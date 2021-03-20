@@ -1,0 +1,21 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "add_include_path": "yes",
+    "env_prefix": "CK_ENV_LIB_QAIC_API",
+    "limit_recursion_dir_search": {
+      "linux": 4
+    },
+    "skip_add_to_bin": "yes",
+    "skip_add_to_path": "yes",
+    "soft_file": {
+      "linux": "QAicInfApi.h"
+    }
+  },
+  "soft_name": "QAic Api library",
+  "tags": [
+    "lib",
+    "qaic",
+    "lang-cpp"
+  ]
+}

@@ -1,0 +1,32 @@
+#! /bin/bash
+
+#
+# Copyright (c) 2021 Krai Ltd.
+#
+
+echo "Setting ECC for all available QAIC devices."
+echo ""
+
+device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
+
+request="{ \
+ \"request\": [ \
+  { \
+   \"qid\": DEVICE_ID, \
+   \"dev_config\": { \
+    \"update_ras_ecc_config_request\": { \
+    \"ras_ecc\": [ \
+        \"RAS_DDR_ECC\" \
+        ] \
+        } \
+   } \
+  } \
+ ] \
+}"
+
+for device_id in $device_ids
+do
+    echo "${request/DEVICE_ID/$device_id}" > request.json
+    sudo /opt/qti-aic/tools/qaic-monitor-json -i request.json
+    rm request.json
+done

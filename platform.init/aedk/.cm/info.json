@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "4779a90e35e94151",
+  "backup_module_uid": "38a2f5438d8555b6",
+  "backup_module_uoa": "platform.init",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2021-03-20T17:32:38.233720",
+    "version": [
+      "1",
+      "55",
+      "2"
+    ]
+  },
+  "data_name": "aedk"
+}

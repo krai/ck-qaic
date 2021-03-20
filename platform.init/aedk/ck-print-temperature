@@ -1,0 +1,16 @@
+#! /bin/bash
+
+zone=${CK_THERMAL_ZONE:-1}
+
+echo "*** Temperature:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/temp`"
+
+echo "*** Policy:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/policy`"
+
+echo "*** Available policies:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/available_policies`"
+
+echo "*** Sustainable power:"
+echo "[zone ${zone}] `cat /sys/devices/virtual/thermal/thermal_zone${zone}/sustainable_power`"
+

@@ -1,0 +1,19 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_QAIC_MODEL",
+    "soft_file_universal": "elfs/*.bin"
+  },
+  "soft_name": "Qualcomm Cloud AI model",
+  "tags": [
+    "model",
+    "qaic",
+    "qualcomm",
+    "qualcomm-ai",
+    "qualcomm-cloud-ai"
+  ],
+  "template": "yes",
+  "template_type": "Qualcomm Cloud AI model"
+}

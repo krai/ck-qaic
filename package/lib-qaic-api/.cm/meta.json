@@ -1,0 +1,40 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "version": "0.1"
+  },
+  "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C compiler",
+      "sort": 10,
+      "tags": "compiler,lang-cpp"
+    },
+    "lib-protobuf-host": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ProtoBuf host compiler",
+      "skip_installed": {
+        "android": "yes",
+        "win": "yes"
+      },
+      "sort": 115,
+      "tags": "lib,protobuf-host,v3.11.4"
+    }
+  },
+  "end_full_path": {
+    "linux": "install/QAicInfApi.h"
+  },
+  "process_script": "process",
+  "soft_uoa": "lib.qaic.api",
+  "suggested_path": "lib-qaic-api",
+  "tags": [
+    "lib",
+    "qaic",
+    "api",
+    "lang-cpp",
+    "v0.1",
+    "v0",
+    "channel-stable"
+  ]
+}
