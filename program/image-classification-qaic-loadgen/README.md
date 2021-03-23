@@ -425,9 +425,9 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 # Benchmark
 
 - Offline: refer to `README.offline.md`.
-- Server: refer to `README.offline.md`.
+- Server: refer to `README.server.md`.
 - Single Stream: refer to `README.singlestream.md`.
 
-# Info
+## Info
 
 Please contact anton@krai.ai if you have any problems or questions.

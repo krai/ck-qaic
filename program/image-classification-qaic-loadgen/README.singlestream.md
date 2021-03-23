@@ -3,6 +3,9 @@
 <a name="submit_aedk_16nsp_singlestream"></a>
 ## Single Stream
 
+<a name="submit_aedk_16nsp_singlestream_accuracy"></a>
+### Accuracy
+
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk.16nsp --library=qaic-v1.3.14-a100 --model=resnet50 --scenario=singlestream \

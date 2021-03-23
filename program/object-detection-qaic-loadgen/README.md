@@ -395,9 +395,9 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 # Benchmark
 
 - Offline: refer to `README.offline.md`.
-- Server: refer to `README.offline.md`.
+- Server: refer to `README.server.md`.
 - Single Stream: refer to `README.singlestream.md`.
 
-# Info
+## Info
 
 Please contact anton@krai.ai if you have any problems or questions.
