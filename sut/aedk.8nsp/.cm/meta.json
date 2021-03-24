@@ -6,7 +6,7 @@
     "accelerator_interconnect_topology": "",
     "accelerator_memory_capacity": "8 GB",
     "accelerator_memory_configuration": "LPDDR4x",
-    "accelerator_model_name": "Qualcomm Cloud AI 100",
+    "accelerator_model_name": "QUALCOMM Cloud AI 100 DM.2e 15W TDP",
     "accelerator_on-chip_memories": "64 MB",
     "accelerators_per_node": "1",
     "cooling": "passive",
