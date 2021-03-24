@@ -1,13 +1,13 @@
 {
   "data": {
-    "accelerator_frequency": "1450 MHz",
+    "accelerator_frequency": "",
     "accelerator_host_interconnect": "5x PCIe 8 lane Gen4",
     "accelerator_interconnect": "",
     "accelerator_interconnect_topology": "",
     "accelerator_memory_capacity": "16 GB",
     "accelerator_memory_configuration": "LPDDR4x",
     "accelerator_model_name": "QUALCOMM Cloud AI 100 PCIe HHHL 75W TDP",
-    "accelerator_on-chip_memories": "128 MB",
+    "accelerator_on-chip_memories": "144 MB",
     "accelerators_per_node": "5",
     "cooling": "air",
     "division": "closed",
