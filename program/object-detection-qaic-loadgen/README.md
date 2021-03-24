@@ -1,10 +1,10 @@
 # Qualcomm - MLPerf Inference v1.0
 
 1. [Installation](#installation)
+    1. [Download Algorithm.cpp](#download_algorithm_cpp)
     1. [Install system-wide prerequisites](#install_system)
     1. [Install CK](#install_ck)
     1. [Set platform scripts](#set_platform_scripts)
-    1. [Download Algorithm.cpp](#download_algorithm_cpp)
     1. [Detect Python](#detect_python)
     1. [Detect GCC](#detect_gcc)
     1. [Set up CMake](#install_cmake)
@@ -37,6 +37,32 @@ Linux ax530b-03-giga.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:
         </ci_build>
         </versions>
 ```
+
+<a name="download_algorithm_cpp"></a>
+## Download `Algorithm.cpp`
+
+One additional source file is required for the benchmark to function correctly.
+It is available to download from the Qualcomm Developer Network. You are
+required to register and agree to Qualcomm's License Agreement to proceed.
+
+Once you have access to Qualcomm Developer Network, please download the
+required file using the link below to a temporary location then unzip.
+
+https://developer.qualcomm.com/downloads/anchor-box-processing-abp-algorithm
+
+Please use the following command to copy the required file to the appropriate
+location in the source tree:
+
+<pre>
+<b>[anton@aedk3 ~]&dollar;</b> cp Algorithm.cpp &dollar;(ck find repo:ck-qaic)/program/object-detection-qaic-loadgen/NMS_ABP/CLASS_SPECIFIC_NMS/source/
+</pre>
+
+To make Git ignore your overwriting this file:
+
+<pre>
+<b>[anton@aedk3 ~]&dollar;</b> git -C &dollar;(ck find repo:ck-qaic) \
+update-index --assume-unchanged program/object-detection-qaic-loadgen/NMS_ABP/CLASS_SPECIFIC_NMS/source/Algorithm.cpp
+</pre>
 
 <a name="install_system"></a>
 ## Install system-wide prerequisites
@@ -164,21 +190,6 @@ Platform init UOA:    qaic
     "linux-64": "qaic"
   }
 }
-</pre>
-
-<a name="download_algorithm_cpp"></a>
-## Download Algorithm.cpp
-
-This additional source file is required for the benchmark to function correctly and is available to download from the Qualcomm Developer Network. You are required to register and agree to Qualcomm's License Agreement to proceed.
-
-Once you have access to Qualcomm Developer Network, please download the required file using the link below to a temporary location then unzip.
-
-https://developer.qualcomm.com/downloads/anchor-box-processing-abp-algorithm
-
-Please use the following command to copy the required file to the relevant location in the source tree -
-
-<pre>
-<b>[anton@aedk3 ~] ~]&dollar;</b> cp Algorithm.cpp &dollar;(ck find repo:ck-qaic)/program/object-detection-qaic-loadgen/NMS_ABP/CLASS_SPECIFIC_NMS/source/
 </pre>
 
 
