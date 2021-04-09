@@ -367,7 +367,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
 --dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.offline \
---env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
+--env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
 #### SingleStream
@@ -377,7 +377,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
 --dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.singlestream \
---env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
+--env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
 ### Compile and install the models to the 16 NSP AEDK
