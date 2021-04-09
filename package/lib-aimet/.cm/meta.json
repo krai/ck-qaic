@@ -30,19 +30,19 @@
     "compiler": {
       "local": "yes",
       "name": "C++ compiler",
-      "sort": 10,
+      "sort": 6,
       "tags": "compiler,lang-cpp"
     },
     "lapacke": {
       "local": "yes",
       "name": "LAPACKE Shared Library",
-      "sort": 10,
+      "sort": 7,
       "tags": "lapacke,vshared"
     },
     "opencv": {
       "local": "yes",
       "name": "OpenCV Custom Build for Aimet",
-      "sort": 10,
+      "sort": 8,
       "tags": "lib,opencv,for-aimet"
     },
     "python": {

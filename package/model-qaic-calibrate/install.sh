@@ -90,8 +90,10 @@ do
      let j++;
 done
 
+if [[ -n ${_AIMET_MODEL} ]]; then
+   
 
-if [[ -n ${_COMPILER_PARAMS} ]]; then
+elif [[ -n ${_COMPILER_PARAMS} ]]; then
   # Generate the profile.yaml file from the calibration dataset using best known options.
   echo ${_COMPILER_PARAMS}
   read -d '' CMD <<END_OF_CMD

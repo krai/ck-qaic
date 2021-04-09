@@ -102,6 +102,17 @@
           }
         ]
       }
+    },
+    "lib-aimet": {
+      "local": "yes",
+      "name": "AIMET",
+      "sort": 5,
+      "tags": "lib,aimet",
+      "enable_if_env": [
+        {
+            "_AIMET_MODEL": "yes"
+	}
+      ]
     }
   },
   "end_full_path_universal": "profile.yaml",
@@ -169,6 +180,7 @@
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_COMPILER_ARGS": "",
         "_COMPILER_PARAMS": "",
+	"_AIMET_MODEL": "yes",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
