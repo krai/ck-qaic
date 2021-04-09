@@ -29,7 +29,7 @@ index 03a9e85..b71325a 100644
 -set(LAPACKE_LIBRARY "${LAPACK_LIBRARIES}")
 -#set(LAPACKE_LIBRARY "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.7.1")
 +#find_package(LAPACK REQUIRED)
-+set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so.3.7.1")
++set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so")
  
  find_package(OpenCV REQUIRED)
  #set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
