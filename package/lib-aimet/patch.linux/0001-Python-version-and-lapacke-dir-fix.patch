@@ -1,0 +1,94 @@
+From 513a8b5e2a4a0067c68489b71e707143f1e235fc Mon Sep 17 00:00:00 2001
+From: Arjun <arjun@krai.ai>
+Date: Thu, 8 Apr 2021 17:43:16 +0100
+Subject: [PATCH] Python version and lapacke dir fix
+
+---
+ CMakeLists.txt                          | 18 +++++++-----------
+ TrainingExtensions/torch/CMakeLists.txt |  4 ++--
+ 2 files changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03a9e85..b71325a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,7 +75,7 @@ if (ENABLE_CUDA)
+ 
+   find_package(CUDAToolkit)
+   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+-    set(CMAKE_CUDA_ARCHITECTURES 52 60 61 70 72)
++    set(CMAKE_CUDA_ARCHITECTURES 50 52 60 61 70 72)
+   endif()
+ 
+   enable_language(CUDA)
+@@ -85,16 +85,14 @@ else(ENABLE_CUDA)
+ 
+ endif(ENABLE_CUDA)
+ 
+-find_package(LAPACK REQUIRED)
+-set(LAPACKE_LIBRARY "${LAPACK_LIBRARIES}")
+-#set(LAPACKE_LIBRARY "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.7.1")
++#find_package(LAPACK REQUIRED)
++set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so.3.7.1")
+ 
+ find_package(OpenCV REQUIRED)
+ #set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
+ set(OPENCV_LIBRARY ${OpenCV_LIBS})
+ 
+-find_package (Python COMPONENTS Interpreter Development)
+-
++find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
+ # ----------------------------------
+ # Conditional build for PyTorch
+ # ----------------------------------
+@@ -105,16 +103,15 @@ if (NOT (DEFINED ENABLE_TORCH))
+ 
+ endif(NOT (DEFINED ENABLE_TORCH))
+ 
++list(APPEND PYBIND11_INC_DIRS "${LAPACKE_DIR}/include")
++
+ if (ENABLE_TORCH)
+   # If we enable PyTorch builds then use the pybind11 headers that are part of the torch pip install
+   # So we don't have a version mismatch - between PyTorch custom C++ op code and PyMO
+-  #list(APPEND PYBIND11_INC_DIRS "/usr/local/lib/python3.6/dist-packages/torch/include")
+-  #list(APPEND PYBIND11_INC_DIRS "/usr/include/python3.6/")
++  list(APPEND PYBIND11_INC_DIRS $ENV{HOME}/.local/lib/python3.6/site-packages/torch/include)
+   list(APPEND PYBIND11_INC_DIRS "${Python_INCLUDE_DIRS}")
+ 
+ else (ENABLE_TORCH)
+-	# list(APPEND PYBIND11_INC_DIRS "/usr/local/lib/python3.6/dist-packages/pybind11/include/")
+-	#list(APPEND PYBIND11_INC_DIRS "/usr/include/python3.6/")
+ 	list(APPEND PYBIND11_INC_DIRS "${Python_INCLUDE_DIRS}")
+ 
+   message("AIMET Torch build disabled")
+@@ -126,7 +123,6 @@ endif (ENABLE_TORCH)
+ # ----------------------------------
+ 
+ add_library(PYBIND11 SHARED IMPORTED)
+-
+ set_target_properties(PYBIND11 PROPERTIES
+ 	#IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libpython3.6m.so"
+ 	IMPORTED_LOCATION "${Python_LIBRARIES}"
+diff --git a/TrainingExtensions/torch/CMakeLists.txt b/TrainingExtensions/torch/CMakeLists.txt
+index f46b9d9..46de00c 100644
+--- a/TrainingExtensions/torch/CMakeLists.txt
++++ b/TrainingExtensions/torch/CMakeLists.txt
+@@ -35,7 +35,7 @@
+ #==============================================================================
+ cmake_minimum_required(VERSION 3.5)
+ 
+-find_program(PYTHON "python3")
++find_program(PYTHON "python3.6")
+ 
+ 
+ set(SETUP_PY "${CMAKE_CURRENT_BINARY_DIR}/src/setup.py")
+@@ -86,4 +86,4 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/artifacts/
+ 
+ install(FILES ${CMAKE_BINARY_DIR}/artifacts/easy-install.pth ${CMAKE_BINARY_DIR}/artifacts/site.py
+       DESTINATION ${AIMET_INSTALL_DIR}/lib/x86_64-linux-gnu
+-      )
+\ No newline at end of file
++      )
+-- 
+2.25.1
+
