@@ -37,13 +37,13 @@
       "local": "yes",
       "name": "LAPACKE Shared Library",
       "sort": 7,
-      "tags": "lapacke,vshared"
+      "tags": "lapacke,shared"
     },
     "opencv": {
       "local": "yes",
-      "name": "OpenCV Custom Build for Aimet",
+      "name": "OpenCV with IPP off",
       "sort": 8,
-      "tags": "lib,opencv,for-aimet"
+      "tags": "lib,opencv,ipp.off"
     },
     "python": {
       "add_to_path": "yes",
