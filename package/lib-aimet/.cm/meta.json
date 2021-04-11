@@ -2,7 +2,9 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
-      "*PACKAGE_CONFIGURE_FLAGS": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TENSORFLOW=FALSE",
+      "ENABLE_CUDA": "FALSE",
+      "EXTRA_CONFIGURE_FLAGS":"",    
+      "*PACKAGE_CONFIGURE_FLAGS": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TENSORFLOW=FALSE $<<EXTRA_CONFIGURE_FLAGS>>$ -DENABLE_CUDA=$<<ENABLE_CUDA>>$",
       "BUILD_SHARED_LIBS": "OFF",
       "CMAKE_CONFIG": "Release",
       "FILE_EXT_LINUX": "",
@@ -41,7 +43,7 @@
     },
     "opencv": {
       "local": "yes",
-      "name": "OpenCV with IPP off",
+      "name": "OpenCV with IPP",
       "sort": 8,
       "tags": "lib,opencv,ipp.off"
     },
@@ -51,10 +53,16 @@
       "name": "Python 3.6",
       "sort": 20,
       "tags": "compiler,python,v3.6"
+    },
+    "python-setuptools": {
+      "local": "yes",
+      "name": "Python Setup Tools v1.41",
+      "sort": 30,
+      "tags": "python-package,setuptools"
     }
   },
   "end_full_path": {
-    "linux": "install/staging/universal/lib/python"
+    "linux": "install/staging/universal/lib/python/aimet_common/bin/update_snpe_out_encoding_onnx_model"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [
@@ -85,7 +93,8 @@
         "version": "master"
       },
       "extra_env": {
-        "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DENABLE_CUDA=FALSE -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$"
+        "PACKAGE_PATCH": "YES",
+        "EXTRA_CONFIGURE_FLAGS": "-DOPENCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$ -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DOpenCV_STATIC_LIB_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$"
       },
       "extra_tags": [
         "vmaster"
@@ -97,7 +106,7 @@
         "version": "with-cuda"
       },
       "extra_env": {
-        "PACKAGE_CONFIGURE_FLAGS_LINUX": "-DENABLE_CUDA=TRUE -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$"
+        "ENABLE_CUDA": "TRUE"
       },
       "extra_tags": [
         "vmaster"

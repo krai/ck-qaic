@@ -54,6 +54,29 @@ rm -f ${image_list}
 batchsize=${_BATCH_SIZE:-1}
 
 
+if [[ -n ${_AIMET_MODEL} ]]; then
+     AIMET_RUN="aimet_run"
+     cp -r ${PACKAGE_DIR}/$AIMET_RUN .
+     PYTHON="/usr/bin/python3.6"
+     COCO_CAL_DIR="${CK_ENV_DATASET_IMAGE_DIR}/${CK_ENV_DATASET_COCO_TRAIN_TRAIN_IMAGE_DIR}"
+     PYTHONPATH=${PYTHONPATH}:${CK_ENV_MLPERF_INFERENCE}/vision/classification_and_detection/python
+     PYTHONPATH=${CK_ENV_MLPERF_INFERENCE}/vision/classification_and_detection/python
+     AIMET_PATH=${CK_ENV_LIB_AIMET}/../../../lib/x86_64-linux-gnu:${CK_ENV_LIB_AIMET}/../../../lib/python
+     export PYTHONPATH=${AIMET_PATH}:$PYTHONPATH
+     #export LD_LIBRARY_PATH=${AIMET_PATH}:$LD_LIBRARY_PATH
+     export LD_LIBRARY_PATH=${AIMET_PATH}
+     cd ${AIMET_RUN}
+     rm -rf output
+     rm -rf preprocessed
+     ln -s ${CK_ENV_MLPERF_INFERENCE} inference
+     wget "https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch"
+     echo "PYTHONPATH=${PYTHONPATH} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}"
+     ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}
+     exit_if_error
+     echo "Done."
+     exit 0
+fi
+
 filenames=`cat $images`
 i=0;
 lastset=""
@@ -90,10 +113,8 @@ do
      let j++;
 done
 
-if [[ -n ${_AIMET_MODEL} ]]; then
-   
 
-elif [[ -n ${_COMPILER_PARAMS} ]]; then
+if [[ -n ${_COMPILER_PARAMS} ]]; then
   # Generate the profile.yaml file from the calibration dataset using best known options.
   echo ${_COMPILER_PARAMS}
   read -d '' CMD <<END_OF_CMD
