@@ -1,0 +1,182 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d3bbe73..858b323 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,8 +39,8 @@ cmake_minimum_required(VERSION 3.5)
+ 
+ project(aimet)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
+-set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/staging/universal)
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
++set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/../install/staging/universal)
+ 
+ set(AIMET_PYTHONPATH
+       "PYTHONPATH=${CMAKE_BINARY_DIR}/artifacts:${CMAKE_CURRENT_SOURCE_DIR}/TrainingExtensions/torch/src/python/:${CMAKE_CURRENT_SOURCE_DIR}/TrainingExtensions/tensorflow/src/python/:${CMAKE_CURRENT_SOURCE_DIR}/TrainingExtensions/common/src/python/" CACHE STRING "python path")
+@@ -75,7 +75,7 @@ if (ENABLE_CUDA)
+ 
+   find_package(CUDAToolkit)
+   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+-    set(CMAKE_CUDA_ARCHITECTURES 52 60 61 70 72)
++    set(CMAKE_CUDA_ARCHITECTURES 50 52 60 61 70 72)
+   endif()
+ 
+   enable_language(CUDA)
+@@ -85,11 +85,14 @@ else(ENABLE_CUDA)
+ 
+ endif(ENABLE_CUDA)
+ 
+-set(LAPACKE_LIBRARY "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.7.1")
++#find_package(LAPACK REQUIRED)
++set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so")
+ 
+-find_package(OpenCV REQUIRED)
+-set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
++#find_package(OpenCV REQUIRED)
++#set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
++set(OPENCV_LIBRARY "${OpenCV_STATIC_LIB_DIR}/libopencv_core.a")
+ 
++find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
+ # ----------------------------------
+ # Conditional build for PyTorch
+ # ----------------------------------
+@@ -100,15 +103,16 @@ if (NOT (DEFINED ENABLE_TORCH))
+ 
+ endif(NOT (DEFINED ENABLE_TORCH))
+ 
++list(APPEND PYBIND11_INC_DIRS "${LAPACKE_DIR}/include")
++
+ if (ENABLE_TORCH)
+   # If we enable PyTorch builds then use the pybind11 headers that are part of the torch pip install
+   # So we don't have a version mismatch - between PyTorch custom C++ op code and PyMO
+-  list(APPEND PYBIND11_INC_DIRS "/usr/local/lib/python3.6/dist-packages/torch/include")
+-  list(APPEND PYBIND11_INC_DIRS "/usr/include/python3.6/")
++  list(APPEND PYBIND11_INC_DIRS $ENV{HOME}/.local/lib/python3.6/site-packages/torch/include)
++  list(APPEND PYBIND11_INC_DIRS "${Python_INCLUDE_DIRS}")
+ 
+ else (ENABLE_TORCH)
+-  list(APPEND PYBIND11_INC_DIRS "/usr/local/lib/python3.6/dist-packages/pybind11/include/")
+-  list(APPEND PYBIND11_INC_DIRS "/usr/include/python3.6/")
++	list(APPEND PYBIND11_INC_DIRS "${Python_INCLUDE_DIRS}")
+ 
+   message("AIMET Torch build disabled")
+ 
+@@ -119,9 +123,9 @@ endif (ENABLE_TORCH)
+ # ----------------------------------
+ 
+ add_library(PYBIND11 SHARED IMPORTED)
+-
+ set_target_properties(PYBIND11 PROPERTIES
+-        IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libpython3.6m.so"
++	#IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libpython3.6m.so"
++	IMPORTED_LOCATION "${Python_LIBRARIES}"
+         INTERFACE_INCLUDE_DIRECTORIES "${PYBIND11_INC_DIRS}"
+         )
+ 
+diff --git a/ModelOptimizations/DlCompression/CMakeLists.txt b/ModelOptimizations/DlCompression/CMakeLists.txt
+index 42bc162..16efb83 100644
+--- a/ModelOptimizations/DlCompression/CMakeLists.txt
++++ b/ModelOptimizations/DlCompression/CMakeLists.txt
+@@ -44,6 +44,7 @@ add_library(MoDlCompression STATIC
+ 
+ target_include_directories(MoDlCompression
+       PUBLIC
++         ${LAPACKE_DIR}/include
+          ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ 
+ target_compile_options(MoDlCompression
+@@ -53,4 +54,4 @@ target_compile_options(MoDlCompression
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ 
+-add_subdirectory(test)
+\ No newline at end of file
++#add_subdirectory(test)
+diff --git a/ModelOptimizations/DlEqualization/CMakeLists.txt b/ModelOptimizations/DlEqualization/CMakeLists.txt
+index 09afe2b..7fc7f68 100644
+--- a/ModelOptimizations/DlEqualization/CMakeLists.txt
++++ b/ModelOptimizations/DlEqualization/CMakeLists.txt
+@@ -57,8 +57,9 @@ add_library(MoDlEqualization STATIC
+       include/DlEqualization/CrossLayerScalingForPython.h
+       include/DlEqualization/BiasCorrection.h
+       include/DlEqualization/BiasCorrectionForPython.h
+-      test/TestDLEqualization.cpp
+-      test/python/test_cross_layer_scaling.py )
++      #      test/TestDLEqualization.cpp
++      #test/python/test_cross_layer_scaling.py 
++      )
+ 
+ target_include_directories(MoDlEqualization
+       PUBLIC
+@@ -72,4 +73,4 @@ target_compile_options(MoDlEqualization
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ 
+-add_subdirectory(test)
+\ No newline at end of file
++#add_subdirectory(test)
+diff --git a/ModelOptimizations/DlQuantization/CMakeLists.txt b/ModelOptimizations/DlQuantization/CMakeLists.txt
+index b2123fd..5650459 100644
+--- a/ModelOptimizations/DlQuantization/CMakeLists.txt
++++ b/ModelOptimizations/DlQuantization/CMakeLists.txt
+@@ -103,4 +103,4 @@ if (ENABLE_CUDA)
+ 
+ endif (ENABLE_CUDA)
+ 
+-add_subdirectory(test)
++#add_subdirectory(test)
+diff --git a/ModelOptimizations/PyModelOptimizations/CMakeLists.txt b/ModelOptimizations/PyModelOptimizations/CMakeLists.txt
+index e6e3575..0b96e46 100644
+--- a/ModelOptimizations/PyModelOptimizations/CMakeLists.txt
++++ b/ModelOptimizations/PyModelOptimizations/CMakeLists.txt
+@@ -57,8 +57,8 @@ if (ENABLE_CUDA)
+           )
+ 
+ else (ENABLE_CUDA)
+-    target_link_libraries(PyModelOptimizations
+-            PUBLIC
++	target_link_libraries(PyModelOptimizations
++          PUBLIC
+             stdc++
+             PYBIND11
+             MoDlQuantization
+@@ -80,4 +80,4 @@ set_target_properties(PyModelOptimizations
+ 
+ install(FILES $<TARGET_FILE:PyModelOptimizations>
+       DESTINATION ${AIMET_INSTALL_DIR}/lib/x86_64-linux-gnu
+-      )
+\ No newline at end of file
++      )
+diff --git a/ThirdParty/CMakeLists.txt b/ThirdParty/CMakeLists.txt
+index e4eecc2..7dfd538 100644
+--- a/ThirdParty/CMakeLists.txt
++++ b/ThirdParty/CMakeLists.txt
+@@ -37,5 +37,5 @@
+ #=============================================================================
+ cmake_minimum_required(VERSION 3.5)
+ 
+-add_subdirectory(googletest/googletest-release-1.8.0/
+-      EXCLUDE_FROM_ALL)
+\ No newline at end of file
++#add_subdirectory(googletest/googletest-release-1.8.0/
++#      EXCLUDE_FROM_ALL)
+diff --git a/TrainingExtensions/torch/CMakeLists.txt b/TrainingExtensions/torch/CMakeLists.txt
+index f46b9d9..46de00c 100644
+--- a/TrainingExtensions/torch/CMakeLists.txt
++++ b/TrainingExtensions/torch/CMakeLists.txt
+@@ -35,7 +35,7 @@
+ #==============================================================================
+ cmake_minimum_required(VERSION 3.5)
+ 
+-find_program(PYTHON "python3")
++find_program(PYTHON "python3.6")
+ 
+ 
+ set(SETUP_PY "${CMAKE_CURRENT_BINARY_DIR}/src/setup.py")
+@@ -86,4 +86,4 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/artifacts/
+ 
+ install(FILES ${CMAKE_BINARY_DIR}/artifacts/easy-install.pth ${CMAKE_BINARY_DIR}/artifacts/site.py
+       DESTINATION ${AIMET_INSTALL_DIR}/lib/x86_64-linux-gnu
+-      )
+\ No newline at end of file
++      )
