@@ -1,14 +1,12 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d3bbe73..858b323 100644
+index d3bbe73..740c90a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -39,8 +39,8 @@ cmake_minimum_required(VERSION 3.5)
- 
+@@ -40,7 +40,7 @@ cmake_minimum_required(VERSION 3.5)
  project(aimet)
  
--set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
 -set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/staging/universal)
-+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
 +set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/../install/staging/universal)
  
  set(AIMET_PYTHONPATH
@@ -22,7 +20,7 @@ index d3bbe73..858b323 100644
    endif()
  
    enable_language(CUDA)
-@@ -85,11 +85,14 @@ else(ENABLE_CUDA)
+@@ -85,11 +85,15 @@ else(ENABLE_CUDA)
  
  endif(ENABLE_CUDA)
  
@@ -34,13 +32,14 @@ index d3bbe73..858b323 100644
 -set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
 +#find_package(OpenCV REQUIRED)
 +#set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
-+set(OPENCV_LIBRARY "${OpenCV_STATIC_LIB_DIR}/libopencv_core.a")
++#set(OPENCV_LIBRARY "${OpenCV_STATIC_LIB_DIR}/libopencv_core.a")
++set(OPENCV_LIBRARY "opencv_videostab;opencv_videoio;opencv_video;opencv_superres;opencv_stitching;opencv_shape;opencv_photo;opencv_objdetect;opencv_ml;opencv_imgproc;opencv_imgcodecs;opencv_highgui;opencv_flann;opencv_features2d;opencv_core;opencv_calib3d")
  
 +find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
  # ----------------------------------
  # Conditional build for PyTorch
  # ----------------------------------
-@@ -100,15 +103,16 @@ if (NOT (DEFINED ENABLE_TORCH))
+@@ -100,15 +104,16 @@ if (NOT (DEFINED ENABLE_TORCH))
  
  endif(NOT (DEFINED ENABLE_TORCH))
  
@@ -61,7 +60,7 @@ index d3bbe73..858b323 100644
  
    message("AIMET Torch build disabled")
  
-@@ -119,9 +123,9 @@ endif (ENABLE_TORCH)
+@@ -119,9 +124,9 @@ endif (ENABLE_TORCH)
  # ----------------------------------
  
  add_library(PYBIND11 SHARED IMPORTED)

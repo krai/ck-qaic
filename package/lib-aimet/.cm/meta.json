@@ -43,9 +43,9 @@
     },
     "opencv": {
       "local": "yes",
-      "name": "OpenCV with IPP",
+      "name": "OpenCV with IPP off",
       "sort": 8,
-      "tags": "lib,opencv,ipp.off"
+      "tags": "lib,opencv,ipp.off,itt.off"
     },
     "python": {
       "add_to_path": "yes",

@@ -63,8 +63,9 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      PYTHONPATH=${CK_ENV_MLPERF_INFERENCE}/vision/classification_and_detection/python
      AIMET_PATH=${CK_ENV_LIB_AIMET}/../../../lib/x86_64-linux-gnu:${CK_ENV_LIB_AIMET}/../../../lib/python
      export PYTHONPATH=${AIMET_PATH}:$PYTHONPATH
-     #export LD_LIBRARY_PATH=${AIMET_PATH}:$LD_LIBRARY_PATH
-     export LD_LIBRARY_PATH=${AIMET_PATH}
+     export LD_LIBRARY_PATH=${AIMET_PATH}:$LD_LIBRARY_PATH
+     export LD_LIBRARY_PATH=${AIMET_PATH}:/home/arjun/CK-TOOLS/lib-lapack-master-gcc-9.3.1-lapacke-master-shared-linux-64/install/lib
+     #export LD_LIBRARY_PATH=${AIMET_PATH}
      cd ${AIMET_RUN}
      rm -rf output
      rm -rf preprocessed

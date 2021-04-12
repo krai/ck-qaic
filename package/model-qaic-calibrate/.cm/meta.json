@@ -136,17 +136,6 @@
             "_AIMET_MODEL": "yes"
 	}
       ]
-    },
-    "pytorch": {
-      "local": "yes",
-      "name": "Pytorch 1.4",
-      "sort": 50,
-      "tags": "lib,pytorch,v1.4",
-      "enable_if_env": [
-        {
-            "_AIMET_MODEL": "yes"
-	}
-      ]
     }
   },
   "end_full_path_universal": "profile.yaml",
