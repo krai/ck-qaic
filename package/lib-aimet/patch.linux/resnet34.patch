@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d3bbe73..740c90a 100644
+index d3bbe73..53a8a8e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -40,7 +40,7 @@ cmake_minimum_required(VERSION 3.5)
@@ -20,26 +20,27 @@ index d3bbe73..740c90a 100644
    endif()
  
    enable_language(CUDA)
-@@ -85,11 +85,15 @@ else(ENABLE_CUDA)
+@@ -85,11 +85,16 @@ else(ENABLE_CUDA)
  
  endif(ENABLE_CUDA)
  
 -set(LAPACKE_LIBRARY "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.7.1")
+-
 +#find_package(LAPACK REQUIRED)
 +set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so")
- 
--find_package(OpenCV REQUIRED)
++find_package (Eigen3 REQUIRED NO_MODULE)
+ find_package(OpenCV REQUIRED)
 -set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
-+#find_package(OpenCV REQUIRED)
 +#set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
 +#set(OPENCV_LIBRARY "${OpenCV_STATIC_LIB_DIR}/libopencv_core.a")
 +set(OPENCV_LIBRARY "opencv_videostab;opencv_videoio;opencv_video;opencv_superres;opencv_stitching;opencv_shape;opencv_photo;opencv_objdetect;opencv_ml;opencv_imgproc;opencv_imgcodecs;opencv_highgui;opencv_flann;opencv_features2d;opencv_core;opencv_calib3d")
++set(OPENCV_LIBRARY "${OpenCV_LIBS}")
  
 +find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
  # ----------------------------------
  # Conditional build for PyTorch
  # ----------------------------------
-@@ -100,15 +104,16 @@ if (NOT (DEFINED ENABLE_TORCH))
+@@ -100,15 +105,16 @@ if (NOT (DEFINED ENABLE_TORCH))
  
  endif(NOT (DEFINED ENABLE_TORCH))
  
@@ -60,7 +61,7 @@ index d3bbe73..740c90a 100644
  
    message("AIMET Torch build disabled")
  
-@@ -119,9 +124,9 @@ endif (ENABLE_TORCH)
+@@ -119,9 +125,9 @@ endif (ENABLE_TORCH)
  # ----------------------------------
  
  add_library(PYBIND11 SHARED IMPORTED)

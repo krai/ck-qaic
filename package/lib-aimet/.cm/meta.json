@@ -45,7 +45,7 @@
       "local": "yes",
       "name": "OpenCV with IPP,ITT off",
       "sort": 8,
-      "tags": "lib,opencv,ipp.off,itt.off"
+      "tags": "lib,opencv,ipp.off,itt.off,v3.4.10"
     },
     "python": {
       "add_to_path": "yes",
@@ -94,7 +94,7 @@
       },
       "extra_env": {
         "PACKAGE_PATCH": "YES",
-        "EXTRA_CONFIGURE_FLAGS": "-DOPENCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$ -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DOpenCV_STATIC_LIB_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$"
+        "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DOpenCV_STATIC_LIB_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$"
       },
       "extra_tags": [
         "vmaster"
