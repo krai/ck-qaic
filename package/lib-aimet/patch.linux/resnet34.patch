@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d3bbe73..53a8a8e 100644
+index d3bbe73..2b43f8e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -40,7 +40,7 @@ cmake_minimum_required(VERSION 3.5)
@@ -20,27 +20,23 @@ index d3bbe73..53a8a8e 100644
    endif()
  
    enable_language(CUDA)
-@@ -85,11 +85,16 @@ else(ENABLE_CUDA)
+@@ -85,11 +85,12 @@ else(ENABLE_CUDA)
  
  endif(ENABLE_CUDA)
  
 -set(LAPACKE_LIBRARY "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.7.1")
 -
-+#find_package(LAPACK REQUIRED)
 +set(LAPACKE_LIBRARY "${LAPACKE_DIR}/lib/liblapacke.so")
 +find_package (Eigen3 REQUIRED NO_MODULE)
  find_package(OpenCV REQUIRED)
 -set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
-+#set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
-+#set(OPENCV_LIBRARY "${OpenCV_STATIC_LIB_DIR}/libopencv_core.a")
-+set(OPENCV_LIBRARY "opencv_videostab;opencv_videoio;opencv_video;opencv_superres;opencv_stitching;opencv_shape;opencv_photo;opencv_objdetect;opencv_ml;opencv_imgproc;opencv_imgcodecs;opencv_highgui;opencv_flann;opencv_features2d;opencv_core;opencv_calib3d")
 +set(OPENCV_LIBRARY "${OpenCV_LIBS}")
  
 +find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
  # ----------------------------------
  # Conditional build for PyTorch
  # ----------------------------------
-@@ -100,15 +105,16 @@ if (NOT (DEFINED ENABLE_TORCH))
+@@ -100,15 +101,16 @@ if (NOT (DEFINED ENABLE_TORCH))
  
  endif(NOT (DEFINED ENABLE_TORCH))
  
@@ -61,20 +57,19 @@ index d3bbe73..53a8a8e 100644
  
    message("AIMET Torch build disabled")
  
-@@ -119,9 +125,9 @@ endif (ENABLE_TORCH)
+@@ -119,9 +121,8 @@ endif (ENABLE_TORCH)
  # ----------------------------------
  
  add_library(PYBIND11 SHARED IMPORTED)
 -
  set_target_properties(PYBIND11 PROPERTIES
 -        IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libpython3.6m.so"
-+	#IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libpython3.6m.so"
 +	IMPORTED_LOCATION "${Python_LIBRARIES}"
          INTERFACE_INCLUDE_DIRECTORIES "${PYBIND11_INC_DIRS}"
          )
  
 diff --git a/ModelOptimizations/DlCompression/CMakeLists.txt b/ModelOptimizations/DlCompression/CMakeLists.txt
-index 42bc162..16efb83 100644
+index 42bc162..26e118e 100644
 --- a/ModelOptimizations/DlCompression/CMakeLists.txt
 +++ b/ModelOptimizations/DlCompression/CMakeLists.txt
 @@ -44,6 +44,7 @@ add_library(MoDlCompression STATIC
@@ -85,46 +80,44 @@ index 42bc162..16efb83 100644
           ${CMAKE_CURRENT_SOURCE_DIR}/include)
  
  target_compile_options(MoDlCompression
-@@ -53,4 +54,4 @@ target_compile_options(MoDlCompression
+@@ -52,5 +53,3 @@ target_compile_options(MoDlCompression
+ 
  
  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
- 
+-
 -add_subdirectory(test)
 \ No newline at end of file
-+#add_subdirectory(test)
 diff --git a/ModelOptimizations/DlEqualization/CMakeLists.txt b/ModelOptimizations/DlEqualization/CMakeLists.txt
-index 09afe2b..7fc7f68 100644
+index 09afe2b..1f9c9b4 100644
 --- a/ModelOptimizations/DlEqualization/CMakeLists.txt
 +++ b/ModelOptimizations/DlEqualization/CMakeLists.txt
-@@ -57,8 +57,9 @@ add_library(MoDlEqualization STATIC
+@@ -57,8 +57,7 @@ add_library(MoDlEqualization STATIC
        include/DlEqualization/CrossLayerScalingForPython.h
        include/DlEqualization/BiasCorrection.h
        include/DlEqualization/BiasCorrectionForPython.h
 -      test/TestDLEqualization.cpp
 -      test/python/test_cross_layer_scaling.py )
-+      #      test/TestDLEqualization.cpp
-+      #test/python/test_cross_layer_scaling.py 
 +      )
  
  target_include_directories(MoDlEqualization
        PUBLIC
-@@ -72,4 +73,4 @@ target_compile_options(MoDlEqualization
+@@ -71,5 +70,3 @@ target_compile_options(MoDlEqualization
+         )
  
  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
- 
+-
 -add_subdirectory(test)
 \ No newline at end of file
-+#add_subdirectory(test)
 diff --git a/ModelOptimizations/DlQuantization/CMakeLists.txt b/ModelOptimizations/DlQuantization/CMakeLists.txt
-index b2123fd..5650459 100644
+index b2123fd..3537dc1 100644
 --- a/ModelOptimizations/DlQuantization/CMakeLists.txt
 +++ b/ModelOptimizations/DlQuantization/CMakeLists.txt
-@@ -103,4 +103,4 @@ if (ENABLE_CUDA)
+@@ -102,5 +102,3 @@ if (ENABLE_CUDA)
+             )
  
  endif (ENABLE_CUDA)
- 
+-
 -add_subdirectory(test)
-+#add_subdirectory(test)
 diff --git a/ModelOptimizations/PyModelOptimizations/CMakeLists.txt b/ModelOptimizations/PyModelOptimizations/CMakeLists.txt
 index e6e3575..0b96e46 100644
 --- a/ModelOptimizations/PyModelOptimizations/CMakeLists.txt
@@ -148,18 +141,17 @@ index e6e3575..0b96e46 100644
 \ No newline at end of file
 +      )
 diff --git a/ThirdParty/CMakeLists.txt b/ThirdParty/CMakeLists.txt
-index e4eecc2..7dfd538 100644
+index e4eecc2..377dd99 100644
 --- a/ThirdParty/CMakeLists.txt
 +++ b/ThirdParty/CMakeLists.txt
-@@ -37,5 +37,5 @@
+@@ -36,6 +36,3 @@
+ #
  #=============================================================================
  cmake_minimum_required(VERSION 3.5)
- 
+-
 -add_subdirectory(googletest/googletest-release-1.8.0/
 -      EXCLUDE_FROM_ALL)
 \ No newline at end of file
-+#add_subdirectory(googletest/googletest-release-1.8.0/
-+#      EXCLUDE_FROM_ALL)
 diff --git a/TrainingExtensions/torch/CMakeLists.txt b/TrainingExtensions/torch/CMakeLists.txt
 index f46b9d9..46de00c 100644
 --- a/TrainingExtensions/torch/CMakeLists.txt
