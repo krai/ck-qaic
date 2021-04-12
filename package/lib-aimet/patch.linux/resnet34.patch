@@ -1,12 +1,14 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d3bbe73..2b43f8e 100644
+index d3bbe73..fd5f92b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -40,7 +40,7 @@ cmake_minimum_required(VERSION 3.5)
+@@ -39,8 +39,8 @@ cmake_minimum_required(VERSION 3.5)
+ 
  project(aimet)
  
- set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
 -set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/staging/universal)
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fPIC -D_GLIBCXX_USE_CXX11_ABI=0")
 +set(AIMET_INSTALL_DIR ${CMAKE_BINARY_DIR}/../install/staging/universal)
  
  set(AIMET_PYTHONPATH
