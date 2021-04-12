@@ -43,7 +43,7 @@
     },
     "opencv": {
       "local": "yes",
-      "name": "OpenCV with IPP off",
+      "name": "OpenCV with IPP,ITT off",
       "sort": 8,
       "tags": "lib,opencv,ipp.off,itt.off"
     },
