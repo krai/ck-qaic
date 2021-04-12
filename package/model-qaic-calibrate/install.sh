@@ -40,22 +40,8 @@ function exit_if_error() {
 model=${CK_ENV_ONNX_MODEL_ONNX_FILEPATH:-$CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH}
 echo "Model: '${model}'"
 
-
-# Calibration dataset.
-images=${CK_ENV_DATASET_PREPROCESSED_DIR}/${CK_ENV_DATASET_PREPROCESSED_FOF}
-echo "Calibration images: '${images}'"
-# Remove old files.
-rm -f ${INSTALL_DIR}/*.raw
-# Remove old image list file.
-image_list="${INSTALL_DIR}/image_list.txt"
-rm -f ${image_list}
-
-# Batch size.
-batchsize=${_BATCH_SIZE:-1}
-
-
 if [[ -n ${_AIMET_MODEL} ]]; then
-     AIMET_RUN="aimet_run"
+     AIMET_RUN="ssd-resnet34"
      cp -r ${PACKAGE_DIR}/$AIMET_RUN .
      PYTHON="/usr/bin/python3.6"
      COCO_CAL_DIR="${CK_ENV_DATASET_IMAGE_DIR}/${CK_ENV_DATASET_COCO_TRAIN_TRAIN_IMAGE_DIR}"
@@ -69,13 +55,25 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      rm -rf output
      rm -rf preprocessed
      ln -s ${CK_ENV_MLPERF_INFERENCE} inference
-     wget "https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch"
+     wget -nc "https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch"
      echo "PYTHONPATH=${PYTHONPATH} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}"
      ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}
      exit_if_error
      echo "Done."
      exit 0
 fi
+
+# Calibration dataset.
+images=${CK_ENV_DATASET_PREPROCESSED_DIR}/${CK_ENV_DATASET_PREPROCESSED_FOF}
+echo "Calibration images: '${images}'"
+# Remove old files.
+rm -f ${INSTALL_DIR}/*.raw
+# Remove old image list file.
+image_list="${INSTALL_DIR}/image_list.txt"
+rm -f ${image_list}
+
+# Batch size.
+batchsize=${_BATCH_SIZE:-1}
 
 filenames=`cat $images`
 i=0;
