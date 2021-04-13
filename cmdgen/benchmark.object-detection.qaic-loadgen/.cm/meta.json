@@ -77,13 +77,21 @@
       }
     },
     "library": {
+      "qaic-v1.3.14-aic100": {
+        "ck_env": "",
+        "deps": "",
+        "program_name": "object-detection-qaic-loadgen",
+        "inference_engine": "qaic",
+        "inference_engine_version": "v1.3.14",
+        "inference_engine_backend": "aic100"
+      },
       "qaic-v1.3.14-a100": {
         "ck_env": "",
         "deps": "",
+        "program_name": "object-detection-qaic-loadgen",
         "inference_engine": "qaic",
-        "inference_engine_backend": "a100",
         "inference_engine_version": "v1.3.14",
-        "program_name": "object-detection-qaic-loadgen"
+        "inference_engine_backend": "a100"
       }
     },
     "max_query_count": {
