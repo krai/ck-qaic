@@ -166,7 +166,6 @@
     "resnet50.pcie.14nsp": {
       "extra_env": {
         "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS": ""
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=14  -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4,4,2 -aic-max-outchannel-split=1,1,4,2 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0'  -ols=2 -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
       },
       "extra_tags": [
