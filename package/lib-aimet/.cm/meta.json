@@ -37,26 +37,26 @@
     },
     "lapacke": {
       "local": "yes",
-      "name": "LAPACKE Shared Library",
+      "name": "LAPACKE library (shared)",
       "sort": 7,
-      "tags": "lapacke,shared"
+      "tags": "lib,lapacke,shared"
     },
     "opencv": {
       "local": "yes",
-      "name": "OpenCV with IPP,ITT off",
+      "name": "OpenCV library (without IPP/ITT)",
       "sort": 8,
       "tags": "lib,opencv,ipp.off,itt.off,v3.4.10"
     },
     "python": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "Python 3.6",
+      "name": "Python v3.6",
       "sort": 20,
       "tags": "compiler,python,v3.6"
     },
     "python-setuptools": {
       "local": "yes",
-      "name": "Python Setup Tools v1.41",
+      "name": "Python setuptools v41",
       "sort": 30,
       "tags": "python-package,setuptools"
     }

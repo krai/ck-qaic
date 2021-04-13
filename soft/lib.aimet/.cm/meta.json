@@ -12,7 +12,7 @@
       "linux": "lib"
     }
   },
-  "soft_name": "lib Aimet",
+  "soft_name": "AI Model Efficiency Toolkit",
   "tags": [
     "lib",
     "aimet"
