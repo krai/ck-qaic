@@ -56,9 +56,15 @@
     },
     "python-setuptools": {
       "local": "yes",
-      "name": "Python setuptools v41",
+      "name": "Python Setup Tools v41",
       "sort": 30,
       "tags": "python-package,setuptools"
+    },
+    "eigen3-headers": {
+      "local": "yes",
+      "name": "Eigen Library Headers",
+      "sort": 35,
+      "tags": "lib,eigen,headers"
     }
   },
   "end_full_path": {
@@ -94,7 +100,7 @@
       },
       "extra_env": {
         "PACKAGE_PATCH": "YES",
-        "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DOpenCV_STATIC_LIB_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$"
+        "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DEigen3_DIR=$<<CK_ENV_EIGEN_HEADERS_LIB>>$"
       },
       "extra_tags": [
         "vmaster"
