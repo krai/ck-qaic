@@ -57,8 +57,7 @@ class Params:
 		self.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu') 
 		self.default_bitwidth = 8
 		self.rounding_mode = 'nearest'
-		self.timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-		self.log_path = os.path.join(self.log_path, self.timestamp)
+		self.log_path = os.path.join(self.log_path)
 
 		self.model_file = model_file
 		self.encodings_dataset_list = encodings_dataset_list

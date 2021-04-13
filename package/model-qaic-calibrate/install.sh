@@ -41,8 +41,8 @@ model=${CK_ENV_ONNX_MODEL_ONNX_FILEPATH:-$CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILE
 echo "Model: '${model}'"
 
 if [[ -n ${_AIMET_MODEL} ]]; then
-     AIMET_RUN="${INSTALL_DIR}/ssd-resnet34"
-     cp -r ${PACKAGE_DIR}/$AIMET_RUN .
+     AIMET_RUN="ssd-resnet34"
+     cp -r ${PACKAGE_DIR}/$AIMET_RUN ${INSTALL_DIR}/$AIMET_RUN
      PYTHON="/usr/bin/python3.6"
      COCO_CAL_DIR="${CK_ENV_DATASET_IMAGE_DIR}/${CK_ENV_DATASET_COCO_TRAIN_TRAIN_IMAGE_DIR}"
      PYTHONPATH=${PYTHONPATH}:${CK_ENV_MLPERF_INFERENCE}/vision/classification_and_detection/python
@@ -51,7 +51,7 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      export PYTHONPATH=${AIMET_PATH}:$PYTHONPATH
      export LD_LIBRARY_PATH=${AIMET_PATH}:$LD_LIBRARY_PATH
      export LD_LIBRARY_PATH=${AIMET_PATH}
-     cd ${AIMET_RUN}
+     cd ${INSTALL_DIR}/${AIMET_RUN}
      rm -rf output
      rm -rf preprocessed
      ln -s ${CK_ENV_MLPERF_INFERENCE} inference
