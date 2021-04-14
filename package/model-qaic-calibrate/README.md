@@ -17,13 +17,13 @@ Install the preprocessed dataset locally as follows:
 
 1. Preprocess only the first 5 images of Imagenet 2012 (quick test)
 
-				ck install package --tags=imagenet,cal,first.5
+		ck install package --tags=imagenet,cal,first.5
 2. Preprocess the MLPerf Calibration Option 1 Dataset
 
-				ck install package --tags=imagenet,cal,mlperf.option1 
+		ck install package --tags=imagenet,cal,mlperf.option1 
 3. **Alternatively** Preprocess the MLPerf Calibration Option 2 Dataset
 
-				ck install package --tags=imagenet,cal,mlperf.option2 
+		ck install package --tags=imagenet,cal,mlperf.option2 
 
 ### Examples
 
