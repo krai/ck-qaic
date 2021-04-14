@@ -53,7 +53,7 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      cd ${INSTALL_DIR}/${AIMET_RUN}
      rm -rf output
      rm -rf preprocessed
-     ${PYTHON} -m pip install torch==1.4 torchvision==0.5.0 setuptools==41.0.1 numpy pyyaml tensorboard tqdm onnx --user
+     ${PYTHON} -m pip install torch==1.4 torchvision==0.5.0 setuptools==41.0.1 pycocotools numpy pyyaml tensorboard tqdm onnx --user
      ln -s ${CK_ENV_MLPERF_INFERENCE} inference
      ln -s ${CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR} preprocessed
      ln -s ${COCO_CAL_DIR} ${COCO_CAL_DIR}/val2017
