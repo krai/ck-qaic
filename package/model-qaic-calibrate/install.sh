@@ -56,12 +56,14 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      ${PYTHON} -m pip install torch==1.4 torchvision==0.5.0 setuptools==41.0.1 numpy pyyaml tensorboard tqdm onnx --user
      ln -s ${CK_ENV_MLPERF_INFERENCE} inference
      ln -s ${CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR} preprocessed
+     ln -s ${COCO_CAL_DIR} ${COCO_CAL_DIR}/val2017
      wget -nc "https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch"
      #echo "PYTHONPATH=${PYTHONPATH} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}"
      ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}
      mv output/ssd_resnet34_aimet.encodings.yaml ${INSTALL_DIR}/profile.yaml
      mv output/ssd_resnet34_aimet.onnx ${INSTALL_DIR}/
      mv node-precision.yaml ${INSTALL_DIR}/
+     rm ${COCO_CAL_DIR}/val2017
      rm -rf output
      exit_if_error
      echo "Done."
