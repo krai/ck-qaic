@@ -63,7 +63,7 @@ Install the preprocessed dataset locally as follows:
 2. **Alternatively** you can detect an already preprocessed calibration dataset as follows
 
 		echo "vdetected" | ck detect soft:dataset.coco.2017.train \
-		--full_path=/home/arjun/CK-TOOLS/dataset-coco-calibration-mlperf/train2017/000000391895.jpg \
+		--full_path=$HOME/CK-TOOLS/dataset-coco-calibration-mlperf/train2017/000000391895.jpg \
 		--extra_tags=preprocessed,mlperf,calibration
     
 ### Examples
