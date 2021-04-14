@@ -22,7 +22,7 @@ If you have the ImageNet validation dataset e.g. in `/datasets/dataset-imagenet-
 		ck install package --tags=profile,resnet50.tf,mlperf.option1
 3. MLPerf ResNet50 TF with calibration option 2
 
-		ck install package --tags=profile,resnet50.tf,mlperf.option2</pre>
+		ck install package --tags=profile,resnet50.tf,mlperf.option2
 
 ### Use a Pregenerated Profile
 	echo "vdetected" | ck detect soft:model.qaic,
