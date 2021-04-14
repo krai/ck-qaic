@@ -45,17 +45,10 @@ from inference.vision.classification_and_detection.python.coco import Coco
 class CocoMod(Coco):
     def get_item(self, nr):
         """Get image by number in the list."""
-        if self.use_cache:
-            dst = os.path.join(self.cache_dir, self.image_list[nr])
-            img = np.load(dst + ".npy")
-            img = torch.Tensor(img).unsqueeze(0)
-            return img, self.label_list[nr]
-        else:
-            src = self.get_item_loc(nr)
-            img_org = cv2.imread(src)
-            processed = self.pre_process(img_org, need_transpose=self.need_transpose, dims=self.image_size)
-            processed = torch.Tensor(processed).unsqueeze(0)
-            return processed, self.label_list[nr]
+        dst = os.path.join(self.cache_dir, self.image_list[nr])
+        img = np.load(dst + ".npy")
+        img = torch.Tensor(img).unsqueeze(0)
+        return img, self.label_list[nr]
 
     def get_samples(self, id_list):
         data = [self.image_list_inmemory[id] for id in id_list]

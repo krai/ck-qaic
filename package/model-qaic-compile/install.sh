@@ -51,21 +51,20 @@ rm -rf $aic_binary_dir
 profile=${CK_ENV_COMPILER_GLOW_PROFILE_YAML}
 echo "Profile: '${profile}'"
 
+# Model: assume either ONNX or TF.
+model=${CK_ENV_ONNX_MODEL_ONNX_FILEPATH:-$CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH}
+# Source model.
+echo "Model: '${model}'"
+
 if [[ -n ${_EXTERNAL_QUANTIZATION} ]]; then
   echo ${CK_ENV_COMPILER_GLOW_PROFILE_DIR}
-  model=${CK_ENV_COMPILER_GLOW_PROFILE_DIR}/ssd_resnet34_aimet.onnx
-  node_precision=${CK_ENV_COMPILER_GLOW_PROFILE_DIR}/node-precision.yaml
+  node_precision=${CK_ENV_COMPILER_GLOW_NODE_PRECISION_FILE}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/$node_precision}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[EXTERNAL_QUANTIZATION_FILE]"/$profile}
   LOAD_PROFILE=""
 else
-  # Model: assume either ONNX or TF.
-  model=${CK_ENV_ONNX_MODEL_ONNX_FILEPATH:-$CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH}
   LOAD_PROFILE="-load-profile=${profile}"
 fi
-
-# Source model.
-echo "Model: '${model}'"
 
 if [[ -n ${_COMPILER_PARAMS} ]]; then
   echo ${_COMPILER_PARAMS}
