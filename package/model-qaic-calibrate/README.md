@@ -25,6 +25,6 @@ If you have the ImageNet validation dataset e.g. in `/datasets/dataset-imagenet-
 		ck install package --tags=profile,resnet50.tf,mlperf.option2
 
 ### Use a Pregenerated Profile
-	echo "vdetected" | ck detect soft:model.qaic,
-    --extra_tags=resnet50.tf
-    --full_path=$HOME/CK-TOOLS/model-qaic-converted-from-onnx-batch_size.8-resnet50/elfs/constants.bin
+	echo "vdetected" | ck detect soft:model.qaic \
+	--extra_tags=resnet50.tf \
+	--full_path=$HOME/CK/ck-qaic/profile/resnet50/bs.8/profile.yaml
