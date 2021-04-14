@@ -18,20 +18,14 @@ echo "full" | ck detect soft:dataset.imagenet.val --extra_tags=full,ilsvrc2012 \
 ### Examples
 
 1. MLPerf ResNet50 TF with the first 5 images of ImageNet 2012 (quick test)
-
 <pre>
-$ck install package --tags=profile,resnet50.tf,first.5
+ck install package --tags=profile,resnet50.tf,first.5
 </pre>
-
-
 2. MLPerf ResNet50 TF with calibration option 1
-
 <pre>
-$ck install package --tags=profile,resnet50.tf,mlperf.option1
+ck install package --tags=profile,resnet50.tf,mlperf.option1
 </pre>
-
 3. MLPerf ResNet50 TF with calibration option 2
-
 <pre>
 ck install package --tags=profile,resnet50.tf,mlperf.option2
 </pre>
