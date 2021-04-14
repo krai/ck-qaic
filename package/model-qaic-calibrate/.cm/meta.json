@@ -2,6 +2,7 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
+      "CUDA_VISIBLE_DEVICES": "-1",
       "MODEL_NAME": "profile",
       "PACKAGE_VERSION": "1",
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
