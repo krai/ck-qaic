@@ -119,7 +119,7 @@
       "local": "yes",
       "name": "MLPerf Source",
       "sort": 36,
-      "tags": "mlperf,inference,source,r1.0",
+      "tags": "mlperf,inference,source,for.aimet",
       "enable_if_env": [
         {
             "_AIMET_MODEL": "yes"
