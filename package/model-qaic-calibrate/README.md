@@ -118,7 +118,7 @@ Follow these instructions to build the docker:
 
 Follow these instructions to build the AIMET code inside docker:
 
-set  `WORKSPACE="<absolute_path_to_workspace>"`  **again.**
+set  `WORKSPACE="<absolute_path_to_workspace>"`  **again.**. Include "50" among the CUDA architectures in CMakeLists.txt (Line no. 78) if the running GPU is of compute capability 5.0
 
 	cd $WORKSPACE 
 	mkdir build && cd build
