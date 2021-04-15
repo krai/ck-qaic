@@ -86,19 +86,28 @@ Currently we are using AIMET docker image to generate the AIMET profile to be ru
 	WORKSPACE=`pwd`
 	git clone https://github.com/quic/aimet.git
 	source $WORKSPACE/aimet/packaging/envsetup.sh
+
+Clone the google test repo as follows:
+
+	cd aimet
+	mkdir -p ./ThirdParty/googletest
+	pushd ./ThirdParty/googletest
+	git clone https://github.com/google/googletest.git -b release-1.8.0 googletest-release-1.8.0
+	popd
+
 Ensure that mlcommons/inference is installed for utilizing model definitions and preprocessing routines. You can install a local copy:
 
-`git clone https://github.com/mlcommons/inference.git`
+	git clone https://github.com/mlcommons/inference.git
 
 Follow these instructions to build the docker:
 
 	docker_image_name="aimet-dev-docker:latest"
 	docker_container_name="aimet-dev-latest"
-	docker build -t ${docker_image_name} -f $WORKSPACE/aimet/Jenkins/Dockerfile .
+	sudo docker build -t ${docker_image_name} -f $WORKSPACE/aimet/Jenkins/Dockerfile .
 
 #### Start docker container manually
 
-	docker run --gpus all --rm -it -u $(id -u ${USER}):$(id -g ${USER}) \
+	sudo docker run --gpus all --rm -it -u $(id -u ${USER}):$(id -g ${USER}) \
 	  -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro \
 	  -v ${HOME}:${HOME} -v ${WORKSPACE}:${WORKSPACE} \
 	  -v "/mnt/workspace":"/mnt/workspace" \
