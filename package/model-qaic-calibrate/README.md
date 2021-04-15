@@ -75,9 +75,8 @@ Install the preprocessed dataset locally as follows:
 ### Use a Pregenerated Profile
 Suppose you have the folder **AIMET_profile_download** in your $HOME, containing profile.yaml, node-precision.yaml and AIMET modified ssd_resnet34_aimet.onnx files from an AIMET run, you can detect them as follows:
 
-	echo "vdetected" | ck detect soft:model.qaic \
-	--extra_tags=ssd_resnet34 \
-	--full_path=$HOME/AIMET_profile_download/profile.yaml
+	echo "vdetected" | ck detect soft:compiler.glow.profile \
+	--extra_tags=ssd_resnet34,gpu,aimet --full_path=$HOME/AIMET_profile_download/profile.yaml \
 	--ienv._AIMET_MODEL=yes
 
 ### Generation of AIMET profile using GPUs 
