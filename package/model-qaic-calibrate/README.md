@@ -87,9 +87,10 @@ Currently we are using AIMET docker image to generate the AIMET profile to be ru
 	git clone https://github.com/quic/aimet.git
 	source $WORKSPACE/aimet/packaging/envsetup.sh
 
-Clone the google test repo as follows:
+We are using the commit as on March 4 and we need to clone the google test repo as follows:
 
 	cd aimet
+	git checkout 8a4ed8817bf44aa16bf47dbeec4962f9d0113ce7
 	mkdir -p ./ThirdParty/googletest
 	pushd ./ThirdParty/googletest
 	git clone https://github.com/google/googletest.git -b release-1.8.0 googletest-release-1.8.0
