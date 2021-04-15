@@ -144,7 +144,7 @@ To export the model to onnx and generate encodings, and depending on your mlcomm
 
 	export PYTHONPATH=$PYTHONPATH:$WORKSPACE/inference/vision/classification_and_detection/python
 
-Download the AIMET encoding generation files, annotation file and the base model from [here](https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch).
+Download the AIMET encoding generation files, annotation file and the base model
 
 	mkdir configs && cd configs 
 	wget https://raw.githubusercontent.com/krai/ck-qaic/main/package/model-qaic-calibrate/ssd-resnet34/configs/aic100_config_symmetric.json
