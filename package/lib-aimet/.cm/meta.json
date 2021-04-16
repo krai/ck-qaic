@@ -35,6 +35,18 @@
       "sort": 6,
       "tags": "compiler,lang-cpp"
     },
+    "compiler-extra": {
+      "enable_if_env": [
+         {
+            "ENABLE_CUDA" : "TRUE"
+         }
+      ],
+      "add_to_the_end_of_bat": "yes",
+      "local": "yes",
+      "name": "CUDA compiler >=10.0",
+      "sort": -1,
+      "tags": "compiler,lang-c-cuda"
+    },
     "lapacke": {
       "local": "yes",
       "name": "LAPACKE library (shared)",
