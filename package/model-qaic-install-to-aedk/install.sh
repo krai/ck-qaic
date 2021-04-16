@@ -89,12 +89,17 @@ mytag=`ck cat env --tags=${basetag}  |grep Tags |tail -n 1|cut -d':' -f2|sed 's/
 echo "Tag: ${mytag}"
 
 
-env=`cat ${model_install_file} | python3 -c "import sys, json; dict=json.load(sys.stdin)['deps']['model-source']['dict']['env'];
+env=`cat ${model_install_file} | python3 -c "import sys, json; 
+deps=json.load(sys.stdin)['deps']
+dict=deps['model-source']['dict']['env'];
 for key,val in dict.items():
-	key=key.replace('CK_ENV_', '_')
-	print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')"`
-#echo "Env: ${env}"
-
+   key=key.replace('CK_ENV_', '_')
+   print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')
+if(dict['ML_MODEL_MODEL_NAME'] == 'ssd-resnet34'):
+   dict=deps['profile-resnet34']['dict']['env'];
+   for key,val in dict.items():
+      key=key.replace('CK_ENV_', '_')
+      print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')"`
 source_path=`ck cat env --tags=${mytag} | grep "MODEL_ROOT"|head -n 1 |cut -d"=" -f2`
 echo $source_path
 dest_path=${source_path}

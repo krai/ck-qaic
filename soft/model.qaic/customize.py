@@ -105,7 +105,7 @@ def setup(i):
         if varname.startswith('ML_MODEL_') or varname.startswith('CK_MLPERF_'):
             env[varname] = install_env[varname]
             # These variables are expected to be stipped of "CK_ENV"
-        elif varname.startswith('_ONNX_MODEL_') or varname.startswith('_TENSORFLOW_MODEL_'):
+        elif varname.startswith('_ONNX_MODEL_') or varname.startswith('_TENSORFLOW_MODEL_') or varname.startswith('_ABC_LOC_') or varname.startswith('_COMPILER'):
             env["CK_ENV" + varname] = install_env[varname]
 
     
