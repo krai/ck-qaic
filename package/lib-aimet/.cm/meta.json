@@ -3,8 +3,8 @@
     "extra_dir": "",
     "install_env": {
       "ENABLE_CUDA": "FALSE",
-      "EXTRA_CONFIGURE_FLAGS":"",    
       "*PACKAGE_CONFIGURE_FLAGS": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TENSORFLOW=FALSE $<<EXTRA_CONFIGURE_FLAGS>>$ -DENABLE_CUDA=$<<ENABLE_CUDA>>$",
+      "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DEigen3_DIR=$<<CK_ENV_EIGEN_HEADERS_LIB>>$",
       "BUILD_SHARED_LIBS": "OFF",
       "CMAKE_CONFIG": "Release",
       "FILE_EXT_LINUX": "",
@@ -99,8 +99,7 @@
         "version": "master"
       },
       "extra_env": {
-        "PACKAGE_PATCH": "YES",
-        "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DEigen3_DIR=$<<CK_ENV_EIGEN_HEADERS_LIB>>$"
+        "PACKAGE_PATCH": "YES"
       },
       "extra_tags": [
         "vmaster"
