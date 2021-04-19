@@ -108,6 +108,7 @@
       "local": "yes",
       "name": "MLPerf Inference source",
       "sort": 45,
+      "no_tags": "for.aimet",
       "tags": "mlperf,inference,source"
     },
     "python": {
