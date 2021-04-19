@@ -129,9 +129,9 @@
     "python": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "Python 3.6",
+      "name": "Python 3",
       "sort": 40,
-      "tags": "compiler,python,v3.6",
+      "tags": "compiler,python,v3",
       "enable_if_env": [
         {
             "_AIMET_MODEL": "yes"

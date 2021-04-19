@@ -74,7 +74,7 @@ def setup(i):
 
     # Get variables
     ck=i['ck_kernel']
-
+    s=''
     iv=i.get('interactive','')
 
     env=i.get('env',{})
@@ -102,8 +102,19 @@ def setup(i):
 
        cus['path_include']=pi+sdirs+'include'
 
+    ellp=host_d.get('env_ld_library_path','')
+    if ellp=='': ellp='LD_LIBRARY_PATH'
+
     ep=cus.get('env_prefix','')
     if pi!='' and ep!='':
        env[ep]=pi
+    
+    aimet_path=pi+sdirs+".."+sdirs+".."+sdirs
+    export_aimet_path=aimet_path+"python"+":"+aimet_path+"x86_64-linux-gnu"
+    env[ep+"_PYTHONPATH"]=export_aimet_path
+    env['PYTHONPATH']='$'+ep+'_PYTHONPATH:$PYTHONPATH'
 
-    return {'return':0, 'bat': ''}
+    if win=='':
+      env[ep+"_LIB"]=export_aimet_path
+      env[ellp]='$'+ep+'_LIB:$'+ellp
+    return {'return':0, 'bat': s}

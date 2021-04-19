@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d3bbe73..fd5f92b 100644
+index d3bbe73..72d6d9e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -39,8 +39,8 @@ cmake_minimum_required(VERSION 3.5)
@@ -34,7 +34,7 @@ index d3bbe73..fd5f92b 100644
 -set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
 +set(OPENCV_LIBRARY "${OpenCV_LIBS}")
  
-+find_package (Python 3.6 EXACT COMPONENTS Interpreter Development)
++find_package (Python 3 EXACT COMPONENTS Interpreter Development)
  # ----------------------------------
  # Conditional build for PyTorch
  # ----------------------------------
@@ -49,7 +49,7 @@ index d3bbe73..fd5f92b 100644
    # So we don't have a version mismatch - between PyTorch custom C++ op code and PyMO
 -  list(APPEND PYBIND11_INC_DIRS "/usr/local/lib/python3.6/dist-packages/torch/include")
 -  list(APPEND PYBIND11_INC_DIRS "/usr/include/python3.6/")
-+  list(APPEND PYBIND11_INC_DIRS $ENV{HOME}/.local/lib/python3.6/site-packages/torch/include)
++  list(APPEND PYBIND11_INC_DIRS "${TORCH_INCLUDE_DIR}")
 +  list(APPEND PYBIND11_INC_DIRS "${Python_INCLUDE_DIRS}")
  
  else (ENABLE_TORCH)
@@ -179,18 +179,18 @@ index 5263eaa..83aeca0 100644
  
  else (ENABLE_CUDA)
 diff --git a/TrainingExtensions/torch/CMakeLists.txt b/TrainingExtensions/torch/CMakeLists.txt
-index f46b9d9..46de00c 100644
+index f46b9d9..7577c8c 100644
 --- a/TrainingExtensions/torch/CMakeLists.txt
 +++ b/TrainingExtensions/torch/CMakeLists.txt
-@@ -35,7 +35,7 @@
- #==============================================================================
- cmake_minimum_required(VERSION 3.5)
+@@ -50,7 +50,7 @@ string(REPLACE ";" "','" DlQuantizationIncludePaths "${DlQuantizationIncludes}")
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/setup.py.in ${SETUP_PY})
  
--find_program(PYTHON "python3")
-+find_program(PYTHON "python3.6")
- 
- 
- set(SETUP_PY "${CMAKE_CURRENT_BINARY_DIR}/src/setup.py")
+ add_custom_command(OUTPUT ${OUTPUT}
+-      COMMAND ${CMAKE_COMMAND} -E env PYTHONPATH="${CMAKE_BINARY_DIR}/artifacts"
++	COMMAND ${CMAKE_COMMAND} -E env PYTHONPATH="${PYTHONPATH}:${CMAKE_BINARY_DIR}/artifacts"
+               ${PYTHON} ${SETUP_PY} install  --install-base=${CMAKE_BINARY_DIR}/artifacts
+                                              --install-purelib=${CMAKE_BINARY_DIR}/artifacts
+                                              --install-platlib=${CMAKE_BINARY_DIR}/artifacts
 @@ -86,4 +86,4 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/artifacts/
  
  install(FILES ${CMAKE_BINARY_DIR}/artifacts/easy-install.pth ${CMAKE_BINARY_DIR}/artifacts/site.py
