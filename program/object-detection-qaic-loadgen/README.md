@@ -333,21 +333,16 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 </pre>
 
 <a name="prepare_ssd_resnet34"></a>
-## Prepare the SSD ResNet34 model
+## Prepare the SSD-ResNet34 model
 
-### Download the SSD ResNet34 model
-
-#### Use precalibrated profile
-
-<pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package:model-aimet-mlperf-ssd-resnet
-</pre>
+<a name="prepare_ssd_resnet34_calibrate"></a>
+### Calibrate the model using [AIMET](https://quic.github.io/aimet-pages/index.html)
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> echo "mixed" | ck detect soft --tags=compiler,glow,profile \
---full_path=$(ck find repo:ck-qaic)/aimet/mixed/profile.yaml \
---extra_tags=mlperf,ssd_resnet34,bs.1,aimet,mixed
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
+
+**NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md).
 
 
 ### Compile the Server/Offline model for the PCIe server cards
@@ -405,9 +400,9 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <a name="benchmark"></a>
 # Benchmark
 
-- Offline: refer to `README.offline.md`.
-- Server: refer to `README.server.md`.
-- Single Stream: refer to `README.singlestream.md`.
+- Offline: refer to [`README.offline.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.offline.md).
+- Server: refer to [`README.server.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.server.md).
+- Single Stream: refer to [`README.singlestream.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.singlestream.md).
 
 ## Info
 
