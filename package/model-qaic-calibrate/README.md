@@ -77,7 +77,7 @@ Install the preprocessed dataset locally as follows:
 			--tags=profile,ssd_resnet34 --env.CUDA_VISIBLE_DEVICES=0
 		
 ### Use a Pregenerated Profile
-Suppose you have the folder **AIMET_profile_download** in your $HOME, containing profile.yaml, node-precision.yaml and AIMET modified ssd_resnet34_aimet.onnx files from an AIMET run, you can detect them as follows:
+Suppose you have the folder **AIMET_profile_download** in your $HOME, containing profile.yaml, node-precision.yaml and AIMET modified ssd_resnet34_aimet.onnx files from the `ck install package --tags=profile,ssd_resnet34` command (or its GPU variant) on a different machine (for example, one used for a GPU run), you can detect the profile as follows:
 
 	echo "vdetected" | ck detect soft:compiler.glow.profile \
 	--extra_tags=ssd_resnet34,gpu,aimet --full_path=$HOME/AIMET_profile_download/profile.yaml \
