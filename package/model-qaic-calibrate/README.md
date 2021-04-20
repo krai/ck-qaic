@@ -71,6 +71,8 @@ Install the preprocessed dataset locally as follows:
 1. MLPerf SSD-ResNet34 ONNX with the 500 images of Coco Calibration dataset
 						 
 		ck install package --tags=profile,ssd_resnet34
+	1. Using GPUs
+		```ck install package --dep_add_tags.lib-aimet=with-cuda --tags=profile,ssd_resnet34 --env.CUDA_VISIBLE_DEVICES=0```
 		
 ### Use a Pregenerated Profile
 Suppose you have the folder **AIMET_profile_download** in your $HOME, containing profile.yaml, node-precision.yaml and AIMET modified ssd_resnet34_aimet.onnx files from an AIMET run, you can detect them as follows:
@@ -79,7 +81,7 @@ Suppose you have the folder **AIMET_profile_download** in your $HOME, containing
 	--extra_tags=ssd_resnet34,gpu,aimet --full_path=$HOME/AIMET_profile_download/profile.yaml \
 	--ienv._AIMET_MODEL=yes
 
-### Generation of AIMET profile using GPUs 
+#### Generation of AIMET profile using GPUs without CK
 Currently we are using AIMET docker image to generate the AIMET profile to be run using GPUs. 
 
 	WORKSPACE=`pwd`
