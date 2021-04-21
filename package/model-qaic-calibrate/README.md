@@ -1,22 +1,22 @@
 # Qualcomm Cloud AI - MLPerf Inference - Calibration
 
-This package calibrates the [ResNet50](#resnet50) model using the QAIC
-toolchain, and the SSD-ResNet34 model using the AI Model Efficiency Toolkit
-([AIMET](https://github.com/quic/aimet)).
+This package calibrates:
+- [ResNet50](#resnet50) using the QAIC toolchain.
+- [SSD-ResNet34](#ssd_resnet34) using the AI Model Efficiency Toolkit ([AIMET](https://github.com/quic/aimet)).
 
 <a name="resnet50"></a>
 ## Calibrate ResNet50
 
 The ResNet50 model is calibrated using the QAIC toolchain based on
-[Glow](https://github.com/pytorch/glow). It requires 500 preprocess images
-randomly selected from the ImageNet 2012 validation dataset.
+[Glow](https://github.com/pytorch/glow). This requires `500` images
+randomly selected from the [ImageNet](http://www.image-net.org/) 2012 validation dataseti (`50,000` images).
 
 <a name="resnet50_calbration_dataset"></a>
 ### Prepare the calibration dataset based on [MLPerf option #1](https://github.com/mlcommons/inference/blob/master/calibration/ImageNet/cal_image_list_option_1.txt)
 
-#### Detect the ImageNet validation dataset
+#### Detect the ImageNet 2012 validation dataset
 
-Unfortunately, the ImageNet validation dataset (50,000 images) [cannot be
+Unfortunately, the ImageNet validation dataset [cannot be
 freely downloaded](https://github.com/mlcommons/inference/issues/542).  If you
 have a copy of it under e.g. `/datasets/dataset-imagenet-ilsvrc2012-val/`, you
 can register it with CK ("detect") by giving the absolute path to
@@ -61,41 +61,102 @@ can register it with CK ("detect") by giving the absolute path to
 <a name="ssd_resnet34"></a>
 ## Calibrate SSD-ResNet34
 
+The SSD-ResNet34 model is calibrated using the AI Model Efficiency Toolkit ([AIMET](https://github.com/quic/aimet)).
+This requires `500` images randomly selected from the [COCO](https://cocodataset.org) 2017 training dataset (`118,287` images).
+
 ### Prerequisites
 
-#### Coco Train dataset
+**TODO**
 
-1. If you have the Coco train dataset e.g. in `/datasets/dataset-coco-2017-train`, you can register it with CK as follows:
+<a name="ssd_resnet34_calbration_dataset"></a>
+### Prepare the calibration dataset
 
-		echo "full" | ck detect soft:dataset.coco.2017.train \
-		--extra_tags=full \
-		--full_path=/datasets/dataset-coco-2017-train/train2017/000000000009.jpg
-2. **Alternatively** you can install the Coco dataset as follows:
+#### Download the COCO training dataset
 
-		ck install package --tags=dataset,coco,train,full
-#### Preprocess the Training dataset
-1. Install locally
+The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destination directory.
 
-		ck install package --tags=dataset,coco,calibration,preprocessed
-2. **Alternatively** you can detect an already preprocessed calibration dataset as follows
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,train,2017)
+20G    /datasets/dataset-coco-2017-train
+</pre>
 
-		echo "vdetected" | ck detect soft:dataset.coco.2017.train \
-		--full_path=/home/arjun/CK-TOOLS/dataset-coco-calibration-mlperf/train2017/000000391895.jpg \
-		--extra_tags=preprocessed,mlperf,calibration
-    
-### Examples
+##### Hint
 
-1. MLPerf SSD-ResNet34 ONNX with the 500 images of Coco Calibration dataset
-						 
-		ck install package --tags=profile,ssd_resnet34
-	1. Using GPUs
+Once you have downloaded the COCO 2017 training dataset **using CK** under e.g. `/datasets/dataset-coco-2017-train`,
+you can register it with CK again if needed (e.g. if you reset your CK environment) as follows:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck detect soft:dataset.coco.2017.train --extra_tags=detected,full \
+--full_path=/datasets/dataset-coco-2017-train/train2017/000000000009.jpg
+</pre>
+
+#### Select the calibration dataset
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=dataset,coco,calibration,mlperf
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,calibration,mlperf)
+86M     /home/anton/CK-TOOLS/dataset-coco-calibration-mlperf
+</pre>
+
+#### Preprocess the calibration dataset
+
+
+#### Preprocess the official MLPerf calibration dataset
+
+The [official MLPerf Inference calibration dataset](https://github.com/mlcommons/inference/blob/master/calibration/COCO/coco_cal_images_list.txt) takes `8.1G` when preprocessed to the `1200x1200` resolution: use `--ask` to confirm the destination directory.
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
+--tags=dataset,coco,calibration,preprocessed
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs $(ck locate env --tags=calibration,mlperf)
+8.1G    /datasets/dataset-object-detection-preprocessed-using-opencv-calibration-coco.2017-for-ssd-resnet-onnx-preprocessed-full-mlperf
+</pre>
+
+##### Hint
+
+You can detect an already preprocessed calibration dataset as follows:
+
+<pre>
+<b>[arjun@ax530b-03-giga ~]&dollar;</b>	echo "vdetected" | ck detect soft:dataset.coco.2017.train \
+--full_path=/home/arjun/CK-TOOLS/dataset-coco-calibration-mlperf/train2017/000000391895.jpg \
+--extra_tags=preprocessed,mlperf,calibration
+</pre>  
+
+
+<a name="ssd_resnet34_aimet"></a>
+### Install the AI Model Effiiciency Toolkit ([AIMET](https://quic.github.io/aimet-pages/index.html))
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=lib,aimet
+</pre>
+ 
+
+<a name="ssd_resnet34_calibrate"></a>
+### Calibrate
+
+<a name="ssd_resnet34_calibrate_cpu"></a>
+#### CPU
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
+</pre>
+
+<a name="ssd_resnet34_calibrate_gpu"></a>
+#### GPU
+
+<pre>
+<b>[anton@krai ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34 \
+--dep_add_tags.lib-aimet=with-cuda --env.CUDA_VISIBLE_DEVICES=0
+</pre>
 		
-			ck install package --dep_add_tags.lib-aimet=with-cuda \
-			--tags=profile,ssd_resnet34 --env.CUDA_VISIBLE_DEVICES=0
-		
-### Use a Pregenerated Profile
-Suppose you have the folder **AIMET_profile_download** in your $HOME, containing profile.yaml, node-precision.yaml and AIMET modified ssd_resnet34_aimet.onnx files from the `ck install package --tags=profile,ssd_resnet34` command (or its GPU variant) on a different machine (for example, one used for a GPU run), you can detect the profile as follows:
+### Detect a pregenerated profile
 
-	echo "vdetected" | ck detect soft:compiler.glow.profile \
-	--extra_tags=ssd_resnet34,gpu,aimet --full_path=$HOME/AIMET_profile_download/profile.yaml \
-	--ienv._AIMET_MODEL=yes
+Suppose you generate a profile using the `ck install package --tags=profile,ssd_resnet34` command (or its GPU variant) as above.
+Suppose you then copy the folder containing `profile.yaml`, `node-precision.yaml` and `ssd_resnet34_aimet.onnx` files to `$HOME/ssd_resnet34_profile` on a different machine.
+Then, you can detect the profile as follows:
+
+<pre>
+<b>[arjun@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
+--extra_tags=ssd_resnet34,aimet --full_path=$HOME/ssd_resnet34_profile/profile.yaml --ienv._AIMET_MODEL=yes
+</pre>
