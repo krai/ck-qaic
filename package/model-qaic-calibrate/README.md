@@ -1,48 +1,65 @@
+# Qualcomm Cloud AI - MLPerf Inference - Calibration
+
+This package calibrates the [ResNet50](#resnet50) model using the QAIC
+toolchain, and the SSD-ResNet34 model using the AI Model Efficiency Toolkit
+([AIMET](https://github.com/quic/aimet)).
+
+<a name="resnet50"></a>
+## Calibrate ResNet50
+
+The ResNet50 model is calibrated using the QAIC toolchain based on
+[Glow](https://github.com/pytorch/glow). It requires 500 preprocess images
+randomly selected from the ImageNet 2012 validation dataset.
+
+<a name="resnet50_calbration_dataset"></a>
+### Prepare the calibration dataset based on [MLPerf option #1](https://github.com/mlcommons/inference/blob/master/calibration/ImageNet/cal_image_list_option_1.txt)
+
+#### Detect the ImageNet validation dataset
+
+Unfortunately, the ImageNet validation dataset (50,000 images) [cannot be
+freely downloaded](https://github.com/mlcommons/inference/issues/542).  If you
+have a copy of it under e.g. `/datasets/dataset-imagenet-ilsvrc2012-val/`, you
+can register it with CK ("detect") by giving the absolute path to
+`ILSVRC2012_val_00000001.JPEG` as follows:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> echo "full" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
+--full_path=/datasets/dataset-imagenet-ilsvrc2012-val/ILSVRC2012_val_00000001.JPEG
+</pre>
+
+#### Select the calibration dataset
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --dep_add_tags.imagenet-val=full \
+--tags=dataset,imagenet,calibration,mlperf.option1
+</pre>
+
+#### Preprocess the calibration dataset
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --dep_add_tags.dataset-source=mlperf.option1 \
+--tags=dataset,preprocessed,using-opencv,for.resnet,layout.nhwc,first.500 \
+--extra_tags=calibration,mlperf.option1
+</pre>
+
+### Calibrate the model
+
+#### 8 samples per batch (for the Server and Offline scenarios)
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,resnet50,mlperf.option1,bs.8
+</pre>
 
 
-# Profile ONNX or TF models using Glow
+#### 1 sample per batch (for the SingleStream scenario)
 
-## Resnet50
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,resnet50,mlperf.option1,bs.1
+</pre>
 
-### Prerequisites
 
-#### ImageNet validation dataset
-
-If you have the ImageNet validation dataset e.g. in `/datasets/dataset-imagenet-ilsvrc2012-val`, you can register it with CK as follows:
-
-    echo "full" | ck detect soft:dataset.imagenet.val --extra_tags=full,ilsvrc2012 \
-    --full_path=/datasets/dataset-imagenet-ilsvrc2012-val/ILSVRC2012_val_00000001.JPEG
-#### Preprocess the Imagenet calibration dataset
-Install the preprocessed dataset locally as follows:
-
-1. Preprocess only the first 5 images of Imagenet 2012 (quick test)
-
-		ck install package --tags=imagenet,cal,first.5
-2. Preprocess the MLPerf Calibration Option 1 Dataset
-
-		ck install package --tags=imagenet,cal,mlperf.option1 
-3. **Alternatively** Preprocess the MLPerf Calibration Option 2 Dataset
-
-		ck install package --tags=imagenet,cal,mlperf.option2 
-
-### Examples
-
-1. MLPerf ResNet50 TF with the first 5 images of ImageNet 2012 (quick test) 
-						 
-		ck install package --tags=profile,resnet50.tf,first.5
-2. MLPerf ResNet50 TF with calibration option 1
-
-		ck install package --tags=profile,resnet50.tf,mlperf.option1
-3. MLPerf ResNet50 TF with calibration option 2
-
-		ck install package --tags=profile,resnet50.tf,mlperf.option2
-
-### Use a Pregenerated Profile
-	echo "vdetected" | ck detect soft:model.qaic \
-	--extra_tags=resnet50.tf \
-	--full_path=$HOME/CK/ck-qaic/profile/resnet50/bs.8/profile.yaml
-
-## SSD-Resnet34
+<a name="ssd_resnet34"></a>
+## Calibrate SSD-ResNet34
 
 ### Prerequisites
 
