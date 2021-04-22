@@ -101,6 +101,11 @@
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
+        ],
+        "ssd-mobilenet,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
+          }
         ]
       }
     },
@@ -212,6 +217,20 @@
         "calibrated-by-qaic",
         "no-nms"
       ]
+    },
+    "ssd-mobilenet": {
+      "extra_customize": {
+        "package_name": "Profile for QAIC model (SSD-MobileNet No NMS)"
+      },
+      "extra_env": {
+        "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ],
+      "on_by_default": "no"
     }
   }
 }
