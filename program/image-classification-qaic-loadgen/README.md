@@ -423,9 +423,9 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 <a name="benchmark"></a>
 # Benchmark
 
-- Offline: refer to `README.offline.md`.
-- Server: refer to `README.server.md`.
-- Single Stream: refer to `README.singlestream.md`.
+- Offline: refer to [`README.offline.md`](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.offline.md).
+- Server: refer to [`README.server.md`](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.server.md).
+- Single Stream: refer to [`README.singlestream.md`](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.singlestream.md).
 
 ## Info
 
