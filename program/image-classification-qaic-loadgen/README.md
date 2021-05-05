@@ -134,7 +134,6 @@ V1.55.16
 ## Install CK repositories
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck pull repo --url=https://github.com/krai/ck-mlperf
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck pull repo --url=https://github.com/krai/ck-qaic
 </pre>
 
