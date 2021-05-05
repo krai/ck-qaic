@@ -123,7 +123,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> export CK_PYTHON=`which python3`
 <b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
-<b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck
+<b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck==1.55.16
 <b>[anton@ax530b-03-giga ~]&dollar;</b> echo 'export PATH=&dollar;HOME/.local/bin:&dollar;PATH' >> &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> source &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck version
