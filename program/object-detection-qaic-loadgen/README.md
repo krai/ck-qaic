@@ -150,11 +150,11 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> export CK_PYTHON=`which python3`
 <b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
-<b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck==1.55.16
+<b>[anton@ax530b-03-giga ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck==1.55.5
 <b>[anton@ax530b-03-giga ~]&dollar;</b> echo 'export PATH=&dollar;HOME/.local/bin:&dollar;PATH' >> &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> source &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck version
-V1.55.16
+V1.55.5
 </pre>
 
 <a name="install_ck_repos"></a>
@@ -341,7 +341,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
 
-**NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md).
+**NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34_calibrate).
 
 
 ### Compile the Server/Offline model for the PCIe server cards
