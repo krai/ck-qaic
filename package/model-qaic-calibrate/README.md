@@ -153,10 +153,18 @@ You can detect an already preprocessed calibration dataset as follows:
 ### Detect a pregenerated profile
 
 Suppose you generate a profile using the `ck install package --tags=profile,ssd_resnet34` command (or its GPU variant) as above.
-Suppose you then copy the folder containing `profile.yaml`, `node-precision.yaml` and `ssd_resnet34_aimet.onnx` files to `$HOME/ssd_resnet34_profile` on a different machine.
-Then, you can detect the profile as follows:
+
+Suppose you then copy the folder containing `profile.yaml`, `node-precision.yaml` and `ssd_resnet34_aimet.onnx` files to a different machine e.g.:
 
 <pre>
-<b>[arjun@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
---extra_tags=ssd_resnet34,aimet --full_path=$HOME/ssd_resnet34_profile/profile.yaml --ienv._AIMET_MODEL=yes
+<b>[anton@krai ~]&dollar;</b> rsync -av --exclude=preprocessed --exclude=inference --exclude=__pycache__ \
+&dollar;(ck locate env --tags=profile,ssd_resnet34,no-disable-cuda-devices) anton@ax530b-03-giga:~/CK-TOOLS
+</pre>
+
+Then, you can detect the profile on that machine e.g.:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile --ienv._AIMET_MODEL=yes \
+--full_path=$HOME/CK-TOOLS/model-profile-qaic-compiler.python-3.6.13-no-disable-cuda-devices-ssd_resnet34/profile.yaml \
+--extra_tags=ssd_resnet34,aimet
 </pre>
