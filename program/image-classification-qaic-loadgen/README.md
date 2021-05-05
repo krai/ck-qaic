@@ -127,7 +127,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 <b>[anton@ax530b-03-giga ~]&dollar;</b> echo 'export PATH=&dollar;HOME/.local/bin:&dollar;PATH' >> &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> source &dollar;HOME/.bashrc
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck version
-V1.55.2
+V1.55.16
 </pre>
 
 <a name="install_ck_repos"></a>
