@@ -341,7 +341,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
 
-**NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34_calibrate).
+**NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34).
 
 
 ### Compile the Server/Offline model for the PCIe server cards
