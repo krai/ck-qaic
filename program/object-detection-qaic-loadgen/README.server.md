@@ -1,4 +1,4 @@
-# Qualcomm - MLPerf Inference v1.0
+# Qualcomm Cloud AI - MLPerf Inference - Object Detection
 
 <a name="submit_r282_z93_q5_server"></a>
 ## Server

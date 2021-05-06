@@ -1,4 +1,4 @@
-# Qualcomm - MLPerf Inference v1.0
+# Qualcomm Cloud AI - MLPerf Inference - Image Classification
 
 <a name="submit_aedk_16nsp_singlestream"></a>
 ## Single Stream

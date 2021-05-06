@@ -1,4 +1,4 @@
-# Qualcomm - MLPerf Inference v1.0
+# Qualcomm Cloud AI - MLPerf Inference - Image Classification
 
 1. [Installation](#installation)
     1. [Install system-wide prerequisites](#install_system)

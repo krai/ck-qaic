@@ -1,4 +1,4 @@
-# Qualcomm - MLPerf Inference v1.0
+# Qualcomm Cloud AI - MLPerf Inference - Object Detection
 
 1. [Installation](#installation)
     1. [Download Algorithm.cpp](#download_algorithm_cpp)
