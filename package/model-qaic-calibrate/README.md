@@ -2,7 +2,7 @@
 
 This package calibrates:
 - [ResNet50](#resnet50) using the QAIC toolchain.
-- [SSD-ResNet34](#ssd_resnet34) using the AI Model Efficiency Toolkit ([AIMET](https://github.com/quic/aimet)).
+- [SSD-ResNet34](#ssd_resnet34) using the AI Model Efficiency Toolkit ([AIMET](https://quic.github.io/aimet-pages/index.html)).
 
 <a name="resnet50"></a>
 ## Calibrate ResNet50
@@ -62,14 +62,12 @@ can register it with CK ("detect") by giving the absolute path to
 ## Calibrate SSD-ResNet34
 
 The SSD-ResNet34 model is calibrated using the AI Model Efficiency Toolkit ([AIMET](https://github.com/quic/aimet)).
-This requires `500` images randomly selected from the [COCO](https://cocodataset.org) 2017 training dataset (`118,287` images).
-
-### Prerequisites
-
-**TODO**
 
 <a name="ssd_resnet34_calbration_dataset"></a>
 ### Prepare the calibration dataset
+
+The [official MLPerf Inference calibration dataset](https://github.com/mlcommons/inference/blob/master/calibration/COCO/coco_cal_images_list.txt)
+consists of `500` images randomly selected from the [COCO](https://cocodataset.org) 2017 training dataset (`118,287` images).
 
 #### Download the COCO training dataset
 
@@ -101,16 +99,13 @@ you can register it with CK again if needed (e.g. if you reset your CK environme
 
 #### Preprocess the calibration dataset
 
-
-#### Preprocess the official MLPerf calibration dataset
-
-The [official MLPerf Inference calibration dataset](https://github.com/mlcommons/inference/blob/master/calibration/COCO/coco_cal_images_list.txt) takes `8.1G` when preprocessed to the `1200x1200` resolution: use `--ask` to confirm the destination directory.
+The calibration dataset takes `8.1G` when preprocessed to the `1200x1200` resolution: use `--ask` to confirm the destination directory.
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
---tags=dataset,coco,calibration,preprocessed
-<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs $(ck locate env --tags=calibration,mlperf)
-8.1G    /datasets/dataset-object-detection-preprocessed-using-opencv-calibration-coco.2017-for-ssd-resnet-onnx-preprocessed-full-mlperf
+--tags=dataset,coco.2017,calibration,for-ssd-resnet-onnx-preprocessed
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco.2017,calibration,preprocessed)
+8.1G    /datasets/dataset-object-detection-preprocessed-using-opencv-calibration-coco.2017-first.500-for-ssd-resnet-onnx-preprocessed
 </pre>
 
 ##### Hint
@@ -127,10 +122,14 @@ You can detect an already preprocessed calibration dataset as follows:
 <a name="ssd_resnet34_aimet"></a>
 ### Install the AI Model Effiiciency Toolkit ([AIMET](https://quic.github.io/aimet-pages/index.html))
 
-<pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=lib,aimet
-</pre>
- 
+**NB:** The resulting accuracy depends on the hardware on which the model is
+calibrated.  The accuracy has been observed to satisfy the MLPerf Inference
+requirement (mAP &GreaterEqual; `19.80%`) when calibrating on server-class
+Intel CPUs (Xeon, but not Core).  The best accuracy,
+however, has been observed when calibrating on NVIDIA GPUs (mAP &GreaterEqual;
+`19.85%`).
+
+Please follow the corresponding [AIMET installation instructions](https://github.com/krai/ck-qaic/tree/main/package/lib-aimet), and then the calibration instructions below.
 
 <a name="ssd_resnet34_calibrate"></a>
 ### Calibrate
@@ -158,13 +157,13 @@ Suppose you then copy the folder containing `profile.yaml`, `node-precision.yaml
 
 <pre>
 <b>[anton@krai ~]&dollar;</b> rsync -av --exclude=preprocessed --exclude=inference --exclude=__pycache__ \
-&dollar;(ck locate env --tags=profile,ssd_resnet34,no-disable-cuda-devices) anton@ax530b-03-giga:~/CK-TOOLS
+&dollar;(ck locate env --tags=profile,ssd_resnet34) anton@ax530b-03-giga:~/CK-TOOLS
 </pre>
 
 Then, you can detect the profile on that machine e.g.:
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile --ienv._AIMET_MODEL=yes \
---full_path=$HOME/CK-TOOLS/model-profile-qaic-compiler.python-3.6.13-no-disable-cuda-devices-ssd_resnet34/profile.yaml \
---extra_tags=ssd_resnet34,aimet
+<b>[anton@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
+--ienv._AIMET_MODEL=yes --extra_tags=ssd_resnet34,aimet \
+--full_path=/home/anton/CK-TOOLS/model-profile-qaic-compiler.python-3.8.5-ssd_resnet34/profile.yaml
 </pre>

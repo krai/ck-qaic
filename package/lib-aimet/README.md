@@ -9,6 +9,22 @@ compute and memory requirements and minimal impact to task accuracy.
 <a name="prereqs"></a>
 # Prerequisites
 
+**NB:** The SSD-ResNet34 model is currently calibrated using a particular revision of AIMET.
+This revision requires v41 of `setuptools` to be installed:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> python3 -m pip install setuptools==41.0.1 --user
+</pre>
+
+If it is not installed, AIMET installation characteristically fails with:
+
+<pre>
+CMake Error at TrainingExtensions/torch/cmake_install.cmake:73 (file):
+  file INSTALL cannot find
+  "/home/anton/CK-TOOLS/lib-aimet-master-gcc-9.3.0-compiler.python-3.8.5-lib.python.torch-1.4.0-master-linux-64/obj/artifacts/site.py":
+  No such file or directory.
+</pre>
+
 <a name="prereqs_cpu"></a>
 ## CPU
 
@@ -18,7 +34,7 @@ None?
 ## GPU (tested on Ubuntu 20.04.2)
 
 ```
-# apt install -y \
+$ sudo apt install -y \
 python3.6-dev \
 pybind11-dev \
 libilmbase-dev \
@@ -32,17 +48,13 @@ ffmpeg
 ### Driver 460 (CUDA 11.2)
 
 ```
-# apt install -y \
-nvidia-kernel-source-460-server \
-nvidia-compute-utils-460
+$ sudo apt install -y nvidia-driver-460-server nvidia-kernel-source-460-server nvidia-compute-utils-460
 ```
 
 ### Driver 465 (CUDA 11.3)
 
 ```
-# apt install -y \
-nvidia-kernel-source-465 \
-nvidia-compute-utils-465
+$ sudo apt install -y nvidia-driver-465 nvidia-kernel-source-465 nvidia-compute-utils-465
 ```
 
 <a name="install"></a>
@@ -51,13 +63,13 @@ nvidia-compute-utils-465
 <a name="install_cpu"></a>
 ## CPU
 
-```bash
-$ ck install package --tags=lib,aimet
-```
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=lib,aimet
+</pre>
 
 <a name="install_gpu"></a>
 ## GPU
 
-```bash
-$ ck install package --tags=lib,aimet,with-cuda
-```
+<pre>
+<b>[anton@krai ~]&dollar;</b> ck install package --tags=lib,aimet,with-cuda
+</pre>
