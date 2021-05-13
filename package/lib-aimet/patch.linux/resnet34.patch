@@ -34,7 +34,7 @@ index d3bbe73..72d6d9e 100644
 -set(OPENCV_LIBRARY /usr/local/lib/libopencv_core.a)
 +set(OPENCV_LIBRARY "${OpenCV_LIBS}")
  
-+find_package (Python 3 EXACT COMPONENTS Interpreter Development)
++find_package (Python 3.7 EXACT COMPONENTS Interpreter Development)
  # ----------------------------------
  # Conditional build for PyTorch
  # ----------------------------------
