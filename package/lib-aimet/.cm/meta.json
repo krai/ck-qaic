@@ -63,7 +63,7 @@
       "add_to_path": "yes",
       "local": "yes",
       "name": "Python Compiler",
-      "sort": -10,
+      "sort": 24,
       "tags": "compiler,python"
     },
     "pytorch": {
