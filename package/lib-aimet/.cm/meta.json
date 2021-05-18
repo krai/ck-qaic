@@ -62,26 +62,26 @@
     "python": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "Python Compiler",
+      "name": "Python interpreter",
       "sort": 24,
       "tags": "compiler,python"
     },
     "pytorch": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "PyTorch python library",
+      "name": "Python PyTorch library",
       "sort": 25,
       "tags": "lib,pytorch,v1.4.0"
     },
     "python-setuptools": {
       "local": "yes",
-      "name": "Python Setup Tools v41",
+      "name": "Python Setuptools (v41)",
       "sort": 30,
       "tags": "python-package,setuptools,v41.0.1"
     },
     "eigen3-headers": {
       "local": "yes",
-      "name": "Eigen Library Headers",
+      "name": "Eigen library headers",
       "sort": 35,
       "tags": "lib,eigen,headers"
     }
