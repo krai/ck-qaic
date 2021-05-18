@@ -64,7 +64,7 @@
       "local": "yes",
       "name": "Python Compiler",
       "sort": -10,
-      "tags": "compiler,python,cpython,v3.7.10"
+      "tags": "compiler,python"
     },
     "pytorch": {
       "add_to_path": "yes",
