@@ -31,7 +31,7 @@
       "local": "yes",
       "name": "COCO calibration dataset in NCHW",
       "sort": 1,
-      "tags": "dataset,calibration,coco.2017,for-ssd-resnet-onnx-preprocessed",
+      "tags": "dataset,calibration,coco.2017",
       "update_tags_if_env": {
         "first.5": [
           {
@@ -42,7 +42,17 @@
           {
             "_COCO_CAL": "calibrate_ssd_resnet34_mlperf"
           }
-        ]
+        ],
+	"for-ssd-resnet-onnx-preprocessed": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
+          }
+	],
+	"for-ssd-mobilenet-preprocessed": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
+          }
+	]
       }
     },
     "imagenet-cal": {
@@ -100,6 +110,11 @@
         "ssd-resnet34,onnx,mlperf,non-quantized,no-nms": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
+          }
+        ],
+	 "ssd-mobilenet,tf,quantized,from-zenodo": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
           }
         ]
       }
@@ -212,6 +227,25 @@
         "calibrated-by-qaic",
         "no-nms"
       ]
+    },
+   "ssd-mobilenet": {
+      "extra_customize": {
+        "package_name": "Profile for QAIC model (SSD-MobileNet)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_COCO": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "_COMPILER_ARGS": "",
+        "_COMPILER_PARAMS": "",
+        "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ],
+      "on_by_default": "no"
     }
   }
 }
