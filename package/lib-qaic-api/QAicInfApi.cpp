@@ -369,82 +369,12 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   // Load file
   status = loadFileType(filePath, programQpcBuf_.size, programQpcBuf_.buf,
                         programBufferVector_);
-   if (programQpcBuf_.buf != nullptr) {
-    // Init QPC
-    status = qaicInitQpc(programQpcBuf_.buf, programQpcBuf_.size);
-    if (status != QS_SUCCESS) {
-      std::cerr << "Failed to initialize QPC" << std::endl;
-      return status;
-    }
-    status = qaicGetQpcSegment(programQpcBuf_.buf, "constantsdesc.bin",
-                                        &(constDescBuf_.buf),
-                                        &(constDescBuf_.size), 0);
-
-    if (status != QS_SUCCESS) {
-      std::cout << "Did not find constdesc.bin segment" << std::endl;
-      // This is not an error
-    }
-    status = qaicGetQpcSegment(programQpcBuf_.buf, "constants.bin",
-                                        &(constBuf_.buf), &(constBuf_.size), 0);
-    if (status != QS_SUCCESS) {
-      std::cout << "Did not find constants.bin segment" << std::endl;
-      // This is not an error
-    }
-    status = qaicGetQpcSegment(programQpcBuf_.buf, "networkdesc.bin",
-                                        &(networkDescBuf_.buf),
-                                        &(networkDescBuf_.size), 0);
-    if (status != QS_SUCCESS) {
-      std::cerr << "Did not find networkdesc.bin segment" << std::endl;
-      return status;
-    }
-
-    status = qaicGetQpcSegment(programQpcBuf_.buf, "network.elf",
-                                        &(progBuf_.buf), &(progBuf_.size), 0);
-    if (status != QS_SUCCESS) {
-      std::cerr << "Did not find network.elf segment" << std::endl;
-      return status;
-    }
-  } else {
-    std::cout << "QPC file was not found, attempting to load individual "
-                 "program components"
-              << std::endl;
-    loadFileType(modelBasePath_ + "/constantsdesc.bin", constDescBuf_.size,
-                 constDescBuf_.buf, programBufferVector_);
-    loadFileType(modelBasePath_ + "/constants.bin", constBuf_.size,
-                 constBuf_.buf, programBufferVector_);
-    loadFileType(modelBasePath_ + "/networkdesc.bin", networkDescBuf_.size,
-                 networkDescBuf_.buf, programBufferVector_);
-    loadFileType(modelBasePath_ + "/network.elf", progBuf_.size, progBuf_.buf,
-                 programBufferVector_);
-  }
 
   status = qaicCreateContext(&context_, &contextProperties_, 1, &dev_,
                                       logCallback, errorHandler, nullptr);
   if ((context_ == nullptr) || (status != QS_SUCCESS)) {
     std::cerr << "Failed to Create Context" << std::endl;
     return status;
-  }
-  
-  QAicConstantsProperties constantsProperties =
-      QAIC_CONSTANTS_PROPERTIES_SINGLES_SEGMENT;
-
-  if (constBuf_.buf != nullptr) {
-    status = qaicCreateConstants(context_, &constants_, dev_,
-                                          &constantsProperties, "constants",
-                                          nullptr, 0);
-    if ((constants_ == nullptr) || (status != QS_SUCCESS)) {
-      std::cerr << "Failed to Create Constants" << std::endl;
-      return status;
-    }
-  }
-
-  if (constants_ != nullptr) {
-    status = qaicLoadConstants(constants_, constBuf_.buf,
-                                        constBuf_.size, 0);
-    if (status != QS_SUCCESS) {
-      std::cerr << "Failed to load constants" << std::endl;
-      return status;
-    }
   }
 
   //-------------------------------------------------------------------------
@@ -459,11 +389,19 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     return status;
   }
 
+  status = qaicOpenQpc(&qpcObj_, programQpcBuf_.buf, programQpcBuf_.size, false);
+  if (status != QS_SUCCESS) {
+    std::cerr << "Failed to open Qpc." << std::endl;
+    return status;
+  }
+
   for (uint32_t i = 0; i < numActivations_; i++) {
     const char *name = "progName";
     QAicProgram *program = nullptr;
-    status = qaicCreateProgram(
-        context_, &program, &programProperties_, dev_, name, programQpcBuf_.buf, programQpcBuf_.size, constants_);
+
+    status = qaicCreateProgramQpcObj(
+        context_, &program, &programProperties_, dev_, name, qpcObj_, nullptr);
+
     if ((program == nullptr) || (status != QS_SUCCESS)) {
       std::cerr << "Failed to create program" << std::endl;
       return status;
