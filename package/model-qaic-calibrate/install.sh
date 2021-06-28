@@ -49,7 +49,7 @@ if [[ -n ${_AIMET_MODEL} ]]; then
      cd ${INSTALL_DIR}/${AIMET_RUN}
      rm -rf output
      rm -rf preprocessed
-     ${PYTHON} -m pip install torchvision==0.5.0 pycocotools numpy pyyaml tensorboard tqdm onnx Pillow jsonschema opencv-python-headless --user
+     ${PYTHON} -m pip install torchvision==0.5.0 pycocotools numpy pyyaml tensorboard tqdm onnx Pillow jsonschema opencv-python-headless
      ln -s ${CK_ENV_MLPERF_INFERENCE} inference
      wget -nc "https://zenodo.org/record/3236545/files/resnet34-ssd1200.pytorch"
      #echo "PYTHONPATH=${PYTHONPATH} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ${PYTHON} ssd_resnet_aimet.py resnet34-ssd1200.pytorch annotations.json ${COCO_CAL_DIR}"
