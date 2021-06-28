@@ -311,6 +311,14 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <a name="prepare_coco"></a>
 ## Prepare the COCO 2017 validation dataset (5,000 images)
 
+### Hint
+Once you have downloaded the COCO 2017 validation dataset using CK, you can register it with CK again if needed (e.g. if you reset your CK environment) as follows:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck detect soft:dataset.coco.2017.val --extra_tags=detected,full \
+--full_path=/datasets/dataset-coco-2017-val/val2017/000000000139.jpg
+</pre>
+
 <a name="prepare_coco_download"></a>
 ###  Download
 
