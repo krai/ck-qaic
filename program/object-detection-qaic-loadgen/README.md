@@ -271,7 +271,7 @@ If this fails, install CMake from source:
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck show env --tags=tool,cmake,from.source
 Env UID:         Target OS: Bits: Name: Version: Tags:
 
-415293550c8e9de3   linux-64    64 cmake 3.18.2   64bits,cmake,compiled-by-gcc,compiled-by-gcc-9.3.0,host-os-linux-64,source,target-os-linux-64,tool,v3,v3.18,v3.18.2
+9784ba222cddacb6   linux-64    64 cmake 3.20.5   64bits,cmake,compiled,compiled-by-gcc,compiled-by-gcc-9.3.0,from.source,host-os-linux-64,source,target-os-linux-64,tool,v3,v3.20,v3.20.5
 </pre>
 
 <a name="install_python_deps"></a>
