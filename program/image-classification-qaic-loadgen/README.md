@@ -73,7 +73,7 @@ Python 3.6.8
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> sudo su
-<b>[root@ax530b-03-giga anton]#</b> export PYTHON_VERSION=3.7.10
+<b>[root@ax530b-03-giga anton]#</b> export PYTHON_VERSION=3.7.11
 <b>[root@ax530b-03-giga anton]#</b> cd /usr/src \
 && wget https://www.python.org/ftp/python/&dollar;{PYTHON_VERSION}/Python-&dollar;{PYTHON_VERSION}.tgz \
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
@@ -84,7 +84,7 @@ Python 3.6.8
 <b>[root@ax530b-03-giga ~]#</b> exit
 exit
 <b>[anton@ax530b-03-giga ~]&dollar;</b> python3.7 --version
-Python 3.7.10
+Python 3.7.11
 </pre>
 
 #### GCC 9
