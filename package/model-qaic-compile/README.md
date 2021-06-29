@@ -1,20 +1,10 @@
 # Convert ONNX models into the QAIC format
 
 ## Prerequisites
+Calibration profiles which can be done following the instructions given [https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md](here.)
 
-**TODO**
+### Resnet50
+Please see [https://github.com/krai/ck-qaic/tree/main/program/image-classification-qaic-loadgen#prepare_resnet50] for compilation instructions for Resnet50.
 
-### ImageNet validation dataset (required for calibration)
-
-If you have the ImageNet validation dataset e.g. in `/datasets/dataset-imagenet-ilsvrc2012-val`, you can register it with CK as follows:
-
-```bash
-$ ck detect soft:dataset.imagenet.val \
---full_path=/datasets/dataset-imagenet-ilsvrc2012-val/ILSVRC2012_val_00000001.JPEG
-```
-
-## Example:
-
-```bash
-$ ck install package --tags=qaic,resnet50-example,precision.int8
-```
+### SSD-Resnet34
+Please see [https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md#prepare_ssd_resnet34] for compilation instructions for SSD-Resnet34.
