@@ -117,6 +117,7 @@
         "CK_CALIBRATE_IMAGENET": "yes",
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "resnet50",
         "_COMPILER_ARGS": "",
         "_MODEL_TO_CONVERT": "compile_resnet50_tf",
         "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
