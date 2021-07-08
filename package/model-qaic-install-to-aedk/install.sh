@@ -76,59 +76,55 @@ if [[ ${num_ports} != ${num_ips} ]]; then
   exit 1
 fi
 
+# User (the same by default).
+user=${CK_AEDK_USER:$USER}
 
-# Blank line before printing commands.
 echo
-
-USER=${CK_AEDK_USER}
 
 echo ${CK_ENV_QAIC_MODEL_ROOT}
 model_install_file=${CK_ENV_QAIC_MODEL_ROOT}/../ck-install.json
 basetag=`cat ${model_install_file} | python3 -c "import sys, json; print(json.load(sys.stdin)['tags'])"`
-mytag=`ck cat env --tags=${basetag}  |grep Tags |tail -n 1|cut -d':' -f2|sed 's/^\s*//g'`
-echo "Tag: ${mytag}"
+my_tags=`ck cat env --tags=${basetag} | grep Tags | tail -n 1 | cut -d':' -f2 | sed 's/^\s*//g'`
+echo "Tags: ${my_tags}"
 
-
-env=`cat ${model_install_file} | python3 -c "import sys, json; 
+env=`cat ${model_install_file} | python3 -c "import sys, json;
 deps=json.load(sys.stdin)['deps']
 dict=deps['model-source']['dict']['env'];
 for key,val in dict.items():
-   key=key.replace('CK_ENV_', '_')
-   print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')
+  key=key.replace('CK_ENV_', '_')
+  print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')
 if(dict['ML_MODEL_MODEL_NAME'] == 'ssd-resnet34'):
-   dict=deps['profile-resnet34']['dict']['env'];
-   for key,val in dict.items():
-      key=key.replace('CK_ENV_', '_')
-      print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')"`
-source_path=`ck cat env --tags=${mytag} | grep "MODEL_ROOT"|head -n 1 |cut -d"=" -f2`
-echo $source_path
+  dict=deps['profile-resnet34']['dict']['env'];
+  for key,val in dict.items():
+    key=key.replace('CK_ENV_', '_')
+    print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')"`
+source_path=`ck cat env --tags=${my_tags} | grep "MODEL_ROOT" | head -n 1 | cut -d"=" -f2`
+echo ${source_path}
 dest_path=${source_path}
-if [ -z ${source_path} ]
-then
-	echo "Invalid path";
-	exit 1;
+if [ -z ${source_path} ]; then
+  echo "Invalid path";
+  exit 1;
 fi
 
-ck_detect="ck detect soft:model.qaic --full_path=\"${dest_path}/network.elf\" --extra_tags=\"${mytag}\" ${env}"
-echo $ck_detect
+ck_detect="ck detect soft:model.qaic --full_path=\"${dest_path}/network.elf\" --extra_tags=\"${my_tags}\" ${env}"
+echo ${ck_detect}
 
 for i in $(seq 1 ${#ips[@]}); do
   ip=${ips[${i}-1]}
   id=${ids[${i}-1]}
   port=${ports[${i}-1]}
   worker_id="worker-${id}"
-  ssh -n -f ${USER}@${ip} -p ${port} mkdir -p ${dest_path}
-  rsync -avz -e "ssh -p ${port}" ${source_path}/ $USER@${ip}:${dest_path}/
-  ssh -n -f ${USER}@${ip} -p ${port} \
+  ssh -n -f ${user}@${ip} -p ${port} mkdir -p ${dest_path}
+  rsync -avz -e "ssh -p ${port}" ${source_path}/ ${user}@${ip}:${dest_path}/
+  ssh -n -f ${user}@${ip} -p ${port} \
   "bash -c ' \
-  exists=\`ck search env --tags=\"${mytag}\"\`;
-  if [ ! -z \${exists} ] 
-  then 
-     echo \"Already registered \${exists}\";
+  exists=\`ck search env --tags=\"${my_tags}\"\`;
+  if [ ! -z \${exists} ]; then
+    echo \"Already registered \${exists}\";
   else
-	  echo \"default\" | ${ck_detect} 
+    echo \"default\" | ${ck_detect}
   fi
   '"
+  # Wait a bit.
   sleep 1s
 done
-# Wait a bit.
