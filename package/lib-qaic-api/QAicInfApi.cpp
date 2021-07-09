@@ -232,7 +232,7 @@ QAicInfApi::QAicInfApi()
       execObjProperties_(QAIC_EXECOBJ_PROPERTIES_DEFAULT),
       queueProperties_{QAIC_QUEUE_PROPERTIES_ENABLE_MULTI_THREADED_QUEUES,
                        numThreadsPerQueueDefault},
-      programQpcBuf_(QBuffer()), qpcObj_(nullptr), dev_(0),
+      dev_(0),
       numActivations_(numActivationsDefault),
       numInferences_(numInferencesDefault),
       numThreadsPerQueue_(numThreadsPerQueueDefault), setSize_(setSizeDefault),
@@ -241,12 +241,6 @@ QAicInfApi::QAicInfApi()
 
 QAicInfApi::~QAicInfApi() {
   QStatus status;
-  if (qpcObj_ != nullptr) {
-    status = qaicCloseQpc(qpcObj_);
-    if (status != QS_SUCCESS) {
-      std::cerr << "Failed to close QpcObj" << std::endl;
-    }
-  }
 
   for (uint32_t i = 0; i < programs_.size(); i++) {
     status = qaicReleaseProgram(programs_[i]);
@@ -280,7 +274,6 @@ QAicInfApi::~QAicInfApi() {
     context_ = nullptr;
   }
 
-  programBufferVector_.clear();
   inferenceBufferVector_.clear();
 }
 
@@ -364,12 +357,6 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
   }
 
-  std::string filePath = modelBasePath_ + "/programqpc.bin";
-
-  // Load file
-  status = loadFileType(filePath, programQpcBuf_.size, programQpcBuf_.buf,
-                        programBufferVector_);
-
   status = qaicCreateContext(&context_, &contextProperties_, 1, &dev_,
                                       logCallback, errorHandler, nullptr);
   if ((context_ == nullptr) || (status != QS_SUCCESS)) {
@@ -377,25 +364,39 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     return status;
   }
 
-  //-------------------------------------------------------------------------
-  // Create Programs
-  // It is valid to pass a null for constants, if null program will
-  // disregard constants
-  //-------------------------------------------------------------------------
-  // Initialize the program properties with default.
-  status = qaicProgramPropertiesInitDefault(&programProperties_);
-  if (status != QS_SUCCESS) {
-    std::cerr << "Failed to initialize program properties." << std::endl;
-    return status;
-  }
+  for (uint32_t i = 0; i < modelBasePaths_.size() ; i++) {
 
-  status = qaicOpenQpc(&qpcObj_, programQpcBuf_.buf, programQpcBuf_.size, false);
-  if (status != QS_SUCCESS) {
-    std::cerr << "Failed to open Qpc." << std::endl;
-    return status;
-  }
+    QBuffer programQpcBuf_;
+    QAicProgramProperties_t programProperties_;
+    std::vector<std::unique_ptr<uint8_t[]>> programBufferVector_;
+    QAicQpcObj *qpcObj_;
 
-  for (uint32_t i = 0; i < numActivations_; i++) {
+    std::string filePath = modelBasePaths_[i] + "/programqpc.bin";
+
+
+    // Load file
+    status = loadFileType(filePath, programQpcBuf_.size, programQpcBuf_.buf,
+                          programBufferVector_);
+
+
+    //-------------------------------------------------------------------------
+    // Create Programs
+    // It is valid to pass a null for constants, if null program will
+    // disregard constants
+    //-------------------------------------------------------------------------
+    // Initialize the program properties with default.
+    status = qaicProgramPropertiesInitDefault(&programProperties_);
+    if (status != QS_SUCCESS) {
+      std::cerr << "Failed to initialize program properties." << std::endl;
+      return status;
+    }
+
+    status = qaicOpenQpc(&qpcObj_, programQpcBuf_.buf, programQpcBuf_.size, false);
+    if (status != QS_SUCCESS) {
+      std::cerr << "Failed to open Qpc." << std::endl;
+      return status;
+    }
+
     const char *name = "progName";
     QAicProgram *program = nullptr;
 
@@ -409,6 +410,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     programs_.push_back(program);
   }
 
+
   //-------------------------------------------------------------------------
   // Load Programs  QAicInfApi(uint32_t dummy);
 
@@ -417,7 +419,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   // For this reason the following code is commented out, to demonstrate
   // automatic loading and activation
   //-------------------------------------------------------------------------
-  for (uint32_t i = 0; i < numActivations_; i++) {
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
     QStatus status;
     status = qaicLoadProgram(programs_[i]);
     if (status != QS_SUCCESS) {
@@ -432,7 +434,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   // For this reason the following code is commented out, to demonstrate
   // automatic loading and activation
   //-------------------------------------------------------------------------
-  for (uint32_t i = 0; i < numActivations_; i++) {
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
     QStatus status;
     status = qaicRunActivationCmd(programs_[i],
                                            QAIC_PROGRAM_CMD_ACTIVATE_FULL);
@@ -445,7 +447,8 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   //-------------------------------------------------------------------------
   // Create Queues for Execution
   //-------------------------------------------------------------------------
-  for (uint32_t i = 0; i < numActivations_; i++) {
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
+
     QAicQueue *queue = nullptr;
     status =
         qaicCreateQueue(context_, &queue, &queueProperties_, dev_);
@@ -456,61 +459,62 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     queues_.push_back(queue);
   }
 
-  QData ioDescQData;
-  aicapi::IoDesc ioDescProto;
-  status = qaicProgramGetIoDescriptor(programs_.back(), &ioDescQData);
-  if (ioDescQData.data == nullptr) {
-    std::cerr << "Failed to get iodesc" << std::endl;
-    return QS_ERROR;
-  }
-  ioDescProto.ParseFromArray(ioDescQData.data, ioDescQData.size);
-  if (!entryPoint_.empty() && entryPoint_.compare("default") != 0)  {
-    for (auto &io_set : ioDescProto.io_sets()) {
-      if (io_set.name().compare(entryPoint_) == 0) {
-        ioDescProto.clear_selected_set();
-        ioDescProto.mutable_selected_set()->CopyFrom(io_set);
-        break;
-      }
-    }
-    if(ioDescProto.selected_set().name().compare(entryPoint_) != 0) {
-      std::cerr << "Failed to match name in iodesc" << std::endl;
-      return QS_ERROR;
-    }
-  
-    try {
-      customizedIoDescProtoBuffer_.resize(ioDescProto.ByteSizeLong());
-    } catch (const std::bad_alloc &e) {
-      std::cerr << "vector resize failed for protocol Buffer -"<< e.what()<<std::endl;
-      return QS_ERROR;
-    }
-    if (!ioDescProto.SerializeToArray(customizedIoDescProtoBuffer_.data(),
-                                   customizedIoDescProtoBuffer_.size())) {
-      std::cerr << "Failed to serialize modified protocol bufffer"<<std::endl;
-      return QS_ERROR;
-    }
-    ioDescQData.data = customizedIoDescProtoBuffer_.data();
-    ioDescQData.size = customizedIoDescProtoBuffer_.size();
-  } else {
-    customizedIoDescProtoBuffer_.clear();
-    ioDescQData.data = nullptr;
-    ioDescQData.size = 0;
-  }
-#if 0
-  {
-    google::protobuf::util::JsonPrintOptions jsonPrintOption;
-    jsonPrintOption.add_whitespace = true;
-    jsonPrintOption.always_print_primitive_fields = true;
-    jsonPrintOption.always_print_enums_as_ints = false;
-    jsonPrintOption.preserve_proto_field_names = true;
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
 
-    std::string jsonPrint;
-    google::protobuf::util::MessageToJsonString(ioDescProto, &jsonPrint,
-                                                jsonPrintOption);
-    std::cout << "Network Descriptor:\n{" << jsonPrint << std::endl;
-    jsonPrint.clear();
-  }
-#endif
-  for (uint32_t i = 0; i < numActivations_; i++) {
+    QData ioDescQData;
+    aicapi::IoDesc ioDescProto;
+    status = qaicProgramGetIoDescriptor(programs_[i], &ioDescQData);
+    if (ioDescQData.data == nullptr) {
+      std::cerr << "Failed to get iodesc" << std::endl;
+      return QS_ERROR;
+    }
+    ioDescProto.ParseFromArray(ioDescQData.data, ioDescQData.size);
+    if (!entryPoint_.empty() && entryPoint_.compare("default") != 0)  {
+      for (auto &io_set : ioDescProto.io_sets()) {
+        if (io_set.name().compare(entryPoint_) == 0) {
+          ioDescProto.clear_selected_set();
+          ioDescProto.mutable_selected_set()->CopyFrom(io_set);
+          break;
+        }
+      }
+      if(ioDescProto.selected_set().name().compare(entryPoint_) != 0) {
+        std::cerr << "Failed to match name in iodesc" << std::endl;
+        return QS_ERROR;
+      }
+
+      try {
+        customizedIoDescProtoBuffer_.resize(ioDescProto.ByteSizeLong());
+      } catch (const std::bad_alloc &e) {
+        std::cerr << "vector resize failed for protocol Buffer -"<< e.what()<<std::endl;
+        return QS_ERROR;
+      }
+      if (!ioDescProto.SerializeToArray(customizedIoDescProtoBuffer_.data(),
+                                     customizedIoDescProtoBuffer_.size())) {
+        std::cerr << "Failed to serialize modified protocol bufffer"<<std::endl;
+        return QS_ERROR;
+      }
+      ioDescQData.data = customizedIoDescProtoBuffer_.data();
+      ioDescQData.size = customizedIoDescProtoBuffer_.size();
+    } else {
+      customizedIoDescProtoBuffer_.clear();
+      ioDescQData.data = nullptr;
+      ioDescQData.size = 0;
+    }
+    #if 0
+    {
+      google::protobuf::util::JsonPrintOptions jsonPrintOption;
+      jsonPrintOption.add_whitespace = true;
+      jsonPrintOption.always_print_primitive_fields = true;
+      jsonPrintOption.always_print_enums_as_ints = false;
+      jsonPrintOption.preserve_proto_field_names = true;
+
+      std::string jsonPrint;
+      google::protobuf::util::MessageToJsonString(ioDescProto, &jsonPrint,
+                                                  jsonPrintOption);
+      std::cout << "Network Descriptor:\n{" << jsonPrint << std::endl;
+      jsonPrint.clear();
+    }
+    #endif
     std::shared_ptr<ActivationSet> shActivation =
         std::make_shared<ActivationSet>(ioDescQData,
             context_, programs_[i], queues_[i], dev_,
@@ -520,69 +524,66 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
       shActivation->init(setSize_);
       shActivationSets_.emplace_back(std::move(shActivation));
     }
+
+    // Create IO buffers
+    status = createBuffers(i, ioDescProto);
+    if (status != QS_SUCCESS) {
+      std::cerr << "Failed to create IO buffers." << std::endl;
+      return status;
+    }
   }
 
-  // Create IO buffers
-  status = createBuffers(ioDescProto);
-  if (status != QS_SUCCESS) {
-    std::cerr << "Failed to create IO buffers." << std::endl;
-    return status;
-  }
+  setData();
 
   return QS_SUCCESS;
 }
 
-QStatus QAicInfApi::createBuffers(aicapi::IoDesc& ioDescProto) {
+QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
 
-  inferenceBuffersList_.resize(numActivations_);
+  inferenceBuffersList_.resize(inferenceBuffersList_.size()+1);
 
-  for (uint32_t x = 0; x < numActivations_; x++) {
-    inferenceBuffersList_[x].resize(setSize_);
+  inferenceBuffersList_[idx].resize(setSize_);
 
-    for (uint32_t y = 0; y < setSize_; y++) {
+  for (uint32_t y = 0; y < setSize_; y++) {
 
-      for (uint32_t i = 0; i < ioDescProto.selected_set().bindings().size(); i++) {
-        if (ioDescProto.selected_set().bindings(i).dir() == aicapi::BUFFER_IO_TYPE_OUTPUT) {
-          QBuffer buf;
-          uint32_t outputBufferSize = ioDescProto.selected_set().bindings(i).size();
-          std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
-              new(std::nothrow) uint8_t[outputBufferSize]);
-          if (uniqueBuffer == nullptr) {
-            std::cerr << "Failed to allocate buffer for output, size "
-                << outputBufferSize << std::endl;
-            return QS_ERROR;
-          }
-          buf.buf = uniqueBuffer.get();
-          buf.size = outputBufferSize;
-          inferenceBufferVector_.push_back(std::move(uniqueBuffer));
-          inferenceBuffersList_[x][y].push_back(std::move(buf));
-        } else if (ioDescProto.selected_set().bindings(i).dir() == aicapi::BUFFER_IO_TYPE_INPUT) {
-          QBuffer buf = QBuffer();
-          uint32_t inputBufferSize = ioDescProto.selected_set().bindings(i).size();
-
-          std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
-              // over allocate to allow for buffer alignment
-              new(std::nothrow) uint8_t[inputBufferSize+32]);
-          if (uniqueBuffer == nullptr) {
-            std::cerr << "Failed to allocate input buffer" << std::endl;
-            return QS_ERROR;
-          }
-          buf.buf = uniqueBuffer.get();
-
-          //align the buffer to 32 byte boundary
-          uint64_t mask = 31; mask = ~mask;
-          buf.buf = (uint8_t*)((uint64_t)(buf.buf+32)&mask);
-
-          buf.size = inputBufferSize;
-          inferenceBufferVector_.push_back(std::move(uniqueBuffer));
-          inferenceBuffersList_[x][y].push_back(std::move(buf));
+    for (uint32_t i = 0; i < ioDescProto.selected_set().bindings().size(); i++) {
+      if (ioDescProto.selected_set().bindings(i).dir() == aicapi::BUFFER_IO_TYPE_OUTPUT) {
+        QBuffer buf;
+        uint32_t outputBufferSize = ioDescProto.selected_set().bindings(i).size();
+        std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
+            new(std::nothrow) uint8_t[outputBufferSize]);
+        if (uniqueBuffer == nullptr) {
+          std::cerr << "Failed to allocate buffer for output, size "
+              << outputBufferSize << std::endl;
+          return QS_ERROR;
         }
+        buf.buf = uniqueBuffer.get();
+        buf.size = outputBufferSize;
+        inferenceBufferVector_.push_back(std::move(uniqueBuffer));
+        inferenceBuffersList_[idx][y].push_back(std::move(buf));
+      } else if (ioDescProto.selected_set().bindings(i).dir() == aicapi::BUFFER_IO_TYPE_INPUT) {
+        QBuffer buf = QBuffer();
+        uint32_t inputBufferSize = ioDescProto.selected_set().bindings(i).size();
+
+        std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
+            // over allocate to allow for buffer alignment
+            new(std::nothrow) uint8_t[inputBufferSize+32]);
+        if (uniqueBuffer == nullptr) {
+          std::cerr << "Failed to allocate input buffer" << std::endl;
+          return QS_ERROR;
+        }
+        buf.buf = uniqueBuffer.get();
+
+        //align the buffer to 32 byte boundary
+        uint64_t mask = 31; mask = ~mask;
+        buf.buf = (uint8_t*)((uint64_t)(buf.buf+32)&mask);
+
+        buf.size = inputBufferSize;
+        inferenceBufferVector_.push_back(std::move(uniqueBuffer));
+        inferenceBuffersList_[idx][y].push_back(std::move(buf));
       }
     }
   }
-
-
-  setData();
 
   return QS_SUCCESS;
 }
@@ -635,11 +636,11 @@ QStatus QAicInfApi::deinit() {
     return QS_SUCCESS;
   }
 
-  for (uint32_t i = 0; i < numActivations_; i++) {
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
     qaicRunActivationCmd(programs_.at(i),
                                   QAIC_PROGRAM_CMD_DEACTIVATE_FULL);
     }
-  for (uint32_t i = 0; i < numActivations_; i++) {
+  for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
     status = qaicUnloadProgram(programs_[i]);
     if (status != QS_SUCCESS) {
       std::cerr << "Failed to unload program" << std::endl;
@@ -650,14 +651,17 @@ QStatus QAicInfApi::deinit() {
   return QS_SUCCESS;
 }
 
+// Kept to keep backwards compatibility for resnets 50 and 34.
 void QAicInfApi::setNumActivations(uint32_t num) {
-  numActivations_ = num;
+
+  for(int i=0 ; i<num-1 ; ++i)
+      modelBasePaths_.push_back(modelBasePaths_[0]);
 }
 
 void QAicInfApi::setSetSize(uint32_t setSize) { setSize_ = setSize; }
 
 void QAicInfApi::setModelBasePath(std::string modelBasePath) {
-  modelBasePath_ = modelBasePath;
+  modelBasePaths_.push_back(modelBasePath);
 }
 
 void QAicInfApi::setNumThreadsPerQueue(uint32_t num) {

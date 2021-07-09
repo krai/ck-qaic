@@ -88,7 +88,7 @@ public:
   QStatus init(QID qid, QAicEventCallback callback);
   QStatus loadDataset();
   QStatus setData();
-  QStatus createBuffers(aicapi::IoDesc& ioDescProto);
+  QStatus createBuffers(int idx, aicapi::IoDesc& ioDescProto);
 
   QStatus run(uint32_t activation, uint32_t execobj, void* payload);
 
@@ -112,7 +112,6 @@ private:
   // Properties
   QAicContextProperties_t contextProperties_;
   QAicConstantsProperties_t constantsProperties_;
-  QAicProgramProperties_t programProperties_;
   QAicExecObjProperties_t execObjProperties_;
   QAicQueueProperties queueProperties_;
 
@@ -122,16 +121,13 @@ private:
   std::vector<QAicQueue *> queues_;
   std::vector<QAicEvent *> perQueueFinishEvents_;
   std::vector<std::shared_ptr<ActivationSet>> shActivationSets_;
-  QBuffer programQpcBuf_;
   QBuffer constDescBuf_;
   QBuffer constBuf_;
   QBuffer networkDescBuf_;
   QBuffer progBuf_;
-  QAicQpcObj *qpcObj_;
   QID dev_;
-  std::string modelBasePath_;
+  std::vector<std::string> modelBasePaths_;
   std::vector<std::unique_ptr<uint8_t[]>> inferenceBufferVector_;
-  std::vector<std::unique_ptr<uint8_t[]>> programBufferVector_;
   uint32_t numActivations_;
   uint32_t numInferences_;
   uint32_t numThreadsPerQueue_;
