@@ -203,7 +203,7 @@
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>",
         "recommended_input_select": "0",
-        "performance_mode_extension": "-target_qps.<<<target_qps>>>"
+        "performance_mode_extension": ""
       },
       "singlestream": {
         "activation_count": "1",
