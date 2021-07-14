@@ -245,9 +245,9 @@
         "ck_benchmark_prefix": "numactl --interleave=all",
         "compiler_tags": "gcc",
         "model_tags": [
-          "ssd_resnet34.pcie.14nsp"
+          "ssd_resnet34.pcie.16nsp"
         ],
-        "recommended_activation_count": "14",
+        "recommended_activation_count": "16",
         "recommended_batch_size": "1"
       },
       "r282_z93_q5": {

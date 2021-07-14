@@ -246,9 +246,9 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.14nsp"
+          "resnet50.pcie.16nsp"
         ],
-        "recommended_activation_count": "1",
+        "recommended_activation_count": "2",
         "recommended_batch_size": "8"
       },
       "r282_z93_q5": {
