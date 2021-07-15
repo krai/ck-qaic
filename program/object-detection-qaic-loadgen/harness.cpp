@@ -198,11 +198,11 @@ void Program::QueueScheduler() {
 
       Payload *p = ring_buf[activation]->getPayload();
 
-      std::this_thread::sleep_for(std::chrono::microseconds(1));
 
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
+        std::this_thread::sleep_for(std::chrono::microseconds(1));
         continue;
       }
 
