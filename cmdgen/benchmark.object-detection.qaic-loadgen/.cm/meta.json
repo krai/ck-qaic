@@ -11,7 +11,7 @@
     "deps": [
       "--dep_add_tags.compiler=<<<compiler_tags>>>",
       "--dep_add_tags.python=v3",
-      "--dep_add_tags.mlperf-inference-src=r1.0",
+      "--dep_add_tags.mlperf-inference-src=r1.1",
       "--dep_add_tags.weights=<<<model_tags,>>>",
       "--dep_add_tags.dataset=dataset,object-detection,preprocessed,full,using-<<<preprocessed_using>>>"
     ],
