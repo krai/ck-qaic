@@ -238,7 +238,7 @@ public:
   get_random_images(const std::vector<mlperf::QuerySample> &samples,
                     int dev_idx, int act_idx, int set_idx) = 0;
 
-  virtual void *get_img_ptr(int img_idx) = 0;
+  virtual void *get_img_ptr(unsigned dev_idx, int img_idx) = 0;
 };
 
 template <typename TInConverter, typename TOutConverter,
@@ -254,10 +254,33 @@ public:
     _out_ptrs = out_ptrs;
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
+    int dev_cnt =  settings->qaic_device_count; 
+    _in_batch.resize(dev_cnt);
+    _out_batch.resize(dev_cnt);
+#ifdef G292
+    const int CTN = settings -> copy_threads_per_device;
+    get_random_images_samples.resize(CTN*dev_cnt);
+    get_random_images_act_idx.resize(CTN*dev_cnt);
+    get_random_images_set_idx.resize(CTN*dev_cnt);
+    get_random_images_finished.resize(CTN*dev_cnt);
+    get_random_images_turn.resize(dev_cnt);
+    for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
+      get_random_images_turn[dev_idx]=0;
+      unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
+      for (int i = 0; i < CTN; i++) {
+        cpu_set_t cpuset;
+        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
+        get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
+      
+        CPU_ZERO(&cpuset);
+        CPU_SET(coreid+i, &cpuset);
+        pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+        t.detach();
+      }
+    }
+#endif
   }
-
-  void load_images(BenchmarkSession *_session) override {
-    session = _session;
+  void load_images_locally(BenchmarkSession *_session, int d) { 
     auto vl = _settings->verbosity_level;
 
     const std::vector<std::string> &image_filenames =
@@ -265,33 +288,111 @@ public:
 
     unsigned length = image_filenames.size();
     _current_buffer_size = length;
-    _in_batch = new std::unique_ptr<ImageDataFormat<TInputDataType>>[length];
-    _out_batch = new std::unique_ptr<ResultData>[length];
+    _in_batch[d] = new std::unique_ptr<ImageDataFormat<TInputDataType>>[length];
+    _out_batch[d] = new std::unique_ptr<ResultData>[length];
     unsigned batch_size = _settings->qaic_batch_size;
     unsigned image_size = _settings->image_size * _settings->image_size *
                           _settings->num_channels * sizeof(TInputDataType);
-
     for (auto i = 0; i < length; i += batch_size) {
       unsigned actual_batch_size =
           std::min(batch_size, batch_size < length ? (length - i) : length);
       uint8_t *buf = (uint8_t*)aligned_alloc(32, batch_size * image_size);
       for (auto j = 0; j < actual_batch_size; j++, buf += image_size) {
-        _in_batch[i + j].reset(
+        _in_batch[d][i + j].reset(
             new ImageDataFormat<TInputDataType>(_settings, buf));
-        _out_batch[i + j].reset(new ResultData(_settings));
-        _in_batch[i + j]->load(image_filenames[i + j], vl, _settings->isNHWC);
+        _out_batch[d][i + j].reset(new ResultData(_settings));
+        _in_batch[d][i + j]->load(image_filenames[i + j], vl, _settings->isNHWC);
       }
     }
+  }
+ 
+  void load_images(BenchmarkSession *_session) override {
+    session = _session;
+#ifdef G292
+    int i = 64;
+    for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
+      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
+
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(i+dev_idx*8, &cpuset);
+      // CPU_SET(i+dev_idx*8+4, &cpuset);
+      if(dev_idx == 7) i = -64;
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+
+      t.join();
+    }
+#else
+    load_images_locally( _session, 0);
+
+#endif
+
   }
 
   void unload_images(size_t num_examples) override {
     uint16_t batch_size = _settings->qaic_batch_size;
+#ifdef G292
+    int N =  _settings->qaic_device_count;
+#else
+    int N = 1;
+#endif
     for (size_t i = 0; i < num_examples; i += batch_size) {
-      delete _in_batch[i].get();
-      delete _out_batch[i].get();
+      for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
+        delete _in_batch[dev_idx][i].get();
+        delete _out_batch[dev_idx][i].get();
+      }
     }
   }
 
+#ifdef G292
+  void get_random_images_worker(int fake_idx) {
+    int dev_cnt =  _settings->qaic_device_count;
+    int dev_idx = fake_idx;
+    while(dev_idx - dev_cnt >= 0)
+     dev_idx -= dev_cnt;
+    while(true) {
+      get_random_images_mutex[fake_idx].lock();
+      const std::vector<mlperf::QuerySample> &samples = *get_random_images_samples[fake_idx];
+      const int act_idx = get_random_images_act_idx[fake_idx];
+      const int set_idx = get_random_images_set_idx[fake_idx];
+    
+      for (int i = 0; i < samples.size(); ++i) {
+        TInputDataType *ptr =
+          ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
+          i * _settings->image_size * _settings->image_size *
+              _settings->num_channels;
+        _in_converter->convert(
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
+      }
+      get_random_images_finished[fake_idx] = true;
+      get_random_images_mutex2[fake_idx].unlock();
+    }
+  }
+
+  void get_random_images(const std::vector<mlperf::QuerySample> &samples,
+                         int dev_idx, int act_idx, int set_idx) override {
+    int dev_cnt =  _settings->qaic_device_count;
+    const int CTN =  _settings->copy_threads_per_device;
+    get_random_images_mutex3[dev_idx].lock();
+    const int turn = (get_random_images_turn[dev_idx]+1)%CTN;
+    const int fake_idx = turn*dev_cnt + dev_idx;
+    get_random_images_turn[dev_idx] = turn;
+    get_random_images_mutex3[dev_idx].unlock();
+    get_random_images_mutex2[fake_idx].lock();
+    get_random_images_samples[fake_idx] = &samples;
+    get_random_images_act_idx[fake_idx] = act_idx;
+    get_random_images_set_idx[fake_idx] = set_idx;
+
+    get_random_images_finished[fake_idx] = false;
+    get_random_images_mutex[fake_idx].unlock();
+    while(true) {
+      if(get_random_images_finished[fake_idx])
+        return;
+      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+    }
+  
+  }
+#else
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
     for (int i = 0; i < samples.size(); ++i) {
@@ -300,12 +401,13 @@ public:
           i * _settings->image_size * _settings->image_size *
               _settings->num_channels;
       _in_converter->convert(
-          _in_batch[session->idx2loc[samples[i].index]].get(), ptr);
+          _in_batch[0][session->idx2loc[samples[i].index]].get(), ptr);
     }
   }
+#endif
 
-  virtual void *get_img_ptr(int img_idx) {
-    return _in_batch[session->idx2loc[img_idx]].get()->data();
+  virtual void *get_img_ptr(unsigned dev_idx, int img_idx) {
+    return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
   }
 
   void get_next_results(int num_results, std::vector<int> &results, int dev_idx,
@@ -324,9 +426,9 @@ public:
     const std::vector<std::string> &image_filenames =
         session->current_filenames();
     int i = 0;
-    for (auto image_file : image_filenames) {
-      _out_batch[i++]->save(image_file);
-    }
+     for (auto image_file : image_filenames) {
+       (*_out_batch[i++])->save(image_file);
+     }
   }
 
 private:
@@ -336,10 +438,19 @@ private:
   int _current_buffer_size = 0;
   std::vector<std::vector<std::vector<void *>>> _in_ptrs;
   std::vector<std::vector<std::vector<std::vector<void *>>>> _out_ptrs;
-  std::unique_ptr<ImageDataFormat<TInputDataType>> *_in_batch;
-  std::unique_ptr<ResultData> *_out_batch;
+  std::vector<std::unique_ptr<ImageDataFormat<TInputDataType>>*> _in_batch;
+  std::vector<std::unique_ptr<ResultData>*> _out_batch;
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
+  std::mutex get_random_images_mutex[256];
+  std::mutex get_random_images_mutex2[256];
+  std::mutex get_random_images_mutex3[16];
+  std::vector<const std::vector<mlperf::QuerySample>*> get_random_images_samples;
+  std::vector<int> get_random_images_act_idx;
+  std::vector<int> get_random_images_set_idx;
+  std::vector<int> get_random_images_finished;
+  std::vector<int> get_random_images_turn;
+
 };
 
 //----------------------------------------------------------------------

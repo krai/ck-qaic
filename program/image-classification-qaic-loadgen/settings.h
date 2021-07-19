@@ -204,6 +204,9 @@ public:
   int qaic_device_count;
 
   const int input_select = alter_str_i(getenv("CK_ENV_QAIC_INPUT_SELECT"), 0);
+  
+  const int copy_threads_per_device = alter_str_i(getenv("CK_ENV_COPY_THREADS_PER_DEVICE"), 2);
+  //const int num_setup_threads = alter_str_i(getenv("CK_ENV_NUM_SETUP_THREADS"), 2);
 
   BenchmarkSettings() {
 
