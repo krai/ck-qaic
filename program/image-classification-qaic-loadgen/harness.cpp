@@ -52,13 +52,8 @@ using namespace qaic_api;
 using namespace std;
 using namespace CK;
 
-Program::Program() {
-
-  settings = new BenchmarkSettings();
-
-  session = new BenchmarkSession(settings);
-
-  for (int d = 0; d < settings->qaic_device_count; ++d) {
+#ifdef G292
+void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out) {
 
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -72,8 +67,15 @@ Program::Program() {
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
-  }
 
+}
+#endif
+
+Program::Program() {
+
+  settings = new BenchmarkSettings();
+
+  session = new BenchmarkSession(settings);
   // device, activation, set
   std::vector<std::vector<std::vector<void *>>> in(settings->qaic_device_count);
 
@@ -81,7 +83,46 @@ Program::Program() {
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(
       settings->qaic_device_count);
 
-  // get references to all the buffers devices->activations->set
+#ifdef G292
+  int i = 64;
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
+    std::thread t(&Program::InitDevices, this, d, in, out);
+
+    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
+    // only CPU i as set.
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+   // for(int j = 0; j < 1; j++)
+      CPU_SET(i+d*8, &cpuset);
+     // CPU_SET(i+d*8+1, &cpuset);
+      CPU_SET(i+d*8+2, &cpuset);
+      //CPU_SET(i+d*8+3, &cpuset);
+      CPU_SET(i+d*8+4, &cpuset);
+      //CPU_SET(i+d*8+5, &cpuset);
+      CPU_SET(i+d*8+6, &cpuset);
+      //CPU_SET(i+d*8+7, &cpuset);
+    if(d == 7) i = -64;
+    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    t.join();
+  }
+#else
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
+    std::cout << "Creating device " << d << std::endl;
+    runners.push_back(new QAicInfApi());
+
+    runners[d]->setModelBasePath(settings->qaic_model_root);
+    runners[d]->setNumActivations(settings->qaic_activation_count);
+    runners[d]->setSetSize(settings->qaic_set_size);
+    runners[d]->setNumThreadsPerQueue(settings->qaic_threads_per_queue);
+    runners[d]->setSkipStage(settings->qaic_skip_stage);
+    QStatus status = runners[d]->init(settings->qaic_hw_ids[d], PostResults);
+
+    if (status != QS_SUCCESS)
+      throw "Failed to invoke qaic";
+  }
+#endif
+
+
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     in[d].resize(settings->qaic_activation_count);
     out[d].resize(settings->qaic_activation_count);
@@ -95,6 +136,8 @@ Program::Program() {
       }
     }
   }
+
+
   if (settings->qaic_skip_stage != "convert")
     benchmark.reset(new Benchmark<InCopy, OutCopy, float>(settings, in, out));
   else
@@ -116,12 +159,23 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
+
 #ifdef __amd64__
-  num_setup_threads = 8;
+  const auto processor_count = std::thread::hardware_concurrency();
+  if(processor_count > 0)
+     num_setup_threads = processor_count/8; //One per L3 cache, might need a change for Zen3
 #else
   num_setup_threads = 2;
 #endif
 
+#ifdef G292
+  if(settings -> input_select == 0)
+    num_setup_threads = 32;
+  else
+    num_setup_threads = 3; //to be investigated if this can go higher
+#endif
+
+std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
   for(int i=0 ; i<num_setup_threads ; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
@@ -131,8 +185,13 @@ Program::Program() {
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    CPU_SET(i*4, &cpuset);
-    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    //CPU_SET(i*4, &cpuset);
+    CPU_SET(i*4+1, &cpuset);
+    //CPU_SET(i*4+2, &cpuset);
+    //CPU_SET(i*4+3, &cpuset);
+    //CPU_SET(i*8+2, &cpuset);
+   // CPU_SET(i*8+3, &cpuset);
+  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();
@@ -200,7 +259,7 @@ void Program::EnqueueShim(int id) {
         benchmark->get_random_images(p->samples, p->device, p->activation,
                                      p->set);
       } else if (settings->input_select == 1) {
-        void *img_ptr = benchmark->get_img_ptr(p->samples[0].index);
+        void *img_ptr = benchmark->get_img_ptr(p->device,p->samples[0].index);
         runners[p->device]->setBufferPtr(p->activation, p->set, 0, img_ptr);
       } else {
         // Do nothing - random data
@@ -212,7 +271,7 @@ void Program::EnqueueShim(int id) {
 
       Program::payloads[id] = nullptr;
     }
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
   }
 }
 
@@ -337,7 +396,12 @@ std::vector<RingBuffer *> Program::ring_buf;
 
 std::mutex Program::mtx_queue;
 std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
+
+#ifdef G292
+int Program::samples_queue_len = 16384;
+#else
 int Program::samples_queue_len = 4096;
+#endif
 
 unique_ptr<IBenchmark> Program::benchmark;
 
@@ -346,7 +410,7 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-Payload* Program::payloads[8] = {nullptr ,nullptr ,nullptr ,nullptr, nullptr, nullptr, nullptr, nullptr};
+Payload* Program::payloads[64] = {nullptr};
 
 int Program::num_setup_threads = 0;
 
@@ -384,13 +448,19 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
   prev = std::chrono::steady_clock::now();
   std::chrono::microseconds max_wait = std::chrono::microseconds(prg->settings->max_wait);
 
+   // mtx_samples_queue.lock();
   while(!terminate) {
-    auto now = std::chrono::steady_clock::now();
 
     mtx_samples_queue.lock();
     int qlen = samples_queue.size();
+    if(qlen == 0){
+    mtx_samples_queue.unlock();
+    std::this_thread::sleep_for(std::chrono::microseconds(10));
+    continue;
+    }
+    auto now = std::chrono::steady_clock::now();
 
-    if( qlen != 0  && (now - prev) > max_wait) {
+    if( (now - prev) > max_wait) {
       if(prg->settings->verbosity_server)
         std::cout << "(" << qlen <<  ")";
       prg->Inference(samples_queue);
@@ -398,7 +468,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
       prev = now;
     }
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
   }
 }
 

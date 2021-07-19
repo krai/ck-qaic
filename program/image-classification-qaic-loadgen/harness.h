@@ -122,6 +122,8 @@ public:
 
   virtual ~Program();
 
+  void InitDevices(int dev_idx, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out);
+
   void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex> &img_indices);
 
   void ColdRun();
@@ -166,7 +168,7 @@ private:
   std::thread scheduler;
 
   static int num_setup_threads;
-  static Payload* payloads[8];
+  static Payload* payloads[64];
 };
 
 class SystemUnderTestQAIC : public mlperf::SystemUnderTest {
