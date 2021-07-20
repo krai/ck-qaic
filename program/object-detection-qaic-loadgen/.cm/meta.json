@@ -35,7 +35,7 @@
     "CK_ENV_LIB_MLPERF_LOADGEN_INCLUDE"
   ],
   "compiler_env": "CK_CXX",
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ -O3 -Wall -Wno-sign-compare -I/opt/qti-aic/dev/inc/ -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ -O3 -ffast-math  -Wall -Wno-sign-compare  $<<CK_EXTRA_COMPILER_DEPS>>$  $<<CK_EXTRA_COMPILER_DEPS2>>$ -I/opt/qti-aic/dev/inc/ -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/",
   "data_name": "object-detection-qaic-loadgen",
   "extra_ld_vars": "-L$<<CK_ENV_LIB_MLPERF_LOADGEN_LIB>>$ -L$<<CK_ENV_LIB_QAIC_API>>$/install/lib/ -lmlperf_loadgen -ldl -lpthread -lprotobuf -lQAic",
   "linker_add_lib_as_env": [

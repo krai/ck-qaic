@@ -114,8 +114,12 @@ private:
 
 template <typename TData> class StaticBuffer {
 public:
-  StaticBuffer(int size, const std::string &dir) : _size(size), _dir(dir) {
-    _buffer = new TData[size];
+  StaticBuffer(int size, const std::string &dir, TData *ptr = NULL) : _size(size), _dir(dir) {
+   if(!ptr)
+    _buffer = (TData*)aligned_alloc(32,size);
+    //_buffer = new TData[size];
+   else
+    _buffer = ptr;
   }
 
   virtual ~StaticBuffer() { delete[] _buffer; }
@@ -134,11 +138,11 @@ protected:
 
 class ImageData : public StaticBuffer<uint8_t> {
 public:
-  ImageData(BenchmarkSettings *s)
+  ImageData(BenchmarkSettings *s, uint8_t *buf = NULL)
       : StaticBuffer(s->image_size_height() * s->image_size_width() *
              s->num_channels() * ((s->qaic_skip_stage != "convert") ? 
                   sizeof(float) : sizeof(uint8_t)),
-                     s->images_dir()),
+                     s->images_dir(), buf),
         s(s) {}
 
   void load(const std::string &filename, int vl) {
@@ -194,7 +198,7 @@ public:
                     int dev_idx, int act_idx, int set_idx) = 0;
 
   virtual void*
-  get_img_ptr(int img_idx) = 0;
+  get_img_ptr(int dev_idx, int img_idx) = 0;
 
 };
 
@@ -210,7 +214,9 @@ public:
     _out_ptrs = out_ptrs;
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
-
+    int dev_cnt = settings->qaic_device_count;
+    _in_batch.resize(dev_cnt);
+    _out_batch.resize(dev_cnt);
     // load NMS data
 
     acConfig.classT = settings->abc_classt;
@@ -270,33 +276,71 @@ public:
         for (int s = 0; s < _settings->qaic_set_size; ++s)
           delete reformatted_results[d][a][s];
   }
-  
-  void load_images(BenchmarkSession *_session) override {
-    session = _session;
+ 
+ void load_images_locally(BenchmarkSession *_session, int d) {
     auto vl = _settings->verbosity_level;
 
     const std::vector<std::string> &image_filenames =
         session->current_filenames();
 
-    int length = image_filenames.size();
+    unsigned length = image_filenames.size();
     _current_buffer_size = length;
-    _in_batch = new std::unique_ptr<ImageData>[length];
-    _out_batch = new std::unique_ptr<ResultData>[length];
-    int i = 0;
-    for (auto image_file : image_filenames) {
-      _in_batch[i].reset(new ImageData(_settings));
-      _out_batch[i].reset(new ResultData(_settings));
-      _in_batch[i]->load(image_file, vl);
-      i++;
+    _in_batch[d] = new std::unique_ptr<ImageData>[length];
+    _out_batch[d] = new std::unique_ptr<ResultData>[length];
+    unsigned batch_size = _settings->qaic_batch_size;
+    unsigned image_size = _settings->image_size_width() * _settings->image_size_height() *
+                          _settings->num_channels() * sizeof(TInputDataType);
+    for (auto i = 0; i < length; i += batch_size) {
+      unsigned actual_batch_size =
+          std::min(batch_size, batch_size < length ? (length - i) : length);
+      uint8_t *buf = (uint8_t*)aligned_alloc(32, batch_size * image_size);
+      for (auto j = 0; j < actual_batch_size; j++, buf += image_size) {
+        _in_batch[d][i + j].reset(
+            new ImageData(_settings, buf));
+        _out_batch[d][i + j].reset(new ResultData(_settings));
+        _in_batch[d][i + j]->load(image_filenames[i + j], vl);
+      }
     }
   }
 
-  void unload_images(size_t num_examples) override {
-    for (size_t i = 0; i < num_examples; i++) {
-      delete _in_batch[i].get();
-      delete _out_batch[i].get();
+  void load_images(BenchmarkSession *_session) override {
+    session = _session;
+#ifdef G292
+    int i = 64;
+    for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
+      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
+
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(i+dev_idx*8, &cpuset);
+      // CPU_SET(i+dev_idx*8+4, &cpuset);
+      if(dev_idx == 7) i = -64;
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+
+      t.join();
+    }
+#else
+    load_images_locally( _session, 0);
+
+#endif
+
+  }
+
+ void unload_images(size_t num_examples) override {
+    uint16_t batch_size = _settings->qaic_batch_size;
+#ifdef G292
+    int N =  _settings->qaic_device_count;
+#else
+    int N = 1;
+#endif
+    for (size_t i = 0; i < num_examples; i += batch_size) {
+      for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
+        delete _in_batch[dev_idx][i].get();
+        delete _out_batch[dev_idx][i].get();
+      }
     }
   }
+
 
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
@@ -305,13 +349,13 @@ public:
                                                                        _settings->image_size_height() *
                                                                        _settings->num_channels();
       _in_converter->convert(
-          _in_batch[session->idx2loc[samples[i].index]].get(), ptr);
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
     }
   }
 
   virtual void*
-  get_img_ptr(int img_idx) {
-    return _in_batch[session->idx2loc[img_idx]].get()->data();
+  get_img_ptr(int dev_idx, int img_idx) {
+    return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
   }
 
 
@@ -393,8 +437,9 @@ private:
   std::vector<std::vector<std::vector<void *>>> _in_ptrs;
   std::vector<std::vector<std::vector<std::vector<void *>>>> _out_ptrs;
 
-  std::unique_ptr<ImageData> *_in_batch;
-  std::unique_ptr<ResultData> *_out_batch;
+  std::vector<std::unique_ptr<ImageData>*> _in_batch;
+  std::vector<std::unique_ptr<ResultData>*> _out_batch;
+
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
 

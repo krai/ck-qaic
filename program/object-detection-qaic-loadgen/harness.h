@@ -147,6 +147,8 @@ public:
 
   static BenchmarkSettings *settings;
 
+  void InitDevices(int dev_idx);
+
 private:
   static BenchmarkSession *session;
   static std::vector<QAicInfApi*> runners;
