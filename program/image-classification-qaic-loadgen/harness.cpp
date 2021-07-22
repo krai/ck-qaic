@@ -67,7 +67,11 @@ void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> i
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 }
 #endif
 
@@ -82,7 +86,11 @@ Program::Program() {
   // device, activation, set, buffer no
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(
       settings->qaic_device_count);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 #ifdef G292
   int i = 64;
   for (int d = 0; d < settings->qaic_device_count; ++d) {
@@ -159,7 +167,11 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 #ifdef __amd64__
   const auto processor_count = std::thread::hardware_concurrency();
   if(processor_count > 0)
@@ -170,8 +182,13 @@ Program::Program() {
 
 #ifdef G292
   if(settings -> input_select == 0)
+<<<<<<< HEAD
     num_setup_threads = 16;
   else 
+=======
+    num_setup_threads = 32;
+  else
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
 
@@ -191,7 +208,11 @@ std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
     //CPU_SET(i*4+3, &cpuset);
     //CPU_SET(i*8+2, &cpuset);
    // CPU_SET(i*8+3, &cpuset);
+<<<<<<< HEAD
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+=======
+  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 #endif
 
     t.detach();
@@ -468,7 +489,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
       prev = now;
     }
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::microseconds(20));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
   }
 }
 

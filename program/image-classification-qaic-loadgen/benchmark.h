@@ -254,7 +254,11 @@ public:
     _out_ptrs = out_ptrs;
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
+<<<<<<< HEAD
     int dev_cnt =  settings->qaic_device_count; 
+=======
+    int dev_cnt =  settings->qaic_device_count;
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
     _in_batch.resize(dev_cnt);
     _out_batch.resize(dev_cnt);
 #ifdef G292
@@ -269,9 +273,15 @@ public:
       unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
       for (int i = 0; i < CTN; i++) {
         cpu_set_t cpuset;
+<<<<<<< HEAD
         get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
         std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
       
+=======
+        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
+        get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
+
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
         CPU_ZERO(&cpuset);
         CPU_SET(coreid+i, &cpuset);
         pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
@@ -280,7 +290,11 @@ public:
     }
 #endif
   }
+<<<<<<< HEAD
   void load_images_locally(BenchmarkSession *_session, int d) { 
+=======
+  void load_images_locally(BenchmarkSession *_session, int d) {
+>>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
     auto vl = _settings->verbosity_level;
 
     const std::vector<std::string> &image_filenames =
@@ -330,6 +344,29 @@ public:
 
   }
 
+  void load_images(BenchmarkSession *_session) override {
+    session = _session;
+#ifdef G292
+    int i = 64;
+    for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
+      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
+
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(i+dev_idx*8, &cpuset);
+      // CPU_SET(i+dev_idx*8+4, &cpuset);
+      if(dev_idx == 7) i = -64;
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+
+      t.join();
+    }
+#else
+    load_images_locally( _session, 0);
+
+#endif
+
+  }
+
   void unload_images(size_t num_examples) override {
     uint16_t batch_size = _settings->qaic_batch_size;
 #ifdef G292
@@ -356,7 +393,6 @@ public:
       const std::vector<mlperf::QuerySample> &samples = *get_random_images_samples[fake_idx];
       const int act_idx = get_random_images_act_idx[fake_idx];
       const int set_idx = get_random_images_set_idx[fake_idx];
-    
       for (int i = 0; i < samples.size(); ++i) {
         TInputDataType *ptr =
           ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
@@ -391,7 +427,6 @@ public:
         return;
       std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
-  
   }
 #else
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,

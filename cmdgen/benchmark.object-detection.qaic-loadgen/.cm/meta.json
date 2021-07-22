@@ -11,7 +11,7 @@
     "deps": [
       "--dep_add_tags.compiler=<<<compiler_tags>>>",
       "--dep_add_tags.python=v3",
-      "--dep_add_tags.mlperf-inference-src=r1.0",
+      "--dep_add_tags.mlperf-inference-src=r1.1",
       "--dep_add_tags.weights=<<<model_tags,>>>",
       "--dep_add_tags.dataset=dataset,object-detection,preprocessed,full,using-<<<preprocessed_using>>>"
     ],
@@ -250,13 +250,14 @@
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
-        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_benchmark_prefix": "numactl",
         "compiler_tags": "gcc",
         "model_tags": [
           "ssd_resnet34.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "3"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",

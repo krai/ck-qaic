@@ -124,6 +124,8 @@ public:
   
   void InitDevices(int dev_idx, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out);
 
+  void InitDevices(int dev_idx, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out);
+
   void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex> &img_indices);
 
   void ColdRun();

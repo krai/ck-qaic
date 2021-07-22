@@ -40,6 +40,12 @@ function exit_if_error() {
 model=${CK_ENV_ONNX_MODEL_ONNX_FILEPATH:-$CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH}
 echo "Model: '${model}'"
 
+if [[ -n ${_NODE_PRECISION_FILE_PATH} ]]; then
+     echo "Copying Node Precision file: '${_NODE_PRECISION_FILE_PATH}'";
+     cp ${PACKAGE_DIR}/${_NODE_PRECISION_FILE_PATH} ${INSTALL_DIR}/
+     _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/${INSTALL_DIR}/node-precision.yaml}
+fi
+
 if [[ -n ${_AIMET_MODEL} ]]; then
      AIMET_RUN="ssd-resnet34"
      rm -rf ${INSTALL_DIR}/$AIMET_RUN

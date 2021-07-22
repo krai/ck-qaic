@@ -58,12 +58,15 @@ echo "Model: '${model}'"
 
 if [[ -n ${_EXTERNAL_QUANTIZATION} ]]; then
   echo ${CK_ENV_COMPILER_GLOW_PROFILE_DIR}
-  node_precision=${CK_ENV_COMPILER_GLOW_NODE_PRECISION_FILE}
-  _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/$node_precision}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[EXTERNAL_QUANTIZATION_FILE]"/$profile}
   LOAD_PROFILE=""
 else
   LOAD_PROFILE="-load-profile=${profile}"
+fi
+
+if [[ -n ${CK_ENV_COMPILER_GLOW_PROFILE_DIR} ]]; then
+  node_precision="${CK_ENV_COMPILER_GLOW_PROFILE_DIR}/node-precision.yaml"
+  _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/$node_precision}
 fi
 
 if [[ -n ${_COMPILER_PARAMS} ]]; then
