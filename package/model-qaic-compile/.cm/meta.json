@@ -192,7 +192,6 @@
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_BATCH_SIZE": "1",
-        "_EXTERNAL_QUANTIZATION": "yes",
         "_MODEL_TO_CONVERT": "compile_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
@@ -230,7 +229,7 @@
     },
     "ssd_resnet34.pcie.16nsp": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt -aic-host-preproc=true -aic-buffer-dealloc-delay=1 -aic-userdma-producer-dma' -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     }
   }

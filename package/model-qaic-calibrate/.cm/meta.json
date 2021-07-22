@@ -38,6 +38,11 @@
             "_CAL": "calibrate_first.5"
           }
         ],
+        "first.1": [
+          {
+            "_CAL": "calibrate_first.1"
+          }
+        ],
         "mlperf": [
           {
             "_COCO_CAL": "calibrate_ssd_resnet34_mlperf"
@@ -48,7 +53,7 @@
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
 	],
-	"for-ssd-mobilenet-preprocessed": [
+	"for.ssd-mobilenet_onnx_preprocessed": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
           }
@@ -77,6 +82,11 @@
         "first.5": [
           {
             "_CAL": "calibrate_first.5"
+          }
+        ],
+        "first.1": [
+          {
+            "_CAL": "calibrate_first.1"
           }
         ],
         "layout.nhwc": [
@@ -170,6 +180,11 @@
         "_BATCH_SIZE": "1"
       }
     },
+    "bs.4": {
+      "extra_env": {
+        "_BATCH_SIZE": "4"
+      }
+    },
     "bs.8": {
       "extra_env": {
         "_BATCH_SIZE": "8"
@@ -178,6 +193,11 @@
     "first.5": {
       "extra_env": {
         "_CAL": "calibrate_first.5"
+      }
+    },
+    "first.1": {
+      "extra_env": {
+        "_CAL": "calibrate_first.1"
       }
     },
     "mlperf.option1": {
@@ -217,9 +237,9 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
+        "_NODE_PRECISION_FILE_PATH": "ssd-resnet34/node-precision.yaml",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "",
-	"_AIMET_MODEL": "yes",
+        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
@@ -228,7 +248,7 @@
         "no-nms"
       ]
     },
-   "ssd-mobilenet": {
+   "ssd_mobilenet": {
       "extra_customize": {
         "package_name": "Profile for QAIC model (SSD-MobileNet)"
       },
