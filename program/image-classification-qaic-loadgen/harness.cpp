@@ -170,7 +170,7 @@ Program::Program() {
 
 #ifdef G292
   if(settings -> input_select == 0)
-    num_setup_threads = 32;
+    num_setup_threads = 16;
   else 
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
@@ -191,7 +191,7 @@ std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
     //CPU_SET(i*4+3, &cpuset);
     //CPU_SET(i*8+2, &cpuset);
    // CPU_SET(i*8+3, &cpuset);
-  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();
@@ -468,7 +468,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
       prev = now;
     }
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+    std::this_thread::sleep_for(std::chrono::microseconds(20));
   }
 }
 

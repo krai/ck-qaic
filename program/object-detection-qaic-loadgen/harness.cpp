@@ -92,9 +92,9 @@ Program::Program() {
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    for(int j = 0; j < 8; j++)
+    for(int j = 0; j < 7; j++)
       CPU_SET(i+d*8+j, &cpuset);
-    for(int j = 0; j < 8; j++)
+    for(int j = 0; j < 7; j++)
       CPU_SET(i+d*8+j+128, &cpuset);
     if(d == 7) i = -64;
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
@@ -167,11 +167,28 @@ Program::Program() {
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
 
+num_setup_threads = 3; //to be investigated if this can go higher
 std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
-  //  for(int i=0 ; i<num_setup_threads ; ++i) {
-  //      std::thread t(&Program::EnqueueShim, this, i);
-  //
+for(int i=0 ; i<num_setup_threads ; ++i) {
+  std::thread t(&Program::EnqueueShim, this, i);
+ #ifdef __amd64__
+    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
+    // only CPU i as set.
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    //CPU_SET(i*4, &cpuset);
+    CPU_SET(i*8+7, &cpuset);
+    //CPU_SET(i*4+2, &cpuset);
+    //CPU_SET(i*4+3, &cpuset);
+    //CPU_SET(i*8+2, &cpuset);
+   // CPU_SET(i*8+3, &cpuset);
+  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+#endif
+
+    t.detach();
+  }
+ 
 }
 
 Program::~Program() {
@@ -259,6 +276,7 @@ void Program::QueueScheduler() {
 
   // current activation index
   int activation = -1;
+  int round_robin = 0;
 
   std::vector<mlperf::QuerySample> qs(settings->qaic_batch_size);
 
@@ -413,7 +431,7 @@ std::vector<RingBuffer *> Program::ring_buf;
 
 std::mutex Program::mtx_queue;
 std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
-int Program::samples_queue_len = 4096;
+int Program::samples_queue_len = 16384;
 
 unique_ptr<IBenchmark> Program::benchmark;
 
@@ -421,6 +439,10 @@ bool Program::terminate = false;
 
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
+
+Payload* Program::payloads[64] = {nullptr};
+
+int Program::num_setup_threads = 0;
 
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
