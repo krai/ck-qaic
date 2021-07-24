@@ -94,8 +94,8 @@ Program::Program() {
     CPU_ZERO(&cpuset);
     for(int j = 0; j < 7; j++)
       CPU_SET(i+d*8+j, &cpuset);
-    for(int j = 0; j < 7; j++)
-      CPU_SET(i+d*8+j+128, &cpuset);
+//    for(int j = 0; j < 7; j++)
+  //    CPU_SET(i+d*8+j+128, &cpuset);
     if(d == 7) i = -64;
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
@@ -167,8 +167,7 @@ Program::Program() {
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
 
-num_setup_threads = 3; //to be investigated if this can go higher
-std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
+//std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
 for(int i=0 ; i<num_setup_threads ; ++i) {
   std::thread t(&Program::EnqueueShim, this, i);
@@ -252,7 +251,7 @@ void Program::EnqueueShim(int id) {
         benchmark->get_random_images(p->samples, p->device, p->activation,
                                      p->set);
       } else if (settings->input_select == 1) {
-        void *img_ptr = benchmark->get_img_ptr(p->device,p->samples[0].index);
+        void *img_ptr = benchmark->get_img_ptr(p->device, p->samples[0].index);
         runners[p->device]->setBufferPtr(p->activation, p->set, 0, img_ptr);
       } else {
         // Do nothing - random data

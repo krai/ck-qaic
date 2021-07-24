@@ -276,8 +276,27 @@ public:
         for (int s = 0; s < _settings->qaic_set_size; ++s)
           delete reformatted_results[d][a][s];
   }
- 
- void load_images_locally(BenchmarkSession *_session, int d) {
+/*
+ void load_images(BenchmarkSession *_session) override {
+    session = _session;
+    auto vl = _settings->verbosity_level;
+
+    const std::vector<std::string> &image_filenames =
+        session->current_filenames();
+
+    int length = image_filenames.size();
+    _current_buffer_size = length;
+    _in_batch[0] = new std::unique_ptr<ImageData>[length];
+    _out_batch[0] = new std::unique_ptr<ResultData>[length];
+    int i = 0;
+    for (auto image_file : image_filenames) {
+      _in_batch[0][i].reset(new ImageData(_settings));
+      _out_batch[0][i].reset(new ResultData(_settings));
+      _in_batch[0][i]->load(image_file, vl);
+      i++;
+    }
+  }*/
+ void load_images_locally(int d) {
     auto vl = _settings->verbosity_level;
 
     const std::vector<std::string> &image_filenames =
@@ -290,7 +309,8 @@ public:
     unsigned batch_size = _settings->qaic_batch_size;
     unsigned image_size = _settings->image_size_width() * _settings->image_size_height() *
                           _settings->num_channels() * sizeof(TInputDataType);
-    for (auto i = 0; i < length; i += batch_size) {
+//std::cout<<batch_size<<" "<<image_size<<"\n";
+    for (int i = 0; i < length; i += batch_size) {
       unsigned actual_batch_size =
           std::min(batch_size, batch_size < length ? (length - i) : length);
       uint8_t *buf = (uint8_t*)aligned_alloc(32, batch_size * image_size);
@@ -308,7 +328,7 @@ public:
 #ifdef G292
     int i = 64;
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
-      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
+      std::thread t(&Benchmark::load_images_locally, this, dev_idx);
 
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
@@ -320,7 +340,7 @@ public:
       t.join();
     }
 #else
-    load_images_locally( _session, 0);
+    load_images_locally(0);
 
 #endif
 
@@ -333,8 +353,8 @@ public:
 #else
     int N = 1;
 #endif
+  for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
     for (size_t i = 0; i < num_examples; i += batch_size) {
-      for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
         delete _in_batch[dev_idx][i].get();
         delete _out_batch[dev_idx][i].get();
       }
@@ -355,7 +375,11 @@ public:
 
   virtual void*
   get_img_ptr(int dev_idx, int img_idx) {
+#ifndef G292
+    return _in_batch[0][session->idx2loc[img_idx]].get()->data();
+#else
     return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
+#endif
   }
 
 

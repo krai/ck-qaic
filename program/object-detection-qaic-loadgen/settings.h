@@ -335,7 +335,7 @@ public:
   const float abc_classt = alter_str_f(getenv("CK_ENV_ABC_CLASST"), std::string("0.05").c_str());
   const float abc_nmst = alter_str_f(getenv("CK_ENV_ABC_NMST"), std::string("0.5").c_str());
   const float abc_loc_offset = alter_str_f(getenv("CK_ENV_ABC_LOC_OFFSET"), std::string("0.0").c_str());
-  const float abc_loc_scale = alter_str_f(getenv("CK_ENV_ABC_LOC_SCALE"), std::string("0.137429535").c_str());
+  const float abc_loc_scale = alter_str_f(getenv("CK_ENV_ABC_LOC_SCALE"), std::string("0.136092901").c_str());
   const float abc_conf_offset = alter_str_f(getenv("CK_ENV_ABC_CONF_OFFSET"), std::string("0.0").c_str());
   const float abc_conf_scale = alter_str_f(getenv("CK_ENV_ABC_CONF_SCALE"), std::string("1.0").c_str());
 
