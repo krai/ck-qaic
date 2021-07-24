@@ -269,8 +269,8 @@ public:
       unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
       for (int i = 0; i < CTN; i++) {
         cpu_set_t cpuset;
-        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
         get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
+        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
 
         CPU_ZERO(&cpuset);
         CPU_SET(coreid+i, &cpuset);
