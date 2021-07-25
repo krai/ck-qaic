@@ -36,8 +36,8 @@
 
 
 #include "../include/AnchorBoxSSD.hpp"
-#include "../include/Algorithm.hpp"
 #include "../include/Profiler.hpp"
+#include "../include/NMS.hpp"
 #include "../include/fp16.h"
 #include <assert.h>
 #include <chrono>
@@ -46,7 +46,8 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-
+#include <queue>
+#include <tuple>
 
 AnchorBoxProc::AnchorBoxProc(AnchorBoxConfig& config)
 {
@@ -83,30 +84,11 @@ static std::vector<float> decodeLocationTensor(std::vector<float>& loc, const fl
     return {x, y, width, height};
 }
 
-
 void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(anchor::fTensor &odmLoc, anchor::fTensor &odmConf, std::vector<std::vector<float>>& selectedAll, float& batchIdx)
 {
     PROFILE("SSD");
     const anchor::fTensor& odmPrior = tPrior;
 
-    #if 0
-    // Enable if wants to performing softmax on CPU
-    float * scoresPtr = odmConf.data;
-    float * locPtr = odmLoc.data;
-    float * priorData = odmPrior.data;
-    for(uint32_t i = 0; i < TOTAL_NUM_BOXES; i++,
-        scoresPtr += 1,
-        locPtr += 1,
-        priorData += 1){
-        // Algorithm::SoftmaxOpt(scoresPtr, locPtr, NUM_CLASSES, 1.0, 0.0,
-        //                         class_threshold, priorData);
-        Algorithm::Softmax(scoresPtr, NUM_CLASSES, 1.0, 0.0);
-    }
-    #endif
-
-    // Already Softmaxed
-    uint32_t sizeCount = 0;
-    uint32_t count = 0;
 
     for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
         /* Since outputs from networks for confidence scores
@@ -140,7 +122,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(anchor::fTensor &odmLoc, an
 
         if(result.size()){
             // To avoid creating call stack if result.size() is 0
-            Algorithm::NMS(result, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
+            NMS_fp32(result, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
         }
     }
     // Keep it commented for internal testing
@@ -155,73 +137,12 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(anchor::fTensor &odmLoc, an
                 });
 }
 
-void AnchorBoxProc::anchorBoxProcessingInt8PerBatch(anchor::iTensor &odmLoc, anchor::iTensor &odmConf, std::vector<std::vector<float>>& selectedAll, float& batchIdx)
-{
-    PROFILE("SSD");
-    const anchor::fTensor& odmPrior = tPrior;
-
-    // Already Softmaxed
-    uint32_t sizeCount = 0;
-    uint32_t count = 0;
-
-    for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
-        /* Since outputs from networks for confidence scores
-            are in shape [1 x NUM_CLASSES x TOTAL_NUM_BOXES ]
-            We iterate this way to avoid doing transpose of data */
-        uint32_t confItr = nClsIdx * TOTAL_NUM_BOXES;
-        std::vector<std::vector<float>> result;
-        std::vector<std::vector<float>> selected;
-        int8_t* odmConfPtr = odmConf.data;
-        int8_t* odmLocPtr = odmLoc.data;
-        float* odmPriorPtr = odmPrior.data;
-
-        for (uint32_t nBoxIdx = 0; nBoxIdx < TOTAL_NUM_BOXES; ++nBoxIdx,
-            odmConfPtr += 1,
-            odmLocPtr += 1,
-            odmPriorPtr += 1) {
-            // Since outputs from networks are in shape 1 x NUM_CLASSES x TOTAL_NUM_BOXES
-            // We iterate this way to avoid doing transpose of data
-            float confidence = (odmConfPtr[confItr] - confOffset) * confScale ;
-            if (confidence <= class_threshold)
-                continue;
-
-            // Transform int8_t -> fp32
-            std::vector<float> box = { (odmLocPtr[BOX_ITR_0] - locOffset) * locScale,
-                                        (odmLocPtr[BOX_ITR_1] - locOffset) * locScale,
-                                        (odmLocPtr[BOX_ITR_2] - locOffset) * locScale,
-                                        (odmLocPtr[BOX_ITR_3] - locOffset) * locScale};
-            box = decodeLocationTensor(box, odmPriorPtr, variance.data());
-            float labelId = nClsIdx;
-            result.emplace_back(
-                std::initializer_list<float>{batchIdx, box[1], box[0], box[3], box[2],
-                                                confidence,
-                                                labelId});
-        }
-
-        if(result.size()){
-            // To avoid creating call stack if result.size() is 0
-            Algorithm::NMS(result, nms_threshold, max_boxes_per_class, selected, selectedAll, class_map);
-        }
-    }
-    using box = std::vector<float>;
-
-    int middle = selectedAll.size();
-    if(selectedAll.size() > max_detections_per_image){
-        middle = max_detections_per_image;
-    }
-    std::partial_sort(selectedAll.begin(), selectedAll.begin() + middle, selectedAll.end(), [] (const box& a, const box& b) {
-            return a[SCORE_POSITION] > b[SCORE_POSITION];
-                });
-}
 
 void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(anchor::uTensor &odmLoc, anchor::uTensor &odmConf, std::vector<std::vector<float>>& selectedAll, float& batchIdx)
 {
     PROFILE("SSD");
     const anchor::fTensor& odmPrior = tPrior;
 
-    // Already Softmaxed
-    uint32_t sizeCount = 0;
-    uint32_t count = 0;
 
     for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
         /* Since outputs from networks for confidence scores
@@ -259,7 +180,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(anchor::uTensor &odmLoc, an
 
         if(result.size()){
             // To avoid creating call stack if result.size() is 0
-            Algorithm::NMS(result, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
+            NMS_fp32(result, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
         }
     }
     // Keep it commented for internal testing
@@ -274,64 +195,6 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(anchor::uTensor &odmLoc, an
                 });
 }
 
-// First output in network desc is Location tensor
-void AnchorBoxProc::anchorBoxProcessingUint8FloatPerBatch(anchor::uTensor &odmLoc, anchor::fTensor &odmConf, std::vector<std::vector<float>>& selectedAll, float& batchIdx)
-{
-    PROFILE("SSD");
-    const anchor::fTensor& odmPrior = tPrior;
-
-    // Already Softmaxed
-    uint32_t sizeCount = 0;
-    uint32_t count = 0;
-
-    for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
-        /* Since outputs from networks for confidence scores
-            are in shape [1 x NUM_CLASSES x TOTAL_NUM_BOXES ]
-            We iterate this way to avoid doing transpose of data */
-        uint32_t confItr = nClsIdx * TOTAL_NUM_BOXES;
-        std::vector<std::vector<float>> result;
-        std::vector<std::vector<float>> selected;
-        float* odmConfPtr = odmConf.data;
-        uint8_t* odmLocPtr = odmLoc.data;
-        float* odmPriorPtr = odmPrior.data;
-
-        for (uint32_t nBoxIdx = 0; nBoxIdx < TOTAL_NUM_BOXES; ++nBoxIdx,
-            odmConfPtr += 1,
-            odmLocPtr += 1,
-            odmPriorPtr += 1) {
-            float confidence = odmConfPtr[confItr] ;
-            if (confidence <= class_threshold)
-                continue;
-
-            // Transform uint8_t -> int8_t -> fp32
-            std::vector<float> box = { (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_0]) - locOffset) * locScale,
-                                        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_1]) - locOffset) * locScale,
-                                        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_2]) - locOffset) * locScale,
-                                        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_3]) - locOffset) * locScale};
-            box = decodeLocationTensor(box, odmPriorPtr, variance.data());
-            float labelId = nClsIdx;
-            result.emplace_back(
-                std::initializer_list<float>{batchIdx, box[1], box[0], box[3], box[2],
-                                                confidence,
-                                                labelId});
-        }
-
-        if(result.size()){
-            // To avoid creating call stack if result.size() is 0
-            Algorithm::NMS(result, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
-        }
-    }
-    // Keep it commented for internal testing
-    using box = std::vector<float>;
-
-    int middle = selectedAll.size();
-    if(selectedAll.size() > max_detections_per_image){
-        middle = max_detections_per_image;
-    }
-    std::partial_sort(selectedAll.begin(), selectedAll.begin() + middle, selectedAll.end(), [] (const box& a, const box& b) {
-            return a[SCORE_POSITION] > b[SCORE_POSITION];
-                });
-}
 
 // First output in network desc is Location tensor
 void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odmLoc, anchor::hfTensor &odmConf, std::vector<std::vector<float>>& selectedAll, float& batchIdx)
@@ -339,9 +202,6 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odm
     PROFILE("SSD");
     const anchor::fTensor& odmPrior = tPrior;
 
-    // Already Softmaxed
-    uint32_t sizeCount = 0;
-    uint32_t count = 0;
 
     for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
         /* Since outputs from networks for confidence scores
@@ -381,7 +241,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odm
 
         if(result.size()){
             // To avoid creating call stack if result.size() is 0
-            Algorithm::NMS_FP16(result, scores, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
+            NMS_fp16(result, scores, nms_threshold, max_boxes_per_class, selected, selectedAll,class_map);
         }
     }
     // Keep it commented for internal testing
@@ -395,3 +255,5 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odm
             return a[SCORE_POSITION] > b[SCORE_POSITION];
                 });
 }
+
+

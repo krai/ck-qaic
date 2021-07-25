@@ -53,7 +53,7 @@ using namespace std;
 using namespace CK;
 
 #ifdef G292
-void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out) {
+void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -67,11 +67,6 @@ void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> i
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 }
 #endif
 
@@ -86,15 +81,11 @@ Program::Program() {
   // device, activation, set, buffer no
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(
       settings->qaic_device_count);
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 #ifdef G292
   int i = 64;
   for (int d = 0; d < settings->qaic_device_count; ++d) {
-    std::thread t(&Program::InitDevices, this, d, in, out);
+    std::thread t(&Program::InitDevices, this, d);
 
     // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
     // only CPU i as set.
@@ -167,11 +158,6 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
-<<<<<<< HEAD
-   
-=======
-
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
 #ifdef __amd64__
   const auto processor_count = std::thread::hardware_concurrency();
   if(processor_count > 0)
@@ -182,17 +168,11 @@ Program::Program() {
 
 #ifdef G292
   if(settings -> input_select == 0)
-<<<<<<< HEAD
-    num_setup_threads = 16;
-  else 
-=======
     num_setup_threads = 32;
   else
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
 
-std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
   for(int i=0 ; i<num_setup_threads ; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
@@ -205,14 +185,7 @@ std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
     //CPU_SET(i*4, &cpuset);
     CPU_SET(i*4+1, &cpuset);
     //CPU_SET(i*4+2, &cpuset);
-    //CPU_SET(i*4+3, &cpuset);
-    //CPU_SET(i*8+2, &cpuset);
-   // CPU_SET(i*8+3, &cpuset);
-<<<<<<< HEAD
-    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-=======
-  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
+    //   pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();

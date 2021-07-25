@@ -254,47 +254,37 @@ public:
     _out_ptrs = out_ptrs;
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
-<<<<<<< HEAD
-    int dev_cnt =  settings->qaic_device_count; 
-=======
     int dev_cnt =  settings->qaic_device_count;
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
     _in_batch.resize(dev_cnt);
     _out_batch.resize(dev_cnt);
 #ifdef G292
-    const int CTN = settings -> copy_threads_per_device;
-    get_random_images_samples.resize(CTN*dev_cnt);
-    get_random_images_act_idx.resize(CTN*dev_cnt);
-    get_random_images_set_idx.resize(CTN*dev_cnt);
-    get_random_images_finished.resize(CTN*dev_cnt);
-    get_random_images_turn.resize(dev_cnt);
-    for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
-      get_random_images_turn[dev_idx]=0;
-      unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
-      for (int i = 0; i < CTN; i++) {
-        cpu_set_t cpuset;
-<<<<<<< HEAD
-        get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
-        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
+    if(settings -> input_select == 0) {
+      const int CTN = settings -> copy_threads_per_device;
+      get_random_images_samples.resize(CTN*dev_cnt);
+      get_random_images_act_idx.resize(CTN*dev_cnt);
+      get_random_images_set_idx.resize(CTN*dev_cnt);
+      get_random_images_finished.resize(CTN*dev_cnt);
+      get_random_images_turn.resize(dev_cnt);
+    
+      for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
+        get_random_images_turn[dev_idx]=0;
+        unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
+        for (int i = 0; i < CTN; i++) {
+          cpu_set_t cpuset;
+          get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
+          std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
       
-=======
-        std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
-        get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
-
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
-        CPU_ZERO(&cpuset);
-        CPU_SET(coreid+i, &cpuset);
-        pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-        t.detach();
+          CPU_ZERO(&cpuset);
+          CPU_SET(coreid+i, &cpuset);
+          pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+          t.detach();
+        }
       }
     }
 #endif
   }
-<<<<<<< HEAD
-  void load_images_locally(BenchmarkSession *_session, int d) { 
-=======
-  void load_images_locally(BenchmarkSession *_session, int d) {
->>>>>>> e985f0c7168100a48d88b83b17d53deb66816ab6
+  
+  void load_images_locally(int d) {
     auto vl = _settings->verbosity_level;
 
     const std::vector<std::string> &image_filenames =
@@ -318,7 +308,6 @@ public:
         _in_batch[d][i + j]->load(image_filenames[i + j], vl, _settings->isNHWC);
       }
     }
-    std::cout<<"Finished load: "<<d<<"\n";
   }
  
   void load_images(BenchmarkSession *_session) override {
@@ -326,42 +315,18 @@ public:
 #ifdef G292
     int i = 64;
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
-      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
-
-      cpu_set_t cpuset;
-      CPU_ZERO(&cpuset);
-      CPU_SET(i+dev_idx*8+128, &cpuset);
-       CPU_SET(i+dev_idx*8+4, &cpuset);
-      if(dev_idx == 7) i = -64;
-      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-
-      t.join();
-    }
-#else
-    load_images_locally( _session, 0);
-
-#endif
-
-  }
-
-  void load_images(BenchmarkSession *_session) override {
-    session = _session;
-#ifdef G292
-    int i = 64;
-    for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
-      std::thread t(&Benchmark::load_images_locally, this, _session, dev_idx);
+      std::thread t(&Benchmark::load_images_locally, this, dev_idx);
 
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
       CPU_SET(i+dev_idx*8, &cpuset);
-      // CPU_SET(i+dev_idx*8+4, &cpuset);
       if(dev_idx == 7) i = -64;
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 
       t.join();
     }
 #else
-    load_images_locally( _session, 0);
+    load_images_locally(0);
 
 #endif
 
@@ -374,8 +339,8 @@ public:
 #else
     int N = 1;
 #endif
+  for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
     for (size_t i = 0; i < num_examples; i += batch_size) {
-      for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
         delete _in_batch[dev_idx][i].get();
         delete _out_batch[dev_idx][i].get();
       }
@@ -443,7 +408,11 @@ public:
 #endif
 
   virtual void *get_img_ptr(unsigned dev_idx, int img_idx) {
+#ifdef G292
     return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
+#else
+    return _in_batch[0][session->idx2loc[img_idx]].get()->data();
+#endif
   }
 
   void get_next_results(int num_results, std::vector<int> &results, int dev_idx,
@@ -463,7 +432,7 @@ public:
         session->current_filenames();
     int i = 0;
      for (auto image_file : image_filenames) {
-       (*_out_batch[i++])->save(image_file);
+       _out_batch[0][i++]->save(image_file);
      }
   }
 

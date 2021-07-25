@@ -62,7 +62,7 @@
           "module_uoa": "script",
           "script_name": "loadgen_preprocess"
         },
-        "run_cmd_main": "gdb --args $#BIN_FILE#$",
+        "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
           "$<<?CK_ENV_LOADGEN_CONFIG_FILE>>$",
           "$<<?CK_LOADGEN_CONF_FILE>>$"

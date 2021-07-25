@@ -96,7 +96,7 @@ namespace anchor
     };
 };
 
-typedef struct AnchorBoxConfig{
+struct AnchorBoxConfig{
     float classT;
     float nmsT;
     std::string priorfilename;
