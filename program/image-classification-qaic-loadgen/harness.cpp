@@ -175,7 +175,7 @@ Program::Program() {
     num_setup_threads = 3; //to be investigated if this can go higher
 #endif
 
-std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
+//std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
   for(int i=0 ; i<num_setup_threads ; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
