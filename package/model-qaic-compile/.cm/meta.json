@@ -209,7 +209,7 @@
     },
     "ssd_resnet34.aedk.16nsp.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE]"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE]"
       }
     },
     "ssd_resnet34.aedk.8nsp.offline": {
@@ -219,7 +219,7 @@
     },
     "ssd_resnet34.aedk.8nsp.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE]"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test --node-precision-info=[NODE_PRECISION_FILE]"
       }
     },
     "ssd_resnet34.pcie.14nsp": {
