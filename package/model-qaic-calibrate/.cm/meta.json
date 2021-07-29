@@ -48,12 +48,12 @@
             "_COCO_CAL": "calibrate_ssd_resnet34_mlperf"
           }
         ],
-	"for-ssd-resnet-onnx-preprocessed": [
+	"for.ssd_resnet34.onnx.preprocessed": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
 	],
-	"for.ssd-mobilenet_onnx_preprocessed": [
+	"for.ssd_mobilenet.onnx.preprocessed": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
           }
