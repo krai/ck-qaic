@@ -18,7 +18,7 @@
       "ML_MODEL_SKIPS_ORIGINAL_DATASET_CLASSES": "12,26,29,30,45,66,68,69,71,83",
       "MODEL_DATASET_TYPE": "coco",
       "MODEL_INPUT_LAYER_NAME": "image",
-      "MODEL_NAME": "MLPerf SSD-Resnet",
+      "MODEL_NAME": "MLPerf SSD-ResNet34",
       "MODEL_OUTPUT_LAYER_BBOXES": "bboxes",
       "MODEL_OUTPUT_LAYER_LABELS": "labels",
       "MODEL_OUTPUT_LAYER_SCORES": "scores",
@@ -39,7 +39,17 @@
       "local": "yes",
       "name": "Python ONNX library",
       "sort": 10,
-      "tags": "lib,python-package,onnx"
+      "tags": "lib,python-package,onnx",
+      "version_from": [
+        1,
+        8,
+        0
+      ],
+      "version_to": [
+        1,
+        8,
+        99
+      ]
     },
     "python": {
       "local": "yes",
@@ -57,7 +67,7 @@
   "only_for_target_os_tags": [
     "linux"
   ],
-  "package_extra_name": " (MLPerf SSD-ResNet no NMS)",
+  "package_extra_name": " (MLPerf SSD-ResNet34 without NMS)",
   "process_script": "install",
   "soft_uoa": "bcaac306e9041879",
   "suggested_path": "model-onnx-mlperf-ssd-resnet-no-nms-downloaded",
@@ -68,7 +78,9 @@
     "onnx",
     "ssd",
     "ssd-resnet",
+    "ssd_resnet",
     "ssd-resnet34",
+    "ssd_resnet34",
     "non-quantized",
     "nchw",
     "vcoco",

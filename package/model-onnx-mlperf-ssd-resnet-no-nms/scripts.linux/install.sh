@@ -32,9 +32,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+function exit_if_error() {
+  if [ "${?}" != "0" ]; then exit 1; fi
+}
+
 INSTALL_SCRIPT_NAME=install.sh
 
-echo "${INSTALL_SCRIPT_NAME} : Removing NMS from model ..."
+echo "${INSTALL_SCRIPT_NAME} : Removing NMS from the SSD-ResNet34 model ..."
 ${CK_ENV_COMPILER_PYTHON_FILE} ${ORIGINAL_PACKAGE_DIR}/remove_nms.py ${INSTALL_DIR}/${PACKAGE_NAME}
+exit_if_error
 
 echo "${INSTALL_SCRIPT_NAME} : Done."

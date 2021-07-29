@@ -79,7 +79,7 @@ Python 3.6.8
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
 && rm -f Python-&dollar;{PYTHON_VERSION}.tgz \
 && cd /usr/src/Python-&dollar;{PYTHON_VERSION} \
-&& ./configure --enable-optimizations && make -j 32 altinstall \
+&& ./configure --enable-optimizations --enable-shared --with-ssl && make -j 32 altinstall \
 && rm -rf /usr/src/Python-&dollar;{PYTHON_VERSION}*
 <b>[root@ax530b-03-giga ~]#</b> exit
 exit
@@ -302,7 +302,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
 --dep_add_tags.dataset-source=original,full \
---tags=dataset,imagenet,val,full,preprocessed,using-opencv,for.resnet-quant,layout.nhwc,side.224
+--tags=dataset,imagenet,val,full,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224
 </pre>
 
 <a name="prepare_resnet50"></a>
@@ -346,7 +346,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 --tags=dataset,imagenet,calibration,mlperf.option1
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --dep_add_tags.dataset-source=mlperf.option1 \
---tags=dataset,preprocessed,using-opencv,for.resnet,layout.nhwc,first.500 \
+--tags=dataset,preprocessed,using-opencv,for.resnet50,layout.nhwc,first.500 \
 --extra_tags=calibration,mlperf.option1
 </pre>
 
