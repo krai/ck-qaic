@@ -79,7 +79,7 @@ Python 3.6.8
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
 && rm -f Python-&dollar;{PYTHON_VERSION}.tgz \
 && cd /usr/src/Python-&dollar;{PYTHON_VERSION} \
-&& ./configure --enable-optimizations --enable-shared && make -j 32 altinstall \
+&& ./configure --enable-optimizations --enable-shared --with-ssl && make -j 32 altinstall \
 && rm -rf /usr/src/Python-&dollar;{PYTHON_VERSION}*
 <b>[root@ax530b-03-giga ~]#</b> exit
 exit
