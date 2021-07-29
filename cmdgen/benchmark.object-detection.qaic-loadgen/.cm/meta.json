@@ -129,7 +129,7 @@
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
         ],
         "deps": [
-          "--dep_add_tags.dataset=for-ssd-resnet-onnx-preprocessed-quant,full"
+          "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,full"
         ],
         "division": "closed",
         "model_tags": [
