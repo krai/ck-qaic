@@ -82,6 +82,7 @@
       "local": "yes",
       "name": "ImageNet dataset (aux)",
       "sort": 10,
+      "no_tags": "preprocessed",
       "tags": "dataset,imagenet,aux"
     },
     "images": {
@@ -89,7 +90,7 @@
       "local": "yes",
       "name": "ImageNet dataset (preprocessed subset)",
       "sort": 3,
-      "tags": "dataset,imagenet,preprocessed"
+      "tags": "dataset,imagenet,preprocessed,validation"
     },
     "lib-python-numpy": {
       "force_target_as_host": "yes",
