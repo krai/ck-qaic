@@ -106,7 +106,7 @@ Python 3.6.8
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
 && rm -f Python-&dollar;{PYTHON_VERSION}.tgz \
 && cd /usr/src/Python-&dollar;{PYTHON_VERSION} \
-&& ./configure --enable-optimizations && make -j 32 altinstall \
+&& ./configure --enable-optimizations  --enable-shared --with-ssl && make -j 32 altinstall \
 && rm -rf /usr/src/Python-&dollar;{PYTHON_VERSION}*
 <b>[root@ax530b-03-giga ~]#</b> exit
 exit
@@ -335,7 +335,7 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
 --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for-ssd-resnet-onnx-preprocessed-quant,using-opencv,full \
+--tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
 --extra_tags=using-opencv
 </pre>
 
