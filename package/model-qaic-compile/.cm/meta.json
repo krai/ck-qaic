@@ -204,7 +204,7 @@
     },
     "ssd_resnet34.aedk.16nsp.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE]"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     },
     "ssd_resnet34.aedk.16nsp.singlestream": {
@@ -214,7 +214,7 @@
     },
     "ssd_resnet34.aedk.8nsp.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE]"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     },
     "ssd_resnet34.aedk.8nsp.singlestream": {
@@ -224,7 +224,7 @@
     },
     "ssd_resnet34.pcie.14nsp": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt -aic-host-preproc=true -aic-buffer-dealloc-delay=1 -aic-userdma-producer-dma' -aic-compile-only-test -external-quantization=[EXTERNAL_QUANTIZATION_FILE] -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 --enable-channelwise -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     },
     "ssd_resnet34.pcie.16nsp": {
