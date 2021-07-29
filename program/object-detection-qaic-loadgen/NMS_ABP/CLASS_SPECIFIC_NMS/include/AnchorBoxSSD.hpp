@@ -35,8 +35,9 @@
 //==============================================================================
 
 
-#ifndef MLPERF_R34SSD_SSD_HPP
-#define MLPERF_R34SSD_SSD_HPP
+#ifndef MLPERF_R34_MV1_SSD_SSD_HPP
+#define MLPERF_R34_MV1_SSD_SSD_HPP
+#undef MODEL_R34
 
 #include <iostream>
 #include "fp16.h"
@@ -48,25 +49,52 @@
 #include <assert.h>
 #include <algorithm>
 
-#define NUM_CLASSES 81
-#define NUM_COORDINATES 4
-#define MAX_BOXES_PER_CLASS 100
-#define TOTAL_NUM_BOXES 15130
-#define BATCH_SIZE 1
+#if MODEL_R34
+    #define NUM_CLASSES 81
+    #define MAX_BOXES_PER_CLASS 100
+    #define TOTAL_NUM_BOXES 15130
 
-#define DATA_LENGTH_LOC 60520
-#define DATA_LENGTH_CONF 1225530
+    #define DATA_LENGTH_LOC 60520
+    #define DATA_LENGTH_CONF 1225530
+    #define MAP_CLASSES 1
+
+    #define BOX_ITR_0 0
+    #define BOX_ITR_1 15130
+    #define BOX_ITR_2 30260
+    #define BOX_ITR_3 45390
+
+    #define OFFSET_CONF 15130
+    #define STEP_CONF_PTR 1
+    #define STEP_LOC_PTR 1
+    #define STEP_PRIOR_PTR 1
+#else
+    #define NUM_CLASSES 91
+    #define MAX_BOXES_PER_CLASS 100
+    #define TOTAL_NUM_BOXES 1917
+
+
+    #define DATA_LENGTH_LOC 7668
+    #define DATA_LENGTH_CONF 174447
+
+    #define BOX_ITR_0 0
+    #define BOX_ITR_1 1
+    #define BOX_ITR_2 2
+    #define BOX_ITR_3 3
+
+    #define MAP_CLASSES 0
+
+    #define OFFSET_CONF 1
+    #define STEP_CONF_PTR 91
+    #define STEP_LOC_PTR 4
+    #define STEP_PRIOR_PTR 4
+#endif
+
 #define _UINT8_TO_INT8 128
 #define CONVERT_TO_INT8(x) (int8_t)((int16_t)x - _UINT8_TO_INT8)
-
-#define BOX_ITR_0 0
-#define BOX_ITR_1 15130
-#define BOX_ITR_2 30260
-#define BOX_ITR_3 45390
-
 #define CLASS_POSITION 6
 #define SCORE_POSITION 5
-#define MAP_CLASSES 1
+#define NUM_COORDINATES 4
+#define BATCH_SIZE 4
 
 namespace anchor
 {
@@ -96,7 +124,7 @@ namespace anchor
     };
 };
 
-struct AnchorBoxConfig{
+typedef struct AnchorBoxConfig{
     float classT;
     float nmsT;
     std::string priorfilename;
@@ -109,6 +137,7 @@ struct AnchorBoxConfig{
     float confOffset;
     float confScale;
 };
+
 
 // Api to read data from raw/bin file into tensor
 template<typename T, typename Tensor>
@@ -158,5 +187,4 @@ public:
     };
 };
 
-
-#endif //MLPERF_R34SSD_SSD_HPP
+#endif //MLPERF_R34_MV1_SSD_SSD_HPP
