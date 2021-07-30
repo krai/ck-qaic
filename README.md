@@ -2,7 +2,7 @@
 
 This repository contains benchmark implementations and automated workflows for
 the [Qualcomm Cloud AI](https://www.qualcomm.com/products/cloud-artificial-intelligence)
-submission to [MLPerf Inference v1.0](https://mlcommons.org/en/).
+submissions to [MLPerf Inference](https://mlcommons.org/en/).
 
 Unless explicitly stated otherwise, this software is released under the following license 
 ([SPDX-License-Identifier: BSD-3-Clause.](https://spdx.org/licenses/BSD-3-Clause.html)):
