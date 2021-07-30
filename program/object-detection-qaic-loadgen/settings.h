@@ -330,6 +330,8 @@ public:
 
   const int input_select = alter_str_i(getenv("CK_ENV_QAIC_INPUT_SELECT"), 0);
 
+  const int copy_threads_per_device = alter_str_i(getenv("CK_ENV_COPY_THREADS_PER_DEVICE"), 2);
+
   int verbosity_level;
 
   const float abc_classt = alter_str_f(getenv("CK_ENV_ABC_CLASST"), std::string("0.05").c_str());

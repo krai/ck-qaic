@@ -131,6 +131,8 @@ public:
 
   void Inference(std::vector<mlperf::QuerySample> samples);
 
+  void EnqueueShim(int id);
+
   static void QueueScheduler();
 
   static void PostResults(QAicEvent *event,
@@ -146,6 +148,10 @@ public:
   static void setSUT(SystemUnderTestQAIC *s);
 
   static BenchmarkSettings *settings;
+
+  void InitDevices(int dev_idx);
+  static int num_setup_threads;
+  static Payload* payloads[64];
 
 private:
   static BenchmarkSession *session;

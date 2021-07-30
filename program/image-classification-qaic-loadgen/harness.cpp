@@ -53,7 +53,7 @@ using namespace std;
 using namespace CK;
 
 #ifdef G292
-void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> in, std::vector<std::vector<std::vector<std::vector<void *>>>> out) {
+void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -67,7 +67,6 @@ void Program::InitDevices(int d, std::vector<std::vector<std::vector<void *>>> i
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
-
 }
 #endif
 
@@ -86,7 +85,7 @@ Program::Program() {
 #ifdef G292
   int i = 64;
   for (int d = 0; d < settings->qaic_device_count; ++d) {
-    std::thread t(&Program::InitDevices, this, d, in, out);
+    std::thread t(&Program::InitDevices, this, d);
 
     // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
     // only CPU i as set.
@@ -159,7 +158,6 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
-
 #ifdef __amd64__
   const auto processor_count = std::thread::hardware_concurrency();
   if(processor_count > 0)
@@ -188,10 +186,7 @@ Program::Program() {
     //CPU_SET(i*4, &cpuset);
     CPU_SET(i*4+1, &cpuset);
     //CPU_SET(i*4+2, &cpuset);
-    //CPU_SET(i*4+3, &cpuset);
-    //CPU_SET(i*8+2, &cpuset);
-   // CPU_SET(i*8+3, &cpuset);
-  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    //   pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();

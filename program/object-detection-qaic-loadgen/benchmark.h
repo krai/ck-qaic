@@ -114,8 +114,12 @@ private:
 
 template <typename TData> class StaticBuffer {
 public:
-  StaticBuffer(int size, const std::string &dir) : _size(size), _dir(dir) {
-    _buffer = new TData[size];
+  StaticBuffer(int size, const std::string &dir, TData *ptr = NULL) : _size(size), _dir(dir) {
+   if(!ptr)
+    _buffer = (TData*)aligned_alloc(32,size);
+    //_buffer = new TData[size];
+   else
+    _buffer = ptr;
   }
 
   virtual ~StaticBuffer() { delete[] _buffer; }
@@ -134,11 +138,11 @@ protected:
 
 class ImageData : public StaticBuffer<uint8_t> {
 public:
-  ImageData(BenchmarkSettings *s)
+  ImageData(BenchmarkSettings *s, uint8_t *buf = NULL)
       : StaticBuffer(s->image_size_height() * s->image_size_width() *
              s->num_channels() * ((s->qaic_skip_stage != "convert") ? 
                   sizeof(float) : sizeof(uint8_t)),
-                     s->images_dir()),
+                     s->images_dir(), buf),
         s(s) {}
 
   void load(const std::string &filename, int vl) {
@@ -194,7 +198,7 @@ public:
                     int dev_idx, int act_idx, int set_idx) = 0;
 
   virtual void*
-  get_img_ptr(int img_idx) = 0;
+  get_img_ptr(int dev_idx, int img_idx) = 0;
 
 };
 
@@ -202,6 +206,20 @@ template <typename TInConverter, typename TOutConverter,
          typename TInputDataType, typename TOutput1DataType, typename TOutput2DataType>
 class Benchmark : public IBenchmark {
 public:
+  void initResultsBuffer(int dev_id) {
+    for (int d = 0; d < _settings->qaic_device_count ; ++d) {
+      nms_results[d].resize(_settings->qaic_activation_count);
+      reformatted_results[d].resize(_settings->qaic_activation_count);
+      for (int a = 0; a < _settings->qaic_activation_count; ++a) {
+        nms_results[d][a].resize(_settings->qaic_set_size);
+        reformatted_results[d][a].resize(_settings->qaic_set_size);
+        for (int s = 0; s < _settings->qaic_set_size; ++s) {
+          nms_results[d][a][s] = std::vector<std::vector<float>>(0,std::vector<float>(NUM_COORDINATES+2,0));
+          reformatted_results[d][a][s] = new ResultData(_settings);
+        }
+      }
+    }
+  }
   Benchmark(BenchmarkSettings *settings,
             std::vector<std::vector<std::vector<void *>>> &in_ptrs,
             std::vector<std::vector<std::vector<std::vector<void *>>>> &out_ptrs)
@@ -210,7 +228,9 @@ public:
     _out_ptrs = out_ptrs;
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
-
+    int dev_cnt = settings->qaic_device_count;
+    _in_batch.resize(dev_cnt);
+    _out_batch.resize(dev_cnt);
     // load NMS data
 
     acConfig.classT = settings->abc_classt;
@@ -244,20 +264,40 @@ public:
     // create buffers for each of the available threads
     nms_results.resize(settings->qaic_device_count);
     reformatted_results.resize(settings->qaic_device_count);
-    for (int d = 0; d < settings->qaic_device_count ; ++d) {
-      nms_results[d].resize(settings->qaic_activation_count);
-      reformatted_results[d].resize(settings->qaic_activation_count);
-      for (int a = 0; a < settings->qaic_activation_count; ++a) {
-        nms_results[d][a].resize(settings->qaic_set_size);
-        reformatted_results[d][a].resize(settings->qaic_set_size);
-        for (int s = 0; s < settings->qaic_set_size; ++s) {
-          nms_results[d][a][s] = std::vector<std::vector<float>>(0,std::vector<float>(NUM_COORDINATES+2,0));
-          reformatted_results[d][a][s] = new ResultData(_settings);
-        }
-      }
-    }
 
-    std::vector<int> exclude{12, 26, 29, 30, 45, 66, 68, 69, 71, 83};
+#ifdef G292
+    const int CTN = settings -> copy_threads_per_device;
+    get_next_results_image_idxs.resize(CTN*dev_cnt);
+    get_next_results_results.resize(CTN*dev_cnt);
+    get_next_results_act_idx.resize(CTN*dev_cnt);
+    get_next_results_set_idx.resize(CTN*dev_cnt);
+    get_next_results_finished.resize(CTN*dev_cnt);
+    get_next_results_turn.resize(dev_cnt);
+
+    for (int dev_idx = 0; dev_idx < settings->qaic_device_count ; ++dev_idx) {
+      unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
+      std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(dev_idx*8+4, &cpuset);
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+      t.join();
+
+      get_next_results_turn[dev_idx]=0;
+      for (int i = 0; i < CTN; i++) {
+        cpu_set_t cpuset;
+        get_next_results_mutex[dev_idx+ i*dev_cnt].lock();
+        std::thread t(&Benchmark::get_next_results_worker, this, dev_idx+ i*dev_cnt);
+
+        CPU_ZERO(&cpuset);
+        CPU_SET(coreid+i, &cpuset);
+        pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+        t.detach();
+      }
+  }
+#endif
+    
+   std::vector<int> exclude{12, 26, 29, 30, 45, 66, 68, 69, 71, 83};
 
     for (int i = 0; i < 100; ++i)
       if (std::find(exclude.begin(), exclude.end(), i) == exclude.end())
@@ -270,8 +310,8 @@ public:
         for (int s = 0; s < _settings->qaic_set_size; ++s)
           delete reformatted_results[d][a][s];
   }
-  
-  void load_images(BenchmarkSession *_session) override {
+/*
+ void load_images(BenchmarkSession *_session) override {
     session = _session;
     auto vl = _settings->verbosity_level;
 
@@ -280,23 +320,80 @@ public:
 
     int length = image_filenames.size();
     _current_buffer_size = length;
-    _in_batch = new std::unique_ptr<ImageData>[length];
-    _out_batch = new std::unique_ptr<ResultData>[length];
+    _in_batch[0] = new std::unique_ptr<ImageData>[length];
+    _out_batch[0] = new std::unique_ptr<ResultData>[length];
     int i = 0;
     for (auto image_file : image_filenames) {
-      _in_batch[i].reset(new ImageData(_settings));
-      _out_batch[i].reset(new ResultData(_settings));
-      _in_batch[i]->load(image_file, vl);
+      _in_batch[0][i].reset(new ImageData(_settings));
+      _out_batch[0][i].reset(new ResultData(_settings));
+      _in_batch[0][i]->load(image_file, vl);
       i++;
+    }
+  }*/
+ void load_images_locally(int d) {
+    auto vl = _settings->verbosity_level;
+
+    const std::vector<std::string> &image_filenames =
+        session->current_filenames();
+
+    unsigned length = image_filenames.size();
+    _current_buffer_size = length;
+    _in_batch[d] = new std::unique_ptr<ImageData>[length];
+    _out_batch[d] = new std::unique_ptr<ResultData>[length];
+    unsigned batch_size = _settings->qaic_batch_size;
+    unsigned image_size = _settings->image_size_width() * _settings->image_size_height() *
+                          _settings->num_channels() * sizeof(TInputDataType);
+    for (int i = 0; i < length; i += batch_size) {
+      unsigned actual_batch_size =
+          std::min(batch_size, batch_size < length ? (length - i) : length);
+      uint8_t *buf = (uint8_t*)aligned_alloc(32, batch_size * image_size);
+      for (auto j = 0; j < actual_batch_size; j++, buf += image_size) {
+        _in_batch[d][i + j].reset(
+            new ImageData(_settings, buf));
+        _out_batch[d][i + j].reset(new ResultData(_settings));
+        _in_batch[d][i + j]->load(image_filenames[i + j], vl);
+      }
     }
   }
 
-  void unload_images(size_t num_examples) override {
-    for (size_t i = 0; i < num_examples; i++) {
-      delete _in_batch[i].get();
-      delete _out_batch[i].get();
+  void load_images(BenchmarkSession *_session) override {
+    session = _session;
+#ifdef G292
+    int i = 64;
+    for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
+      std::thread t(&Benchmark::load_images_locally, this, dev_idx);
+
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(i+dev_idx*8, &cpuset);
+      // CPU_SET(i+dev_idx*8+4, &cpuset);
+      if(dev_idx == 7) i = -64;
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+
+      t.join();
+    }
+#else
+    load_images_locally(0);
+
+#endif
+
+  }
+
+ void unload_images(size_t num_examples) override {
+    uint16_t batch_size = _settings->qaic_batch_size;
+#ifdef G292
+    int N =  _settings->qaic_device_count;
+#else
+    int N = 1;
+#endif
+  for (int dev_idx = 0; dev_idx < N; ++dev_idx) {
+    for (size_t i = 0; i < num_examples; i += batch_size) {
+        delete _in_batch[dev_idx][i].get();
+        delete _out_batch[dev_idx][i].get();
+      }
     }
   }
+
 
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
@@ -305,81 +402,116 @@ public:
                                                                        _settings->image_size_height() *
                                                                        _settings->num_channels();
       _in_converter->convert(
-          _in_batch[session->idx2loc[samples[i].index]].get(), ptr);
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
     }
   }
 
   virtual void*
-  get_img_ptr(int img_idx) {
-    return _in_batch[session->idx2loc[img_idx]].get()->data();
+  get_img_ptr(int dev_idx, int img_idx) {
+#ifndef G292
+    return _in_batch[0][session->idx2loc[img_idx]].get()->data();
+#else
+    return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
+#endif
   }
 
+   void get_next_results_worker(int fake_idx) {
+   
+    int dev_cnt =  _settings->qaic_device_count;
+    int dev_idx = fake_idx;
+    while(dev_idx - dev_cnt >= 0)
+     dev_idx -= dev_cnt;
+    while(true) {
+      get_next_results_mutex[fake_idx].lock();
+      const std::vector<int>&image_idxs = *get_next_results_image_idxs[fake_idx];
+      std::vector<ResultData*> &results = *get_next_results_results[fake_idx];
+
+      const int act_idx = get_next_results_act_idx[fake_idx];
+      const int set_idx = get_next_results_set_idx[fake_idx];
+    
+      results.clear();
+      nms_results[dev_idx][act_idx][set_idx].clear();
+
+    // get pointers to unique buffer for device->activation->set
+      std::vector<std::vector<float>> &nms_res = nms_results[dev_idx][act_idx][set_idx];
+      ResultData *next_result_ptr = reformatted_results[dev_idx][act_idx][set_idx];
+
+      TOutput1DataType* boxes_ptr = (TOutput1DataType*)_out_ptrs[dev_idx][act_idx][set_idx][0];
+      TOutput2DataType* classes_ptr = (TOutput2DataType*)_out_ptrs[dev_idx][act_idx][set_idx][1];
+
+    // This could be threaded to match batch size
+      for (int i = 0; i < image_idxs.size(); ++i) {
+        TOutput1DataType* dataLoc = boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
+        TOutput2DataType* dataConf = classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
+
+
+        float idx = image_idxs[i];
+        if(_settings -> qaic_skip_stage != "convert") {
+           anchor::fTensor tLoc = anchor::fTensor({ "tLoc",
+                                          {TOTAL_NUM_BOXES, NUM_COORDINATES},
+                                         (float*) dataLoc });
+           anchor::fTensor tConf = anchor::fTensor({ "tConf",
+                                          {TOTAL_NUM_BOXES, NUM_CLASSES},
+                                         (float*) dataConf });
+           nwOutputLayer->anchorBoxProcessingFloatPerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+        }
+        else { 
+           anchor::uTensor tLoc = anchor::uTensor({ "tLoc",
+                                          {TOTAL_NUM_BOXES, NUM_COORDINATES},
+                                         (uint8_t*) dataLoc });
+           anchor::hfTensor tConf = anchor::hfTensor({ "tConf",
+                                          {TOTAL_NUM_BOXES, NUM_CLASSES},
+                                        (uint16_t*) dataConf });
+           nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+        }
+
+        int num_elems = nms_res.size() < _settings->detections_buffer_size() ? nms_res.size()  : _settings->detections_buffer_size();
+
+        next_result_ptr->set_size(num_elems * 7);
+        float *buffer = next_result_ptr->data();
+
+        for (int j = 0; j < num_elems; j++) {
+          buffer[0] = nms_res[j][0];
+          buffer[1] = nms_res[j][1];
+          buffer[2] = nms_res[j][2];
+          buffer[3] = nms_res[j][3];
+          buffer[4] = nms_res[j][4];
+          buffer[5] = nms_res[j][5];
+          buffer[6] = nms_res[j][6];
+
+          buffer += 7;
+        }
+
+        _out_buffer_index %= _current_buffer_size;
+        results.push_back(next_result_ptr);
+      }
+      get_next_results_finished[fake_idx] = true;
+      get_next_results_mutex2[fake_idx].unlock();
+    }
+  }
 
   void get_next_results(std::vector<int> &image_idxs,
                              std::vector<ResultData *> &results,
                             int dev_idx, int act_idx, int set_idx) override {
+    int dev_cnt =  _settings->qaic_device_count;
+    const int CTN =  _settings->copy_threads_per_device;
+    get_next_results_mutex3[dev_idx].lock();
+    const int turn = (get_next_results_turn[dev_idx]+1)%CTN;
+    const int fake_idx = turn*dev_cnt + dev_idx;
+    get_next_results_turn[dev_idx] = turn;
+    get_next_results_mutex3[dev_idx].unlock();
+    get_next_results_mutex2[fake_idx].lock();
+    get_next_results_image_idxs[fake_idx] = &image_idxs;
+    get_next_results_results[fake_idx] = &results;
+    get_next_results_act_idx[fake_idx] = act_idx;
+    get_next_results_set_idx[fake_idx] = set_idx;
 
-    results.clear();
-    nms_results[dev_idx][act_idx][set_idx].clear();
-
-    // get pointers to unique buffer for device->activation->set
-    std::vector<std::vector<float>> &nms_res = nms_results[dev_idx][act_idx][set_idx];
-    ResultData *next_result_ptr = reformatted_results[dev_idx][act_idx][set_idx];
-
-    TOutput1DataType* boxes_ptr = (TOutput1DataType*)_out_ptrs[dev_idx][act_idx][set_idx][0];
-    TOutput2DataType* classes_ptr = (TOutput2DataType*)_out_ptrs[dev_idx][act_idx][set_idx][1];
-
-    //std::cout << "ptrs are " << boxes_ptr << " " << classes_ptr<< std::endl;
-    // This could be threaded to match batch size
-    for (int i = 0; i < image_idxs.size(); ++i) {
-      TOutput1DataType* dataLoc = boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
-      TOutput2DataType* dataConf = classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
-
-
-      float idx = image_idxs[i];
-      if(_settings -> qaic_skip_stage != "convert") {
-         anchor::fTensor tLoc = anchor::fTensor({ "tLoc",
-                                          {TOTAL_NUM_BOXES, NUM_COORDINATES},
-                                         (float*) dataLoc });
-         anchor::fTensor tConf = anchor::fTensor({ "tConf",
-                                          {TOTAL_NUM_BOXES, NUM_CLASSES},
-                                         (float*) dataConf });
-         nwOutputLayer->anchorBoxProcessingFloatPerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-      }
-      else { 
-         anchor::uTensor tLoc = anchor::uTensor({ "tLoc",
-                                          {TOTAL_NUM_BOXES, NUM_COORDINATES},
-                                         (uint8_t*) dataLoc });
-         anchor::hfTensor tConf = anchor::hfTensor({ "tConf",
-                                          {TOTAL_NUM_BOXES, NUM_CLASSES},
-                                        (uint16_t*) dataConf });
-         nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-      }
-
-      int num_elems = nms_res.size() < _settings->detections_buffer_size() ? nms_res.size()  : _settings->detections_buffer_size();
-
-      next_result_ptr->set_size(num_elems * 7);
-      float *buffer = next_result_ptr->data();
-
-      for (int j = 0; j < num_elems; j++) {
-        buffer[0] = nms_res[j][0];
-        buffer[1] = nms_res[j][1];
-        buffer[2] = nms_res[j][2];
-        buffer[3] = nms_res[j][3];
-        buffer[4] = nms_res[j][4];
-        buffer[5] = nms_res[j][5];
-        buffer[6] = nms_res[j][6];
-
-        //if(j < 5)
-        //  std::cout << buffer[0] << " " << buffer[1] << " " << buffer[2] << " "
-        //  << buffer[3] << " " << buffer[4] << " " << buffer[5] << " " <<
-        //  buffer[6] << std::endl;
-
-        buffer += 7;
-      }
-
-      _out_buffer_index %= _current_buffer_size;
-      results.push_back(next_result_ptr);
+    get_next_results_finished[fake_idx] = false;
+    get_next_results_mutex[fake_idx].unlock();
+    while(true) {
+      if(get_next_results_finished[fake_idx])
+        return;
+      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
   }
 
@@ -393,8 +525,9 @@ private:
   std::vector<std::vector<std::vector<void *>>> _in_ptrs;
   std::vector<std::vector<std::vector<std::vector<void *>>>> _out_ptrs;
 
-  std::unique_ptr<ImageData> *_in_batch;
-  std::unique_ptr<ResultData> *_out_batch;
+  std::vector<std::unique_ptr<ImageData>*> _in_batch;
+  std::vector<std::unique_ptr<ResultData>*> _out_batch;
+
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
 
@@ -405,6 +538,18 @@ private:
 
   std::vector<std::vector<std::vector<std::vector<std::vector<float>>>>> nms_results;
   std::vector<std::vector<std::vector<ResultData*>>> reformatted_results;
+
+  std::mutex get_next_results_mutex[256];
+  std::mutex get_next_results_mutex2[256];
+  std::mutex get_next_results_mutex3[16];
+
+  std::vector<std::vector<int>*> get_next_results_image_idxs;
+  std::vector<std::vector<ResultData*>*> get_next_results_results;
+  
+  std::vector<int> get_next_results_act_idx;
+  std::vector<int> get_next_results_set_idx;
+  std::vector<int> get_next_results_finished;
+  std::vector<int> get_next_results_turn;
 };
 
 //----------------------------------------------------------------------

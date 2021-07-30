@@ -51,13 +51,8 @@ using namespace qaic_api;
 using namespace std;
 using namespace CK;
 
-Program::Program() {
-
-  settings = new BenchmarkSettings();
-
-  session = new BenchmarkSession(settings);
-
-  for(int d=0 ; d<settings->qaic_device_count ; ++d) {
+#ifdef G292
+void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -71,13 +66,57 @@ Program::Program() {
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
-  }
+
+}
+#endif
+
+
+Program::Program() {
+
+  settings = new BenchmarkSettings();
+
+  session = new BenchmarkSession(settings);
 
   // device, activation, set
   std::vector<std::vector<std::vector<void *>>> in(settings->qaic_device_count);
 
   // device, activation, set, buffer no
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(settings->qaic_device_count);
+
+#ifdef G292
+  int i = 64;
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
+    std::thread t(&Program::InitDevices, this, d);
+
+    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
+    // only CPU i as set.
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    for(int j = 0; j < 7; j++)
+      CPU_SET(i+d*8+j, &cpuset);
+//    for(int j = 0; j < 7; j++)
+  //    CPU_SET(i+d*8+j+128, &cpuset);
+    if(d == 7) i = -64;
+    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    t.join();
+  }
+#else
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
+    std::cout << "Creating device " << d << std::endl;
+    runners.push_back(new QAicInfApi());
+
+    runners[d]->setModelBasePath(settings->qaic_model_root);
+    runners[d]->setNumActivations(settings->qaic_activation_count);
+    runners[d]->setSetSize(settings->qaic_set_size);
+    runners[d]->setNumThreadsPerQueue(settings->qaic_threads_per_queue);
+    runners[d]->setSkipStage(settings->qaic_skip_stage);
+    QStatus status = runners[d]->init(settings->qaic_hw_ids[d], PostResults);
+
+    if (status != QS_SUCCESS)
+      throw "Failed to invoke qaic";
+  }
+#endif
+
 
   // get references to all the buffers devices->activations->set
   for (int d = 0; d < settings->qaic_device_count ; ++d) {
@@ -112,6 +151,43 @@ Program::Program() {
 
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
+
+#ifdef __amd64__
+  const auto processor_count = std::thread::hardware_concurrency();
+  if(processor_count > 0)
+     num_setup_threads = processor_count/8; //One per L3 cache, might need a change for Zen3
+#else
+  num_setup_threads = 2;
+#endif
+
+#ifdef G292
+  if(settings -> input_select == 0)
+    num_setup_threads = 32;
+  else
+    num_setup_threads = 3; //to be investigated if this can go higher
+#endif
+
+//std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
+  //payloads = new Payload[num_setup_threads];
+for(int i=0 ; i<num_setup_threads ; ++i) {
+  std::thread t(&Program::EnqueueShim, this, i);
+ #ifdef __amd64__
+    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
+    // only CPU i as set.
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    //CPU_SET(i*4, &cpuset);
+    CPU_SET(i*8+7, &cpuset);
+    //CPU_SET(i*4+2, &cpuset);
+    //CPU_SET(i*4+3, &cpuset);
+    //CPU_SET(i*8+2, &cpuset);
+   // CPU_SET(i*8+3, &cpuset);
+  //  pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+#endif
+
+    t.detach();
+  }
+ 
 }
 
 Program::~Program() {
@@ -164,6 +240,34 @@ void Program::Inference(std::vector<mlperf::QuerySample> samples) {
   ++sback;
 }
 
+void Program::EnqueueShim(int id) {
+  while(!terminate) {
+    if(payloads[id] != nullptr) {
+      Payload* p = Program::payloads[id];
+
+
+      // set the images
+      if (settings->input_select == 0) {
+        benchmark->get_random_images(p->samples, p->device, p->activation,
+                                     p->set);
+      } else if (settings->input_select == 1) {
+        void *img_ptr = benchmark->get_img_ptr(p->device, p->samples[0].index);
+        runners[p->device]->setBufferPtr(p->activation, p->set, 0, img_ptr);
+      } else {
+        // Do nothing - random data
+      }
+
+      QStatus status = runners[p->device]->run(p->activation, p->set, p);
+      if (status != QS_SUCCESS)
+        throw "Failed to invoke qaic";
+
+      Program::payloads[id] = nullptr;
+    }
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+  }
+}
+
+
 void Program::QueueScheduler() {
 
   // total number of activations over all devices
@@ -171,6 +275,7 @@ void Program::QueueScheduler() {
 
   // current activation index
   int activation = -1;
+  int round_robin = 0;
 
   std::vector<mlperf::QuerySample> qs(settings->qaic_batch_size);
 
@@ -209,12 +314,41 @@ void Program::QueueScheduler() {
       // add the image samples to the payload
       p->samples = qs;
 
+      while(Program::payloads[round_robin] != nullptr){
+        std::this_thread::sleep_for(std::chrono::microseconds(1));
+      }
+
+      Program::payloads[round_robin] = p;
+
+      //std::cout << " " << round_robin;
+      round_robin = (round_robin+1)%num_setup_threads;
+
+      break;
+    }
+
+   /* while (!terminate) {
+
+      activation = (activation + 1) % activation_count;
+
+      Payload *p = ring_buf[activation]->getPayload();
+
+
+      // if no hardware slots available then increment the activation
+      // count and then continue
+      if (p == nullptr) {
+        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        continue;
+      }
+
+      // add the image samples to the payload
+      p->samples = qs;
+
 
       // set the images
       if(settings->input_select == 0) {
         benchmark->get_random_images(p->samples, p->device, p->activation, p->set);
       } else if(settings->input_select == 1)  {
-        void* img_ptr = benchmark->get_img_ptr(p->samples[0].index);
+        void* img_ptr = benchmark->get_img_ptr(p->device, p->samples[0].index);
         runners[p->device]->setBufferPtr(p->activation, p->set, 0, img_ptr);
       } else {
         // Do nothing - random data
@@ -227,7 +361,7 @@ void Program::QueueScheduler() {
         throw "Failed to invoke qaic";
 
       break;
-    }
+    }*/
   }
 }
 
@@ -296,7 +430,7 @@ std::vector<RingBuffer *> Program::ring_buf;
 
 std::mutex Program::mtx_queue;
 std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
-int Program::samples_queue_len = 4096;
+int Program::samples_queue_len = 16384;
 
 unique_ptr<IBenchmark> Program::benchmark;
 
@@ -304,6 +438,10 @@ bool Program::terminate = false;
 
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
+
+Payload* Program::payloads[64] = {nullptr};
+
+int Program::num_setup_threads = 0;
 
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
