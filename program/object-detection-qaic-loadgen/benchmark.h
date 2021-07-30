@@ -297,7 +297,11 @@ public:
   }
 #endif
     
-   std::vector<int> exclude{12, 26, 29, 30, 45, 66, 68, 69, 71, 83};
+   #ifdef MODEL_R34
+    std::vector<int> exclude{12, 26, 29, 30, 45, 66, 68, 69, 71, 83};
+#else
+    std::vector<int> exclude{};
+#endif
 
     for (int i = 0; i < 100; ++i)
       if (std::find(exclude.begin(), exclude.end(), i) == exclude.end())
@@ -436,8 +440,8 @@ public:
       std::vector<std::vector<float>> &nms_res = nms_results[dev_idx][act_idx][set_idx];
       ResultData *next_result_ptr = reformatted_results[dev_idx][act_idx][set_idx];
 
-      TOutput1DataType* boxes_ptr = (TOutput1DataType*)_out_ptrs[dev_idx][act_idx][set_idx][0];
-      TOutput2DataType* classes_ptr = (TOutput2DataType*)_out_ptrs[dev_idx][act_idx][set_idx][1];
+      TOutput1DataType* boxes_ptr = (TOutput1DataType*)_out_ptrs[dev_idx][act_idx][set_idx][BOXES_INDEX];
+      TOutput2DataType* classes_ptr = (TOutput2DataType*)_out_ptrs[dev_idx][act_idx][set_idx][CLASSES_INDEX];
 
     // This could be threaded to match batch size
       for (int i = 0; i < image_idxs.size(); ++i) {
@@ -459,10 +463,17 @@ public:
            anchor::uTensor tLoc = anchor::uTensor({ "tLoc",
                                           {TOTAL_NUM_BOXES, NUM_COORDINATES},
                                          (uint8_t*) dataLoc });
+#ifdef MODEL_R34
            anchor::hfTensor tConf = anchor::hfTensor({ "tConf",
                                           {TOTAL_NUM_BOXES, NUM_CLASSES},
                                         (uint16_t*) dataConf });
            nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+#else
+           anchor::uTensor tConf =
+              anchor::uTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
+                                (uint8_t *)dataConf });
+           nwOutputLayer->anchorBoxProcessingUint8PerBatch(std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+#endif
         }
 
         int num_elems = nms_res.size() < _settings->detections_buffer_size() ? nms_res.size()  : _settings->detections_buffer_size();

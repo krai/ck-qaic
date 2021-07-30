@@ -136,7 +136,11 @@ Program::Program() {
   if (settings->qaic_skip_stage != "convert")
     benchmark.reset(new Benchmark<InCopy, OutCopy, float, float, float>(settings, in, out));
   else
+#ifdef MODEL_R34
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(settings, in, out));
+#else
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(settings, in, out));
+#endif
 
   // create enough ring buffers for each activation within all devices
   ring_buf.resize(settings->qaic_activation_count*settings->qaic_device_count);

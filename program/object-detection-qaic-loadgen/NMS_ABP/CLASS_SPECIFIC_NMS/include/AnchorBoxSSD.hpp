@@ -37,7 +37,6 @@
 
 #ifndef MLPERF_R34_MV1_SSD_SSD_HPP
 #define MLPERF_R34_MV1_SSD_SSD_HPP
-#undef MODEL_R34
 
 #include <iostream>
 #include "fp16.h"
@@ -67,6 +66,8 @@
     #define STEP_CONF_PTR 1
     #define STEP_LOC_PTR 1
     #define STEP_PRIOR_PTR 1
+    #define BOXES_INDEX 0
+    #define CLASSES_INDEX 1
 #else
     #define NUM_CLASSES 91
     #define MAX_BOXES_PER_CLASS 100
@@ -87,6 +88,8 @@
     #define STEP_CONF_PTR 91
     #define STEP_LOC_PTR 4
     #define STEP_PRIOR_PTR 4
+    #define BOXES_INDEX 1
+    #define CLASSES_INDEX 0
 #endif
 
 #define _UINT8_TO_INT8 128
@@ -110,12 +113,6 @@ namespace anchor
         std::vector<uint64_t> dim;
         float* data;
     };
-    struct iTensor
-    {
-        std::string name;
-        std::vector<uint64_t> dim;
-        int8_t* data;
-    };
 
     struct hfTensor{
         std::string name;
@@ -124,7 +121,7 @@ namespace anchor
     };
 };
 
-typedef struct AnchorBoxConfig{
+struct AnchorBoxConfig{
     float classT;
     float nmsT;
     std::string priorfilename;
@@ -169,8 +166,6 @@ public:
     AnchorBoxProc(AnchorBoxConfig & config);
     void anchorBoxProcessingFloatPerBatch(anchor::fTensor &odcLoc, anchor::fTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
     void anchorBoxProcessingUint8PerBatch(anchor::uTensor &odcLoc, anchor::uTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
-    void anchorBoxProcessingInt8PerBatch(anchor::iTensor &odcLoc, anchor::iTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
-    void anchorBoxProcessingUint8FloatPerBatch(anchor::uTensor &odcLoc, anchor::fTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
     void anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odcLoc, anchor::hfTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
     anchor::fTensor tPrior;
     float class_threshold, nms_threshold;

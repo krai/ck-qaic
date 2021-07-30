@@ -304,9 +304,6 @@ public:
   const char *qaic_model_root = getenv("CK_ENV_QAIC_MODEL_ROOT");
   const bool has_background_class =
       getenv_s("ML_MODEL_HAS_BACKGROUND_CLASS") == "YES";
-  // const int boxes_buff_idx = getenv_i("ML_MODEL_BOXES_BUFFER_IDX");
-  // const int classes_buff_idx = getenv_i("ML_MODEL_CLASSES_BUFFER_IDX");
-  // const int scores_buff_idx = getenv_i("ML_MODEL_SCORES_BUFFER_IDX");
 
   // defaults for hardware setup
   const int qaic_activation_count = alter_str_i(getenv("CK_ENV_QAIC_ACTIVATION_COUNT"), 1);
