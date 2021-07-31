@@ -272,7 +272,7 @@ public:
       unsigned coreid = (dev_idx > 7) ? -64 + dev_idx * 8 : 64 + dev_idx * 8;
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
-      CPU_SET(dev_idx * 8 + 4, &cpuset);
+      CPU_SET(coreid, &cpuset);
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
       t.join();
@@ -293,6 +293,7 @@ public:
                       dev_idx + i * dev_cnt);
 
 #ifdef G292
+        unsigned coreid = (dev_idx > 7) ? -64 + dev_idx * 8 : 64 + dev_idx * 8;
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
         CPU_SET(coreid + i, &cpuset);
