@@ -64,6 +64,10 @@ else
   LOAD_PROFILE="-load-profile=${profile}"
 fi
 
+if [[ -n ${_ENABLE_CHANNEL_WISE} ]]; then
+  _COMPILER_PARAMS=${_COMPILER_PARAMS}" -enable-channelwise"
+fi
+
 if [[ -n ${CK_ENV_COMPILER_GLOW_PROFILE_DIR} ]]; then
   node_precision="${CK_ENV_COMPILER_GLOW_PROFILE_DIR}/node-precision.yaml"
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/$node_precision}

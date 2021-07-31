@@ -122,9 +122,9 @@
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
         ],
-	 "ssd-mobilenet,tf,quantized,from-zenodo": [
+        "ssd-mobilenet,pytorch,non-quantized,for.qaic": [
           {
-            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
+            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
           }
         ]
       }
@@ -248,7 +248,7 @@
         "no-nms"
       ]
     },
-   "ssd_mobilenet": {
+    "ssd_mobilenet": {
       "extra_customize": {
         "package_name": "Profile for QAIC model (SSD-MobileNet)"
       },
@@ -257,8 +257,8 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "",
-        "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -num-histogram-bins=512",
+        "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
       },
       "extra_tags": [
         "object-detection",
