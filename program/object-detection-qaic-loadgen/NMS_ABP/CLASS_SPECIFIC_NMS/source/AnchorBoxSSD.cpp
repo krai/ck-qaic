@@ -154,9 +154,9 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
       box = mv1SSD_decodeLocationTensor(box, odmPriorPtr);
 #endif // For MV1 decoding logic is inside the model.
       float labelId = nClsIdx;
-      result.emplace_back(std::initializer_list<float>{
-        batchIdx, box[1], box[0], box[3], box[2], confidence, labelId
-      });
+      result.emplace_back(
+          std::initializer_list<float>{ batchIdx, box[1],     box[0], box[3],
+                                        box[2],   confidence, labelId });
     }
 
     if (result.size()) {
@@ -184,42 +184,27 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
   PROFILE("SSD");
   const anchor::fTensor &odmPrior = tPrior;
 
-  uint8_t *baseConfPtr = odmConf.data;
-  uint8_t *baseLocPtr = odmLoc.data;
   uint8_t *odmConfPtr = odmConf.data;
   uint8_t *odmLocPtr = odmLoc.data;
+  float *odmPriorPtr = odmPrior.data;
+  std::vector<std::vector<float> > result[NUM_CLASSES];
+  std::vector<std::vector<float> > selected[NUM_CLASSES];
 
-  for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
-    /* Since outputs from networks for confidence scores
-        are in shape [1 x NUM_CLASSES x TOTAL_NUM_BOXES ]
-        We iterate this way to avoid doing transpose of data */
-    uint32_t confItr = nClsIdx * OFFSET_CONF;
-    // OFFSET_CONF = TOTAL_NUM_BOXES -> R34SSD because output-dimension is [1,
-    // 81, 15130]
-    // OFFSET_CONF = 1 -> MV1SSD because output-dimension is [1, 1917, 91]
-    std::vector<std::vector<float> > result;
-    std::vector<std::vector<float> > selected;
-    odmConfPtr = baseConfPtr;
-    odmLocPtr = baseLocPtr;
-    float *odmPriorPtr = odmPrior.data;
-
-    for (uint32_t nBoxIdx = 0; nBoxIdx < TOTAL_NUM_BOXES; ++nBoxIdx,
-                  odmConfPtr += STEP_CONF_PTR, odmLocPtr += STEP_LOC_PTR,
-                  odmPriorPtr += STEP_PRIOR_PTR) {
-      // Since outputs from networks are in shape 1 x NUM_CLASSES x
-      // TOTAL_NUM_BOXES
-      // We iterate this way to avoid doing transpose of data
+  for (uint32_t nBoxIdx = 0; nBoxIdx < TOTAL_NUM_BOXES;
+       ++nBoxIdx, odmLocPtr += 4, odmPriorPtr += 4) {
+    uint32_t confItr = nBoxIdx * NUM_CLASSES;
+    for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
       float confidence =
-          (CONVERT_TO_INT8(odmConfPtr[confItr]) - confOffset) * confScale;
+          (CONVERT_TO_INT8(odmConfPtr[confItr+nClsIdx]) - confOffset) * confScale;
       if (confidence <= class_threshold)
         continue;
 
       // Transform uint8_t -> int8_t -> fp32
       std::vector<float> box = {
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_0]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_1]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_2]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_3]) - locOffset) * locScale
+        (CONVERT_TO_INT8(odmLocPtr[0]) - locOffset) * locScale,
+        (CONVERT_TO_INT8(odmLocPtr[1]) - locOffset) * locScale,
+        (CONVERT_TO_INT8(odmLocPtr[2]) - locOffset) * locScale,
+        (CONVERT_TO_INT8(odmLocPtr[3]) - locOffset) * locScale
       };
 #if MODEL_R34
       box = decodeLocationTensor(box, odmPriorPtr, variance.data());
@@ -227,14 +212,16 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
       box = mv1SSD_decodeLocationTensor(box, odmPriorPtr);
 #endif // For MV1 decoding logic is inside the model.
       float labelId = nClsIdx;
-      result.emplace_back(
+      result[nClsIdx].emplace_back(
           std::initializer_list<float>{ batchIdx, box[1],     box[0], box[3],
                                         box[2],   confidence, labelId });
     }
+  }
+  for (uint32_t j = 1; j < NUM_CLASSES; j++) {
 
-    if (result.size()) {
+    if (result[j].size()) {
       // To avoid creating call stack if result.size() is 0
-      NMS_fp32(result, nms_threshold, max_boxes_per_class, selected,
+      NMS_fp32(result[j], nms_threshold, max_boxes_per_class, selected[j],
                selectedAll, class_map);
     }
   }
@@ -262,7 +249,6 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
   uint8_t *baseLocPtr = odmLoc.data;
   uint16_t *odmConfPtr = odmConf.data;
   uint8_t *odmLocPtr = odmLoc.data;
-
 
   std::vector<std::vector<float> > selectedPerBatch;
 
