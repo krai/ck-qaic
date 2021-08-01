@@ -114,6 +114,11 @@
             "_BATCH_SIZE": "8"
           }
         ],
+        "bs.16": [
+          {
+            "_BATCH_SIZE": "16"
+          }
+        ],
         "first.5": [
           {
             "_CAL": "calibrate_first.5"
@@ -166,6 +171,15 @@
         "image-classification",
         "compiled-by-qaic",
         "calibrated-by-qaic"
+      ]
+    },
+    "resnet50.aedk_25w.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "16",
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
+      },
+      "extra_tags": [
+        "bs.16"
       ]
     },
     "resnet50.aedk_20w.offline": {
@@ -336,6 +350,11 @@
     "bs.8": {
       "extra_env": {
         "_BATCH_SIZE": "8"
+      }
+    },
+    "bs.16": {
+      "extra_env": {
+        "_BATCH_SIZE": "16"
       }
     }
   }
