@@ -55,7 +55,7 @@
 	],
 	"for.ssd_mobilenet.onnx.preprocessed": [
           {
-            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet"
+            "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
           }
 	]
       }
