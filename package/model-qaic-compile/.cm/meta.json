@@ -168,7 +168,7 @@
         "calibrated-by-qaic"
       ]
     },
-    "resnet50.aedk.16nsp.offline": {
+    "resnet50.aedk_20w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
@@ -177,7 +177,7 @@
         "bs.8"
       ]
     },
-    "resnet50.aedk.16nsp.singlestream": {
+    "resnet50.aedk_20w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
@@ -186,7 +186,7 @@
         "bs.1"
       ]
     },
-    "resnet50.aedk.8nsp.offline": {
+    "resnet50.aedk_15w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
@@ -195,7 +195,7 @@
         "bs.8"
       ]
     },
-    "resnet50.aedk.8nsp.singlestream": {
+    "resnet50.aedk_15w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
@@ -243,22 +243,22 @@
         "bs.1"
       ]
     },
-    "ssd_resnet34.aedk.16nsp.offline": {
+    "ssd_resnet34.aedk_20w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     },
-    "ssd_resnet34.aedk.16nsp.singlestream": {
+    "ssd_resnet34.aedk_20w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE]"
       }
     },
-    "ssd_resnet34.aedk.8nsp.offline": {
+    "ssd_resnet34.aedk_15w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
       }
     },
-    "ssd_resnet34.aedk.8nsp.singlestream": {
+    "ssd_resnet34.aedk_15w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test --node-precision-info=[NODE_PRECISION_FILE]"
       }
@@ -293,22 +293,22 @@
         "no-nms"
       ]
     },
-    "ssd_mobilenet.aedk.16nsp.offline": {
+    "ssd_mobilenet.aedk_20w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       }
     },
-    "ssd_mobilenet.aedk.16nsp.singlestream": {
+    "ssd_mobilenet.aedk_20w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       }
     },
- "ssd_mobilenet.aedk.8nsp.offline": {
+ "ssd_mobilenet.aedk_15w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       }
     },
-    "ssd_mobilenet.aedk.8nsp.singlestream": {
+    "ssd_mobilenet.aedk_15w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       }

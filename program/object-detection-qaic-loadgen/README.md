@@ -365,20 +365,20 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 #### Offline
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
---tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk.8nsp.offline
+--tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_15w.offline
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.offline \
+--dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk_15w.offline \
 --env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
 #### SingleStream
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
---tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk.8nsp.singlestream
+--tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_15w.singlestream
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.singlestream \
+--dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk_15w.singlestream \
 --env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
@@ -387,20 +387,20 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 #### Offline
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
---tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk.16nsp.offline
+--tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_20w.offline
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.16nsp.offline \
+--dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk_20w.offline \
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 
 #### SingleStream
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
---tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk.16nsp.singlestream
+--tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_20w.singlestream
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.16nsp.singlestream \
+--dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk_20w.singlestream \
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 

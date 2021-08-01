@@ -225,22 +225,22 @@
       "###": {
         "compiler_tags": "gcc"
       },
-      "aedk.16nsp": {
+      "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "resnet50.aedk.16nsp.<<<scenario>>>"
+          "resnet50.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "2",
         "recommended_batch_size": "8"
       },
-      "aedk.8nsp": {
+      "aedk_15w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "resnet50.aedk.8nsp.<<<scenario>>>"
+          "resnet50.aedk_15w.<<<scenario>>>"
         ],
         "recommended_activation_count": "1",
         "recommended_batch_size": "8"
