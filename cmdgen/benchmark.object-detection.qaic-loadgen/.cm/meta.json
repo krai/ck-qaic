@@ -249,6 +249,16 @@
       "###": {
         "compiler_tags": "gcc"
       },
+      "aedk_25w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc,v8",
+        "model_tags": [
+          "ssd_resnet34.aedk_20w.<<<scenario>>>"
+        ],
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1"
+      },
       "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",

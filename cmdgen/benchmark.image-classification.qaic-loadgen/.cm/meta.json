@@ -225,6 +225,16 @@
       "###": {
         "compiler_tags": "gcc"
       },
+      "aedk_25w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc,v8",
+        "model_tags": [
+          "resnet50.aedk_20w.<<<scenario>>>"
+        ],
+        "recommended_activation_count": "2",
+        "recommended_batch_size": "8"
+      },
       "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
