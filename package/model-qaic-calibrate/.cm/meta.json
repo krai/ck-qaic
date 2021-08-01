@@ -77,7 +77,8 @@
       "local": "yes",
       "name": "ImageNet calibration dataset",
       "sort": 100,
-      "tags": "dataset,imagenet,calibration,preprocessed,for.resnet",
+      "tags": "dataset,imagenet,calibration,preprocessed",
+      "or_tags": "for.resnet;for.resnet50",
       "update_tags_if_env": {
         "first.5": [
           {
@@ -188,6 +189,11 @@
     "bs.8": {
       "extra_env": {
         "_BATCH_SIZE": "8"
+      }
+    },
+    "bs.16": {
+      "extra_env": {
+        "_BATCH_SIZE": "16"
       }
     },
     "first.5": {
