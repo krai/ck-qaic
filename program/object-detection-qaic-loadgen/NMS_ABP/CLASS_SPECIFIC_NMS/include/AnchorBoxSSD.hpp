@@ -68,6 +68,16 @@
     #define STEP_PRIOR_PTR 1
     #define BOXES_INDEX 0
     #define CLASSES_INDEX 1
+
+    #define LOC_OFFSET 0
+    #define LOC_SCALE 0.136092901
+    #define CONF_OFFSET 0
+    #define CONF_SCALE 1
+    
+    #define CLASS_THRESHOLD 0.05
+    #define NMS_THRESHOLD 0.5
+    #define MAX_DETECTIONS_PER_IMAGE 600
+    #define MAX_DETECTIONS_PER_CLASS 100
 #else
     #define NUM_CLASSES 91
     #define MAX_BOXES_PER_CLASS 100
@@ -90,6 +100,16 @@
     #define STEP_PRIOR_PTR 4
     #define BOXES_INDEX 1
     #define CLASSES_INDEX 0
+    
+    #define LOC_OFFSET 0
+    #define LOC_SCALE 0.144255146
+    #define CONF_OFFSET -128
+    #define CONF_SCALE 0.00392156886
+    
+    #define CLASS_THRESHOLD 0.3
+    #define NMS_THRESHOLD 0.45
+    #define MAX_DETECTIONS_PER_IMAGE 100
+    #define MAX_DETECTIONS_PER_CLASS 100
 #endif
 
 #define _UINT8_TO_INT8 128
@@ -122,17 +142,8 @@ namespace anchor
 };
 
 struct AnchorBoxConfig{
-    float classT;
-    float nmsT;
     std::string priorfilename;
-    uint32_t maxDetectionsPerImage;
-    uint32_t maxBoxesPerClass;
 
-    float locOffset;
-    float locScale;
-
-    float confOffset;
-    float confScale;
 };
 
 
@@ -168,12 +179,6 @@ public:
     void anchorBoxProcessingUint8PerBatch(anchor::uTensor &odcLoc, anchor::uTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
     void anchorBoxProcessingUint8Float16PerBatch(anchor::uTensor &odcLoc, anchor::hfTensor &odmConf, std::vector<std::vector<float>>& result, float& batchidx);
     anchor::fTensor tPrior;
-    float class_threshold, nms_threshold;
-    uint32_t max_detections_per_image;
-    uint32_t max_boxes_per_class;
-    // float * odmConfFloat, odmLocFloat;
-    float locScale, locOffset;
-    float confScale, confOffset;
     std::vector<float> variance = {0.1, 0.2};
     uint16_t class_threshold_in_fp16;
     std::vector<float> class_map = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 67, 70, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90};

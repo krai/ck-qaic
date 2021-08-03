@@ -146,6 +146,7 @@
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH": "../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
         ],

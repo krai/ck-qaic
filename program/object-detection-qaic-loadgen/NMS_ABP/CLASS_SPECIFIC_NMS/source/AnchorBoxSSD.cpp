@@ -47,23 +47,11 @@
 #include <cmath>
 
 AnchorBoxProc::AnchorBoxProc(AnchorBoxConfig &config) {
-  class_threshold = config.classT;
-  nms_threshold = config.nmsT;
-  class_threshold_in_fp16 = fp16_ieee_from_fp32_value(class_threshold);
-  max_detections_per_image = config.maxDetectionsPerImage;
-  max_boxes_per_class = config.maxBoxesPerClass;
-  /* Since outputs from networks for boxes are in shape
-     [1 x NUM_COORDINATES x TOTAL_NUM_BOXES ]
-     We iterate this way to avoid doing transpose of data and since
-     it is a constant, we declare it here in constructor */
+  class_threshold_in_fp16 = fp16_ieee_from_fp32_value(CLASS_THRESHOLD);
   float *dataPrior = new float[DATA_LENGTH_LOC];
   tPrior = anchor::fTensor(
       { "tPriors", { 1, TOTAL_NUM_BOXES, NUM_COORDINATES }, dataPrior });
   read<float, anchor::fTensor>(tPrior, config.priorfilename);
-  locScale = config.locScale;
-  locOffset = config.locOffset;
-  confScale = config.confScale;
-  confOffset = config.confOffset;
 }
 static std::vector<float> decodeLocationTensor(std::vector<float> &loc,
                                                const float *prior,
@@ -141,7 +129,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
                   odmConfPtr += STEP_CONF_PTR, odmLocPtr += STEP_LOC_PTR,
                   odmPriorPtr += STEP_PRIOR_PTR) {
       float confidence = odmConfPtr[confItr];
-      if (confidence <= class_threshold)
+      if (confidence <= CLASS_THRESHOLD)
         continue;
       std::vector<float> box = { odmLocPtr[BOX_ITR_0], odmLocPtr[BOX_ITR_1],
                                  odmLocPtr[BOX_ITR_2], odmLocPtr[BOX_ITR_3] };
@@ -158,7 +146,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
 
     if (result.size()) {
       // To avoid creating call stack if result.size() is 0
-      NMS_fp32(result, nms_threshold, max_boxes_per_class, selected,
+      NMS_fp32(result, NMS_THRESHOLD, MAX_BOXES_PER_CLASS, selected,
                selectedAll, class_map);
     }
   }
@@ -166,8 +154,8 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
   using box = std::vector<float>;
 
   int middle = selectedAll.size();
-  if (middle > max_detections_per_image) {
-    middle = max_detections_per_image;
+  if (middle > MAX_DETECTIONS_PER_IMAGE) {
+    middle = MAX_DETECTIONS_PER_IMAGE;
   }
   std::partial_sort(selectedAll.begin(), selectedAll.begin() + middle,
                     selectedAll.end(), [](const box &a, const box &b) {
@@ -194,14 +182,14 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
       uint8_t confi = odmConfPtr[confItr+nClsIdx];
       if (confi < 76)
         continue;
-      float confidence = confi  * confScale;
+      float confidence = confi  * CONF_SCALE;
 
       // Transform uint8_t -> int8_t -> fp32
       std::vector<float> box = {
-        (CONVERT_TO_INT8(odmLocPtr[0]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[1]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[2]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[3]) - locOffset) * locScale
+        (CONVERT_TO_INT8(odmLocPtr[0]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[1]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[2]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[3]) - LOC_OFFSET) * LOC_SCALE
       };
       
       box = mv1SSD_decodeLocationTensor(box, odmPriorPtr);
@@ -216,7 +204,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
 
     if (result[j].size()) {
       // To avoid creating call stack if result.size() is 0
-      NMS_fp32(result[j], nms_threshold, max_boxes_per_class, selected[j],
+      NMS_fp32(result[j], NMS_THRESHOLD, MAX_BOXES_PER_CLASS, selected[j],
                selectedAll, class_map);
     }
   }
@@ -224,8 +212,8 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
   using box = std::vector<float>;
 
   int middle = selectedAll.size();
-  if (middle > max_detections_per_image) {
-    middle = max_detections_per_image;
+  if (middle > MAX_DETECTIONS_PER_IMAGE) {
+    middle = MAX_DETECTIONS_PER_IMAGE;
   }
   std::partial_sort(selectedAll.begin(), selectedAll.begin() + middle,
                     selectedAll.end(), [](const box &a, const box &b) {
@@ -271,10 +259,10 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
 
       // Transform uint8_t -> int8_t -> fp32
       std::vector<float> box = {
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_0]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_1]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_2]) - locOffset) * locScale,
-        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_3]) - locOffset) * locScale
+        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_0]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_1]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_2]) - LOC_OFFSET) * LOC_SCALE,
+        (CONVERT_TO_INT8(odmLocPtr[BOX_ITR_3]) - LOC_OFFSET) * LOC_SCALE
       };
 #if MODEL_R34
       box = decodeLocationTensor(box, odmPriorPtr, variance.data());
@@ -288,7 +276,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
 
     if (result.size()) {
       // To avoid creating call stack if result.size() is 0
-      NMS_fp16(result, scores, nms_threshold, max_boxes_per_class, selected,
+      NMS_fp16(result, scores, NMS_THRESHOLD, MAX_BOXES_PER_CLASS, selected,
                selectedAll, class_map);
     }
   }
@@ -296,8 +284,8 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
   using box = std::vector<float>;
 
   int middle = selectedAll.size();
-  if (middle > max_detections_per_image) {
-    middle = max_detections_per_image;
+  if (middle > MAX_DETECTIONS_PER_IMAGE) {
+    middle = MAX_DETECTIONS_PER_IMAGE;
   }
   std::partial_sort(selectedAll.begin(), selectedAll.begin() + middle,
                     selectedAll.end(), [](const box &a, const box &b) {

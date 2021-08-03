@@ -160,14 +160,15 @@ public:
         qaic_hw_ids.push_back(std::stoi(substr));
       }
       qaic_device_count = qaic_hw_ids.size();
-
+#ifdef MODEL_R34
       std::string classes_file =
           abs_path(getenv_s("CK_ENV_QAIC_MODEL_ROOT"),
                    getenv_s("CK_ENV_ONNX_MODEL_FLATLABELS"));
+      _model_classes = *readClassesFile(classes_file);
+#endif
 
       _nms_priors_bin_path = getenv_s("CK_ENV_QAIC_NMS_PRIORS_BIN_PATH");
 
-      _model_classes = *readClassesFile(classes_file);
       _images_dir = getenv_s("CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR");
       _images_file =
           getenv_s("CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF");

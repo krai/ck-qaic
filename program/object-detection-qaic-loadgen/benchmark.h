@@ -242,7 +242,7 @@ public:
     _out_batch.resize(dev_cnt);
     // load NMS data
 
-    acConfig.classT = settings->abc_classt;
+    /*acConfig.classT = settings->abc_classt;
     acConfig.nmsT = settings->abc_nmst;
     acConfig.maxDetectionsPerImage = settings->abc_max_dets_per_image;
     acConfig.maxBoxesPerClass = settings->abc_max_boxes_per_class;
@@ -252,7 +252,7 @@ public:
     // acConfig.locScale = 0.135993376;
     acConfig.locScale = settings->abc_loc_scale; // aimet mixed
     acConfig.confOffset = settings->abc_conf_offset;
-    acConfig.confScale = settings->abc_conf_scale;
+    acConfig.confScale = settings->abc_conf_scale;*/
 
     acConfig.priorfilename = _settings->nms_priors_bin_path();
 
