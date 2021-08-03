@@ -51,7 +51,6 @@ using namespace qaic_api;
 using namespace std;
 using namespace CK;
 
-#ifdef G292
 void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
@@ -68,7 +67,6 @@ void Program::InitDevices(int d) {
       throw "Failed to invoke qaic";
 
 }
-#endif
 
 
 Program::Program() {
@@ -85,6 +83,14 @@ Program::Program() {
 
 #ifdef G292
   int i = 64;
+#endif
+
+#ifdef R282
+  int i = 0;
+#endif
+
+
+#if defined (G292) || defined (R282)
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::thread t(&Program::InitDevices, this, d);
 
@@ -97,10 +103,13 @@ Program::Program() {
 //    for(int j = 0; j < 7; j++)
   //    CPU_SET(i+d*8+j+128, &cpuset);
     if(d == 7) i = -64;
+#ifdef R282
+    if(d < 4)
+#endif
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
-#else
+#else 
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());

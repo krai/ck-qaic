@@ -62,6 +62,14 @@
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
+#ifdef G292
+#define START_CORE 64
+#endif
+
+#ifdef R282
+#define START_CORE 0
+#endif
+
 namespace CK {
 
 //----------------------------------------------------------------------
@@ -268,11 +276,14 @@ public:
 
     for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
       std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
-#ifdef G292
-      unsigned coreid = (dev_idx > 7) ? -64 + dev_idx * 8 : 64 + dev_idx * 8;
+#if defined(G292) || defined(R282)
+      unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
+#ifdef R282
+      if(dev_idx < 4)
+#endif
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
       t.join();
@@ -292,11 +303,14 @@ public:
         std::thread t(&Benchmark::get_next_results_worker, this,
                       dev_idx + i * dev_cnt);
 
-#ifdef G292
-        unsigned coreid = (dev_idx > 7) ? -64 + dev_idx * 8 : 64 + dev_idx * 8;
+#if defined(G292) || defined (R282)
+        unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
         CPU_SET(coreid + i, &cpuset);
+#ifdef R282
+        if(dev_idx < 4)
+#endif
         pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
         t.detach();
@@ -321,26 +335,7 @@ public:
           for (int b = 0; b <  _settings->qaic_batch_size; b++)
             delete reformatted_results[d][a][s][b];
   }
-  /*
-   void load_images(BenchmarkSession *_session) override {
-      session = _session;
-      auto vl = _settings->verbosity_level;
-
-      const std::vector<std::string> &image_filenames =
-          session->current_filenames();
-
-      int length = image_filenames.size();
-      _current_buffer_size = length;
-      _in_batch[0] = new std::unique_ptr<ImageData>[length];
-      _out_batch[0] = new std::unique_ptr<ResultData>[length];
-      int i = 0;
-      for (auto image_file : image_filenames) {
-        _in_batch[0][i].reset(new ImageData(_settings));
-        _out_batch[0][i].reset(new ResultData(_settings));
-        _in_batch[0][i]->load(image_file, vl);
-        i++;
-      }
-    }*/
+  
   void load_images_locally(int d) {
     auto vl = _settings->verbosity_level;
 
@@ -369,17 +364,17 @@ public:
 
   void load_images(BenchmarkSession *_session) override {
     session = _session;
-#ifdef G292
-    int i = 64;
+#if defined(G292) || defined(R282)
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
       std::thread t(&Benchmark::load_images_locally, this, dev_idx);
+      unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
 
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
-      CPU_SET(i + dev_idx * 8, &cpuset);
-      // CPU_SET(i+dev_idx*8+4, &cpuset);
-      if (dev_idx == 7)
-        i = -64;
+      CPU_SET(coreid, &cpuset);
+#ifdef R282
+      if (dev_idx < 4)
+#endif
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 
       t.join();
@@ -392,7 +387,7 @@ public:
 
   void unload_images(size_t num_examples) override {
     uint16_t batch_size = _settings->qaic_batch_size;
-#ifdef G292
+#if defined(G292) || defined(R282)
     int N = _settings->qaic_device_count;
 #else
     int N = 1;
@@ -418,7 +413,7 @@ public:
   }
 
   virtual void *get_img_ptr(int dev_idx, int img_idx) {
-#ifndef G292
+#if !defined(G292) && !defined(R282)
     return _in_batch[0][session->idx2loc[img_idx]].get()->data();
 #else
     return _in_batch[dev_idx][session->idx2loc[img_idx]].get()->data();
@@ -508,7 +503,7 @@ public:
           buffer += 7;
         }
 
-        _out_buffer_index %= _current_buffer_size;
+    //    _out_buffer_index %= _current_buffer_size;
         results.push_back(next_result_ptr);
       }
       get_next_results_finished[fake_idx] = true;
