@@ -297,7 +297,13 @@
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
-        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
+        ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
           "ssd_resnet34.pcie.16nsp"
