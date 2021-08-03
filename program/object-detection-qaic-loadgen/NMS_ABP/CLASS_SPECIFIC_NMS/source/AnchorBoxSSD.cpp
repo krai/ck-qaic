@@ -181,7 +181,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
 void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
     anchor::uTensor &odmLoc, anchor::uTensor &odmConf,
     std::vector<std::vector<float> > &selectedAll, float &batchIdx) {
-  PROFILE("SSD");
+  //PROFILE("SSD");
   const anchor::fTensor &odmPrior = tPrior;
 
   uint8_t *odmConfPtr = odmConf.data;
@@ -194,10 +194,10 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
        ++nBoxIdx, odmLocPtr += 4, odmPriorPtr += 4) {
     uint32_t confItr = nBoxIdx * NUM_CLASSES;
     for (uint32_t nClsIdx = 1; nClsIdx < NUM_CLASSES; nClsIdx++) {
-      float confidence =
-          (CONVERT_TO_INT8(odmConfPtr[confItr+nClsIdx]) - confOffset) * confScale;
-      if (confidence <= class_threshold)
+      uint8_t confi = odmConfPtr[confItr+nClsIdx];
+      if (confi < 76)
         continue;
+      float confidence = confi  * confScale;
 
       // Transform uint8_t -> int8_t -> fp32
       std::vector<float> box = {
@@ -206,15 +206,13 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
         (CONVERT_TO_INT8(odmLocPtr[2]) - locOffset) * locScale,
         (CONVERT_TO_INT8(odmLocPtr[3]) - locOffset) * locScale
       };
-#if MODEL_R34
-      box = decodeLocationTensor(box, odmPriorPtr, variance.data());
-#else
+      
       box = mv1SSD_decodeLocationTensor(box, odmPriorPtr);
-#endif // For MV1 decoding logic is inside the model.
+      
       float labelId = nClsIdx;
       result[nClsIdx].emplace_back(
-          std::initializer_list<float>{ batchIdx, box[1],     box[0], box[3],
-                                        box[2],   confidence, labelId });
+          std::initializer_list<float>{ batchIdx, box[1], box[0], box[3],
+                                        box[2], confidence, labelId });
     }
   }
   for (uint32_t j = 1; j < NUM_CLASSES; j++) {
@@ -242,7 +240,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
 void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
     anchor::uTensor &odmLoc, anchor::hfTensor &odmConf,
     std::vector<std::vector<float> > &selectedAll, float &batchIdx) {
-  PROFILE("SSD");
+  //PROFILE("SSD");
   const anchor::fTensor &odmPrior = tPrior;
 
   uint16_t *baseConfPtr = odmConf.data;
