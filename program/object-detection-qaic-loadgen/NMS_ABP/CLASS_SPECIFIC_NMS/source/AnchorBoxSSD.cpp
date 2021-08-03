@@ -65,7 +65,6 @@ AnchorBoxProc::AnchorBoxProc(AnchorBoxConfig &config) {
   confScale = config.confScale;
   confOffset = config.confOffset;
 }
-#ifdef MODEL_R34
 static std::vector<float> decodeLocationTensor(std::vector<float> &loc,
                                                const float *prior,
                                                const float *variance) {
@@ -80,7 +79,6 @@ static std::vector<float> decodeLocationTensor(std::vector<float> &loc,
 
   return { x, y, width, height };
 }
-#else
 static std::vector<float> mv1SSD_decodeLocationTensor(std::vector<float> &loc,
                                                       const float *prior) {
   float wx = 10;
@@ -116,12 +114,11 @@ static std::vector<float> mv1SSD_decodeLocationTensor(std::vector<float> &loc,
   return { pred_ctr_x - 0.5f * pred_w, pred_ctr_y - 0.5f * pred_h,
            pred_ctr_x + 0.5f * pred_w, pred_ctr_y + 0.5f * pred_h };
 }
-#endif
 
 void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
     anchor::fTensor &odmLoc, anchor::fTensor &odmConf,
     std::vector<std::vector<float> > &selectedAll, float &batchIdx) {
-  PROFILE("SSD");
+//  PROFILE("SSD");
   const anchor::fTensor &odmPrior = tPrior;
 
   float *baseConfPtr = odmConf.data;
