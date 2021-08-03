@@ -52,7 +52,6 @@ using namespace qaic_api;
 using namespace std;
 using namespace CK;
 
-#ifdef G292
 void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
@@ -68,7 +67,6 @@ void Program::InitDevices(int d) {
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
 }
-#endif
 
 Program::Program() {
 
@@ -82,25 +80,26 @@ Program::Program() {
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(
       settings->qaic_device_count);
 
-#ifdef G292
-  int i = 64;
+#if defined(G292) || defined(R282)
+  int OFFSET = 0;
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::thread t(&Program::InitDevices, this, d);
 
-    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
-    // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
+#ifdef R282
+    if(d == 4) OFFSET = 1;
+#endif
+    unsigned coreid = OFFSET+ ((d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8); 
    // for(int j = 0; j < 1; j++)
-      CPU_SET(i+d*8, &cpuset);
-     // CPU_SET(i+d*8+1, &cpuset);
-      CPU_SET(i+d*8+2, &cpuset);
-      //CPU_SET(i+d*8+3, &cpuset);
-      CPU_SET(i+d*8+4, &cpuset);
-      //CPU_SET(i+d*8+5, &cpuset);
-      CPU_SET(i+d*8+6, &cpuset);
-      //CPU_SET(i+d*8+7, &cpuset);
-    if(d == 7) i = -64;
+    CPU_SET(coreid, &cpuset);
+     // CPU_SET(coreid+1, &cpuset);
+    CPU_SET(coreid+2, &cpuset);
+      //CPU_SET(coreid+3, &cpuset);
+    CPU_SET(coreid+4, &cpuset);
+      //CPU_SET(coreid+5, &cpuset);
+    CPU_SET(coreid+6, &cpuset);
+      //CPU_SET(coreid+7, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }

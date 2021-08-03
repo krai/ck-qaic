@@ -63,6 +63,14 @@
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
+#ifdef G292
+#define START_CORE 64
+#endif
+
+#ifdef R282
+#define START_CORE 0
+#endif
+
 
 namespace CK {
 
@@ -257,8 +265,9 @@ public:
     int dev_cnt =  settings->qaic_device_count;
     _in_batch.resize(dev_cnt);
     _out_batch.resize(dev_cnt);
-#ifdef G292
+#if defined(G292) || defined(R282)
     if(settings -> input_select == 0) {
+      unsigned OFFSET = 0;
       const int CTN = settings -> copy_threads_per_device;
       get_random_images_samples.resize(CTN*dev_cnt);
       get_random_images_act_idx.resize(CTN*dev_cnt);
@@ -268,7 +277,11 @@ public:
     
       for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
         get_random_images_turn[dev_idx]=0;
-        unsigned coreid = (dev_idx > 7)? -64 + dev_idx*8: 64 + dev_idx*8;
+#ifdef R282
+        if(dev_idx == 4) OFFSET = 4;
+#endif
+  
+        unsigned coreid = OFFSET + ((dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8);
         for (int i = 0; i < CTN; i++) {
           cpu_set_t cpuset;
           get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
@@ -312,15 +325,14 @@ public:
  
   void load_images(BenchmarkSession *_session) override {
     session = _session;
-#ifdef G292
-    int i = 64;
+#if defined(G292) || defined(R282)
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
+      unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
       std::thread t(&Benchmark::load_images_locally, this, dev_idx);
 
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
-      CPU_SET(i+dev_idx*8, &cpuset);
-      if(dev_idx == 7) i = -64;
+      CPU_SET(coreid, &cpuset);
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 
       t.join();
@@ -334,7 +346,7 @@ public:
 
   void unload_images(size_t num_examples) override {
     uint16_t batch_size = _settings->qaic_batch_size;
-#ifdef G292
+#if defined(G292) || defined(R282)
     int N =  _settings->qaic_device_count;
 #else
     int N = 1;
@@ -347,7 +359,7 @@ public:
     }
   }
 
-#ifdef G292
+#if defined(G292) || defined(R282)
   void get_random_images_worker(int fake_idx) {
     int dev_cnt =  _settings->qaic_device_count;
     int dev_idx = fake_idx;
