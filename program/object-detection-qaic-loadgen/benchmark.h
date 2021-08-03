@@ -219,9 +219,9 @@ public:
         nms_results[d][a].resize(_settings->qaic_set_size);
         reformatted_results[d][a].resize(_settings->qaic_set_size);
         for (int s = 0; s < _settings->qaic_set_size; ++s) {
-          nms_results[d][a][s] = std::vector<std::vector<float> >(
-              0, std::vector<float>(NUM_COORDINATES + 2, 0));
           for (int b = 0; b <  _settings->qaic_batch_size; b++) {
+            nms_results[d][a][s].push_back(std::vector<std::vector<float> >(
+              0, std::vector<float>(NUM_COORDINATES + 2, 0)));
             reformatted_results[d][a][s].push_back(new ResultData(_settings));
           }
         }
@@ -294,6 +294,7 @@ public:
     get_next_results_act_idx.resize(CTN * dev_cnt);
     get_next_results_set_idx.resize(CTN * dev_cnt);
     get_next_results_finished.resize(CTN * dev_cnt);
+    get_next_results_batch_idx.resize(CTN * dev_cnt);
     get_next_results_turn.resize(dev_cnt);
 
     for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
@@ -428,6 +429,9 @@ public:
       dev_idx -= dev_cnt;
     while (true) {
       get_next_results_mutex[fake_idx].lock();
+      int image_idx_in_batch = get_next_results_batch_idx[fake_idx];
+      int i = image_idx_in_batch;
+      get_next_results_batch_mutex[fake_idx].unlock();
       const std::vector<int> &image_idxs =
           *get_next_results_image_idxs[fake_idx];
       std::vector<ResultData *> &results = *get_next_results_results[fake_idx];
@@ -435,79 +439,74 @@ public:
       const int act_idx = get_next_results_act_idx[fake_idx];
       const int set_idx = get_next_results_set_idx[fake_idx];
 
-      results.clear();
 
       TOutput1DataType *boxes_ptr =
           (TOutput1DataType *)_out_ptrs[dev_idx][act_idx][set_idx][BOXES_INDEX];
       TOutput2DataType *classes_ptr = (TOutput2DataType *)
           _out_ptrs[dev_idx][act_idx][set_idx][CLASSES_INDEX];
 
-      // This could be threaded to match batch size
-      for (int i = 0; i < image_idxs.size(); ++i) {
-        nms_results[dev_idx][act_idx][set_idx].clear();
+      nms_results[dev_idx][act_idx][set_idx][i].clear();
 
-        // get pointers to unique buffer for device->activation->set
-        std::vector<std::vector<float> > &nms_res =
-            nms_results[dev_idx][act_idx][set_idx];
-        ResultData *next_result_ptr =
-            reformatted_results[dev_idx][act_idx][set_idx][i];
-        TOutput1DataType *dataLoc =
-            boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
-        TOutput2DataType *dataConf =
-            classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
+      // get pointers to unique buffer for device->activation->set
+      std::vector<std::vector<float> > &nms_res =
+          nms_results[dev_idx][act_idx][set_idx][i];
+      ResultData *next_result_ptr =
+          reformatted_results[dev_idx][act_idx][set_idx][i];
+      TOutput1DataType *dataLoc =
+          boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
+      TOutput2DataType *dataConf =
+          classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
 
-        float idx = image_idxs[i];
-        if (_settings->qaic_skip_stage != "convert") {
+      float idx = image_idxs[i];
+      if (_settings->qaic_skip_stage != "convert") {
           anchor::fTensor tLoc =
-              anchor::fTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                                (float *)dataLoc });
-          anchor::fTensor tConf = anchor::fTensor(
-              { "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES }, (float *)dataConf });
-          nwOutputLayer->anchorBoxProcessingFloatPerBatch(
-              std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-        } else {
-          anchor::uTensor tLoc =
-              anchor::uTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                                (uint8_t *)dataLoc });
+            anchor::fTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
+                              (float *)dataLoc });
+        anchor::fTensor tConf = anchor::fTensor(
+            { "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES }, (float *)dataConf });
+        nwOutputLayer->anchorBoxProcessingFloatPerBatch(
+            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+      } else {
+        anchor::uTensor tLoc =
+            anchor::uTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
+                              (uint8_t *)dataLoc });
 #ifdef MODEL_R34
-          anchor::hfTensor tConf =
-              anchor::hfTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                                 (uint16_t *)dataConf });
-          nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(
-              std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+        anchor::hfTensor tConf =
+            anchor::hfTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
+                               (uint16_t *)dataConf });
+        nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(
+            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
 #else
-          anchor::uTensor tConf =
-              anchor::uTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                                (uint8_t *)dataConf });
-          nwOutputLayer->anchorBoxProcessingUint8PerBatch(
-              std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
+        anchor::uTensor tConf =
+            anchor::uTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
+                               (uint8_t *)dataConf });
+        nwOutputLayer->anchorBoxProcessingUint8PerBatch(
+            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
 #endif
-        }
-
-        int num_elems = nms_res.size() < _settings->detections_buffer_size()
-                            ? nms_res.size()
-                            : _settings->detections_buffer_size();
-
-        next_result_ptr->set_size(num_elems * 7);
-        float *buffer = next_result_ptr->data();
-
-        for (int j = 0; j < num_elems; j++) {
-          buffer[0] = nms_res[j][0];
-          buffer[1] = nms_res[j][1];
-          buffer[2] = nms_res[j][2];
-          buffer[3] = nms_res[j][3];
-          buffer[4] = nms_res[j][4];
-          buffer[5] = nms_res[j][5];
-          buffer[6] = nms_res[j][6];
-
-          buffer += 7;
-        }
-
-    //    _out_buffer_index %= _current_buffer_size;
-        results.push_back(next_result_ptr);
       }
-      get_next_results_finished[fake_idx] = true;
-      get_next_results_mutex2[fake_idx].unlock();
+
+      int num_elems = nms_res.size() < _settings->detections_buffer_size()
+                          ? nms_res.size()
+                          : _settings->detections_buffer_size();
+
+      next_result_ptr->set_size(num_elems * 7);
+      float *buffer = next_result_ptr->data();
+
+      for (int j = 0; j < num_elems; j++) {
+        buffer[0] = nms_res[j][0];
+        buffer[1] = nms_res[j][1];
+        buffer[2] = nms_res[j][2];
+        buffer[3] = nms_res[j][3];
+        buffer[4] = nms_res[j][4];
+        buffer[5] = nms_res[j][5];
+        buffer[6] = nms_res[j][6];
+        buffer += 7;
+      }
+
+      results.push_back(next_result_ptr);
+      get_next_results_finished[fake_idx]++;
+      if(get_next_results_finished[fake_idx] ==  _settings->qaic_batch_size)
+        get_next_results_mutex2[fake_idx].unlock();
     }
   }
 
@@ -521,16 +520,22 @@ public:
     const int fake_idx = turn * dev_cnt + dev_idx;
     get_next_results_turn[dev_idx] = turn;
     get_next_results_mutex3[dev_idx].unlock();
+  
     get_next_results_mutex2[fake_idx].lock();
     get_next_results_image_idxs[fake_idx] = &image_idxs;
     get_next_results_results[fake_idx] = &results;
     get_next_results_act_idx[fake_idx] = act_idx;
     get_next_results_set_idx[fake_idx] = set_idx;
 
-    get_next_results_finished[fake_idx] = false;
-    get_next_results_mutex[fake_idx].unlock();
+    get_next_results_finished[fake_idx] = 0;
+    results.clear();
+    for(int i = 0; i < image_idxs.size(); i++){
+      get_next_results_batch_mutex[fake_idx].lock();
+      get_next_results_batch_idx[fake_idx] = i;
+      get_next_results_mutex[fake_idx].unlock();
+    }
     while (true) {
-      if (get_next_results_finished[fake_idx])
+      if (get_next_results_finished[fake_idx] == image_idxs.size())
         return;
       std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
@@ -557,13 +562,14 @@ private:
 
   std::vector<int> class_map;
 
-  std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > >
+  std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >
   nms_results;
   std::vector<std::vector<std::vector<std::vector<ResultData *> > > > reformatted_results;
 
   std::mutex get_next_results_mutex[256];
   std::mutex get_next_results_mutex2[256];
   std::mutex get_next_results_mutex3[16];
+  std::mutex get_next_results_batch_mutex[256];
 
   std::vector<std::vector<int> *> get_next_results_image_idxs;
   std::vector<std::vector<ResultData *> *> get_next_results_results;
@@ -571,6 +577,7 @@ private:
   std::vector<int> get_next_results_act_idx;
   std::vector<int> get_next_results_set_idx;
   std::vector<int> get_next_results_finished;
+  std::vector<int> get_next_results_batch_idx;
   std::vector<int> get_next_results_turn;
 };
 
