@@ -282,7 +282,7 @@ public:
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
 #ifdef R282
-      if(dev_idx < 4)
+      if(dev_idx < 4 || settings->qaic_device_count > 5)
 #endif
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
@@ -308,9 +308,14 @@ public:
         unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
-        CPU_SET(coreid + i, &cpuset);
 #ifdef R282
-        if(dev_idx < 4)
+        CPU_SET(coreid + i + (dev_idx > 3 &&  settings->qaic_device_count > 5)*4 , &cpuset);
+#else
+        CPU_SET(coreid + i, &cpuset);
+#endif
+
+#ifdef R282
+        if(dev_idx < 4 || settings->qaic_device_count > 5)
 #endif
         pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
@@ -374,7 +379,7 @@ public:
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
 #ifdef R282
-      if (dev_idx < 4)
+      if(dev_idx < 4 || _settings->qaic_device_count > 5)
 #endif
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 

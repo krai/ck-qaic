@@ -81,30 +81,18 @@ Program::Program() {
   // device, activation, set, buffer no
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(settings->qaic_device_count);
 
-#ifdef G292
-  int i = 64;
-#endif
-
-#ifdef R282
-  int i = 0;
-#endif
-
 
 #if defined (G292) || defined (R282)
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::thread t(&Program::InitDevices, this, d);
 
-    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
-    // only CPU i as set.
+    unsigned coreid = (d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8;
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     for(int j = 0; j < 7; j++)
-      CPU_SET(i+d*8+j, &cpuset);
-//    for(int j = 0; j < 7; j++)
-  //    CPU_SET(i+d*8+j+128, &cpuset);
-    if(d == 7) i = -64;
+      CPU_SET(coreid +j, &cpuset);
 #ifdef R282
-    if(d < 4)
+    if(d < 4 || settings->qaic_device_count > 5)
 #endif
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
