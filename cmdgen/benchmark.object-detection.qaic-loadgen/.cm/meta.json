@@ -329,7 +329,7 @@
           "ssd_resnet34.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
