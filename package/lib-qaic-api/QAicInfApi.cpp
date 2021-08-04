@@ -551,13 +551,19 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
         QBuffer buf;
         uint32_t outputBufferSize = ioDescProto.selected_set().bindings(i).size();
         std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
-            new(std::nothrow) uint8_t[outputBufferSize]);
+            // over allocate to allow for buffer alignment
+            new(std::nothrow) uint8_t[outputBufferSize+32]);
         if (uniqueBuffer == nullptr) {
           std::cerr << "Failed to allocate buffer for output, size "
               << outputBufferSize << std::endl;
           return QS_ERROR;
         }
         buf.buf = uniqueBuffer.get();
+        
+        //align the buffer to 32 byte boundary
+        uint64_t mask = 31; mask = ~mask;
+        buf.buf = (uint8_t*)((uint64_t)(buf.buf+32)&mask);
+        
         buf.size = outputBufferSize;
         inferenceBufferVector_.push_back(std::move(uniqueBuffer));
         inferenceBuffersList_[idx][y].push_back(std::move(buf));
