@@ -310,7 +310,8 @@
           "ssd_resnet34.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "3"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
