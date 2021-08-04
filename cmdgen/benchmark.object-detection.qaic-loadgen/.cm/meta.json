@@ -258,7 +258,9 @@
           "ssd_resnet34.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8"
       },
       "aedk_20w": {
         "all_device_ids": "0",
@@ -268,7 +270,9 @@
           "ssd_resnet34.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8"
       },
       "aedk_15w": {
         "all_device_ids": "0",
@@ -278,7 +282,9 @@
           "ssd_resnet34.aedk_15w.<<<scenario>>>"
         ],
         "recommended_activation_count": "8",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -294,7 +300,8 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
-        "recommended_threads_per_queue": "3"
+        "recommended_threads_per_queue": "3",
+        "recommended_queue_length": "8"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -311,7 +318,8 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
-        "recommended_threads_per_queue": "3"
+        "recommended_threads_per_queue": "3",
+        "recommended_queue_length": "8"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
@@ -322,6 +330,8 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1"
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -331,7 +341,9 @@
           "ssd_resnet34.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
-        "recommended_batch_size": "1"
+        "recommended_batch_size": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8"
       }
     },
     "target_latency": {
@@ -379,7 +391,7 @@
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
-    "queue_length": "8",
+    "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
@@ -387,7 +399,7 @@
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
-    "threads_per_queue": "8",
+    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
     "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
