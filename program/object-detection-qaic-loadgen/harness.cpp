@@ -235,7 +235,7 @@ void Program::ColdRun() {
 void Program::Inference(std::vector<mlperf::QuerySample> samples) {
 
   while(sback >= sfront+samples_queue_len)
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 
   samples_queue[sback%samples_queue_len] = samples;
   ++sback;
@@ -308,7 +308,7 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+      //  std::this_thread::sleep_for(std::chrono::microseconds(1));
         continue;
       }
 
@@ -316,7 +316,7 @@ void Program::QueueScheduler() {
       p->samples = qs;
 
       while(Program::payloads[round_robin] != nullptr){
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
       }
 
       Program::payloads[round_robin] = p;
@@ -460,14 +460,15 @@ SystemUnderTestQAIC::SystemUnderTestQAIC(Program *_prg, mlperf::TestScenario _sc
   // multiple samples into the one batch
   if(scenario == mlperf::TestScenario::Server) {
     terminate = false;
-    scheduler = std::thread(&SystemUnderTestQAIC::ServerModeScheduler, this);
+//we donot need scheduler for bs.1
+   // scheduler = std::thread(&SystemUnderTestQAIC::ServerModeScheduler, this);
   }
 };
 
 SystemUnderTestQAIC::~SystemUnderTestQAIC() {
   if(scenario == mlperf::TestScenario::Server) {
     terminate = true;
-    scheduler.join();
+    //scheduler.join();
   }
 }
 
