@@ -80,7 +80,7 @@
       "###": {
         "ck_env": "",
         "deps": "",
-        "program_name": "image-classification-qaic-loadgen",
+        "program_name": "object-detection-qaic-loadgen",
         "library": "qaic-v###-aic100",
         "inference_engine": "qaic",
         "inference_engine_version": "v###",                                                                                                                                                                                                 -21
