@@ -83,8 +83,8 @@
         "program_name": "object-detection-qaic-loadgen",
         "library": "qaic-v###-aic100",
         "inference_engine": "qaic",
-        "inference_engine_version": "v###",                                                                                                                                                                                                 -21
-        "inference_engine_backend": "aic100"                                                                                                                                                                                                
+        "inference_engine_version": "v###",
+        "inference_engine_backend": "aic100"
       }
     },
     "library": {
