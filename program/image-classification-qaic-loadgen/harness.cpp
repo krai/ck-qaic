@@ -305,7 +305,9 @@ void Program::QueueScheduler() {
 
       Payload *p = ring_buf[activation]->getPayload();
 
-
+#ifndef G292
+      std::this_thread::sleep_for(std::chrono::nanoseconds(500));
+#endif
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
