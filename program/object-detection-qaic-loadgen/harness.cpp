@@ -308,7 +308,7 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
-      //  std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
         continue;
       }
 

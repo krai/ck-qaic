@@ -236,7 +236,7 @@ void Program::ColdRun() {
 void Program::Inference(std::vector<mlperf::QuerySample> samples) {
 
   while (sback >= sfront + samples_queue_len)
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 
   samples_queue[sback % samples_queue_len] = samples;
   ++sback;
@@ -309,7 +309,7 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
         continue;
       }
 
@@ -317,7 +317,7 @@ void Program::QueueScheduler() {
       p->samples = qs;
 
       while(Program::payloads[round_robin] != nullptr){
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
       }
 
       Program::payloads[round_robin] = p;
@@ -449,7 +449,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
     int qlen = samples_queue.size();
     if(qlen == 0){
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::microseconds(10));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(100));
     continue;
     }
     auto now = std::chrono::steady_clock::now();
