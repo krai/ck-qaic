@@ -54,12 +54,12 @@ const uint32_t qidDefault = 0;
 
 class ActivationSet {
 
-public:
+ public:
   ActivationSet(
       QData ioDescQData,
-      QAicContext *context,
-      QAicProgram *program, QAicQueue *queue, QID dev, uint32_t numBuffers,
-      QAicExecObjProperties_t &execObjProperties_t,
+      QAicContext* context,
+      QAicProgram* program, QAicQueue* queue, QID dev, uint32_t numBuffers,
+      QAicExecObjProperties_t& execObjProperties_t,
       uint32_t activationId,
       QAicEventCallback callback = nullptr);
   virtual ~ActivationSet();
@@ -67,12 +67,13 @@ public:
   // protected:
   // Program is expected to be activated before calling init
   QStatus init(uint32_t setSize = setSizeDefault);
+  QBuffer* getDmaBuffers(uint32_t execOjbIndex);
   QStatus reset();
-  QStatus setData(std::vector<std::vector<QBuffer>> &buffers);
-  QStatus setDataSingle(int set_idx, std::vector<QBuffer> &buffers);
+  QStatus setData(std::vector<std::vector<QBuffer>>& buffers);
+  QStatus setDataSingle(int set_idx, std::vector<QBuffer>& buffers);
   QStatus run(uint32_t numInferences, void* payload);
   QStatus deinit();
-
+  void setOutBufIndex(uint32_t outBufIndex) { outBufIndex_ = outBufIndex;}
   std::string filename;
 
 private:
@@ -91,6 +92,7 @@ private:
   uint32_t activationId_;
   QAicEventCallback callback_;
   QData ioDescQData_;
+  uint32_t outBufIndex_;
 };
 
 //--------------------------------------------------------------------
@@ -132,6 +134,10 @@ QStatus ActivationSet::deinit() {
   return status;
 }
 
+QBuffer* ActivationSet::getDmaBuffers(uint32_t execObjIndex) {
+  return qbuffersSet_[execObjIndex];
+}
+
 QStatus ActivationSet::init(uint32_t setSize) {
   QStatus status = QS_SUCCESS;
 
@@ -168,6 +174,12 @@ QStatus ActivationSet::init(uint32_t setSize) {
 QStatus ActivationSet::setData(std::vector<std::vector<QBuffer>> &buffers) {
   QStatus status = QS_SUCCESS;
   int i = 0;
+  if (std::getenv("QAIC_BYPASS_PPP")) {
+    // no setdata is required when using dma buf path
+
+    std::cerr << "no setdata is required when using dma buf path" << std::endl;
+    return status;
+  }
   for (auto &e : execObjSet_) {
     status = qaicExecObjSetData(e, buffers[i].size(),  buffers[i].data());
     if (status != QS_SUCCESS) {
@@ -515,10 +527,14 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
       jsonPrint.clear();
     }
     #endif
+    uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
+    if (std::getenv("QAIC_BYPASS_PPP")) {
+      numBuffers = ioDescProto.dma_buf_size();
+    }
     std::shared_ptr<ActivationSet> shActivation =
         std::make_shared<ActivationSet>(ioDescQData,
             context_, programs_[i], queues_[i], dev_,
-            ioDescProto.selected_set().bindings().size(),
+                                        numBuffers,
             execObjProperties_, i, callback_);
     if (shActivation != nullptr) {
       shActivation->init(setSize_);
@@ -526,7 +542,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
 
     // Create IO buffers
-    status = createBuffers(i, ioDescProto);
+    status = createBuffers(i, ioDescProto, shActivation);
     if (status != QS_SUCCESS) {
       std::cerr << "Failed to create IO buffers." << std::endl;
       return status;
@@ -538,11 +554,43 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   return QS_SUCCESS;
 }
 
-QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
+QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::shared_ptr<ActivationSet>& shActivation) {
 
-  inferenceBuffersList_.resize(inferenceBuffersList_.size()+1);
+  inferenceBuffersList_.resize(inferenceBuffersList_.size() + 1);
 
   inferenceBuffersList_[idx].resize(setSize_);
+  if (std::getenv("QAIC_BYPASS_PPP")) {
+    for (uint32_t y = 0; y < setSize_; y++) {
+      QBuffer* dmaBuffVect = shActivation->getDmaBuffers(y);
+      aicapi::IoSet ioSet;
+      for (int i = 0; i < ioDescProto.io_sets_size(); i++) {
+        if (ioDescProto.io_sets(i).name().compare("dma") == 0) {
+          ioSet = ioDescProto.io_sets(i);
+          break;
+        }
+      }
+
+      uint32_t outBufIndex = 0;
+      for (uint32_t i = 0; i < (uint32_t)ioSet.bindings_size(); i++) {
+        if (ioSet.bindings(i).dir() == aicapi::BUFFER_IO_TYPE_INPUT) {
+          outBufIndex++;
+        }
+        QBuffer qbuf = { 0, nullptr, 0, 0, QBUFFER_TYPE_HEAP };
+        auto dmaInfo = ioSet.bindings(i).dma_buf_info(0);
+        if ((dmaInfo.dma_offset() + dmaInfo.dma_size()) >
+                dmaBuffVect[dmaInfo.dma_buf_index()].size) {
+          std::cerr << "failed to prepare buffer" << std::endl;
+          return QS_ERROR;
+        }
+        qbuf.buf = dmaBuffVect[dmaInfo.dma_buf_index()].buf + dmaInfo.dma_offset();
+        qbuf.size = dmaInfo.dma_size();
+        inferenceBuffersList_[idx][y].push_back(qbuf);
+      }
+      // idealy we need to call it once only
+      shActivation->setOutBufIndex(outBufIndex);
+    }
+    return QS_SUCCESS;
+  }
 
   for (uint32_t y = 0; y < setSize_; y++) {
 
@@ -552,18 +600,19 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
         uint32_t outputBufferSize = ioDescProto.selected_set().bindings(i).size();
         std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
             // over allocate to allow for buffer alignment
-            new(std::nothrow) uint8_t[outputBufferSize+32]);
+            new(std::nothrow) uint8_t[outputBufferSize + 32]);
         if (uniqueBuffer == nullptr) {
           std::cerr << "Failed to allocate buffer for output, size "
               << outputBufferSize << std::endl;
           return QS_ERROR;
         }
         buf.buf = uniqueBuffer.get();
-        
+
         //align the buffer to 32 byte boundary
-        uint64_t mask = 31; mask = ~mask;
-        buf.buf = (uint8_t*)((uint64_t)(buf.buf+32)&mask);
-        
+        uint64_t mask = 31;
+        mask = ~mask;
+        buf.buf = (uint8_t*)((uint64_t)(buf.buf + 32) & mask);
+
         buf.size = outputBufferSize;
         inferenceBufferVector_.push_back(std::move(uniqueBuffer));
         inferenceBuffersList_[idx][y].push_back(std::move(buf));
@@ -573,7 +622,7 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
 
         std::unique_ptr<uint8_t[]> uniqueBuffer = std::unique_ptr<uint8_t[]>(
             // over allocate to allow for buffer alignment
-            new(std::nothrow) uint8_t[inputBufferSize+32]);
+            new(std::nothrow) uint8_t[inputBufferSize + 32]);
         if (uniqueBuffer == nullptr) {
           std::cerr << "Failed to allocate input buffer" << std::endl;
           return QS_ERROR;
@@ -581,8 +630,9 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto) {
         buf.buf = uniqueBuffer.get();
 
         //align the buffer to 32 byte boundary
-        uint64_t mask = 31; mask = ~mask;
-        buf.buf = (uint8_t*)((uint64_t)(buf.buf+32)&mask);
+        uint64_t mask = 31;
+        mask = ~mask;
+        buf.buf = (uint8_t*)((uint64_t)(buf.buf + 32) & mask);
 
         buf.size = inputBufferSize;
         inferenceBufferVector_.push_back(std::move(uniqueBuffer));
@@ -677,7 +727,7 @@ void QAicInfApi::setNumThreadsPerQueue(uint32_t num) {
 
 QStatus QAicInfApi::setBufferPtr(uint32_t act_idx, uint32_t set_idx, uint32_t buf_idx, void* ptr) {
   inferenceBuffersList_[act_idx][set_idx][buf_idx].buf =  static_cast<uint8_t *>(ptr);
-  
+
   QStatus status = QS_SUCCESS;
 
   status = shActivationSets_[act_idx]->setDataSingle(set_idx, inferenceBuffersList_[act_idx][set_idx]);
