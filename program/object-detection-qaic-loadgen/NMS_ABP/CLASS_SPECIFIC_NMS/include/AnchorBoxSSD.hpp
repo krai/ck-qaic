@@ -70,7 +70,7 @@
     #define CLASSES_INDEX 1
 
     #define LOC_OFFSET 0
-    #define LOC_SCALE 0.136092901
+    #define LOC_SCALE 0.136092901f
     #define CONF_OFFSET 0
     #define CONF_SCALE 1
     
@@ -102,9 +102,9 @@
     #define CLASSES_INDEX 0
     
     #define LOC_OFFSET 0
-    #define LOC_SCALE 0.144255146
+    #define LOC_SCALE 0.144255146f
     #define CONF_OFFSET -128
-    #define CONF_SCALE 0.00392156886
+    #define CONF_SCALE 0.00392156886f
     
     #define CLASS_THRESHOLD 0.3
     #define NMS_THRESHOLD 0.45

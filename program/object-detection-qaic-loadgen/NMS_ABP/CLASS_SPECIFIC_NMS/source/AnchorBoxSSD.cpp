@@ -53,6 +53,7 @@ AnchorBoxProc::AnchorBoxProc(AnchorBoxConfig &config) {
       { "tPriors", { 1, TOTAL_NUM_BOXES, NUM_COORDINATES }, dataPrior });
   read<float, anchor::fTensor>(tPrior, config.priorfilename);
 }
+#ifdef MODEL_R34
 static std::vector<float> decodeLocationTensor(std::vector<float> &loc,
                                                const float *prior,
                                                const float *variance) {
@@ -67,6 +68,7 @@ static std::vector<float> decodeLocationTensor(std::vector<float> &loc,
 
   return { x, y, width, height };
 }
+#else
 static std::vector<float> mv1SSD_decodeLocationTensor(std::vector<float> &loc,
                                                       const float *prior) {
   float wx = 10;
@@ -102,6 +104,7 @@ static std::vector<float> mv1SSD_decodeLocationTensor(std::vector<float> &loc,
   return { pred_ctr_x - 0.5f * pred_w, pred_ctr_y - 0.5f * pred_h,
            pred_ctr_x + 0.5f * pred_w, pred_ctr_y + 0.5f * pred_h };
 }
+#endif
 
 void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
     anchor::fTensor &odmLoc, anchor::fTensor &odmConf,
@@ -133,7 +136,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
         continue;
       std::vector<float> box = { odmLocPtr[BOX_ITR_0], odmLocPtr[BOX_ITR_1],
                                  odmLocPtr[BOX_ITR_2], odmLocPtr[BOX_ITR_3] };
-#if MODEL_R34
+#ifdef MODEL_R34
       box = decodeLocationTensor(box, odmPriorPtr, variance.data());
 #else
       box = mv1SSD_decodeLocationTensor(box, odmPriorPtr);
@@ -163,6 +166,7 @@ void AnchorBoxProc::anchorBoxProcessingFloatPerBatch(
   });
 }
 
+#ifndef MODEL_R34
 void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
     anchor::uTensor &odmLoc, anchor::uTensor &odmConf,
     std::vector<std::vector<float> > &selectedAll, float &batchIdx) {
@@ -220,7 +224,7 @@ void AnchorBoxProc::anchorBoxProcessingUint8PerBatch(
     return a[SCORE_POSITION] > b[SCORE_POSITION];
   });
 }
-
+#else
 // First output in network desc is Location tensor
 void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
     anchor::uTensor &odmLoc, anchor::hfTensor &odmConf,
@@ -292,3 +296,4 @@ void AnchorBoxProc::anchorBoxProcessingUint8Float16PerBatch(
     return a[SCORE_POSITION] > b[SCORE_POSITION];
   });
 }
+#endif

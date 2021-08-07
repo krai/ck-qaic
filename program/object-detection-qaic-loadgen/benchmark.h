@@ -219,17 +219,9 @@ public:
   void initResultsBuffer(int dev_id) {
     for (int d = 0; d < _settings->qaic_device_count; ++d) {
       
-      src_p[d].resize(_settings->qaic_activation_count);
-      dest_p[d].resize(_settings->qaic_activation_count);
-      copy_size[d].resize(_settings->qaic_activation_count);
-      copy_finished[d].resize(_settings->qaic_activation_count);
       nms_results[d].resize(_settings->qaic_activation_count);
       reformatted_results[d].resize(_settings->qaic_activation_count);
       for (int a = 0; a < _settings->qaic_activation_count; ++a) {
-        src_p[d][a].resize(_settings->qaic_set_size);
-        dest_p[d][a].resize(_settings->qaic_set_size);
-        copy_size[d][a].resize(_settings->qaic_set_size);
-        copy_finished[d][a].resize(_settings->qaic_set_size);
         nms_results[d][a].resize(_settings->qaic_set_size);
         reformatted_results[d][a].resize(_settings->qaic_set_size);
         for (int s = 0; s < _settings->qaic_set_size; ++s) {
@@ -257,7 +249,7 @@ public:
 #if defined(G292) || defined(R282)
     if(settings -> input_select == 0) {
       unsigned OFFSET = 0;
-      const int CTN = 16;//settings -> copy_threads_per_device;
+      const int CTN = settings -> copy_threads_per_device;
       get_random_images_samples.resize(CTN*dev_cnt);
       get_random_images_act_idx.resize(CTN*dev_cnt);
       get_random_images_set_idx.resize(CTN*dev_cnt);
@@ -277,9 +269,11 @@ public:
           std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
       
           CPU_ZERO(&cpuset);
-          CPU_SET(coreid+i/2, &cpuset);
-         if(dev_idx < 4)
-          pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+          CPU_SET(coreid+i%8, &cpuset);
+#ifdef R282
+         if(dev_idx < 4 || settings->qaic_device_count > 5)
+#endif
+            pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
           t.detach();
         }
       }
@@ -287,40 +281,11 @@ public:
 #endif
 
 
-    // load NMS data
-
-    /*acConfig.classT = settings->abc_classt;
-    acConfig.nmsT = settings->abc_nmst;
-    acConfig.maxDetectionsPerImage = settings->abc_max_dets_per_image;
-    acConfig.maxBoxesPerClass = settings->abc_max_boxes_per_class;
-
-    // Set the scale and offset from network Destriptors
-    acConfig.locOffset = settings->abc_loc_offset;
-    // acConfig.locScale = 0.135993376;
-    acConfig.locScale = settings->abc_loc_scale; // aimet mixed
-    acConfig.confOffset = settings->abc_conf_offset;
-    acConfig.confScale = settings->abc_conf_scale;*/
 
     acConfig.priorfilename = _settings->nms_priors_bin_path();
 
-    /*
-    std::cout << acConfig.classT << std::endl;
-    std::cout << acConfig.nmsT << std::endl;
-    std::cout << acConfig.maxDetectionsPerImage << std::endl;
-    std::cout << acConfig.maxBoxesPerClass << std::endl;
-    std::cout << acConfig.locOffset << std::endl;
-    std::cout << acConfig.locScale << std::endl;
-    std::cout << acConfig.confOffset << std::endl;
-    std::cout << acConfig.confScale << std::endl;
-    std::cout << acConfig.priorfilename << std::endl;
-    */
-
     nwOutputLayer = new AnchorBoxProc(acConfig);
 
-    src_p.resize(settings->qaic_device_count);
-    dest_p.resize(settings->qaic_device_count);
-    copy_size.resize(settings->qaic_device_count);
-    copy_finished.resize(settings->qaic_device_count);
     nms_results.resize(settings->qaic_device_count);
     reformatted_results.resize(settings->qaic_device_count);
 
@@ -346,36 +311,7 @@ public:
     get_next_results_finished.resize(CTN * dev_cnt);
     get_next_results_batch_idx.resize(CTN * dev_cnt);
     get_next_results_turn.resize(dev_cnt);
-
-    for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
-      unsigned num_threads_per_device =  _settings->qaic_activation_count * _settings->qaic_set_size * _settings->qaic_batch_size;
-       for (int act_idx = 0; act_idx < settings->qaic_activation_count; ++act_idx) {
-         unsigned num_threads_per_activation =  _settings->qaic_set_size * _settings->qaic_batch_size;
-         for (int set_idx = 0; set_idx < settings->qaic_set_size; ++set_idx) {
-           unsigned num_threads_per_set =   _settings->qaic_batch_size;
-           for(int i = 0; i < num_threads_per_set; i++) {
-             copy_mutex[dev_idx * num_threads_per_device+act_idx * num_threads_per_activation + set_idx * num_threads_per_set + i].lock();
-             std::thread tc(&Benchmark::memcpyWorker, this, dev_idx, act_idx, set_idx, i);
-#if defined(G292) || defined (R282)
-             unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
-             cpu_set_t cpuset;
-             CPU_ZERO(&cpuset);
-#ifdef R282
-             CPU_SET(coreid + i%8 + (dev_idx > 3 &&  settings->qaic_device_count > 5)*4 , &cpuset);
-#else
-             CPU_SET(coreid + i%8, &cpuset);
-#endif
-
-#ifdef R282
-             if(dev_idx < 4 || settings->qaic_device_count > 5)
-#endif
-               pthread_setaffinity_np(tc.native_handle(), sizeof(cpu_set_t), &cpuset);
-#endif
-           }
-        }
-      }
-    }
-
+    
     for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
       get_next_results_turn[dev_idx] = 0;
       for (int i = 0; i < CTN; i++) {
@@ -388,9 +324,9 @@ public:
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
 #ifdef R282
-        CPU_SET(coreid + i + (dev_idx > 3 &&  settings->qaic_device_count > 5)*4 , &cpuset);
+        CPU_SET(coreid + i%8 + (dev_idx > 3 &&  settings->qaic_device_count > 5)*4 , &cpuset);
 #else
-        CPU_SET(coreid + i, &cpuset);
+        CPU_SET(coreid + i%8, &cpuset);
 #endif
 
 #ifdef R282
@@ -484,61 +420,69 @@ public:
       }
     }
   }
-  void memcpyWorker(int dev_id, int act_id, int set_id, int i) {
-    unsigned id = dev_id * (_settings->qaic_activation_count * _settings->qaic_set_size) + act_id *  _settings->qaic_set_size + set_id;
+  
+  void memcpyWorker(int fake_idx, int i) {
     while(true) {
-      copy_mutex[id].lock();
-      memcpy(dest_p[dev_id][act_id][set_id][i], src_p[dev_id][act_id][set_id][i], copy_size[dev_id][act_id][set_id][i]);
-      copy_finished[dev_id][act_id][set_id][i] = true;
+      copy_mutex[fake_idx][i].lock();
+      uint8_t *src = copy_src[fake_idx][i];
+      uint8_t *dest = copy_dest[fake_idx][i];
+      size_t size = copy_size[fake_idx][i];
+#if defined(__amd64__) && defined(ENABLE_ZEN2)
+      __m128i *srca =  reinterpret_cast< __m128i*>(src);
+      __m128i *desta = reinterpret_cast<__m128i*>(dest);
+      int64_t vectors = size / sizeof(*srca);
+      for (; vectors > 0; vectors--, srca++, desta++) {
+        const __m128i loaded = _mm_stream_load_si128(srca);
+        _mm_stream_si128(desta, loaded);
+      }
+      unsigned rem = size%sizeof(*srca);
+      if(rem > 0) {
+        memcpy((uint8_t*)desta, (uint8_t*)srca, rem);
+      }
+      _mm_sfence();
+#else
+      memcpy(dest, src, size);
+#endif
+      copy_finished[fake_idx][i] = true;
     }
   }
+
 #if defined(G292) || defined(R282)
   void get_random_images_worker(int fake_idx) {
     int dev_cnt =  _settings->qaic_device_count;
     int dev_idx = fake_idx;
     while(dev_idx - dev_cnt >= 0)
      dev_idx -= dev_cnt;
-/*#define NCT 4
-    for(int i = 0; i < NCT; i++) {
-      copy_mutex[i].lock();
-      std::thread t(&Benchmark::memcpyWorker, this, i);
+    for(int i = 0; i < _settings->qaic_batch_size; i++) {
+      copy_mutex[fake_idx][i].lock();
+      std::thread t(&Benchmark::memcpyWorker, this, fake_idx, i);
       t.detach();
-    }*/
+    }
 
     while(true) {
       get_random_images_mutex[fake_idx].lock();
       const std::vector<mlperf::QuerySample> &samples = *get_random_images_samples[fake_idx];
       const int act_idx = get_random_images_act_idx[fake_idx];
       const int set_idx = get_random_images_set_idx[fake_idx];
-      unsigned id = dev_idx * (_settings->qaic_activation_count * _settings->qaic_set_size) + act_idx *  _settings->qaic_set_size + set_idx;
       for (int i = 0; i < samples.size(); ++i) {
         TInputDataType *ptr =
           ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
           i * _settings->image_size_width() * _settings->image_size_height() *
               _settings->num_channels();
-    uint8_t *uint8_source = static_cast<uint8_t *>( _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->data());
-    uint8_t *uint8_target = reinterpret_cast<uint8_t *>(ptr);
-    size_t size =  _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->size();
-    //int i;
-    //for(i = 0; i < NCT; i++) {
-      src_p[dev_idx][act_idx][set_idx][i] = uint8_source;// + i*(size/NCT);
-      dest_p[dev_idx][act_idx][set_idx][i] = uint8_target;// + i*(size/NCT);
-      copy_size[dev_idx][act_idx][set_idx][i] = size;
-      copy_finished[dev_idx][act_idx][set_idx][i] = false;
-     // std::cout <<(uint64_t)src_p[i]<<" "<<(uint64_t)dest_p[i]<<" "<<copy_size[i]<<"\n";
-     // memcpy(dest_p[i], src_p[i], copy_size[i]);
-      copy_mutex[id].unlock();
+        uint8_t *uint8_source = static_cast<uint8_t *>( _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->data());
+        uint8_t *uint8_target = reinterpret_cast<uint8_t *>(ptr);
+        size_t size =  _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->size()*sizeof(uint8_t);
+        copy_src[fake_idx][i] = uint8_source;
+        copy_dest[fake_idx][i] = uint8_target;
+        copy_size[fake_idx][i] = size;
+        copy_finished[fake_idx][i] = false;
+        copy_mutex[fake_idx][i].unlock();
     
-    //if(size%NCT)    
-      //memcpy(uint8_target+i*(size/NCT), uint8_source+i*(size/NCT), size%NCT);
-    //memcpy(uint8_target, uint8_source, size);
-    //    _in_converter->convert(
-      //    _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
       }
-    for(int i = 0; i < _settings->qaic_batch_size; i++) {
-      while(!copy_finished[dev_idx][act_idx][set_idx][i]);
-//        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
-    }
+      for(int i = 0; i < _settings->qaic_batch_size; i++) {
+        while(!copy_finished[fake_idx][i])
+          std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+      }
       get_random_images_finished[fake_idx] = true;
       get_random_images_mutex2[fake_idx].unlock();
     }
@@ -547,7 +491,7 @@ public:
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
     int dev_cnt =  _settings->qaic_device_count;
-    const int CTN = 16;// _settings->copy_threads_per_device;
+    const int CTN = _settings->copy_threads_per_device;
     get_random_images_mutex3[dev_idx].lock();
     const int turn = (get_random_images_turn[dev_idx]+1)%CTN;
     const int fake_idx = turn*dev_cnt + dev_idx;
@@ -575,10 +519,11 @@ public:
           i * _settings->image_size_width() * _settings->image_size_height() *
               _settings->num_channels();
       _in_converter->convert(
-          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
+          _in_batch[0][session->idx2loc[samples[i].index]].get(), ptr);
     }
   }
 #endif
+
   virtual void *get_img_ptr(int dev_idx, int img_idx) {
 #if !defined(G292) && !defined(R282)
     return _in_batch[0][session->idx2loc[img_idx]].get()->data();
@@ -736,11 +681,11 @@ private:
   std::vector<int> get_random_images_finished;
   std::vector<int> get_random_images_turn;
 
-  std::vector<std::vector<std::vector<std::vector<uint8_t *>>>> src_p;
-  std::vector<std::vector<std::vector<std::vector<uint8_t *>>>> dest_p;
-  std::vector<std::vector<std::vector<std::vector<size_t>>>> copy_size;
-  std::vector<std::vector<std::vector<std::vector<bool>>>> copy_finished;
-  std::mutex copy_mutex[16*16*8*8];
+  uint8_t* copy_src[256][8];
+  uint8_t* copy_dest[256][8];
+  size_t copy_size[256][8];
+  bool copy_finished[256][8];
+  std::mutex copy_mutex[256][8];
 
 
   std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >
@@ -779,23 +724,8 @@ public:
 
 
   void convert(ImageData *source, void *target) {
-#if defined(__amd64__) && defined(ENABLE_ZEN2)
-    const __m256i *src =  reinterpret_cast<const __m256i*>((((uint64_t)source->data()+31)/32)*32);
-    if((uint64_t)src % 32)
-    std::cout<<(uint64_t) src<<"\n";
-    __m256i *dest = reinterpret_cast<__m256i*>((((uint64_t)target+31)/32)*32);
-    int64_t vectors = source->size() / sizeof(*src);
-    for (; vectors > 0; vectors--, src++, dest++) {
-      const __m256i loaded = _mm256_stream_load_si256(src);
-      _mm256_stream_si256(dest, loaded);
-    }
-    _mm_sfence();
-#else
-    uint8_t *uint8_source = static_cast<uint8_t *>(source->data());
     uint8_t *uint8_target = static_cast<uint8_t *>(target);
-    size_t size = source->size();
-    memcpy(target, source, size);
-#endif
+    std::copy(source->data(), source->data() + source->size(), uint8_target);
   }
 };
 
@@ -805,11 +735,11 @@ class OutCopy {
 public:
   OutCopy(BenchmarkSettings *s) : _settings(s) {
 
-    std::vector<int> exclude{ 12, 26, 29, 30, 45, 66, 68, 69, 71, 83 };
+   /* std::vector<int> exclude{ 12, 26, 29, 30, 45, 66, 68, 69, 71, 83 };
 
     for (int i = 0; i < 100; ++i)
       if (std::find(exclude.begin(), exclude.end(), i) == exclude.end())
-        class_map.push_back(i);
+        class_map.push_back(i);*/
   }
 
   void convert(int img_idx, const float *boxes, const int64_t *classes,
@@ -818,7 +748,7 @@ public:
                std::vector<std::string> model_classes,
                bool correct_background) const {
 
-    float *buffer = target->data();
+   /* float *buffer = target->data();
     target->set_size(num * 7);
 
     auto img_data = _settings->list_of_available_imagefiles()[img_idx];
@@ -841,7 +771,7 @@ public:
                   << class_map[int(classes[i])] << std::endl;
 
       buffer += 7;
-    }
+    }*/
   }
 
 private:

@@ -550,7 +550,9 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
   }
 
-  setData();
+  if (!std::getenv("QAIC_BYPASS_PPP")) {
+    setData();
+  }
 
   return QS_SUCCESS;
 }
