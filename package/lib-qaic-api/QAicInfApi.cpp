@@ -530,6 +530,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
     if (std::getenv("QAIC_BYPASS_PPP")) {
       numBuffers = ioDescProto.dma_buf_size();
+      ioDescQData.data = nullptr;
     }
     std::shared_ptr<ActivationSet> shActivation =
         std::make_shared<ActivationSet>(ioDescQData,
@@ -538,7 +539,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
             execObjProperties_, i, callback_);
     if (shActivation != nullptr) {
       shActivation->init(setSize_);
-      shActivationSets_.emplace_back(std::move(shActivation));
+      shActivationSets_.emplace_back(shActivation);
     }
 
     // Create IO buffers
@@ -554,13 +555,14 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   return QS_SUCCESS;
 }
 
-QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::shared_ptr<ActivationSet>& shActivation) {
+QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::shared_ptr<ActivationSet> shActivation) {
 
   inferenceBuffersList_.resize(inferenceBuffersList_.size() + 1);
 
   inferenceBuffersList_[idx].resize(setSize_);
   if (std::getenv("QAIC_BYPASS_PPP")) {
     for (uint32_t y = 0; y < setSize_; y++) {
+      
       QBuffer* dmaBuffVect = shActivation->getDmaBuffers(y);
       aicapi::IoSet ioSet;
       for (int i = 0; i < ioDescProto.io_sets_size(); i++) {

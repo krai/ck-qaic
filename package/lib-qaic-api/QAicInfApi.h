@@ -88,7 +88,7 @@ public:
   QStatus init(QID qid, QAicEventCallback callback);
   QStatus loadDataset();
   QStatus setData();
-  QStatus createBuffers(int idx, aicapi::IoDesc& ioDescProto,  std::shared_ptr<qaic_api::ActivationSet>&);
+  QStatus createBuffers(int idx, aicapi::IoDesc& ioDescProto,  std::shared_ptr<qaic_api::ActivationSet>);
 
   QStatus run(uint32_t activation, uint32_t execobj, void* payload);
 
