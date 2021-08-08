@@ -168,7 +168,7 @@ private:
   std::thread scheduler;
 
   static int num_setup_threads;
-  static Payload* payloads[64];
+  static std::atomic<Payload*> payloads[256];
 };
 
 class SystemUnderTestQAIC : public mlperf::SystemUnderTest {

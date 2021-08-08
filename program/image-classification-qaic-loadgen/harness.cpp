@@ -93,12 +93,15 @@ Program::Program() {
     unsigned coreid = OFFSET+ ((d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8); 
    // for(int j = 0; j < 1; j++)
     CPU_SET(coreid, &cpuset);
-     // CPU_SET(coreid+1, &cpuset);
-    CPU_SET(coreid+2, &cpuset);
+    CPU_SET(coreid+1, &cpuset);
+  //    CPU_SET(coreid+4, &cpuset);
+      //CPU_SET(coreid+2, &cpuset);
       //CPU_SET(coreid+3, &cpuset);
-    CPU_SET(coreid+4, &cpuset);
+    //CPU_SET(coreid+3, &cpuset);
+      //CPU_SET(coreid+3, &cpuset);
+    //CPU_SET(coreid+4, &cpuset);
       //CPU_SET(coreid+5, &cpuset);
-    CPU_SET(coreid+6, &cpuset);
+    //CPU_SET(coreid+6, &cpuset);
       //CPU_SET(coreid+7, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
@@ -167,10 +170,11 @@ Program::Program() {
 
 #ifdef G292
   if(settings -> input_select == 0)
-    num_setup_threads = 32;
+    num_setup_threads = 128;
   else
-    num_setup_threads = 3; //to be investigated if this can go higher
+    num_setup_threads = 64; //to be investigated if this can go higher
 #endif
+    num_setup_threads = 192;
 
 //std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
@@ -183,9 +187,12 @@ Program::Program() {
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     //CPU_SET(i*4, &cpuset);
-    CPU_SET(i*4+1, &cpuset);
+    if(i%16 <= 7)
+    CPU_SET(64+(i%16)*8+(i/16)%2, &cpuset);
+    else
+    CPU_SET(-64+(i%16)*8+(i/16)%2, &cpuset);
     //CPU_SET(i*4+2, &cpuset);
-    //   pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();
@@ -236,7 +243,7 @@ void Program::ColdRun() {
 void Program::Inference(std::vector<mlperf::QuerySample> samples) {
 
   while (sback >= sfront + samples_queue_len)
-    std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
   samples_queue[sback % samples_queue_len] = samples;
   ++sback;
@@ -246,7 +253,6 @@ void Program::EnqueueShim(int id) {
   while(!terminate) {
     if(payloads[id] != nullptr) {
       Payload* p = Program::payloads[id];
-
 
       // set the images
       if (settings->input_select == 0) {
@@ -278,8 +284,6 @@ void Program::QueueScheduler() {
   // current activation index
   int activation = -1;
 
-  int round_robin = 0;
-
   std::vector<mlperf::QuerySample> qs(settings->qaic_batch_size);
 
   while (!terminate) { // loop forever waiting for images
@@ -288,6 +292,7 @@ void Program::QueueScheduler() {
     if (sfront == sback) {
       // No samples then continue
       mtx_queue.unlock();
+      std::this_thread::sleep_for(std::chrono::nanoseconds(5));
       continue;
     }
 
@@ -298,12 +303,12 @@ void Program::QueueScheduler() {
     if(settings->verbosity_server)
       std::cout << "<" << sback - sfront << ">";
     mtx_queue.unlock();
-
+    unsigned round = 0;
     while (!terminate) {
-
+      if(activation + 1 == activation_count) round = (round +1)%(num_setup_threads/activation_count);
       activation = (activation + 1) % activation_count;
 
-      Payload *p = ring_buf[activation]->getPayload();
+      Payload * p = ring_buf[activation]->getPayload();
 
 #if !defined(G292) && !defined(R282)
       std::this_thread::sleep_for(std::chrono::nanoseconds(500));
@@ -311,21 +316,18 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(50));
         continue;
       }
 
       // add the image samples to the payload
       p->samples = qs;
 
-      while(Program::payloads[round_robin] != nullptr){
-        std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+      while(Program::payloads[round*activation_count +activation] != nullptr){
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       }
 
-      Program::payloads[round_robin] = p;
-
-      //std::cout << " " << round_robin;
-      round_robin = (round_robin+1)%num_setup_threads;
+      Program::payloads[round*activation_count+activation] = p;
 
       break;
     }
@@ -394,7 +396,7 @@ std::mutex Program::mtx_queue;
 std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
 
 #ifdef G292
-int Program::samples_queue_len = 16384;
+int Program::samples_queue_len = 4096;
 #else
 int Program::samples_queue_len = 4096;
 #endif
@@ -406,7 +408,7 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-Payload* Program::payloads[64] = {nullptr};
+std::atomic <Payload*> Program::payloads[256];
 
 int Program::num_setup_threads = 0;
 
@@ -429,20 +431,24 @@ SystemUnderTestQAIC::SystemUnderTestQAIC(Program *_prg,
   if (scenario == mlperf::TestScenario::Server) {
     terminate = false;
     scheduler = std::thread(&SystemUnderTestQAIC::ServerModeScheduler, this);
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(7, &cpuset);
+    pthread_setaffinity_np(scheduler.native_handle(), sizeof(cpu_set_t), &cpuset);
+    scheduler.detach();
   }
 };
 
 SystemUnderTestQAIC::~SystemUnderTestQAIC() {
   if (scenario == mlperf::TestScenario::Server) {
     terminate = true;
-    scheduler.join();
   }
 }
 
 void SystemUnderTestQAIC::ServerModeScheduler() {
 
-  prev = std::chrono::steady_clock::now();
   std::chrono::microseconds max_wait = std::chrono::microseconds(prg->settings->max_wait);
+  prev = std::chrono::steady_clock::now();
 
    // mtx_samples_queue.lock();
   while(!terminate) {
@@ -451,7 +457,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
     int qlen = samples_queue.size();
     if(qlen == 0){
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     continue;
     }
     auto now = std::chrono::steady_clock::now();
@@ -464,7 +470,7 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
       prev = now;
     }
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(50));
   }
 }
 

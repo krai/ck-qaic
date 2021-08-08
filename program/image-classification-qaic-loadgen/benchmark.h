@@ -265,36 +265,6 @@ public:
     int dev_cnt =  settings->qaic_device_count;
     _in_batch.resize(dev_cnt);
     _out_batch.resize(dev_cnt);
-#if defined(G292) || defined(R282)
-    if(settings -> input_select == 0) {
-      unsigned OFFSET = 0;
-      const int CTN = settings -> copy_threads_per_device;
-      get_random_images_samples.resize(CTN*dev_cnt);
-      get_random_images_act_idx.resize(CTN*dev_cnt);
-      get_random_images_set_idx.resize(CTN*dev_cnt);
-      get_random_images_finished.resize(CTN*dev_cnt);
-      get_random_images_turn.resize(dev_cnt);
-    
-      for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
-        get_random_images_turn[dev_idx]=0;
-#ifdef R282
-        if(dev_idx == 4) OFFSET = 4;
-#endif
-  
-        unsigned coreid = OFFSET + ((dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8);
-        for (int i = 0; i < CTN; i++) {
-          cpu_set_t cpuset;
-          get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
-          std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
-      
-          CPU_ZERO(&cpuset);
-          CPU_SET(coreid+i, &cpuset);
-          pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-          t.detach();
-        }
-      }
-    }
-#endif
   }
   
   void load_images_locally(int d) {
@@ -358,54 +328,9 @@ public:
       }
     }
   }
+  
 
-#if defined(G292) || defined(R282)
-  void get_random_images_worker(int fake_idx) {
-    int dev_cnt =  _settings->qaic_device_count;
-    int dev_idx = fake_idx;
-    while(dev_idx - dev_cnt >= 0)
-     dev_idx -= dev_cnt;
-    while(true) {
-      get_random_images_mutex[fake_idx].lock();
-      const std::vector<mlperf::QuerySample> &samples = *get_random_images_samples[fake_idx];
-      const int act_idx = get_random_images_act_idx[fake_idx];
-      const int set_idx = get_random_images_set_idx[fake_idx];
-      for (int i = 0; i < samples.size(); ++i) {
-        TInputDataType *ptr =
-          ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
-          i * _settings->image_size * _settings->image_size *
-              _settings->num_channels;
-        _in_converter->convert(
-          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
-      }
-      get_random_images_finished[fake_idx] = true;
-      get_random_images_mutex2[fake_idx].unlock();
-    }
-  }
 
-  void get_random_images(const std::vector<mlperf::QuerySample> &samples,
-                         int dev_idx, int act_idx, int set_idx) override {
-    int dev_cnt =  _settings->qaic_device_count;
-    const int CTN =  _settings->copy_threads_per_device;
-    get_random_images_mutex3[dev_idx].lock();
-    const int turn = (get_random_images_turn[dev_idx]+1)%CTN;
-    const int fake_idx = turn*dev_cnt + dev_idx;
-    get_random_images_turn[dev_idx] = turn;
-    get_random_images_mutex3[dev_idx].unlock();
-    get_random_images_mutex2[fake_idx].lock();
-    get_random_images_samples[fake_idx] = &samples;
-    get_random_images_act_idx[fake_idx] = act_idx;
-    get_random_images_set_idx[fake_idx] = set_idx;
-
-    get_random_images_finished[fake_idx] = false;
-    get_random_images_mutex[fake_idx].unlock();
-    while(true) {
-      if(get_random_images_finished[fake_idx])
-        return;
-      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-    }
-  }
-#else
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
     for (int i = 0; i < samples.size(); ++i) {
@@ -413,11 +338,15 @@ public:
           ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
           i * _settings->image_size * _settings->image_size *
               _settings->num_channels;
+#if !defined(G292) || defined(R282)
       _in_converter->convert(
           _in_batch[0][session->idx2loc[samples[i].index]].get(), ptr);
+#else
+      _in_converter->convert(
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
+#endif
     }
   }
-#endif
 
   virtual void *get_img_ptr(unsigned dev_idx, int img_idx) {
 #ifdef G292
@@ -459,14 +388,6 @@ private:
   std::vector<std::unique_ptr<ResultData>*> _out_batch;
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
-  std::mutex get_random_images_mutex[256];
-  std::mutex get_random_images_mutex2[256];
-  std::mutex get_random_images_mutex3[16];
-  std::vector<const std::vector<mlperf::QuerySample>*> get_random_images_samples;
-  std::vector<int> get_random_images_act_idx;
-  std::vector<int> get_random_images_set_idx;
-  std::vector<int> get_random_images_finished;
-  std::vector<int> get_random_images_turn;
 
 };
 
@@ -485,6 +406,7 @@ public:
   InCopy(const BenchmarkSettings *s) {}
 
   inline void convert(const ImageData *source, void *target) {
+
 #if defined(__amd64__) && defined(ENABLE_ZEN2)
     const __m256i *src =  reinterpret_cast<const __m256i*>(source->data());
     __m256i *dest = reinterpret_cast<__m256i*>(target);
