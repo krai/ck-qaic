@@ -271,7 +271,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "ssd_resnet34.aedk_20w.<<<scenario>>>"
+          "<<<model>>>.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -283,7 +283,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "ssd_resnet34.aedk_20w.<<<scenario>>>"
+          "<<<model>>>.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -295,7 +295,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "ssd_resnet34.aedk_15w.<<<scenario>>>"
+          "<<<model>>>.aedk_15w.<<<scenario>>>"
         ],
         "recommended_activation_count": "8",
         "recommended_batch_size": "1",
@@ -312,7 +312,7 @@
         ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "ssd_resnet34.pcie.16nsp"
+          "<<<model>>>.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -330,7 +330,7 @@
         ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "ssd_resnet34.pcie.16nsp"
+          "<<<model>>>.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -342,7 +342,7 @@
         "ck_benchmark_prefix": "numactl --interleave=all",
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "ssd_resnet34.pcie.16nsp"
+          "<<<model>>>.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -354,7 +354,7 @@
         "ck_benchmark_prefix": "numactl --interleave=all",
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "ssd_resnet34.pcie.16nsp"
+          "<<<model>>>.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
