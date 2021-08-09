@@ -146,11 +146,15 @@ public:
     std::cout << "MAX WAIT = " << max_wait << std::endl;
 
     try {
+#ifdef MODEL_R34
       std::string model_dataset_type =
           getenv_s("CK_ENV_ONNX_MODEL_DATASET_TYPE");
       if (model_dataset_type != "coco") {
         throw("Unsupported model dataset type: " + model_dataset_type);
       }
+#else
+      std::string model_dataset_type = "coco";
+#endif
 
       std::stringstream ss_ids(qaic_hw_ids_str);
       while( ss_ids.good() )
