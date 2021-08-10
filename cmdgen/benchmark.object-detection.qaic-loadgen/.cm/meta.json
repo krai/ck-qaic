@@ -237,7 +237,7 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
-        "input_select": "1",
+        "input_select": "0",
         "performance_mode_extension": ""
       },
       "range_singlestream": {
@@ -251,7 +251,7 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server",
-        "input_select": "1",
+        "input_select": "0",
         "performance_mode_extension": ""
       },
       "singlestream": {
@@ -351,7 +351,7 @@
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_benchmark_prefix": "numactl --localalloc",
         "compiler_tags": "gcc,v10",
         "model_tags": [
           "<<<model>>>.pcie.16nsp"
