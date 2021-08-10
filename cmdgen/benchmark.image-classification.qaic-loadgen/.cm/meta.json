@@ -135,6 +135,7 @@
           "--env.CK_MLPERF_ACCURACY_IMAGENET_TYPE=float32",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=1",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
         ],
@@ -207,7 +208,7 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "performance_mode_extension": ""
       },
       "range_singlestream": {
