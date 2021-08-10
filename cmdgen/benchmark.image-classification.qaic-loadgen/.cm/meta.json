@@ -382,7 +382,7 @@
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
-    "threads_per_queue": "8",
+    "threads_per_queue": "2",
     "verbosity": "<<<recommended_verbosity>>>",
     "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
