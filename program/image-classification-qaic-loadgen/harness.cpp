@@ -316,7 +316,8 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(50));
+        if(getSUT() -> getTestScenario() !=  mlperf::TestScenario::Server) 
+          std::this_thread::sleep_for(std::chrono::nanoseconds(50));
         continue;
       }
 
@@ -395,11 +396,7 @@ std::vector<RingBuffer *> Program::ring_buf;
 std::mutex Program::mtx_queue;
 std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
 
-#ifdef G292
 int Program::samples_queue_len = 4096;
-#else
-int Program::samples_queue_len = 4096;
-#endif
 
 unique_ptr<IBenchmark> Program::benchmark;
 

@@ -145,6 +145,10 @@ public:
   const int images_in_memory_max();
 
   static void setSUT(SystemUnderTestQAIC *s);
+  
+  static SystemUnderTestQAIC* getSUT() {
+    return sut;
+  }
 
   static BenchmarkSettings *settings;
 
@@ -185,6 +189,10 @@ public:
 
   void QueryResponse(std::vector<mlperf::QuerySample> &samples,
                      std::vector<int> results);
+
+  mlperf::TestScenario getTestScenario() {
+    return scenario;
+  }
 
   void FlushQueries() override;
 
