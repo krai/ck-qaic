@@ -309,7 +309,7 @@
     "ssd_mobilenet.aedk_20w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "4",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       },
       "extra_tags": [
         "bs.4"
@@ -318,7 +318,7 @@
     "ssd_mobilenet.aedk_20w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       },
       "extra_tags": [
         "bs.1"
@@ -327,7 +327,7 @@
     "ssd_mobilenet.aedk_15w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "4",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       },
       "extra_tags": [
         "bs.4"
@@ -336,7 +336,7 @@
     "ssd_mobilenet.aedk_15w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
       },
       "extra_tags": [
         "bs.1"
