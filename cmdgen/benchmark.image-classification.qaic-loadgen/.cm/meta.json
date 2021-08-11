@@ -20,6 +20,9 @@
       "division.<<<division>>>",
       "task.image-classification",
       "platform.<<<sut>>>",
+      "inference_engine.<<<inference_engine>>>",
+      "inference_engine_version.<<<inference_engine_version>>>",
+      "inference_engine_backend.<<<inference_engine_backend>>>",
       "scenario.<<<scenario>>>",
       "mode.<<<mode>>>",
       "workload.<<<workload>>>",
@@ -33,6 +36,9 @@
       "<<<division>>>",
       "<<<sut>>>",
       "<<<library>>>",
+      "<<<inference_engine>>>",
+      "<<<inference_engine_version>>>",
+      "<<<inference_engine_backend>>>",
       "<<<model_readable>>>",
       "<<<scenario>>>",
       "<<<mode>>><<<mode_extension>>>"
@@ -73,9 +79,6 @@
     },
     "sdk": {
       "###": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "image-classification-qaic-loadgen",
         "library": "qaic-v###-aic100",
         "inference_engine": "qaic",
         "inference_engine_version": "v###",
@@ -84,22 +87,14 @@
     },
     "library": {
       "qaic-v1.4.00-aic100": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "image-classification-qaic-loadgen",
         "inference_engine": "qaic",
         "inference_engine_version": "v1.4.00",
         "inference_engine_backend": "aic100"
       },
       "qaic-v1.3.14-aic100": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "image-classification-qaic-loadgen",
-        "record_tags": [
-          "inference_engine.qaic",
-          "inference_engine_version.v1.3.14",
-          "inference_engine_backend.aic100"
-        ]
+        "inference_engine": "qaic",
+        "inference_engine_version": "v1.3.14",
+        "inference_engine_backend": "aic100"
       }
     },
     "max_query_count": {
@@ -373,6 +368,7 @@
     "power_server_port": "4950",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
+    "program_name": "image-classification-qaic-loadgen",
     "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
     "queue_length": "8",
     "record_tags_inner": "<<<record_tags,>>>",
