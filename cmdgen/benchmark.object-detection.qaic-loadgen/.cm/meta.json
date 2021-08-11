@@ -164,7 +164,7 @@
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
           "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=4",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<ssd_mobilenet_activation_count>>>"
         ],
         "deps": [
           "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
@@ -274,6 +274,7 @@
           "<<<model>>>.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
+        "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
@@ -286,6 +287,7 @@
           "<<<model>>>.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "16",
+        "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
@@ -298,6 +300,7 @@
           "<<<model>>>.aedk_15w.<<<scenario>>>"
         ],
         "recommended_activation_count": "8",
+        "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
@@ -422,6 +425,7 @@
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
+    "ssd_mobilenet_activation_count": "<<<activation_count>>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
