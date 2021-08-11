@@ -421,43 +421,12 @@ public:
     }
   }
   
-  void memcpyWorker(int fake_idx, int i) {
-    while(true) {
-      copy_mutex[fake_idx][i].lock();
-      uint8_t *src = copy_src[fake_idx][i];
-      uint8_t *dest = copy_dest[fake_idx][i];
-      size_t size = copy_size[fake_idx][i];
-#if defined(__amd64__) && defined(ENABLE_ZEN2)
-      __m128i *srca =  reinterpret_cast< __m128i*>(src);
-      __m128i *desta = reinterpret_cast<__m128i*>(dest);
-      int64_t vectors = size / sizeof(*srca);
-      for (; vectors > 0; vectors--, srca++, desta++) {
-        const __m128i loaded = _mm_stream_load_si128(srca);
-        _mm_stream_si128(desta, loaded);
-      }
-      unsigned rem = size%sizeof(*srca);
-      if(rem > 0) {
-        memcpy((uint8_t*)desta, (uint8_t*)srca, rem);
-      }
-      _mm_sfence();
-#else
-      memcpy(dest, src, size);
-#endif
-      copy_finished[fake_idx][i] = true;
-    }
-  }
-
 #if defined(G292) || defined(R282)
   void get_random_images_worker(int fake_idx) {
     int dev_cnt =  _settings->qaic_device_count;
     int dev_idx = fake_idx;
     while(dev_idx - dev_cnt >= 0)
      dev_idx -= dev_cnt;
-    for(int i = 0; i < _settings->qaic_batch_size; i++) {
-      copy_mutex[fake_idx][i].lock();
-      std::thread t(&Benchmark::memcpyWorker, this, fake_idx, i);
-      t.detach();
-    }
 
     while(true) {
       get_random_images_mutex[fake_idx].lock();
@@ -469,19 +438,8 @@ public:
           ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
           i * _settings->image_size_width() * _settings->image_size_height() *
               _settings->num_channels();
-        uint8_t *uint8_source = static_cast<uint8_t *>( _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->data());
-        uint8_t *uint8_target = reinterpret_cast<uint8_t *>(ptr);
-        size_t size =  _in_batch[dev_idx][session->idx2loc[samples[i].index]].get()->size()*sizeof(uint8_t);
-        copy_src[fake_idx][i] = uint8_source;
-        copy_dest[fake_idx][i] = uint8_target;
-        copy_size[fake_idx][i] = size;
-        copy_finished[fake_idx][i] = false;
-        copy_mutex[fake_idx][i].unlock();
-    
-      }
-      for(int i = 0; i < _settings->qaic_batch_size; i++) {
-        while(!copy_finished[fake_idx][i])
-          std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+          _in_converter->convert(
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
       }
       get_random_images_finished[fake_idx] = true;
       get_random_images_mutex2[fake_idx].unlock();
@@ -797,8 +755,34 @@ public:
 
 
   void convert(ImageData *source, void *target) {
-    uint8_t *uint8_target = static_cast<uint8_t *>(target);
-    std::copy(source->data(), source->data() + source->size(), uint8_target);
+    size_t size = source -> size();
+    uint8_t *src = source -> data();
+#if defined(__amd64__) && defined(ENABLE_ZEN2)
+#ifndef MODEL_R34
+      __m128i *srca =  reinterpret_cast< __m128i*>(src);
+      __m128i *desta = reinterpret_cast<__m128i*>(target);
+      int64_t vectors = size / sizeof(*srca);
+      for (; vectors > 0; vectors--, srca++, desta++) {
+        const __m128i loaded = _mm_stream_load_si128(srca);
+        _mm_stream_si128(desta, loaded);
+      }
+#else
+      __m256i *srca =  reinterpret_cast< __m256i*>(src);
+      __m256i *desta = reinterpret_cast<__m256i*>(target);
+      int64_t vectors = size / sizeof(*srca);
+      for (; vectors > 0; vectors--, srca++, desta++) {
+        const __m256i loaded = _mm256_stream_load_si256(srca);
+        _mm256_stream_si256(desta, loaded);
+      }
+#endif
+      unsigned rem = size%sizeof(*srca);
+      if(rem > 0) {
+        memcpy((uint8_t*)desta, (uint8_t*)srca, rem);
+      }
+      _mm_sfence();
+#else
+      memcpy(target, src, size);
+#endif
   }
 };
 
