@@ -1,6 +1,7 @@
 {
   "accu_init": {
     "ck_env": [
+      "--env.ML_MODEL_MODEL_NAME=<<<hyphenated_model_name>>>",
       "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
       "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
@@ -131,7 +132,6 @@
       "ssd_resnet34": {
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_R34",
-          "--env.ML_MODEL_MODEL_NAME=ssd-resnet34",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
@@ -145,6 +145,7 @@
           "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full"
         ],
         "division": "closed",
+        "hyphenated_model_name": "ssd-resnet34",
         "model_tags": [
           "###"
         ],
@@ -152,7 +153,6 @@
       },
       "ssd_mobilenet": {
         "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=ssd-mobilenet",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=8",
@@ -170,6 +170,7 @@
           "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
         ],
         "division": "closed",
+        "hyphenated_model_name": "ssd-mobilenet",
         "model_tags": [
           "###"
         ],
