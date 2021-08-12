@@ -268,7 +268,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <pre>
 &dollar; export CK_PYTHON=/usr/bin/python3
 &dollar; &dollar;CK_PYTHON -m pip install --user --upgrade \
-  wheel
+  wheel pyyaml onnx-simplifier
 </pre>
 
 #### Install explicit dependencies via CK (also via `pip`, but register with CK at the same time)
@@ -280,6 +280,10 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,absl
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,cython
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,opencv-python-headless
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,matplotlib
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,onnx --force_version=1.8.1
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,torch --force_version=1.8.1
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=tool,coco
 </pre>
 
 
