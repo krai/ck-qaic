@@ -2,6 +2,7 @@
   "accu_init": {
     "ck_env": [
       "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
+      "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
       "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
       "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
@@ -25,6 +26,7 @@
       "inference_engine_backend.<<<inference_engine_backend>>>",
       "scenario.<<<scenario>>>",
       "mode.<<<mode>>>",
+      "buffer_size.<<<buffer_size>>>",
       "workload.<<<workload>>>",
       "<<<preprocessed_tag>>>",
       "input_select.<<<input_select>>>",
@@ -41,18 +43,12 @@
       "<<<inference_engine_backend>>>",
       "<<<model_readable>>>",
       "<<<scenario>>>",
-      "<<<mode>>><<<mode_extension>>>"
+      "<<<mode>>><<<mode_extension>>>",
+      "buffer_size.<<<buffer_size>>>"
     ],
     "shell_preamble": []
   },
   "build_map": {
-    "buffer_size": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_BUFFER_SIZE=###",
-        "record_tags": "buffer_size.###",
-        "record_uoa_parts": "buffer_size.###"
-      }
-    },
     "compile": {
       "yes": {
         "shell_wrapped_cmd": "<<<ck_compile_program>>>"
@@ -139,6 +135,7 @@
         "model_tags": [
           "###"
         ],
+        "recommended_buffer_size": "1024",
         "workload": "###"
       }
     },
@@ -152,13 +149,6 @@
     "no_record": {
       "yes": {
         "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"
-      }
-    },
-    "performance_sample_count_override": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_BUFFER_SIZE=###",
-        "record_tags": "buffer_size.###",
-        "record_uoa_parts": "buffer_size.###"
       }
     },
     "power": {
@@ -356,6 +346,7 @@
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
+    "buffer_size": "<<<recommended_buffer_size>>>",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
