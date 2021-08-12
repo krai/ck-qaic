@@ -239,7 +239,7 @@
       "range_singlestream": {
         "activation_count": "1",
         "batch_size": "1",
-        "singlestream_suffix": "<<<recommended_singlestream_suffix>>>",
+        "singlestream_suffix": ".singlestream",
         "ssd_mobilenet_batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "0",
