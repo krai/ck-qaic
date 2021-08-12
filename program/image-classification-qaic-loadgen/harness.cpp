@@ -174,7 +174,12 @@ Program::Program() {
   else
     num_setup_threads = 64; //to be investigated if this can go higher
 #endif
+    
+#ifdef __amd64__
     num_setup_threads = 192;
+#else
+    num_setup_threads = 2;
+#endif
 
 //std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
