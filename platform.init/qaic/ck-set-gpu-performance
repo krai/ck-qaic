@@ -27,6 +27,6 @@ request="{ \
 for device_id in $device_ids
 do
     echo "${request/DEVICE_ID/$device_id}" > request.json
-#    sudo /opt/qti-aic/tools/qaic-monitor-json -i request.json
+    sudo /opt/qti-aic/tools/qaic-monitor-json -i request.json
     rm request.json
 done
