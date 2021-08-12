@@ -398,7 +398,7 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 </pre>
 
 
-##### Compile and install the models to the 8 NSP AEDKs
+##### Compile and install the models to the 15W AEDK
 
 ###### Offline
 <pre>
@@ -420,7 +420,7 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 --env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
 </pre>
 
-##### Compile and install the models to the 16 NSP AEDK
+##### Compile and install the models to the 20W AEDK
 
 ###### Offline
 <pre>
@@ -439,6 +439,61 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
 --dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk_20w.singlestream \
+--env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
+</pre>
+
+<a name="prepare_workload_compile_ssd_mobilenet"></a>
+#### SSD-MobileNet
+
+##### Compile the Server/Offline model for the PCIe server cards
+
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp
+</pre>
+
+
+##### Compile and install the models to the 15W AEDK
+
+###### Offline
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.offline
+
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
+--dep_add_tags.model-qaic=ssd_mobilenet,ssd_mobilenet.aedk_15w.offline \
+--env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
+</pre>
+
+###### SingleStream
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.singlestream
+
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
+--dep_add_tags.model-qaic=ssd_mobilenet,ssd_mobilenet.aedk_15w.singlestream \
+--env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
+</pre>
+
+##### Compile and install the models to the 20W AEDK
+
+###### Offline
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.offline
+
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
+--dep_add_tags.model-qaic=ssd_mobilenet,ssd_mobilenet.aedk_20w.offline \
+--env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
+</pre>
+
+##### SingleStream
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.singlestream
+
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
+--dep_add_tags.model-qaic=ssd_mobilenet,ssd_mobilenet.aedk_20w.singlestream \
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 
