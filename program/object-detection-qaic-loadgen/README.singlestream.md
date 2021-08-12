@@ -43,7 +43,7 @@ mAP=19.870%
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=aedk.16nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=singlestream \
 --mode=performance --target_latency=30 --dataset_size=5000 --buffer_size=64 \
---power=yes --power_server_ip=192.168.0.19 --power_server_port=4951 --sleep_before_ck_benchmark_sec=30
+--power=yes --power_server_ip=192.168.0.19 --power_server_port=4949 --sleep_before_ck_benchmark_sec=30
 </pre>
 
 <a name="submit_aedk_16nsp_singlestream_compliance"></a>
