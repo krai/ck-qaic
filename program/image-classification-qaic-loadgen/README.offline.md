@@ -8,13 +8,9 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=offline \
---mode=accuracy --dataset_size=50000 --buffer_size=5000
-
---------------------------------
-accuracy=75.928%, good=37964, total=50000
-
---------------------------------
+--sut=aedk_20w --sdk=1.5.00 --model=resnet50 --mode=accuracy --scenario=offline
+...
+accuracy=76.002%, good=38001, total=50000
 </pre>
 
 <a name="submit_aedk_20w_offline_performance"></a>
@@ -22,8 +18,7 @@ accuracy=75.928%, good=37964, total=50000
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=offline \
---mode=performance --target_qps=100000 --dataset_size=50000 --buffer_size=1024
+--sut=aedk_20w --sdk=1.5.00 --model=resnet50 --mode_performance --scenario=offline --target_qps=9666 
 </pre>
 
 <a name="submit_aedk_20w_offline_power"></a>
@@ -31,9 +26,8 @@ accuracy=75.928%, good=37964, total=50000
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=offline \
---mode=performance --target_qps=100000 --dataset_size=50000 --buffer_size=1024 \
---power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
+--sut=aedk_20w --sdk=1.5.00 --model=resnet50 --mode_performance --scenario=offline --target_qps=9666 \
+--power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=60
 </pre>
 
 <a name="submit_aedk_20w_offline_compliance"></a>
@@ -41,8 +35,8 @@ accuracy=75.928%, good=37964, total=50000
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=offline \
---compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_qps=100000 --dataset_size=50000 --buffer_size=1024
+--sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=offline --target_qps=9666 \
+--compliance,=TEST04-A,TEST04-B,TEST05,TEST01
 </pre>
 
 ## Info
