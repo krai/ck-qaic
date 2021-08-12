@@ -8,7 +8,7 @@
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.16nsp --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=singlestream \
+--sut=aedk.16nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=singlestream \
 --mode=accuracy --dataset_size=5000 --buffer_size=500
 ...
  Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.199
@@ -32,7 +32,7 @@ mAP=19.870%
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.16nsp --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=singlestream \
+--sut=aedk.16nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=singlestream \
 --mode=performance --target_latency=30 --dataset_size=5000 --buffer_size=64
 </pre>
 
@@ -41,7 +41,7 @@ mAP=19.870%
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.16nsp --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=singlestream \
+--sut=aedk.16nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=singlestream \
 --mode=performance --target_latency=30 --dataset_size=5000 --buffer_size=64 \
 --power=yes --power_server_ip=192.168.0.19 --power_server_port=4951 --sleep_before_ck_benchmark_sec=30
 </pre>
@@ -51,7 +51,7 @@ mAP=19.870%
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.16nsp --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=singlestream \
+--sut=aedk.16nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=singlestream \
 --compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_latency=30 --dataset_size=5000 --buffer_size=64
 </pre>
 

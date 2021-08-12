@@ -8,7 +8,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=offline \
+--sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --mode=accuracy --dataset_size=5000 --buffer_size=500
 ...
  Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.198
@@ -32,7 +32,7 @@ mAP=19.810%
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=offline \
+--sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --mode=performance --target_qps=1800 --dataset_size=5000 --buffer_size=64
 </pre>
 
@@ -41,7 +41,7 @@ mAP=19.810%
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=offline \
+--sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --mode=performance --target_qps=1800 --dataset_size=5000 --buffer_size=64 \
 --power=yes --power_server_ip=172.24.66.69 --power_server_port=4951 --sleep_before_ck_benchmark_sec=90
 </pre>
@@ -51,7 +51,7 @@ mAP=19.810%
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.8nsp --library=qaic-v1.3.14-aic100 --model=ssd_resnet34 --scenario=offline \
+--sut=aedk.8nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_qps=1800 --dataset_size=5000 --buffer_size=64
 </pre>
 
