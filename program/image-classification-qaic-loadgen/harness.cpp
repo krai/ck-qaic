@@ -90,7 +90,7 @@ Program::Program() {
 #ifdef R282
     if(d == 4) OFFSET = 1;
 #endif
-    unsigned coreid = OFFSET+ ((d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8); 
+    unsigned coreid = OFFSET+ ((d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8);
    // for(int j = 0; j < 1; j++)
     CPU_SET(coreid, &cpuset);
     CPU_SET(coreid+1, &cpuset);
@@ -174,7 +174,7 @@ Program::Program() {
   else
     num_setup_threads = 64; //to be investigated if this can go higher
 #endif
-    
+
 #ifdef __amd64__
     num_setup_threads = 192;
 #else
@@ -322,7 +322,7 @@ void Program::QueueScheduler() {
       // count and then continue
       if (p == nullptr) {
 #ifndef SERVER_MODE
-        if(getSUT() -> getTestScenario() !=  mlperf::TestScenario::Server) 
+        if(getSUT() -> getTestScenario() !=  mlperf::TestScenario::Server)
           std::this_thread::sleep_for(std::chrono::nanoseconds(50));
 #endif
         continue;
