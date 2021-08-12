@@ -381,7 +381,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
 --dep_add_tags.model-qaic=resnet50,resnet50.aedk_15w.offline \
---env.CK_AEDK_IPS="aedk1 aedk2" --env.CK_AEDK_PORTS="3231 3232" --env.CK_AEDK_USER=$USER
+--env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
 </pre>
 
 #### SingleStream
@@ -392,7 +392,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
 --dep_add_tags.model-qaic=resnet50,resnet50.aedk_15w.singlestream \
---env.CK_AEDK_IPS="aedk1 aedk2" --env.CK_AEDK_PORTS="3231 3232" --env.CK_AEDK_USER=$USER
+--env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
 </pre>
 
 ### Compile and install the models to the 16 NSP AEDK
