@@ -10,6 +10,10 @@
     1. [Install Python dependencies](#install_python_deps)
     1. [Install the MLPerf Inference repo](#install_inference_repo)
     1. [Prepare the COCO 2017 validation dataset](#prepare_coco)
+        - [Download](#prepare_coco_download)
+        - [Preprocess](#prepare_coco_preprocess)
+            - [SSD-ResNet34](#prepare_coco_preprocess_ssd_resnet34)
+            - [SSD-MobileNet](#prepare_coco_preprocess_ssd_mobilenet)
     1. [Prepare the SSD-ResNet34 model](#prepare_ssd_resnet34)
 1. [Benchmark](#benchmark)
     1. [Accuracy](#benchmark_accuracy)
@@ -303,7 +307,10 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 <a name="prepare_coco_preprocess"></a>
 ### Preprocess
 
-**NB:** Since the preprocessed COCO dataset takes up 21G, you may wish to change its destination directory by appending `--ask` to the below commands.
+<a name="prepare_coco_preprocess_ssd_resnet34"></a>
+#### SSD-ResNet34
+
+**NB:** Since the preprocessed `1200x1200` COCO dataset takes up 21G, you may wish to change its destination directory by appending `--ask` to the below command.
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package --ask \
@@ -311,6 +318,18 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 --tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
 --extra_tags=using-opencv
 </pre>
+
+
+<a name="prepare_coco_preprocess_ssd_mobilenet"></a>
+#### SSD-MobileNet
+
+<pre>
+<b>[anton@dyson ~]&dollar;</b> ck install package \
+--dep_add_tags.lib-python-cv2=opencv-python-headless \
+--tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full \
+--extra_tags=using-opencv
+</pre>
+
 
 <a name="prepare_ssd_resnet34"></a>
 ## Prepare the SSD-ResNet34 model
