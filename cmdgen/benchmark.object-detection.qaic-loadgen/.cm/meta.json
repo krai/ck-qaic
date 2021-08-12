@@ -60,7 +60,6 @@
         "mode": "performance",
         "mode_extension": "-compliance.###",
         "output_file": "mlperf_log_summary.txt",
-        "recommended_dataset_size": "64",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
@@ -114,7 +113,6 @@
         "ck_env": "--env.CK_LOADGEN_MODE=AccuracyOnly",
         "mode_extension": "-dataset_size.<<<dataset_size>>>-<<<preprocessed_tag>>>",
         "output_file": "accuracy.txt",
-        "recommended_dataset_size": "5000",
         "recommended_buffer_size": "<<<recommended_accuracy_buffer_size>>>",
         "recommended_verbosity": "1"
       },
@@ -122,7 +120,6 @@
         "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
         "mode_extension": "<<<performance_mode_extension>>>",
         "output_file": "mlperf_log_summary.txt",
-        "recommended_dataset_size": "64",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0"
       }
@@ -425,7 +422,7 @@
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
-    "dataset_size": "<<<recommended_dataset_size>>>",
+    "dataset_size": "5000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
     "max_wait": "50000",
