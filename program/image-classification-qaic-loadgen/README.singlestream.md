@@ -31,7 +31,7 @@ accuracy=75.942%, good=37971, total=50000
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.5.00 --model=resnet50 --scenario=singlestream \
 --mode=performance --target_latency=1 --dataset_size=50000 --buffer_size=1024 \
---power=yes --power_server_ip=192.168.0.19 --power_server_port=4949 --sleep_before_ck_benchmark_sec=30
+--power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=30
 </pre>
 
 <a name="submit_aedk_16nsp_singlestream_compliance"></a>

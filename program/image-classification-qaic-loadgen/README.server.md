@@ -28,7 +28,7 @@
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.00 --model=resnet50 --scenario=server \
 --mode=performance --target_qps=78500 --dataset_size=50000 --buffer_size=1024 \
---power=yes --power_server_ip=172.24.66.69 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
+--power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
 </pre>
 
 <a name="submit_r282_z93_q5_server_compliance"></a>

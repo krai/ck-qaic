@@ -43,7 +43,7 @@ mAP=19.810%
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --mode=performance --target_qps=1800 --dataset_size=5000 --buffer_size=64 \
---power=yes --power_server_ip=172.24.66.69 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
+--power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
 </pre>
 
 <a name="submit_r282_z93_q5_offline_compliance"></a>
