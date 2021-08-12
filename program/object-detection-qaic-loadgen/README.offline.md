@@ -51,7 +51,7 @@ mAP=19.810%
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk.8nsp --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
+--sut=aedk_15w --sdk=1.5.00 --model=ssd_resnet34 --scenario=offline \
 --compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_qps=1800 --dataset_size=5000 --buffer_size=64
 </pre>
 
