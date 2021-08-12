@@ -18,7 +18,7 @@ mAP=
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --mode=performance --target_latency=30
+--sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --mode=performance --target_latency=2
 </pre>
 
 <a name="submit_aedk_20w_singlestream_power"></a>
@@ -26,7 +26,7 @@ mAP=
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --mode=performance --target_latency=30 \
+--sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --mode=performance --target_latency=2 \
 --power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=60
 </pre>
 
@@ -35,7 +35,7 @@ mAP=
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --target_latency=30 \
+--sut=aedk_20w --sdk=1.5.00 --model=ssd_mobilenet --scenario=singlestream --target_latency=2 \
 --compliance,=TEST04-A,TEST04-B,TEST05,TEST01
 </pre>
 
