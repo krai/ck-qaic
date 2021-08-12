@@ -6,8 +6,6 @@
       "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
       "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
-      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
       "--env.CK_VERBOSE=<<<verbosity>>>"
     ],
     "deps": [
@@ -133,7 +131,8 @@
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
         ],
@@ -156,9 +155,8 @@
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=8",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=3",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=3",
-          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<ssd_mobilenet_queue_length>>>",
+          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<ssd_mobilenet_threads_per_queue>>>",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
           "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<ssd_mobilenet_batch_size>>>",
@@ -233,7 +231,7 @@
         "singlestream_suffix": "<<<recommended_singlestream_suffix>>>",
         "ssd_mobilenet_batch_size": "<<<recommended_ssd_mobilenet_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
-        "input_select": "0",
+        "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": ""
       },
       "range_singlestream": {
@@ -260,7 +258,7 @@
         "ssd_mobilenet_batch_size": "1",
         "singlestream_suffix": ".singlestream",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "input_select": "0",
+        "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>"
       }
     },
@@ -279,6 +277,9 @@
         "ssd_mobilenet_activation_count": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_ssd_mobilenet_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -293,6 +294,9 @@
         "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "1",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_ssd_mobilenet_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -307,6 +311,9 @@
         "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "1",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_ssd_mobilenet_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -314,6 +321,7 @@
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DG292"
@@ -325,6 +333,9 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "0",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_ssd_mobilenet_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "recommended_queue_length": "8"
       },
@@ -332,6 +343,7 @@
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
@@ -344,6 +356,9 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "0",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_ssd_mobilenet_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "recommended_queue_length": "8"
       },
@@ -351,6 +366,7 @@
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -362,6 +378,9 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "0",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_ssd_mobilenet_queue_length": "3",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -369,6 +388,7 @@
         "all_device_ids": "0",
         "ck_benchmark_prefix": "numactl --localalloc",
          "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -380,8 +400,11 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_input_select": "0",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_ssd_mobilenet_queue_length": "3",
         "recommended_singlestream_suffix": ""
       }
     },
@@ -432,6 +455,7 @@
     "preprocessed_using": "opencv",
     "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
+    "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
@@ -441,6 +465,7 @@
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
+    "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
     "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
