@@ -362,8 +362,27 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 
 ##### SSD-ResNet34
 
+<pre>
+<b>[anton@dyson ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
+--full_path=$(ck find repo:qualcomm-private)/profile/ssd-resnet34/bs.1/profile.yaml \
+--extra_tags=detected,ssd_resnet34
+</pre>
+
 ##### SSD-MobileNet
 
+##### `bs.1`
+<pre>
+<b>[anton@dyson ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
+--full_path=$(ck find repo:qualcomm-private)/profile/ssd-mobilenet/bs.1/profile.yaml \
+--extra_tags=detected,ssd_mobilenet,bs.1
+</pre>
+
+##### `bs.4`
+<pre>
+<b>[anton@dyson ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
+--full_path=$(ck find repo:qualcomm-private)/profile/ssd-mobilenet/bs.4/profile.yaml \
+--extra_tags=detected,ssd_mobilenet,bs.4
+</pre>
 
 <a name="prepare_workload_compile"></a>
 ### Compile the workload
