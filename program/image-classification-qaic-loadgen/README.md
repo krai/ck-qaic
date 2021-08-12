@@ -284,7 +284,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 ## Prepare the ImageNet validation dataset (50,000 images)
 
 <a name="prepare_imagenet_detect"></a>
-###  Detect
+### Detect
 
 Unfortunately, the ImageNet 2012 validation dataset (50,000 images) [cannot be freely downloaded](https://github.com/mlcommons/inference/issues/542).
 If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`, you can register it with CK ("detect") by giving the absolute path to `ILSVRC2012_val_00000001.JPEG` as follows:
@@ -315,7 +315,6 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 </pre>
 
 **NB:** The input tensor's shape gets updated ("fixed") from `?x224x224x3` to `1x224x224x3` to work around a current limitation in the toolchain.
-
 
 
 ### Obtain a profile using [MLPerf calibration option #1](https://github.com/mlcommons/inference/blob/master/calibration/ImageNet/cal_image_list_option_1.txt)

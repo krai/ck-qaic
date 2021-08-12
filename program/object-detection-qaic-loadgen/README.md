@@ -14,7 +14,14 @@
         - [Preprocess](#prepare_coco_preprocess)
             - [SSD-ResNet34](#prepare_coco_preprocess_ssd_resnet34)
             - [SSD-MobileNet](#prepare_coco_preprocess_ssd_mobilenet)
-    1. [Prepare the SSD-ResNet34 model](#prepare_ssd_resnet34)
+    1. [Prepare the workload model](#prepare_workload)
+        - [Calibrate](#prepare_workload_calibrate)
+            - [SSD-ResNet34](#prepare_workload_calibrate_ssd_resnet34)
+            - [SSD-MobileNet](#prepare_workload_calibrate_ssd_mobilenet)
+        - [Compile](#prepare_workload_compile)
+            - [SSD-ResNet34](#prepare_workload_compile_ssd_resnet34)
+            - [SSD-MobileNet](#prepare_workload_compile_ssd_mobilenet)
+
 1. [Benchmark](#benchmark)
     1. [Accuracy](#benchmark_accuracy)
     1. [Performance](#benchmark_performance)
@@ -331,20 +338,40 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 </pre>
 
 
-<a name="prepare_ssd_resnet34"></a>
-## Prepare the SSD-ResNet34 model
+<a name="prepare_workload"></a>
+## Prepare the workload
 
-<a name="prepare_ssd_resnet34_calibrate"></a>
-### Calibrate the model using [AIMET](https://quic.github.io/aimet-pages/index.html)
+<a name="prepare_workload_calibrate"></a>
+### Calibrate the model
 
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
-</pre>
+#### Calibrate on your own
 
 **NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34).
 
+<a name="prepare_workload_calibrate_ssd_resnet34"></a>
+##### SSD-ResNet34
 
-### Compile the Server/Offline model for the PCIe server cards
+**TODO**
+
+<a name="prepare_workload_calibrate_ssd_mobilenet"></a>
+##### SSD-MobileNet
+
+**TODO**
+
+#### Use precalibrated profiles
+
+##### SSD-ResNet34
+
+##### SSD-MobileNet
+
+
+<a name="prepare_workload_compile"></a>
+### Compile the workload
+
+<a name="prepare_workload_compile_ssd_resnet34"></a>
+#### SSD-ResNet34
+
+##### Compile the Server/Offline model for the PCIe server cards
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
@@ -352,9 +379,9 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 </pre>
 
 
-### Compile and install the models to the 8 NSP AEDKs
+##### Compile and install the models to the 8 NSP AEDKs
 
-#### Offline
+###### Offline
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
 --tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_15w.offline
@@ -364,7 +391,7 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 --env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
 </pre>
 
-#### SingleStream
+###### SingleStream
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
 --tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_15w.singlestream
@@ -374,9 +401,9 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 --env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
 </pre>
 
-### Compile and install the models to the 16 NSP AEDK
+##### Compile and install the models to the 16 NSP AEDK
 
-#### Offline
+###### Offline
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
 --tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_20w.offline
@@ -386,7 +413,7 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 
-#### SingleStream
+##### SingleStream
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
 --tags=model,qaic,ssd_resnet34,ssd_resnet34.aedk_20w.singlestream
