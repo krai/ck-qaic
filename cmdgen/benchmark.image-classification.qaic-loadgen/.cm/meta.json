@@ -126,7 +126,6 @@
           "--env.CK_MLPERF_ACCURACY_IMAGENET_TYPE=float32",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=1",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
         ],
@@ -194,7 +193,6 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
-        "recommended_input_select": "0",
         "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
@@ -202,7 +200,6 @@
         "activation_count": "1",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "recommended_input_select": "0",
         "singlestream_suffix": ".singlestream",
         "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
       },
@@ -210,7 +207,6 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>  --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE",
-        "recommended_input_select": "0",
         "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
@@ -218,7 +214,6 @@
         "activation_count": "1",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "recommended_input_select": "0",
         "singlestream_suffix": ".singlestream",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>"
       }
@@ -235,6 +230,9 @@
           "resnet50.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
         "recommended_batch_size": "8"
       },
       "aedk_20w": {
@@ -245,6 +243,9 @@
           "resnet50.aedk_20w.<<<scenario>>>"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
         "recommended_batch_size": "8"
       },
       "aedk_15w": {
@@ -255,12 +256,16 @@
           "resnet50.aedk_15w.<<<scenario>>>"
         ],
         "recommended_activation_count": "1",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
         "recommended_batch_size": "8"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DG292",
@@ -271,12 +276,16 @@
           "resnet50.pcie.16nsp"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
         "recommended_batch_size": "8"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
@@ -287,12 +296,16 @@
           "resnet50.pcie.16nsp"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
         "recommended_batch_size": "8"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --interleave=all",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
@@ -301,12 +314,16 @@
           "resnet50.pcie.16nsp"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
         "recommended_batch_size": "8"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "numactl --interleave=all",
         "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
@@ -315,6 +332,9 @@
           "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
         ],
         "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
         "recommended_batch_size": "8"
       }
     },
@@ -366,7 +386,7 @@
     "preprocessed_using": "opencv",
     "program_name": "image-classification-qaic-loadgen",
     "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
-    "queue_length": "8",
+    "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
@@ -374,7 +394,7 @@
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
-    "threads_per_queue": "2",
+    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
     "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
