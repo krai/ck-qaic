@@ -163,7 +163,7 @@
           "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
           "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=4",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<ssd_mobilenet_batch_size>>>",
           "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<ssd_mobilenet_activation_count>>>"
         ],
         "deps": [
@@ -237,6 +237,7 @@
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
+        "ssd_mobilenet_batch_size": "<<<recommended_ssd_mobilenet_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
         "input_select": "0",
         "performance_mode_extension": ""
@@ -244,6 +245,7 @@
       "range_singlestream": {
         "activation_count": "1",
         "batch_size": "1",
+        "ssd_mobilenet_batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "0",
         "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
@@ -251,13 +253,15 @@
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server",
+        "ssd_mobilenet_batch_size": "<<<recommended_ssd_mobilenet_batch_size>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE",
         "input_select": "0",
         "performance_mode_extension": ""
       },
       "singlestream": {
         "activation_count": "1",
         "batch_size": "1",
+        "ssd_mobilenet_batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "0",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>"
@@ -276,6 +280,7 @@
         ],
         "recommended_activation_count": "16",
         "ssd_mobilenet_activation_count": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_batch_size": "1",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
@@ -290,6 +295,7 @@
         "recommended_activation_count": "16",
         "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -303,6 +309,7 @@
         "recommended_activation_count": "8",
         "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -320,6 +327,7 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "3",
         "recommended_queue_length": "8"
       },
@@ -338,6 +346,7 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "3",
         "recommended_queue_length": "8"
       },
@@ -355,6 +364,7 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       },
@@ -372,6 +382,7 @@
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8"
       }

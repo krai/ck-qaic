@@ -316,8 +316,10 @@ void Program::QueueScheduler() {
       // if no hardware slots available then increment the activation
       // count and then continue
       if (p == nullptr) {
+#ifndef SERVER_MODE
         if(getSUT() -> getTestScenario() !=  mlperf::TestScenario::Server) 
           std::this_thread::sleep_for(std::chrono::nanoseconds(50));
+#endif
         continue;
       }
 
