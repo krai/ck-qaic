@@ -82,7 +82,7 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec -model=${model} \
   -batchsize=${_BATCH_SIZE} \
   ${LOAD_PROFILE} -aic-binary-dir=${aic_binary_dir} \
-  ${_COMPILER_PARAMS}
+  ${_COMPILER_PARAMS} ${_EXTRA_COMPILER_PARAMS}
 END_OF_CMD
 
   echo ${CMD}

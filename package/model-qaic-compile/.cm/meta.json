@@ -236,6 +236,15 @@
         "bs.8"
       ]
     },
+    "resnet50.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -aic-compile-only-test -aic-minimize-host-traffic"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "ssd_resnet34": {
       "extra_customize": {
         "package_name": "QAIC model (MLPerf ResNet34 No NMS)"
@@ -285,6 +294,11 @@
     "ssd_resnet34.pcie.16nsp": {
       "extra_env": {
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-depth-first-mode=2 -aic-force-depth-first -aic-host-copy-vtcm=false -aic-disable-tcm-copy-opt  -aic-userdma-producer-dma' -aic-compile-only-test -node-precision-info=[NODE_PRECISION_FILE] -aic-minimize-host-traffic"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-buffer-dealloc-delay=1' -aic-minimize-host-traffic -aic-compile-only-test --node-precision-info=[NODE_PRECISION_FILE]"
       }
     },
     "ssd_mobilenet": {
@@ -360,6 +374,15 @@
         "bs.4"
       ]
     },
+    "ssd_mobilenet.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -mos=1 -ols=2  -compiler-args='-aic-buffer-dealloc-delay=2 -aic-size-split-granularity=1048576 -aic-vtcm-working-set-limit-ratio=0.75 -aic-userdma-producer-dma'  -aic-minimize-host-traffic -aic-compile-only-test"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "bs.1": {
       "extra_env": {
         "_BATCH_SIZE": "1"
@@ -378,6 +401,11 @@
     "bs.16": {
       "extra_env": {
         "_BATCH_SIZE": "16"
+      }
+    },
+    "percentile.calibration.1": {
+      "extra_env": {
+        "_EXTRA_COMPILER_PARAMS": "-quantization-calibration=Percentile  -percentile-calibration-value=99.9999"
       }
     }
   }
