@@ -61,6 +61,7 @@
         "mode_extension": "-compliance.###",
         "output_file": "mlperf_log_summary.txt",
         "recommended_dataset_size": "64",
+        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
         "record_tags": "compliance.###"
@@ -114,6 +115,7 @@
         "mode_extension": "-dataset_size.<<<dataset_size>>>-<<<preprocessed_tag>>>",
         "output_file": "accuracy.txt",
         "recommended_dataset_size": "5000",
+        "recommended_buffer_size": "<<<recommended_accuracy_buffer_size>>>",
         "recommended_verbosity": "1"
       },
       "performance": {
@@ -121,6 +123,7 @@
         "mode_extension": "<<<performance_mode_extension>>>",
         "output_file": "mlperf_log_summary.txt",
         "recommended_dataset_size": "64",
+        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0"
       }
     },
@@ -145,7 +148,8 @@
         "model_tags": [
           "###"
         ],
-        "recommended_buffer_size": "64",
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "64",
         "workload": "###"
       },
       "ssd_mobilenet": {
@@ -171,7 +175,8 @@
         "model_tags": [
           "###"
         ],
-        "recommended_buffer_size": "256",
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "256",
         "workload": "###"
       }
     },
