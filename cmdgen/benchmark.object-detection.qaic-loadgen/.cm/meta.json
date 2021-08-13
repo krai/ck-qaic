@@ -26,7 +26,7 @@
       "scenario.<<<scenario>>>",
       "mode.<<<mode>>>",
       "buffer_size.<<<buffer_size>>>",
-      "workload.<<<workload>>>",
+      "workload.<<<hyphenated_model_name>>>",
       "<<<preprocessed_tag>>>",
       "input_select.<<<input_select>>>",
       "queue_length.<<<queue_length>>>",
@@ -145,8 +145,7 @@
           "###"
         ],
         "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "64",
-        "workload": "###"
+        "recommended_performance_buffer_size": "64"
       },
       "ssd_mobilenet": {
         "ck_env": [
@@ -171,8 +170,7 @@
           "###"
         ],
         "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "256",
-        "workload": "###"
+        "recommended_performance_buffer_size": "256"
       }
     },
     "model_extra_tags": {
