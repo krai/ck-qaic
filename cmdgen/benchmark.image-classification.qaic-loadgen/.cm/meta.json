@@ -329,7 +329,7 @@
         ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
+          "resnet50.pcie.16nsp"
         ],
         "recommended_activation_count": "2",
         "recommended_input_select": "0",
