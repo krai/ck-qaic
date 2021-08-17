@@ -393,7 +393,7 @@
         ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp<<<singlestream_suffix>>>"
+          "<<<model>>>.pcie.16nsp"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
