@@ -1,7 +1,7 @@
 # Qualcomm Cloud AI - MLPerf Inference - BERT
 
 <a name="submit_bert_99_r282_z93_q1_singlestream"></a>
-## Single Stream
+## Single Stream - BERT 99% Accuracy Single Card
 
 <a name="submit_bert_99_r282_z93_q1_singlestream_accuracy"></a>
 ### Accuracy
@@ -42,10 +42,9 @@
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_999_r282_z93_q1_singlestream"></a>
-## singlestream
+## Single Stream - BERT 99.9% Accuracy Single Card
 
 <a name="submit_bert_999_r282_z93_q1_singlestream_accuracy"></a>
 ### Accuracy

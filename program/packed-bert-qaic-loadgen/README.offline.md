@@ -1,7 +1,7 @@
 # Qualcomm Cloud AI - MLPerf Inference - BERT
 
 <a name="submit_bert_99_r282_z93_q1_offline"></a>
-## Offline
+## Offline - BERT 99% Accuracy Single Card
 
 <a name="submit_bert_99_r282_z93_q1_offline_accuracy"></a>
 ### Accuracy
@@ -42,10 +42,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_999_r282_z93_q1_offline"></a>
-## Offline
+## Offline - BERT 99.9% Accuracy Single Card
 
 <a name="submit_bert_999_r282_z93_q1_offline_accuracy"></a>
 ### Accuracy
@@ -86,10 +85,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_99_r282_z93_q5_offline"></a>
-## Offline
+## Offline - BERT 99% Accuracy Five Card
 
 <a name="submit_bert_99_r282_z93_q5_offline_accuracy"></a>
 ### Accuracy
@@ -130,10 +128,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_999_r282_z93_q5_offline"></a>
-## Offline
+## Offline - BERT 99.9% Accuracy Five Card
 
 <a name="submit_bert_999_r282_z93_q5_offline_accuracy"></a>
 ### Accuracy
@@ -174,10 +171,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_99_r282_z93_q8_offline"></a>
-## Offline
+## Offline - BERT 99% Accuracy Eight Card
 
 <a name="submit_bert_99_r282_z93_q8_offline_accuracy"></a>
 ### Accuracy
@@ -218,10 +214,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_999_r282_z93_q8_offline"></a>
-## Offline
+## Offline - BERT 99/9% Accuracy Eight Card
 
 <a name="submit_bert_999_r282_z93_q8_offline_accuracy"></a>
 ### Accuracy
@@ -262,10 +257,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_99_r292_z93_q16_offline"></a>
-## Offline
+## Offline - BERT 99% Accuracy Sixteen Card
 
 <a name="submit_bert_99_r292_z93_q16_offline_accuracy"></a>
 ### Accuracy
@@ -306,10 +300,9 @@
 --compliance,=TEST05,TEST01 --scenario=offline --override_batch_size=4096 --target_qps=300
 </pre>
 
-####################################################################################
 
 <a name="submit_bert_999_r292_z93_q16_offline"></a>
-## Offline
+## Offline - BERT 99.9% Accuracy Sixteen Card
 
 <a name="submit_bert_999_r292_z93_q16_offline_accuracy"></a>
 ### Accuracy
