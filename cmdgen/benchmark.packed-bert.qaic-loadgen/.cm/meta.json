@@ -1,0 +1,380 @@
+{
+  "accu_init": {
+    "ck_env": [
+      "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
+      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
+      "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
+      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+      "--env.CK_VERBOSE=<<<verbosity>>>"
+    ],
+    "deps": [
+      "--dep_add_tags.compiler=<<<compiler_tags>>>",
+      "--dep_add_tags.python=v3",
+      "--dep_add_tags.mlperf-inference-src=r1.1",
+      "--dep_add_tags.weights=<<<model_tags,>>>",
+      "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
+    ],
+    "record_tags": [
+      "mlperf",
+      "division.<<<division>>>",
+      "task.language",
+      "platform.<<<sut>>>",
+      "scenario.<<<scenario>>>",
+      "mode.<<<mode>>>",
+      "workload.<<<workload>>>",
+      "input_select.<<<input_select>>>",
+      "queue_length.<<<queue_length>>>",
+      "threads_per_queue.<<<threads_per_queue>>>"
+    ],
+    "record_uoa_parts": [
+      "mlperf",
+      "<<<division>>>",
+      "<<<sut>>>",
+      "<<<library>>>",
+      "<<<model_readable>>>",
+      "<<<scenario>>>",
+      "<<<mode>>><<<mode_extension>>>"
+    ],
+    "shell_preamble": []
+  },
+  "build_map": {
+    "buffer_size": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_BUFFER_SIZE=###",
+        "record_tags": "buffer_size.###",
+        "record_uoa_parts": "buffer_size.###"
+      }
+    },
+    "compile": {
+      "yes": {
+        "shell_wrapped_cmd": "<<<ck_compile_program>>>"
+      }
+    },
+    "compliance": {
+      "###": {
+        "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=### --env.CK_LOADGEN_MODE=PerformanceOnly",
+        "mode": "performance",
+        "mode_extension": "-compliance.###",
+        "output_file": "mlperf_log_summary.txt",
+        "recommended_dataset_size": "10833",
+        "recommended_repetitions": "1",
+        "recommended_verbosity": "0",
+        "record_tags": "compliance.###"
+      }
+    },
+    "fan_mode": {
+      "###": {
+        "ck_env": "--env.CK_FAN_MODE=###",
+        "record_tags": "fan_mode.###",
+        "record_uoa_parts": "fan_mode.###"
+      }
+    },
+    "library": {
+      "qaic-v1.3.14-aic100": {
+        "ck_env": "",
+        "deps": "",
+        "program_name": "packed-bert-qaic-loadgen",
+        "record_tags": [
+          "inference_engine.qaic",
+          "inference_engine_version.v1.3.14",
+          "inference_engine_backend.aic100"
+        ]
+      },
+      "qaic-v1.4.00-aic100": {
+        "ck_env": "",
+        "deps": "",
+        "inference_engine": "qaic",
+        "inference_engine_backend": "aic100",
+        "inference_engine_version": "v1.4.00",
+        "program_name": "packed-bert-qaic-loadgen"
+      }
+    },
+    "max_query_count": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=\"$(echo ###)\"",
+        "record_tags": "max_query_count.\"$(echo ###)\""
+      }
+    },
+    "mode": {
+      "accuracy": {
+        "ck_env": "--env.CK_LOADGEN_MODE=AccuracyOnly",
+        "mode_extension": "-dataset_size.<<<dataset_size>>>",
+        "output_file": "accuracy.txt",
+        "recommended_dataset_size": "10833",
+        "recommended_verbosity": "1"
+      },
+      "performance": {
+        "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
+        "mode_extension": "<<<performance_mode_extension>>>",
+        "output_file": "mlperf_log_summary.txt",
+        "recommended_dataset_size": "10833",
+        "recommended_verbosity": "0"
+      }
+    },
+    "model": {
+      "bert": {
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=bert",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>",
+          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+        ],
+        "deps": "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw",
+        "division": "closed",
+        "model_tags": [
+          "###"
+        ],
+        "workload": "###"
+      }
+    },
+    "model_extra_tags": {
+      "###": {
+        "model_tags": [
+          "###"
+        ]
+      }
+    },
+    "no_record": {
+      "yes": {
+        "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"
+      }
+    },
+    "performance_sample_count_override": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_BUFFER_SIZE=###",
+        "record_tags": "buffer_size.###",
+        "record_uoa_parts": "buffer_size.###"
+      }
+    },
+    "power": {
+      "###": {},
+      "yes": {
+        "_power_log_helper": "mkdir -p \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\" && cp \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\"/../mlperf_log_* \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\"/",
+        "power_command_args": [
+          "ck",
+          "benchmark",
+          "--env.CK_MLPERF_POWER_CLIENT_ADDRESS=<<<power_server_ip>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_PORT=<<<power_server_port>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS=\"$(ck find program:<<<program_name>>>)\"/tmp/loadgen_logs",
+          "--env.CK_MLPERF_POWER_CLIENT_WORKLOAD=\\\"\\\"\"$_cmd\"",
+          "--record",
+          "--record_repo=local",
+          "--repetitions=1",
+          "--record_uoa=<<<record_uoa_parts->>>-power.client",
+          "--tags=<<<record_tags,>>>,power.client",
+          "program:mlperf-power-client"
+        ],
+        "record_tags_inner": "<<<record_tags,>>>,power.workload",
+        "record_uoa": "<<<record_uoa_parts->>>-power.workload",
+        "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi"
+      }
+    },
+    "power_mode": {
+      "###": {
+        "ck_env": "--env.CK_POWER_MODE=###",
+        "record_tags": "power_mode.###",
+        "record_uoa_parts": "power_mode.###"
+      }
+    },
+    "query_count": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=\"$(echo ###)\" --env.CK_LOADGEN_MIN_QUERY_COUNT=\"$(echo ###)\"",
+        "record_tags": "query_count.\"$(echo ###)\"",
+        "record_uoa_parts": "query_count.\"$(echo ###)\""
+      }
+    },
+    "scenario": {
+      "offline": {
+        "activation_count": "<<<recommended_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
+        "performance_mode_extension": "",
+        "recommended_input_select": "0"
+      },
+      "range_singlestream": {
+        "activation_count": "1",
+        "batch_size": "1",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
+        "performance_mode_extension": "-max_query_count.<<<max_query_count>>>",
+        "recommended_input_select": "0"
+      },
+      "server": {
+        "activation_count": "<<<recommended_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>",
+        "performance_mode_extension": "",
+        "recommended_input_select": "0"
+      },
+      "singlestream": {
+        "activation_count": "1",
+        "batch_size": "1",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
+        "performance_mode_extension": "-target_latency.<<<target_latency>>>",
+        "recommended_input_select": "0"
+      }
+    },
+    "sdk": {
+      "###": {
+        "ck_env": "",
+        "deps": "",
+        "inference_engine": "qaic",
+        "inference_engine_backend": "aic100",
+        "inference_engine_version": "v###",
+        "library": "qaic-v###-aic100",
+        "program_name": "packed-bert-qaic-loadgen"
+      }
+    },
+    "sut": {
+      "###": {
+        "compiler_tags": "gcc"
+      },
+      "aedk_15w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc,v8",
+        "model_tags": [
+          "bert.aedk_15w.<<<scenario>>>"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "aedk_20w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc,v8",
+        "model_tags": [
+          "bert.aedk_20w.<<<scenario>>>"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "aedk_25w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc,v8",
+        "model_tags": [
+          "bert.aedk_20w.<<<scenario>>>"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "g292_z43_q16": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292",
+          "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
+        ],
+        "compiler_tags": "gcc,v10",
+        "model_tags": [
+          "bert"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "r282_z93_q1": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
+        ],
+        "compiler_tags": "gcc,v10",
+        "model_tags": [
+          "bert"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "r282_z93_q5": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
+        ],
+        "compiler_tags": "gcc,v10",
+        "model_tags": [
+          "bert"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      },
+      "r282_z93_q8": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
+        ],
+        "compiler_tags": "gcc,v10",
+        "model_tags": [
+          "bert"
+        ],
+        "recommended_activation_count": "4",
+        "recommended_batch_size": "1000"
+      }
+    },
+    "target_latency": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=###",
+        "record_tags": "target_latency.###"
+      }
+    },
+    "target_latency_file": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=$CK_LOADGEN_TARGET_LATENCY",
+        "record_tags": "target_latency.$CK_LOADGEN_TARGET_LATENCY",
+        "shell_preamble": "export CK_LOADGEN_TARGET_LATENCY=$(awk -vX=\"<<<sut>>>,<<<library>>>,<<<model_readable>>>\" 'X==$1{print $2;exit}' < ###); [ \"$CK_LOADGEN_TARGET_LATENCY\" ] || { echo 'Error: entry <<<sut>>>,<<<library>>>,<<<model_readable>>> not found in ###, exiting'; exit 1; }; ",
+        "target_latency": "$CK_LOADGEN_TARGET_LATENCY"
+      }
+    },
+    "target_qps": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_TARGET_QPS=###",
+        "record_tags": "target_qps.###",
+        "record_uoa_parts": "target_qps.###"
+      }
+    },
+    "verbose": {
+      "all": {
+        "print_output_file": "<<<print_output_file_cmd>>>",
+        "screen_output": ""
+      },
+      "yes": {
+        "print_output_file": "<<<print_output_file_cmd>>>"
+      }
+    }
+  },
+  "cmd_template": "<<<shell_wrapped_cmd>>>",
+  "defaults": {
+    "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
+    "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
+    "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
+    "dataset_size": "<<<recommended_dataset_size>>>",
+    "device_ids": "<<<all_device_ids>>>",
+    "division": "open",
+    "input_select": "<<<recommended_input_select>>>",
+    "max_wait": "10000",
+    "model_readable": "<<<model_tags->>>",
+    "override_batch_size": "<<<batch_size>>>",
+    "power_server_port": "4950",
+    "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
+    "queue_length": "8",
+    "record_tags_inner": "<<<record_tags,>>>",
+    "record_uoa": "<<<record_uoa_parts->>>",
+    "repetitions": "1",
+    "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
+    "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
+    "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
+    "sleep_before_ck_benchmark_sec": "0",
+    "threads_per_queue": "8",
+    "verbosity": "<<<recommended_verbosity>>>",
+    "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
+    "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
+  }
+}
