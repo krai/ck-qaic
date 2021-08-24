@@ -23,8 +23,11 @@
             - [SSD-MobileNet](#prepare_workload_compile_ssd_mobilenet)
 
 1. [Benchmark](#benchmark)
-    1. [Accuracy](#benchmark_accuracy)
-    1. [Performance](#benchmark_performance)
+    1. [SSD-ResNet34](#benchmark_ssd_resnet34)
+    1. [SSD-MobileNet](#benchmark_ssd_mobilenet)
+
+1. [Further info](#info)
+
 
 <a name="installation"></a>
 # Installation
@@ -504,10 +507,20 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 <a name="benchmark"></a>
 # Benchmark
 
-- Offline: refer to [`README.offline.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.offline.md).
-- Server: refer to [`README.server.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.server.md).
-- Single Stream: refer to [`README.singlestream.md`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.singlestream.md).
+<a name="benchmark_ssd_resnet34"></a>
+## SSD-ResNet34 (Datacenter, Edge)
 
-## Info
+- [`Offline`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.ssd-resnet34.offline.md).
+- [`Server`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.ssd-resnet34.server.md).
+- [`Single Stream`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.ssd-resnet34.singlestream.md).
+
+<a name="benchmark_ssd_mobilenet"></a>
+## SSD-MobileNet (Edge only)
+
+- [`Offline`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.ssd-mobilenet.offline.md).
+- [`Single Stream`](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.ssd-mobilenet.singlestream.md).
+
+<a name="info"></a>
+# Further info
 
 Please contact anton@krai.ai if you have any problems or questions.
