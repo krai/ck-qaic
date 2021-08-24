@@ -1,4 +1,4 @@
-# Qualcomm Cloud AI - MLPerf Inference - Object Detection
+# Qualcomm Cloud AI - MLPerf Inference - SSD-ResNet34
 
 <a name="submit_r282_z93_q5_server"></a>
 ## Server
@@ -7,9 +7,9 @@
 ### Accuracy
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=server \
---mode=accuracy --target_qps=1555 --dataset_size=5000 --buffer_size=500
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --scenario=server \
+--mode=accuracy --target_qps=1999 --dataset_size=5000 --buffer_size=500
 ...
  Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.198
  Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.381
@@ -31,18 +31,18 @@ mAP=19.810%
 ### Performance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=server \
---mode=performance --target_qps=1555 --dataset_size=5000 --buffer_size=64
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --scenario=server \
+--mode=performance --target_qps=1999 --dataset_size=5000 --buffer_size=64
 </pre>
 
 <a name="submit_r282_z93_q5_server_power"></a>
 ### Power
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=server \
---mode=performance --target_qps=1555 --dataset_size=5000 --buffer_size=64 \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --scenario=server \
+--mode=performance --target_qps=1999 --dataset_size=5000 --buffer_size=64 \
 --power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=90
 </pre>
 
@@ -50,9 +50,9 @@ mAP=19.810%
 ### Compliance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.00 --model=ssd_resnet34 --scenario=server \
---compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_qps=1555 --dataset_size=5000 --buffer_size=64
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --scenario=server \
+--compliance,=TEST04-A,TEST04-B,TEST05,TEST01 --target_qps=1999 --dataset_size=5000 --buffer_size=64
 </pre>
 
 ## Info
