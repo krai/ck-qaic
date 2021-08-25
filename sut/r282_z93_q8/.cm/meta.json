@@ -24,7 +24,7 @@
     "host_processors_per_node": "2",
     "host_storage_capacity": "1 TB",
     "host_storage_type": "1x SSD",
-    "hw_notes": "With 75W Accelerator TDP constraints. 3x QAIC100 on riser 1; 3x QAIC100 on riser 2; 2x QAIC100 on riser 3.",
+    "hw_notes": "With 75W Accelerator TDP constraints. 3x QAIC100 on riser CRS2033; 3x QAIC100 on riser CRS2033; 2x QAIC100 on riser CRS2026.",
     "number_of_nodes": "1",
     "operating_system": "CentOS 7 (Linux kernel: 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux)",
     "other_software_stack": "Collective Knowledge v1.55.5",
