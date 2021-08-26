@@ -188,6 +188,14 @@ Platform init UOA:    aedk
 }
 </pre>
 
+#### Install AEDK specific dependencies
+<pre>
+curl https://sh.rustup.rs -sSf | sh
+export PATH=$PATH:~/.cargo/bin
+$CK_PYTHON -m pip uninstall h5py
+$CK_PYTHON -m pip install h5py
+</pre>
+
 
 <a name="detect_python"></a>
 ## Detect Python
@@ -346,7 +354,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 --tags=model,qaic,bert
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.offline \
+--dep_add_tags.model-qaic=bert,model,compiled \
 --env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
@@ -356,7 +364,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 --tags=model,qaic,bert
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.8nsp.singlestream \
+--dep_add_tags.model-qaic=bert,model,compiled \
 --env.CK_AEDK_IPS="aedk2" --env.CK_AEDK_PORTS="3232" --env.CK_AEDK_USER=$USER
 </pre>
 
@@ -368,7 +376,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 --tags=model,qaic,bert
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.16nsp.offline \
+--dep_add_tags.model-qaic=bert,model,compiled \
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 
@@ -378,7 +386,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 --tags=model,qaic,bert
 
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=ssd_resnet34,ssd_resnet34.aedk.16nsp.singlestream \
+--dep_add_tags.model-qaic=bert,model,compiled \
 --env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
 </pre>
 
