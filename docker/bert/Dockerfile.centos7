@@ -200,12 +200,14 @@ RUN ck install package --tags=dataset,calibration,squad,pickle,width.384
 # Step 4. Prepare the BERT workload.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=model,mlperf,qaic,bert-packed
-# Use a precalibrated profile.
-RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
---full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
---extra_tags=detected,profile,qaic,bert-packed,mixed
-## Uncomment if not using precalibrated profile.
-#RUN ck install package --tags=profile,qaic,bert-packed
+
+# Uncomment if not using precalibrated profile; comment out otherwise.
+RUN ck install package --tags=profile,qaic,bert-packed
+
+# # Uncomment if using precalibrated profile; comment out otherwise.
+# RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
+# --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
+# --extra_tags=detected,profile,qaic,bert-packed,mixed
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN ck install package --tags=model,compiled,bert,precision.mixed
