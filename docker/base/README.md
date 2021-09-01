@@ -1,4 +1,4 @@
-# Base Docker image
+# Qualcomm Cloud AI - MLPerf base Docker image
 
 Obtain `qaic-docker-1.0.tar.gz` from Qualcomm and extract it to e.g. $HOME.
 

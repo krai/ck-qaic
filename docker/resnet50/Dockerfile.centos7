@@ -1,0 +1,256 @@
+#
+# Copyright (c) 2021 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+###############################################################################
+# PREABMLE STAGE
+#
+# In this stage, only perform steps that benefit the final image.
+#
+###############################################################################
+#FROM qran-centos7:1.4.42
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+# (CentOS 7 comes with 1.13.)
+ARG BASE_IMAGE
+ARG SDK_VER
+FROM $BASE_IMAGE:$SDK_VER AS preamble
+
+# Use Python >= 3.7, as required by the MLPerf Power workflow.
+ARG PYTHON_VER=3.7.11
+# Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
+ARG GCC_MAJOR_VER=10
+# Use CK <= 1.55.5 with known behaviour.
+ARG CK_VER=1.55.5
+# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
+ARG IMAGENET=full
+# Fixed group id (recommended to be the same as that of 'qaic').
+ARG GROUP_ID=1500
+# Fixed user id.
+ARG USER_ID=2000
+
+# Use the Austin timezone by default.
+ARG TIMEZONE=US/Central
+RUN rm -rf /etc/localtime \
+ && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+ && ls -la /etc/localtime
+
+LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
+
+# Use the Bash shell.
+SHELL ["/bin/bash", "-c"]
+
+# Allow stepping into the Bash shell interactively.
+ENTRYPOINT ["/bin/bash", "-c"]
+
+# Install known system dependencies and immediately clean up to make the image smaller.
+# CK needs: git, wget, zip, unzip.
+# Python 3 needs: openssl-devel, bzip2-devel, libffi-devel.
+# MLPerf implementation needs: numactl.
+RUN yum upgrade -y\
+ && yum install -y\
+ make which patch\
+ git wget zip unzip\
+ openssl-devel bzip2-devel libffi-devel\
+ numactl\
+ && yum clean all
+
+# NB: Must be two separate calls to yum install.
+RUN yum install -y centos-release-scl \
+ && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
+
+# Install Python >= 3.7.
+RUN cd /usr/src \
+ && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
+ && tar xzf Python-${PYTHON_VER}.tgz \
+ && rm Python-${PYTHON_VER}.tgz \
+ && cd Python-${PYTHON_VER} \
+ && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations --enable-shared && make altinstall" \
+ && cd /usr/src \
+ && rm -rf Python-${PYTHON_VER}*
+
+# Create a non-root user with a fixed group id and a fixed user id.
+RUN groupadd -g ${GROUP_ID} kraig
+RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+USER krai:kraig
+WORKDIR /home/krai
+
+# Work out the subversions of Python and place them into the Bash resource file.
+RUN /bin/bash -l -c  \
+ 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)" >> /home/krai/.bashrc;\
+  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)" >> /home/krai/.bashrc;\
+  echo export PYTHON_PATCH_VER="$(echo ${PYTHON_VER} | cut -d '.' -f3)" >> /home/krai/.bashrc' \
+&& source /home/krai/.bashrc \
+&& /bin/bash -l -c \
+ 'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
+
+# Install Collective Knowledge (CK).
+ENV CK_ROOT=/home/krai/CK \
+    CK_REPOS=/home/krai/CK_REPOS \
+    CK_TOOLS=/home/krai/CK_TOOLS \
+    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
+    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
+    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
+    CK_CC=gcc \
+    GIT_USER="krai" \
+    GIT_EMAIL="info@krai.ai" \
+    LANG=C.UTF-8
+RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS}
+RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
+RUN git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT}
+RUN cd ${CK_ROOT} \
+ && source /home/krai/.bashrc \
+ && ${CK_PYTHON} setup.py install --user\
+ && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
+ && chmod -R g+rx /home/krai/.local
+
+# Explicitly create a CK experiment entry, a folder that will be mounted
+# (with '--volume=<folder_for_results>:/home/krai/CK_REPOS/local/experiment').
+# as a shared volume between the host and the container, and make it group-writable.
+# For consistency, use the "canonical" uid from ck-analytics:module:experiment.
+RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${CK_REPOS}/local\
+ && chmod -R g+ws ${CK_REPOS}/local/experiment
+
+# Pull CK repositories (including ck-mlperf and ck-env).
+RUN ck pull repo --url=https://github.com/krai/ck-qaic
+
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+RUN source /home/krai/.bashrc \
+ && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
+ && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
+ && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
+
+###############################################################################
+# BUILDER STAGE
+#
+# In this stage, only perform steps that write into CK, CK_TOOLS, CK_REPOS,
+# which can be simply copied into the final image.
+#
+###############################################################################
+FROM preamble AS builder
+ARG PYTHON_VER
+ARG GCC_MAJOR_VER
+ARG IMAGENET
+
+# Set platform scripts (ensuring that ECC is on).
+RUN ck detect platform.os --platform_init_uoa=qaic
+
+# Detect C/C++ compiler (gcc).
+RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+
+# Install CMake.
+RUN ck install package --tags=tool,cmake,downloaded
+
+#-----------------------------------------------------------------------------#
+# Step 1. Install explicit Python dependencies.
+#-----------------------------------------------------------------------------#
+RUN ck install package --tags=python-package,cython \
+ && ck install package --tags=python-package,absl \
+ && ck install package --tags=python-package,opencv-python-headless \
+ && echo "latest" | ck install package --tags=python-package,numpy
+
+#-----------------------------------------------------------------------------#
+# Step 2. Prepare the ResNet50 workload.
+#-----------------------------------------------------------------------------#
+# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
+# to work around a current limitation in the toolchain.
+RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
+# Use precalibrated profiles.
+RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
+--extra_tags=resnet50,mlperf.option1,bs.8
+RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
+--extra_tags=resnet50,mlperf.option1,bs.1
+# Compile the workload for the 16-NSP PCIe server cards.
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream
+
+#-----------------------------------------------------------------------------#
+# Step 3. Build the MLPerf LoadGen API.
+#-----------------------------------------------------------------------------#
+RUN ck install package --tags=mlperf,inference,source \
+ && ck install package --tags=mlperf,loadgen,static \
+ && ck install package --tags=mlperf,power,source
+
+#-----------------------------------------------------------------------------#
+# Step 4. Compile the Image Classification program.
+#-----------------------------------------------------------------------------#
+RUN ck compile program:image-classification-qaic-loadgen
+
+#-----------------------------------------------------------------------------#
+# Step 5. Prepare the dataset.
+#-----------------------------------------------------------------------------#
+# Download the ImageNet labels.
+RUN ck install package --tags=dataset,imagenet,aux
+# Add ImageNet from an auxiliary image and preprocess it.
+COPY --from=imagenet /imagenet /imagenet
+RUN if [ "${IMAGENET}" == "full" ]; \
+then \
+    echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
+    --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation; \
+else \
+    ck install package --tags=dataset,imagenet,val,min --no_tags=resized &&  \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation; \
+fi
+
+#-----------------------------------------------------------------------------#
+# Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+#-----------------------------------------------------------------------------#
+RUN rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ctuning-datasets-min)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=python-package,tensorflow)/* \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=model,fix_input_shape)/*
+
+###############################################################################
+# FINAL STAGE
+#
+# In this stage, simply copy CK, CK_TOOLS, CK_REPOS to the final image.
+#
+###############################################################################
+FROM preamble AS final
+COPY --from=builder /home/krai/CK       /home/krai/CK
+COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
+COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
+COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
+
+#-----------------------------------------------------------------------------#
+# Show the status of QAIC devices.
+#-----------------------------------------------------------------------------#
+CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

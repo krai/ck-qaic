@@ -1,9 +1,9 @@
-# SSD-MobileNet Docker image
+# Qualcomm Cloud AI - MLPerf SSD-MobileNet Docker image
 
 ## Build
 
 ```
-$(ck find ck-qaic:docker:ssd-mobilenet)/build.sh
+> $(ck find ck-qaic:docker:ssd-mobilenet)/build.sh
 ```
 
 ### Build parameters
