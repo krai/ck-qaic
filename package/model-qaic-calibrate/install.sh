@@ -127,7 +127,8 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   -batchsize=${batchsize} \
   ${_COMPILER_PARAMS} \
   -dump-profile=${INSTALL_DIR}/profile.yaml \
-  -model=${model}
+  -model=${model} \
+  -compiler-args="-profiling-backend=CPU -cpu-memory=8000000"
 END_OF_CMD
   echo ${CMD}
   eval ${CMD}
