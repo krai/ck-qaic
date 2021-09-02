@@ -6,7 +6,10 @@
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
       "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
       "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-      "--env.CK_VERBOSE=<<<verbosity>>>"
+      "--env.CK_VERBOSE=<<<verbosity>>>",
+      "--env.ML_MODEL_MODEL_NAME=bert",
+      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>",
+      "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
     ],
     "deps": [
       "--dep_add_tags.compiler=<<<compiler_tags>>>",
@@ -25,7 +28,7 @@
       "inference_engine_backend.<<<inference_engine_backend>>>",
       "scenario.<<<scenario>>>",
       "mode.<<<mode>>>",
-      "workload.<<<workload>>>",
+      "workload.<<<model>>>",
       "input_select.<<<input_select>>>",
       "queue_length.<<<queue_length>>>",
       "threads_per_queue.<<<threads_per_queue>>>"
@@ -115,24 +118,16 @@
       }
     },
     "model": {
-      "bert": {
-        "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=bert",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-        ],
-        "deps": "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw",
-        "division": "closed",
+      "bert-99.9": {
         "model_tags": [
-          "###"
-        ],
-        "workload": "###"
-      }
-    },
-    "model_extra_tags": {
-      "###": {
+          "bert",
+          "precision.fp16"
+        ]
+      },
+      "bert-99": {
         "model_tags": [
-          "###"
+          "bert",
+          "precision.mixed"
         ]
       }
     },
@@ -269,9 +264,6 @@
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
         ],
         "compiler_tags": "gcc,v10",
-        "model_tags": [
-          "bert"
-        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -283,9 +275,6 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
         "compiler_tags": "gcc,v10",
-        "model_tags": [
-          "bert"
-        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -297,9 +286,6 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
         "compiler_tags": "gcc,v10",
-        "model_tags": [
-          "bert"
-        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -313,9 +299,6 @@
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
         ],
         "compiler_tags": "gcc,v10",
-        "model_tags": [
-          "bert"
-        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       }
@@ -358,7 +341,7 @@
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "dataset_size": "<<<recommended_dataset_size>>>",
     "device_ids": "<<<all_device_ids>>>",
-    "division": "open",
+    "division": "closed",
     "input_select": "<<<recommended_input_select>>>",
     "max_wait": "10000",
     "model_readable": "<<<model_tags->>>",

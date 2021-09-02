@@ -8,7 +8,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=singlestream --override_batch_size=4096 --target_qps=300
 ...
 {"exact_match": 82.40302743614002, "f1": 90.17090568381533}
@@ -19,7 +19,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
 
@@ -28,7 +28,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
 </pre>
@@ -38,7 +38,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
 
@@ -51,7 +51,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=singlestream --override_batch_size=4096 --target_qps=300
 ...
 {"exact_match": 83.59508041627247, "f1": 90.79046230446818}
@@ -62,7 +62,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
 
@@ -71,7 +71,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
 </pre>
@@ -81,7 +81,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
 
@@ -93,7 +93,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=singlestream --override_batch_size=512 --target_qps=300
 ...
 {"exact_match": 82.40302743614002, "f1": 90.17090568381533}
@@ -104,7 +104,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
 
@@ -113,7 +113,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
 </pre>
@@ -123,7 +123,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.mixed \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
 
@@ -136,7 +136,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=singlestream --override_batch_size=512 --target_qps=300
 ...
 {"exact_match": 83.59508041627247, "f1": 90.79046230446818}
@@ -147,7 +147,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
 
@@ -156,7 +156,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
 </pre>
@@ -166,7 +166,7 @@
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.9 --model=bert --model_extra_tags=precision.fp16 \
+--sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
 
