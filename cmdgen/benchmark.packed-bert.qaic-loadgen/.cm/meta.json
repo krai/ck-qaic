@@ -18,8 +18,11 @@
     "record_tags": [
       "mlperf",
       "division.<<<division>>>",
-      "task.language",
+      "task.bert-question-answering",
       "platform.<<<sut>>>",
+      "inference_engine.<<<inference_engine>>>",
+      "inference_engine_version.<<<inference_engine_version>>>",
+      "inference_engine_backend.<<<inference_engine_backend>>>",
       "scenario.<<<scenario>>>",
       "mode.<<<mode>>>",
       "workload.<<<workload>>>",
@@ -32,6 +35,9 @@
       "<<<division>>>",
       "<<<sut>>>",
       "<<<library>>>",
+      "<<<inference_engine>>>",
+      "<<<inference_engine_version>>>",
+      "<<<inference_engine_backend>>>",
       "<<<model_readable>>>",
       "<<<scenario>>>",
       "<<<mode>>><<<mode_extension>>>"
@@ -74,20 +80,16 @@
       "qaic-v1.3.14-aic100": {
         "ck_env": "",
         "deps": "",
-        "program_name": "packed-bert-qaic-loadgen",
-        "record_tags": [
-          "inference_engine.qaic",
-          "inference_engine_version.v1.3.14",
-          "inference_engine_backend.aic100"
-        ]
+        "inference_engine": "qaic",
+        "inference_engine_backend": "aic100",
+        "inference_engine_version": "v1.3.14"
       },
       "qaic-v1.4.00-aic100": {
         "ck_env": "",
         "deps": "",
         "inference_engine": "qaic",
         "inference_engine_backend": "aic100",
-        "inference_engine_version": "v1.4.00",
-        "program_name": "packed-bert-qaic-loadgen"
+        "inference_engine_version": "v1.4.00"
       }
     },
     "max_query_count": {
@@ -217,11 +219,10 @@
       "###": {
         "ck_env": "",
         "deps": "",
+        "library": "qaic-v###-aic100",
         "inference_engine": "qaic",
         "inference_engine_backend": "aic100",
-        "inference_engine_version": "v###",
-        "library": "qaic-v###-aic100",
-        "program_name": "packed-bert-qaic-loadgen"
+        "inference_engine_version": "v###"
       }
     },
     "sut": {
@@ -364,6 +365,7 @@
     "override_batch_size": "<<<batch_size>>>",
     "power_server_port": "4950",
     "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
+    "program_name": "packed-bert-qaic-loadgen",
     "queue_length": "8",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
