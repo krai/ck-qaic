@@ -1,9 +1,29 @@
 # Boot/BIOS Firmware Settings
 
-Out-of-the-box.
+## AMD CBS
+
+### NBIO Common Options
+#### SMU Common Options
+##### Determinism Slider = Power
+##### cTDP = 280 W
+##### Package Power Limit = 280 W
+##### DF Cstates = Disabled
+##### Fixed SOC Pstate = P0
+
+### DF Common Options
+#### Memory Addressing
+##### NUMA nodes per socket = NPS1
+##### ACPI SRAT L3 Cche As NUMA Domain = Disabled
+
+### CPU Common Options
+#### L1 Stream HW Prefetcher = Enable
+#### L1 Stride Prefetcher = Auto
+#### L1 Region Prefetcher = Auto
+#### L2 Stream HW Prefetcher = Enable
+#### L2 Up/Down Prefetcher = Auto
 
 # Management Firmware Settings
-  
+
 Out-of-the-box.
 
 # Power Management Settings
