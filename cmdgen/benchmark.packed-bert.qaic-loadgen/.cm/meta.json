@@ -343,7 +343,7 @@
     "device_ids": "<<<all_device_ids>>>",
     "division": "closed",
     "input_select": "<<<recommended_input_select>>>",
-    "max_wait": "10000",
+    "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "override_batch_size": "<<<batch_size>>>",
     "power_server_port": "4950",
