@@ -63,14 +63,7 @@
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
-#ifdef G292
-#define START_CORE 64
-#endif
-
-#ifdef R282
-#define START_CORE 0
-#endif
-
+#include "affinity.h"
 
 namespace CK {
 
@@ -297,7 +290,7 @@ public:
     session = _session;
 #if defined(G292) || defined(R282)
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
-      unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
+      unsigned coreid = AFFINITY_CARD(dev_idx);
       std::thread t(&Benchmark::load_images_locally, this, dev_idx);
 
       cpu_set_t cpuset;

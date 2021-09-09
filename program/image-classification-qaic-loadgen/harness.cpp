@@ -90,19 +90,9 @@ Program::Program() {
 #ifdef R282
     if(d == 4) OFFSET = 1;
 #endif
-    unsigned coreid = OFFSET+ ((d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8);
-   // for(int j = 0; j < 1; j++)
+    unsigned coreid = OFFSET+ AFFINITY_CARD(d);
     CPU_SET(coreid, &cpuset);
     CPU_SET(coreid+1, &cpuset);
-  //    CPU_SET(coreid+4, &cpuset);
-      //CPU_SET(coreid+2, &cpuset);
-      //CPU_SET(coreid+3, &cpuset);
-    //CPU_SET(coreid+3, &cpuset);
-      //CPU_SET(coreid+3, &cpuset);
-    //CPU_SET(coreid+4, &cpuset);
-      //CPU_SET(coreid+5, &cpuset);
-    //CPU_SET(coreid+6, &cpuset);
-      //CPU_SET(coreid+7, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
@@ -161,21 +151,6 @@ Program::Program() {
   scheduler = std::thread(QueueScheduler);
 
 #ifdef __amd64__
-  const auto processor_count = std::thread::hardware_concurrency();
-  if(processor_count > 0)
-     num_setup_threads = processor_count/8; //One per L3 cache, might need a change for Zen3
-#else
-  num_setup_threads = 2;
-#endif
-
-#ifdef G292
-  if(settings -> input_select == 0)
-    num_setup_threads = 128;
-  else
-    num_setup_threads = 64; //to be investigated if this can go higher
-#endif
-
-#ifdef __amd64__
     num_setup_threads = 192;
 #else
     num_setup_threads = 2;
@@ -191,12 +166,9 @@ Program::Program() {
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    //CPU_SET(i*4, &cpuset);
-    if(i%16 <= 7)
-    CPU_SET(64+(i%16)*8+(i/16)%2, &cpuset);
-    else
-    CPU_SET(-64+(i%16)*8+(i/16)%2, &cpuset);
-    //CPU_SET(i*4+2, &cpuset);
+    int card_num = i%settings->qaic_device_count;
+    int coreid = AFFINITY_CARD(card_num)+i/settings->qaic_device_count;
+    CPU_SET(coreid, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
