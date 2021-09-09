@@ -32,7 +32,7 @@
 <a name="installation"></a>
 # Installation
 
-Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server/R282-Z93-rev-100)) server with CentOS 7.9 and QAIC Platform SDK 1.3.14:
+Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server/R282-Z93-rev-100)) server with CentOS 7.9 and QAIC Platform SDK 1.5.6:
 
 <pre><b>[anton@dyson ~]&dollar;</b> rpm -q centos-release
 centos-release-7-9.2009.1.el7.centos.x86_64</pre>
@@ -45,8 +45,8 @@ Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST
 <versions>
         <ci_build>
            <base_name>AIC</base_name>
-           <base_version>1.3</base_version>
-           <build_id>14</build_id>
+           <base_version>1.5</base_version>
+           <build_id>6</build_id>
         </ci_build>
         </versions>
 ```

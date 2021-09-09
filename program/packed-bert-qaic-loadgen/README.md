@@ -31,8 +31,8 @@ Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST
 <versions>
         <ci_build>
            <base_name>AIC</base_name>
-           <base_version>1.3</base_version>
-           <build_id>14</build_id>
+           <base_version>1.5</base_version>
+           <build_id>9</build_id>
         </ci_build>
         </versions>
 ```
