@@ -69,11 +69,11 @@ make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
 Python 3.6.8
 </pre>
 
-#### Python 3.7 (optional; required only for power measurements)
+#### Python 3.8 (optional; required only for power measurements)
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> sudo su
-<b>[root@dyson anton]#</b> export PYTHON_VERSION=3.7.10
+<b>[root@dyson anton]#</b> export PYTHON_VERSION=3.8.12
 <b>[root@dyson anton]#</b> cd /usr/src \
 && wget https://www.python.org/ftp/python/&dollar;{PYTHON_VERSION}/Python-&dollar;{PYTHON_VERSION}.tgz \
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
@@ -83,8 +83,8 @@ Python 3.6.8
 && rm -rf /usr/src/Python-&dollar;{PYTHON_VERSION}*
 <b>[root@dyson ~]#</b> exit
 exit
-<b>[anton@dyson ~]&dollar;</b> python3.7 --version
-Python 3.7.10
+<b>[anton@dyson ~]&dollar;</b> python3.8 --version
+Python 3.8.12
 </pre>
 
 #### GCC 10
@@ -200,16 +200,16 @@ $CK_PYTHON -m pip install h5py
 <a name="detect_python"></a>
 ## Detect Python
 
-**NB:** Please detect only one Python interpreter. Python 3.8. While CK can normally detect available Python interpreters automatically, we are playing safe here by only detecting a particular one. Please only detect multiple Python interpreters, if you understand the consequences.
+**NB:** Please detect only one Python interpreter. We recommend Python v3.8. While CK can normally detect available Python interpreters automatically, we are playing safe here by only detecting a particular one. Please only detect multiple Python interpreters, if you understand the consequences.
 
-### <font color="#268BD0">Python v3.8 </font>
+### <font color="#268BD0">Python v3.8</font>
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.python --full_path=`which python3`
+<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.python --full_path=$(which python3.8)
 <b>[anton@dyson ~]&dollar;</b> ck show env --tags=compiler,python
 Env UID:         Target OS: Bits: Name:  Version: Tags:
 
-ce146fbbcd1a8fea   linux-64    64 python 3.8.1    64bits,compiler,host-os-linux-64,lang-python,python,target-os-linux-64,v3,v3.8,v3.8.11
+b088ff37dc944f56   linux-64    64 python 3.8.12   64bits,compiler,host-os-linux-64,lang-python,python,target-os-linux-64,v3,v3.8,v3.8.12
 </pre>
 
 <a name="detect_gcc"></a>
@@ -219,8 +219,8 @@ ce146fbbcd1a8fea   linux-64    64 python 3.8.1    64bits,compiler,host-os-linux-
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> which gcc
-/opt/rh/devtoolset-9/root/usr/bin/gcc
-<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.gcc --full_path=`which gcc`
+/opt/rh/devtoolset-10/root/usr/bin/gcc
+<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.gcc --full_path=$(which gcc)
 <b>[anton@dyson ~]&dollar;</b> ck show env --tags=compiler,gcc
 Env UID:         Target OS: Bits: Name:          Version: Tags:
 
@@ -252,7 +252,7 @@ If this fails, install CMake from source:
 <b>[anton@dyson ~]&dollar;</b> ck show env --tags=tool,cmake,from.source
 Env UID:         Target OS: Bits: Name: Version: Tags:
 
-415293550c8e9de3   linux-64    64 cmake 3.18.2   64bits,cmake,compiled-by-gcc,compiled-by-gcc-9.3.0,host-os-linux-64,source,target-os-linux-64,tool,v3,v3.18,v3.18.2
+415293550c8e9de3   linux-64    64 cmake 3.20.5   64bits,cmake,compiled-by-gcc,compiled-by-gcc-9.3.0,host-os-linux-64,source,target-os-linux-64,tool,v3,v3.20,v3.20.5
 </pre>
 
 <a name="install_python_deps"></a>
@@ -263,13 +263,10 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 **NB:** These dependencies are _implicit_, i.e. CK will not try to satisfy them. If they are not installed, however, the workflow will fail.
 
 <pre>
-&dollar; export CK_PYTHON=/usr/bin/python3
-&dollar; &dollar;CK_PYTHON -m pip install --user --upgrade \
-  wheel
-<b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user --ignore-installed pip setuptools
+<b>[anton@dyson ~]&dollar;</b> &dollar; export CK_PYTHON=/usr/bin/python3
+<b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user --ignore-installed pip setuptools wheel
 <b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user wheel pyyaml testresources onnx-simplifier
-<b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user tokenization
-<b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user nvidia-pyindex
+<b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user tokenization nvidia-pyindex
 <b>[anton@dyson ~]&dollar;</b> &dollar;{CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 </pre>
 
@@ -278,15 +275,15 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 **NB:** These dependencies are _explicit_, i.e. CK will try to satisfy them automatically. On a machine with multiple versions of Python, things can get messy, so we are playing safe here.
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,cython
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,absl
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,opencv-python-headless
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,numpy
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,onnx --force_version=1.8.1
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=python-package,matplotlib
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=lib,python-package,pytorch --force_version=1.8.1
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=lib,python-package,transformers --force_version=2.4.0
-<b>[anton@dyson ~]&dollar;</b>  ck install package --tags=lib,python-package,tensorflow
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,cython
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,absl
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,opencv-python-headless
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,numpy
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,onnx --force_version=1.8.1
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=python-package,matplotlib
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=lib,python-package,pytorch --force_version=1.8.1
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=lib,python-package,transformers --force_version=2.4.0
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=lib,python-package,tensorflow
 </pre>
 
 
