@@ -7,7 +7,7 @@
 ### Accuracy
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=singlestream --override_batch_size=4096 --target_qps=300
 ...
@@ -18,7 +18,7 @@
 ### Performance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
@@ -27,7 +27,7 @@
 ### Power
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
@@ -37,7 +37,7 @@
 ### Compliance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
@@ -50,7 +50,7 @@
 ### Accuracy
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=singlestream --override_batch_size=4096 --target_qps=300
 ...
@@ -61,7 +61,7 @@
 ### Performance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
@@ -70,7 +70,7 @@
 ### Power
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=4096 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
@@ -80,7 +80,7 @@
 ### Compliance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=4096 --target_qps=300
 </pre>
@@ -92,7 +92,7 @@
 ### Accuracy
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=singlestream --override_batch_size=512 --target_qps=300
 ...
@@ -103,7 +103,7 @@
 ### Performance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
@@ -112,7 +112,7 @@
 ### Power
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
@@ -122,7 +122,7 @@
 ### Compliance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
@@ -135,7 +135,7 @@
 ### Accuracy
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=singlestream --override_batch_size=512 --target_qps=300
 ...
@@ -146,7 +146,7 @@
 ### Performance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
@@ -155,7 +155,7 @@
 ### Power
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=singlestream --override_batch_size=512 --target_qps=300 \
 --power=yes --power_singlestream_ip=172.24.66.69 --power_singlestream_port=4951 --sleep_before_ck_benchmark_sec=90
@@ -165,7 +165,7 @@
 ### Compliance
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+<b>[anton@dyson ~]&dollar;</b> time ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST05,TEST01 --scenario=singlestream --override_batch_size=512 --target_qps=300
 </pre>
