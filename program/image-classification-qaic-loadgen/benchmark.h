@@ -408,6 +408,10 @@ public:
       const __m256i loaded = _mm256_stream_load_si256(src);
       _mm256_stream_si256(dest, loaded);
     }
+    unsigned rem = source->size()%sizeof(*src);
+    if(rem > 0) {
+      memcpy((uint8_t*)dest, (uint8_t*)src, rem);
+    }
     _mm_sfence();
 #else
     uint8_t *uint8_target = static_cast<uint8_t *>(target);
