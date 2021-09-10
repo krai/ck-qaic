@@ -1,6 +1,10 @@
+#if defined (G292_CONFA) || defined (G292_CONFB)
+#define G292 1
+#endif
+
 #ifdef G292
 #if !defined(G292_CONFB)
-#define G292_CONFA
+#define G292_CONFA 1
 #endif
 #endif
 
