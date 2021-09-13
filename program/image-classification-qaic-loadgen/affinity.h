@@ -12,9 +12,9 @@
 #define AFFINITY_CARD(i) \
   (i == 0? 4 : \
         i == 1? 68 : \
-        i < 10? 64 + (i-1)*8 : (i-10)*8)
+        i < 10? 64 + (i-2)*8 : (i-10)*8)
 #elif defined (G292_CONFA)
-#define AFFINITY_CARD(i) ((i > 7) * -64 + 64 + 8 * i)
+#define AFFINITY_CARD(i) ((i > 7) * -128 + 64 + 8 * i)
 
 #elif defined (R282)
 #define AFFINITY_CARD(i) ((i < 8) ?  4 * i: 0)
