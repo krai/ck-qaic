@@ -35,10 +35,10 @@
 _BASE_OS=${BASE_OS:-centos7}
 _BASE_IMAGE=${BASE_IMAGE:-qran-${_BASE_OS}}
 _SDK_VER=${SDK_VER:-1.5.6}
-_PYTHON_VER=${PYTHON_VER:-3.8.11}
+_PYTHON_VER=${PYTHON_VER:-3.8.12}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
 _IMAGENET=${IMAGENET:-full}
-if [[ "${_IMAGENET}" == "full" ]]
+if [[ "${_IMAGENET}" == "full" || "${_IMAGENET}" == "preprocessed" ]]
 then
   _IMAGENET_SUFFIX="full"
 else

@@ -36,7 +36,7 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-#FROM qran-centos7:1.4.42
+#FROM qran-centos7:1.5.6
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
@@ -136,7 +136,8 @@ RUN cd ${CK_ROOT} \
 # as a shared volume between the host and the container, and make it group-writable.
 # For consistency, use the "canonical" uid from ck-analytics:module:experiment.
 RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${CK_REPOS}/local\
- && chmod -R g+ws ${CK_REPOS}/local/experiment
+ && chmod -R g+rwxs ${CK_REPOS}/local/experiment \
+ && mkdir -p ${CK_REPOS}/local/experiment/.cm && chmod -R g+rwxs ${CK_REPOS}/local/experiment/.cm
 
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
@@ -210,16 +211,25 @@ RUN ck compile program:image-classification-qaic-loadgen
 #-----------------------------------------------------------------------------#
 # Download the ImageNet labels.
 RUN ck install package --tags=dataset,imagenet,aux
-# Add ImageNet from an auxiliary image and preprocess it.
+# Add original ImageNet from an auxiliary image to preprocess it.
 COPY --from=imagenet /imagenet /imagenet
-RUN if [ "${IMAGENET}" == "full" ]; \
+# Add preprocessed ImageNet from an auxiliary image.
+COPY --from=imagenet-preprocessed /imagenet-preprocessed /imagenet-preprocessed
+RUN if [ "${IMAGENET}" == "preprocessed" ]; \
 then \
+  echo "vfull" | ck detect soft --tags=dataset,imagenet,preprocessed,rgb8 \
+  --extra_tags=using-opencv,for.resnet50.quantized,layout.nhwc,crop.875,side.224,full,validation \
+  --full_path=/imagenet-preprocessed/ILSVRC2012_val_00000001.rgb8; \
+else \
+  if [ "${IMAGENET}" == "full" ]; \
+  then \
     echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
     --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
     ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation; \
-else \
+  else \
     ck install package --tags=dataset,imagenet,val,min --no_tags=resized &&  \
     ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation; \
+  fi \
 fi
 
 #-----------------------------------------------------------------------------#
@@ -249,6 +259,7 @@ COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
+COPY --from=builder /imagenet-preprocessed /imagenet-preprocessed
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.
