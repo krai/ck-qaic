@@ -42,7 +42,7 @@ read -d '' CMD <<END_OF_CMD
 time docker build \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
--t krai/imagenet-preprocessed:latest \
+-t imagenet-preprocessed:latest \
 -f Dockerfile.${_BASE_OS} .
 END_OF_CMD
 echo "Running: ${CMD}"

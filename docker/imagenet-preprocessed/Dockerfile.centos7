@@ -99,9 +99,6 @@ RUN ck install package --tags=python-package,numpy \
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the dataset.
 #-----------------------------------------------------------------------------#
-# Download the ImageNet labels.
-RUN ck install package --tags=dataset,imagenet,aux
-# Preprocess ImageNet.
 RUN echo "vfull" | ck detect soft:dataset.imagenet.val \
   --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" \
   --extra_tags=ilsvrc2012,full
