@@ -2,7 +2,7 @@
 
 This package calibrates:
 - [ResNet50](#resnet50) using the QAIC toolchain.
-- [SSD-ResNet34](#ssd_resnet34) using the AI Model Efficiency Toolkit ([AIMET](https://quic.github.io/aimet-pages/index.html)).
+- [SSD-ResNet34](#ssd_resnet34) using the QAIC toolchain.
 
 <a name="resnet50"></a>
 ## Calibrate ResNet50
@@ -61,7 +61,8 @@ can register it with CK ("detect") by giving the absolute path to
 <a name="ssd_resnet34"></a>
 ## Calibrate SSD-ResNet34
 
-The SSD-ResNet34 model is calibrated using the AI Model Efficiency Toolkit ([AIMET](https://github.com/quic/aimet)).
+The SSD-ResNet34 model is calibrated using the QAIC toolchain based on
+[Glow](https://github.com/pytorch/glow).
 
 <a name="ssd_resnet34_calbration_dataset"></a>
 ### Prepare the calibration dataset
@@ -109,18 +110,6 @@ The calibration dataset takes `8.1G` when preprocessed to the `1200x1200` resolu
 </pre>  
 
 
-<a name="ssd_resnet34_aimet"></a>
-### Install the AI Model Effiiciency Toolkit ([AIMET](https://quic.github.io/aimet-pages/index.html))
-
-**NB:** The resulting accuracy depends on the hardware on which the model is
-calibrated.  The accuracy has been observed to satisfy the MLPerf Inference
-requirement (mAP &GreaterEqual; `19.80%`) when calibrating on server-class
-Intel CPUs (Xeon, but not Core).  The best accuracy,
-however, has been observed when calibrating on NVIDIA GPUs (mAP &GreaterEqual;
-`19.85%`).
-
-Please follow the corresponding [AIMET installation instructions](https://github.com/krai/ck-qaic/tree/main/package/lib-aimet), and then the calibration instructions below.
-
 <a name="ssd_resnet34_calibrate"></a>
 ### Calibrate
 
@@ -131,19 +120,12 @@ Please follow the corresponding [AIMET installation instructions](https://github
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
 
-<a name="ssd_resnet34_calibrate_gpu"></a>
-#### GPU
-
-<pre>
-<b>[anton@krai ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34 \
---dep_add_tags.lib-aimet=with-cuda --env.CUDA_VISIBLE_DEVICES=0
-</pre>
 		
 ### Detect a pregenerated profile
 
-Suppose you generate a profile using the `ck install package --tags=profile,ssd_resnet34` command (or its GPU variant) as above.
+Suppose you generate a profile using the `ck install package --tags=profile,ssd_resnet34` command.
 
-Suppose you then copy the folder containing `profile.yaml`, `node-precision.yaml` and `ssd_resnet34_aimet.onnx` files to a different machine e.g.:
+Suppose you then copy the folder containing `profile.yaml` and `node-precision.yaml` to a different machine e.g.:
 
 <pre>
 <b>[anton@krai ~]&dollar;</b> rsync -av --exclude=preprocessed --exclude=inference --exclude=__pycache__ \
@@ -154,6 +136,6 @@ Then, you can detect the profile on that machine e.g.:
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
---ienv._AIMET_MODEL=yes --extra_tags=ssd_resnet34,aimet \
+--ienv._AIMET_MODEL=yes --extra_tags=ssd_resnet34 \
 --full_path=/home/anton/CK-TOOLS/model-profile-qaic-compiler.python-3.8.5-ssd_resnet34/profile.yaml
 </pre>
