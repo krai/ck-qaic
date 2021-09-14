@@ -6,12 +6,19 @@ Sending build context to Docker daemon  6.745GB
 Step 1/2 : FROM centos:7
  ---> 8652b9f0cb4c
 Step 2/2 : ADD imagenet /imagenet
-
- ---> 9d127fa534b7
-Successfully built 9d127fa534b7
+ ---> d085ffcf869d
+Successfully built d085ffcf869d
 Successfully tagged imagenet:latest
 
+real    1m49.201s
+user    0m18.557s
+sys     0m8.360s
+
 Done.
+
+> docker image ls imagenet
+REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
+imagenet     latest    d085ffcf869d   About a minute ago   6.91GB
 ```
 
 ## Parameters

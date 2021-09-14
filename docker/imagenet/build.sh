@@ -42,7 +42,7 @@ if [[ ! -f "${_IMAGENET_DIR}/ILSVRC2012_val_00000001.JPEG" ]]; then
 fi
 
 # The image tag ('imagenet') and the path in that image ('/imagenet') are hardcoded on purpose.
-docker build -t imagenet ${_DATASETS_DIR} -f-<<EOF
+time docker build -t imagenet:latest ${_DATASETS_DIR} -f-<<EOF
 FROM centos:7
 ADD ${_IMAGENET_NAME} /imagenet
 EOF
