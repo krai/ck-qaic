@@ -528,7 +528,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
     #endif
     uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
-    if (std::getenv("QAIC_BYPASS_PPP")) {
+    if (std::getenv("CK_ENV_QAIC_BYPASS_PPP")) {
       numBuffers = ioDescProto.dma_buf_size();
       ioDescQData.data = nullptr;
     }
