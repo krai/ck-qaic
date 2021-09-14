@@ -113,9 +113,6 @@ The calibration dataset takes `8.1G` when preprocessed to the `1200x1200` resolu
 <a name="ssd_resnet34_calibrate"></a>
 ### Calibrate
 
-<a name="ssd_resnet34_calibrate_cpu"></a>
-#### CPU
-
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
