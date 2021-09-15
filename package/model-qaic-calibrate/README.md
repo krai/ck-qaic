@@ -133,6 +133,6 @@ Then, you can detect the profile on that machine e.g.:
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
---ienv._AIMET_MODEL=yes --extra_tags=ssd_resnet34 \
+--extra_tags=ssd_resnet34 \
 --full_path=/home/anton/CK-TOOLS/model-profile-qaic-compiler.python-3.8.5-ssd_resnet34/profile.yaml
 </pre>
