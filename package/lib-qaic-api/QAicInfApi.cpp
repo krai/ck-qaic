@@ -174,7 +174,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
 QStatus ActivationSet::setData(std::vector<std::vector<QBuffer>> &buffers) {
   QStatus status = QS_SUCCESS;
   int i = 0;
-  if (std::getenv("CK_ENV_QAIC_BYPASS_PPP")) {
+  if (std::getenv("QAIC_BYPASS_PPP")) {
     // no setdata is required when using dma buf path
 
     std::cerr << "no setdata is required when using dma buf path" << std::endl;
@@ -528,7 +528,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
     #endif
     uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
-    if (std::getenv("CK_ENV_QAIC_BYPASS_PPP")) {
+    if (std::getenv("QAIC_BYPASS_PPP")) {
       numBuffers = ioDescProto.dma_buf_size();
       ioDescQData.data = nullptr;
     }
@@ -550,7 +550,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
   }
 
-  if (!std::getenv("CK_ENV_QAIC_BYPASS_PPP")) {
+  if (!std::getenv("QAIC_BYPASS_PPP")) {
     setData();
   }
 
@@ -562,7 +562,7 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::sha
   inferenceBuffersList_.resize(inferenceBuffersList_.size() + 1);
 
   inferenceBuffersList_[idx].resize(setSize_);
-  if (std::getenv("CK_ENV_QAIC_BYPASS_PPP")) {
+  if (std::getenv("QAIC_BYPASS_PPP")) {
     for (uint32_t y = 0; y < setSize_; y++) {
       
       QBuffer* dmaBuffVect = shActivation->getDmaBuffers(y);
