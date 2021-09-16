@@ -359,8 +359,6 @@ The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destinati
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
-<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,train,2017)
-20G    /datasets/dataset-coco-2017-train
 </pre>
 
 <pre>
