@@ -38,7 +38,7 @@ can register it with CK ("detect") by giving the absolute path to
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --dep_add_tags.dataset-source=mlperf.option1 \
---tags=dataset,preprocessed,using-opencv,for.resnet,layout.nhwc,first.500 \
+--tags=dataset,preprocessed,using-opencv,for.resnet50,layout.nhwc,first.500 \
 --extra_tags=calibration,mlperf.option1
 </pre>
 
