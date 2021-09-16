@@ -104,9 +104,9 @@ The calibration dataset takes `8.1G` when preprocessed to the `1200x1200` resolu
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
---tags=dataset,coco.2017,calibration,for-ssd-resnet-onnx-preprocessed
+--tags=dataset,coco.2017,calibration,for.ssd-resnet34.onnx.preprocessed
 <b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco.2017,calibration,preprocessed)
-8.1G    /datasets/dataset-object-detection-preprocessed-using-opencv-calibration-coco.2017-first.500-for-ssd-resnet-onnx-preprocessed
+8.1G    /datasets/dataset-object-detection-preprocessed-using-opencv-calibration-coco.2017-first.500-for.ssd_resnet34.onnx.preprocessed
 </pre>  
 
 
