@@ -355,15 +355,41 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 
 **NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34).
 
+The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destination directory.
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,train,2017)
+20G    /datasets/dataset-coco-2017-train
+</pre>
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=dataset,coco,calibration,mlperf
+</pre>
+
 <a name="prepare_workload_calibrate_ssd_resnet34"></a>
 ##### SSD-ResNet34
 
-**TODO**
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
+--tags=dataset,coco.2017,calibration,for.ssd_resnet34.onnx.preprocessed
+</pre>
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
+</pre>
 
 <a name="prepare_workload_calibrate_ssd_mobilenet"></a>
 ##### SSD-MobileNet
 
-**TODO**
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
+--tags=dataset,coco.2017,calibration,for.ssd_mobilenet.onnx.preprocessed
+</pre>
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet
+</pre>
 
 #### Use precalibrated profiles
 
