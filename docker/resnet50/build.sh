@@ -50,6 +50,7 @@ _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
 read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:resnet50) && \
 time docker build \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \

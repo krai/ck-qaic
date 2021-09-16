@@ -39,6 +39,7 @@ _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
 read -d '' CMD <<END_OF_CMD
+cd "$(dirname "${BASH_SOURCE[0]}")" && \
 time docker build \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
