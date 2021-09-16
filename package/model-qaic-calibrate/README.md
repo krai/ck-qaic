@@ -3,6 +3,7 @@
 This package calibrates:
 - [ResNet50](#resnet50) using the QAIC toolchain.
 - [SSD-ResNet34](#ssd_resnet34) using the QAIC toolchain.
+- [SSD-Mobilenet](#ssd_mobilenet) using the QAIC toolchain.
 
 <a name="resnet50"></a>
 ## Calibrate ResNet50
@@ -136,3 +137,65 @@ Then, you can detect the profile on that machine e.g.:
 --extra_tags=ssd_resnet34 \
 --full_path=/home/anton/CK-TOOLS/model-profile-qaic-compiler.python-3.8.5-ssd_resnet34/profile.yaml
 </pre>
+
+<a name="ssd_mobilenet"></a>
+## Calibrate SSD-Mobilenet
+
+The SSD-Mobilenet model is calibrated using the QAIC toolchain based on
+[Glow](https://github.com/pytorch/glow).
+
+<a name="ssd_mobilenet_calbration_dataset"></a>
+### Prepare the calibration dataset
+
+The [official MLPerf Inference calibration dataset](https://github.com/mlcommons/inference/blob/master/calibration/COCO/coco_cal_images_list.txt)
+consists of `500` images randomly selected from the [COCO](https://cocodataset.org) 2017 training dataset (`118,287` images).
+
+#### Download the COCO training dataset
+
+The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destination directory.
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,train,2017)
+20G    /datasets/dataset-coco-2017-train
+</pre>
+
+##### Hint
+
+Once you have downloaded the COCO 2017 training dataset **using CK** under e.g. `/datasets/dataset-coco-2017-train`,
+you can register it with CK again if needed (e.g. if you reset your CK environment) as follows:
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck detect soft:dataset.coco.2017.train --extra_tags=detected,full \
+--full_path=/datasets/dataset-coco-2017-train/train2017/000000000009.jpg
+</pre>
+
+#### Select the calibration dataset
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=dataset,coco,calibration,mlperf
+<b>[anton@ax530b-03-giga ~]&dollar;</b> du -hs &dollar;(ck locate env --tags=dataset,coco,calibration,mlperf)
+86M     /home/anton/CK-TOOLS/dataset-coco-calibration-mlperf
+</pre>
+
+#### Preprocess the calibration dataset
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package \
+--tags=dataset,coco.2017,calibration,for.ssd_mobilenet.onnx.preprocessed
+</pre>  
+
+
+<a name="ssd_mobilenet_calibrate"></a>
+### Calibrate
+#### 4 samples per batch (for Offline scenario)
+
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet,bs.4
+</pre>
+
+#### 1 sample per batch (for the Single Stream scenario)
+<pre>
+<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet,bs.1
+</pre>
+
