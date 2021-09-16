@@ -358,35 +358,26 @@ Once you have downloaded the COCO 2017 validation dataset using CK, you can regi
 The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destination directory.
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
-</pre>
-
-<pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=dataset,coco,calibration,mlperf
+<b>[anton@dyson ~]&dollar;</b> ck install package --ask --tags=dataset,coco,train,2017
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=dataset,coco,calibration,mlperf
 </pre>
 
 <a name="prepare_workload_calibrate_ssd_resnet34"></a>
 ##### SSD-ResNet34
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
+<b>[anton@dyson ~]&dollar;</b> ck install package --ask \
 --tags=dataset,coco.2017,calibration,for.ssd_resnet34.onnx.preprocessed
-</pre>
-
-<pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=profile,ssd_resnet34
 </pre>
 
 <a name="prepare_workload_calibrate_ssd_mobilenet"></a>
 ##### SSD-MobileNet
 
 <pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --ask \
+<b>[anton@dyson ~]&dollar;</b> ck install package --ask \
 --tags=dataset,coco.2017,calibration,for.ssd_mobilenet.onnx.preprocessed
-</pre>
-
-<pre>
-<b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet
+<b>[anton@dyson ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet
 </pre>
 
 #### Use precalibrated profiles
