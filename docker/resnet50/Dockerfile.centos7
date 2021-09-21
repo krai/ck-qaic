@@ -37,11 +37,12 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.5.6
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
+ARG BASE_OS
 ARG BASE_IMAGE
 ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM $BASE_IMAGE:$SDK_VER AS mlperf.resnet50.centos7.preamble
 
 # Use Python >= 3.7, as required by the MLPerf Power workflow.
 ARG PYTHON_VER=3.7.11
@@ -49,8 +50,6 @@ ARG PYTHON_VER=3.7.11
 ARG GCC_MAJOR_VER=10
 # Use CK <= 1.55.5 with known behaviour.
 ARG CK_VER=1.55.5
-# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
-ARG IMAGENET=full
 # Fixed group id (recommended to be the same as that of 'qaic').
 ARG GROUP_ID=1500
 # Fixed user id.
@@ -74,8 +73,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # CK needs: git, wget, zip, unzip.
 # Python 3 needs: openssl-devel, bzip2-devel, libffi-devel.
 # MLPerf implementation needs: numactl.
-RUN yum upgrade -y\
- && yum install -y\
+RUN yum install -y\
  make which patch\
  git wget zip unzip\
  openssl-devel bzip2-devel libffi-devel\
@@ -111,6 +109,10 @@ RUN /bin/bash -l -c  \
 && /bin/bash -l -c \
  'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
 
+# Make created files (in particular, experiment entries) group-writable by default.
+RUN /bin/bash -l -c \
+ 'echo umask 002 >> /home/krai/.bashrc'
+
 # Install Collective Knowledge (CK).
 ENV CK_ROOT=/home/krai/CK \
     CK_REPOS=/home/krai/CK_REPOS \
@@ -122,14 +124,13 @@ ENV CK_ROOT=/home/krai/CK \
     GIT_USER="krai" \
     GIT_EMAIL="info@krai.ai" \
     LANG=C.UTF-8
-RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS}
-RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
-RUN git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT}
-RUN cd ${CK_ROOT} \
+RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL} \
+ && git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT} && cd ${CK_ROOT} \
  && source /home/krai/.bashrc \
- && ${CK_PYTHON} setup.py install --user\
+ && ${CK_PYTHON} setup.py install --user \
  && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
- && chmod -R g+rx /home/krai/.local
+ && chmod -R g+rx /home/krai/.local \
+ && mkdir -p ${CK_REPOS} ${CK_TOOLS}
 
 # Explicitly create a CK experiment entry, a folder that will be mounted
 # (with '--volume=<folder_for_results>:/home/krai/CK_REPOS/local/experiment').
@@ -141,6 +142,12 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
+
+# Set platform scripts (ensuring that ECC is on).
+RUN ck detect platform.os --platform_init_uoa=qaic
+
+# Detect C/C++ compiler (gcc).
+RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
@@ -155,26 +162,15 @@ RUN source /home/krai/.bashrc \
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM preamble AS builder
+FROM mlperf.resnet50.$BASE_OS.preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
-ARG IMAGENET
-
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
-
-# Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
-
-# Install CMake.
-RUN ck install package --tags=tool,cmake,downloaded
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,absl \
- && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy
 
 #-----------------------------------------------------------------------------#
@@ -197,6 +193,8 @@ RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestre
 #-----------------------------------------------------------------------------#
 # Step 3. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
+# Install CMake.
+RUN ck install package --tags=tool,cmake,downloaded
 RUN ck install package --tags=mlperf,inference,source \
  && ck install package --tags=mlperf,loadgen,static \
  && ck install package --tags=mlperf,power,source
@@ -205,35 +203,11 @@ RUN ck install package --tags=mlperf,inference,source \
 # Step 4. Compile the Image Classification program.
 #-----------------------------------------------------------------------------#
 RUN ck compile program:image-classification-qaic-loadgen
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the dataset.
-#-----------------------------------------------------------------------------#
 # Download the ImageNet labels.
 RUN ck install package --tags=dataset,imagenet,aux
-# Add original ImageNet from an auxiliary image to preprocess it.
-COPY --from=imagenet /imagenet /imagenet
-# Add preprocessed ImageNet from an auxiliary image.
-COPY --from=imagenet-preprocessed /imagenet-preprocessed /imagenet-preprocessed
-RUN if [ "${IMAGENET}" == "preprocessed" ]; \
-then \
-  echo "vfull" | ck detect soft --tags=dataset,imagenet,preprocessed,rgb8 \
-  --extra_tags=using-opencv,for.resnet50.quantized,layout.nhwc,crop.875,side.224,full,validation \
-  --full_path=/imagenet-preprocessed/ILSVRC2012_val_00000001.rgb8; \
-else \
-  if [ "${IMAGENET}" == "full" ]; \
-  then \
-    echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
-    --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation; \
-  else \
-    ck install package --tags=dataset,imagenet,val,min --no_tags=resized &&  \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation; \
-  fi \
-fi
 
 #-----------------------------------------------------------------------------#
-# Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+# Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
 RUN rm -rf \
 $(ck find repo:ctuning-programs)/* \
@@ -249,17 +223,35 @@ $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,fix_input_shape)/*
 
 ###############################################################################
-# FINAL STAGE
+# ONBUILD STAGE
 #
-# In this stage, simply copy CK, CK_TOOLS, CK_REPOS to the final image.
+# In this stage, we describe how to add ImageNet depending on the provided
+# option: IMAGENET={min,full,preprocessed}
 #
 ###############################################################################
-FROM preamble AS final
-COPY --from=builder /home/krai/CK       /home/krai/CK
-COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
-COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
-COPY --from=builder /imagenet-preprocessed /imagenet-preprocessed
+FROM builder AS mlperf.resnet50.min.centos7.onbuild
+ONBUILD RUN \
+ck install package --tags=dataset,imagenet,val,min --no_tags=resized && \
+ck install package --tags=python-package,opencv-python-headless && \
+ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 \
+--extra_tags=full,validation
+
+FROM builder AS mlperf.resnet50.full.centos7.onbuild
+# Add original ImageNet from an auxiliary image to preprocess it.
+ONBUILD COPY --from=imagenet /imagenet /imagenet
+ONBUILD RUN \
+echo "vfull" | ck detect soft:dataset.imagenet.val --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" \
+--extra_tags=ilsvrc2012,full && \
+ck install package --tags=python-package,opencv-python-headless && \
+ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full \
+--extra_tags=validation
+
+FROM builder AS mlperf.resnet50.preprocessed.centos7.onbuild
+ONBUILD COPY --from=imagenet-preprocessed /imagenet-preprocessed /home/krai/CK_TOOLS/imagenet-preprocessed
+ONBUILD RUN \
+echo "vfull" | ck detect soft --tags=dataset,imagenet,preprocessed,rgb8 \
+--extra_tags=using-opencv,for.resnet50.quantized,layout.nhwc,crop.875,side.224,full,validation \
+--full_path="/home/krai/CK_TOOLS/imagenet-preprocessed/ILSVRC2012_val_00000001.rgb8"
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

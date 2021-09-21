@@ -37,12 +37,19 @@ _BASE_IMAGE=${BASE_IMAGE:-qran-${_BASE_OS}}
 _SDK_VER=${SDK_VER:-1.5.6}
 _PYTHON_VER=${PYTHON_VER:-3.8.12}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
+
+# Preprocess the reduced (500 images) or full ImageNet validation dataset
+# (50,000 images), or use the full preprocessed dataset. The latter two
+# options result in the same image suffix 'full'.
 _IMAGENET=${IMAGENET:-full}
 if [[ "${_IMAGENET}" == "full" || "${_IMAGENET}" == "preprocessed" ]]
 then
   _IMAGENET_SUFFIX="full"
 else
   _IMAGENET_SUFFIX="min"
+  if [[ "${_IMAGENET}" != "min"  ]]; then
+    echo "Warning: mapping 'IMAGENET=${_IMAGENET}' to 'IMAGENET=min'."
+  fi
 fi
 
 QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
@@ -52,14 +59,14 @@ _USER_ID=${USER_ID:-2000}
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:resnet50) && \
 time docker build \
+--build-arg BASE_OS=${_BASE_OS} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
---build-arg IMAGENET=${_IMAGENET} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
--t krai/mlperf.resnet50.${_IMAGENET_SUFFIX}.${_BASE_OS}:${_SDK_VER} \
+-t mlperf.resnet50.${_BASE_OS}.onbuild:${_SDK_VER} \
 -f Dockerfile.${_BASE_OS} .
 END_OF_CMD
 echo "Running: ${CMD}"
@@ -67,5 +74,14 @@ if [ -z "${DRY_RUN}" ]; then
   eval ${CMD}
 fi
 
+time docker build \
+-t krai/mlperf.resnet50.${_IMAGENET_SUFFIX}.${_BASE_OS}:${_SDK_VER} . \
+-f-<<EOF
+FROM mlperf.resnet50.${_BASE_OS}.preamble:${_SDK_VER}
+COPY --from=mlperf.resnet50.${_IMAGENET_SUFFIX}.${_BASE_OS}.onbuild:${_SDK_VER} /home/krai/CK       /home/krai/CK
+COPY --from=mlperf.resnet50.${_IMAGENET_SUFFIX}.${_BASE_OS}.onbuild:${_SDK_VER} /home/krai/CK_REPOS /home/krai/CK_REPOS
+COPY --from=mlperf.resnet50.${_IMAGENET_SUFFIX}.${_BASE_OS}.onbuild:${_SDK_VER} /home/krai/CK_TOOLS /home/krai/CK_TOOLS
+EOF
+ 
 echo
 echo "Done."
