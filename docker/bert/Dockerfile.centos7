@@ -218,7 +218,6 @@ RUN ck install package --tags=model,compiled,bert,precision.fp16
 #-----------------------------------------------------------------------------#
 RUN rm -rf \
 $(ck find repo:ctuning-programs)/* \
-$(ck find repo:ctuning-datasets-min)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
 $(ck locate env --tags=lib,protobuf-host)/src \

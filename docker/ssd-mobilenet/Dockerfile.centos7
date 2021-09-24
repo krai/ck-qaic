@@ -224,7 +224,6 @@ RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.
 #-----------------------------------------------------------------------------#
 RUN rm -rf \
 $(ck find repo:ctuning-programs)/* \
-$(ck find repo:ctuning-datasets-min)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
 $(ck locate env --tags=lib,protobuf-host)/src \
