@@ -14,6 +14,7 @@ ssh scourge
 sudo su
 nohup /usr/bin/python3.7 /local/mnt/workspace/mlcommons/power-dev/ptd_client_server/server.py \
 -c /local/mnt/workspace/mlcommons/power-dev/ptd_client_server/server.pr009.conf &
+exit
 ```
 
 ## Install python3.8 (Should be already installed)
