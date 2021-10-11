@@ -125,7 +125,13 @@ cat /opt/qti-aic/versions/platform.xml
         </versions>
 ```
 
-### Check the fan speed
+### Set the fan speed
+```
+ipmitool -I lanplus -U admin -P password -H aus655-pci-bowie-bmc.qualcomm.com raw 0x2e 0x10 0x0a 0x3c 0 64 1 100 0xFF
+```
+
+#### Check the fan speed
+After about 10s of setting
 
 ```
 ipmitool -I lanplus -U admin -P password -H aus655-pci-bowie-bmc.qualcomm.com sensor get BPB_FAN_1A
@@ -138,7 +144,7 @@ Locating sensor record...
 Sensor ID              : BPB_FAN_1A (0xa0)
  Entity ID             : 29.1
  Sensor Type (Threshold)  : Fan
- Sensor Reading        : 7950 (+/- 0) RPM
+ Sensor Reading        : 8100 (+/- 0) RPM
  Status                : ok
  Lower Non-Recoverable : na
  Lower Critical        : 1200.000
