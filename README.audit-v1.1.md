@@ -1125,7 +1125,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=server --override_batch_size=1024 \
---target_qps=2250 -- max_wait=50000"
+--target_qps=2250 --max_wait=50000"
 ```
 #### Submitted Result
  `"f1": 90.79046230446818`
@@ -1155,7 +1155,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=server --override_batch_size=1024 \
---target_qps=2250 -- max_wait=50000 ${POWER_pr009}"
+--target_qps=2250 --max_wait=50000 ${POWER_pr009}"
 ```
 <details>
   <summary>Click to see submitted result!</summary>
@@ -1302,7 +1302,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST01,TEST05 --scenario=server --override_batch_size=1024 \
---target_qps=2250 -- max_wait=50000"
+--target_qps=2250 --max_wait=50000"
 ```
 
 ```
