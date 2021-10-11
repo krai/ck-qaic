@@ -1,11 +1,13 @@
-# Mlcommons 1.1 Submission Values
+# Qualcomm Cloud AI - MLPerf Inference v1.1 audit
 
-| Benchmark | SDK | Offline Performance | Offline Power | Server Performance | Server Power |
-| --------- | --- | ------------------- | ------------- | ------------------ | ------------ |
-| Bert-99 | 1.5.9 | 5202.88 | 776.3 | 4,902.82 | 765.17 |
-| Bert-99.9 | 1.5.9 | 2,664.14 | 841.44 | 2250.17 | 763.92 |
+## R282-Z93-Q8 BERT results
 
-## Start the power server (Should be already started)
+| Benchmark | SDK   | Offline Performance | Offline Power | Server Performance | Server Power |
+| --------- | ----- | ------------------- | ------------- | ------------------ | ------------ |
+| BERT-99   | 1.5.9 | 5,202.88 queries/s  | 776.30 Watts  | 4,902.82 queries/s | 765.17 Watts |
+| BERT-99.9 | 1.5.9 | 2,664.14 queries/s  | 841.44 Watts  | 2,250.17 queries/s | 763.92 Watts |
+
+## Start the power server on an auxiliary machine (should be already started)
 
 ``` 
 ssh scourge
@@ -17,7 +19,8 @@ nohup /usr/bin/python3.7 /local/mnt/workspace/mlcommons/power-dev/ptd_client_ser
 exit
 ```
 
-## Install python3.8 (Should be already installed)
+## Install Python v3.8 (should be already installed)
+
 ```
 sudo su
 export PYTHON_VERSION=3.8.12
@@ -34,7 +37,7 @@ python3.8 --version
 ```
 `Python 3.8.12`
 
-## Account Setup
+## Account setup
 
 ```
 sudo useradd auditor
@@ -103,10 +106,11 @@ chgrp qaic $CK_EXPERIMENTS -R && chmod g+ws $CK_EXPERIMENTS -R
 ```
 
 
-Pull the required CK Repos
+Pull the required CK repos
 
+```
 ck pull repo --url=https://github.com/krai/ck-qaic
-
+```
 
 ### Check the QAIC SDK version
 
