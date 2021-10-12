@@ -389,13 +389,36 @@
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
+    "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
-    "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
+    "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ] && [ -z  \"<<<replace_existing>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
+  },
+  "groups": {
+	 "edge": [
+		 {"scenario": "singlestream"},
+		 {"scenario": "offline"}
+	 ],
+	 "datacenter": [
+		 {"scenario": "server"},
+		 {"scenario": "offline"}
+	 ],
+	 "open": [
+		 {"mode": "accuracy"},
+		 {"mode": "performance"}
+	 ],
+	 "closed": [
+		 {"mode": "accuracy"},
+		 {"mode": "performance"},
+		 {"compliance": "TEST01"},
+		 {"compliance": "TEST04-A"},
+		 {"compliance": "TEST04-B"},
+		 {"compliance": "TEST05"}
+	 ]
   }
 }
