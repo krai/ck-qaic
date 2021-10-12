@@ -537,7 +537,7 @@ QID 7
 
 ```
 ck pull repo --url=https://github.com/krai/ck-qaic
-$(ck find ck-qaic:docker:bert)/build.sh DOCKER_OS=centos7 SDK_VER=1.5.9
+BASE_OS=centos7 SDK_VER=1.5.9 $(ck find ck-qaic:docker:bert)/build.sh
 ```
 
 ```
