@@ -166,6 +166,71 @@ def add_2d_mask(self, inputs, outputs):
     # Insert the new node.
     return self.layer(op="Unsqueeze", name='', attrs=OrderedDict([('axes', [1])]), inputs=[inp1], outputs=output_copy)
 
+@gs.Graph.register()
+def replace_with_comp_mask(self, inputs, outputs, input_mask_node, input_ids_node):
+    input_mask_node.shape = ['batch_size', 8]
+    print(type(input_mask_node.dtype))
+    input_mask_node.dtype = np.dtype('int64')
+    print(type(input_mask_node.dtype))
+
+    for out in input_mask_node.outputs:
+        print('removing: ', out)
+        remove_node(out)
+    
+
+    # Disconnect output nodes of all input tensors
+    for inp in inputs:
+        inp.outputs.clear()
+
+    # Disconnet input nodes of all output tensors
+    output_copy = list(outputs)
+    for out in outputs:
+        print('removing: ', out)
+        out.inputs.clear()
+    
+
+    # Insert the new node.
+    inputsTrans = self.layer(op="Transpose", name='', inputs=[input_mask_node], outputs=['node0'])
+
+#     cumulativeIncl = OnnxCumSum('inputs', np.array(1))
+    cumulativeIncl = self.layer(op="CumSum", name='', inputs=[*inputsTrans, np.array([0], dtype=np.int32)], outputs=['node1'])
+#     cumulativeExcl = OnnxCumSum('inputs', np.array(1), exclusive=True)
+    cumulativeExcl = self.layer(op="CumSum", name='', attrs=OrderedDict([('exclusive', True)]), inputs=[*inputsTrans, np.array([0], dtype=np.int32)], outputs=['node2'])
+
+#     cumulativeIncl = OnnxUnsqueeze(cumulativeIncl, np.array(1))
+    cumulativeIncl = self.layer(op="Unsqueeze", name='', inputs=[*cumulativeIncl], attrs=OrderedDict([('axes', [0])]), outputs=['node3'])
+#     cumulativeExcl = OnnxUnsqueeze(cumulativeExcl, np.array(1))
+    cumulativeExcl = self.layer(op="Unsqueeze", name='', inputs=[*cumulativeExcl], attrs=OrderedDict([('axes', [0])]), outputs=['node4'])
+
+#     cumulativeInclReshaped = OnnxTranspose(cumulativeIncl, perm=np.array([0, 2, 1]))
+    cumulativeInclReshaped = self.layer(op="Transpose", name='', inputs=[*cumulativeIncl], outputs=['node5'])
+    
+#     cumulativeExclReshaped = OnnxTranspose(cumulativeExcl, perm=np.array([0, 2, 1]))
+    cumulativeExclReshaped = self.layer(op="Transpose", name='', inputs=[*cumulativeExcl], outputs=['node6'])
+
+    # shapeNode = OnnxShape(input_ids)
+    shapeNode = self.layer(op="Shape", name='', inputs=[input_ids_node], outputs=['node7'])
+    # gatherNode = OnnxGather(shapeNode, np.array(1));
+    gatherNode = self.layer(op='Gather', name='', inputs=[*shapeNode, np.array(1)], outputs=['node8'])
+    # rangeNode = OnnxRange(np.array(0), gatherNode, np.array(1))
+    rangeNode = self.layer(op='Range', name='', inputs=[np.array(0), *gatherNode, np.array(1)], outputs=['node9'])
+    
+#     lessnode = OnnxLess(rangeNode, cumulativeInclReshaped)
+    lessNode = self.layer(op='Less', name='', inputs=[*rangeNode, *cumulativeInclReshaped], outputs=['node10'])
+#     greaternode = OnnxGreaterOrEqual(rangeNode, cumulativeExclReshaped)
+    greaterNode = self.layer(op='Less', name='', inputs=[*rangeNode, *cumulativeExclReshaped], outputs=['node11'])
+    greaterNode = self.layer(op='Not', name='', inputs=[*greaterNode], outputs=['node12'])
+#     node = OnnxAnd(lessnode, greaternode)
+    node = self.layer(op='And', name='', inputs=[*lessNode, *greaterNode], outputs=['node13'])
+#     node = OnnxCast(node, to=TensorProto.INT32)
+    node = self.layer(op='Cast', name='', inputs=[*node], attrs=OrderedDict([('to', 1)]), outputs=['node14'])
+#     node = OnnxMatMul(OnnxTranspose(node, perm=np.array([0, 2, 1])), node)
+    print('Copy:', output_copy)
+    transNode = self.layer(op='Transpose', name='', inputs=[*node], outputs=['node15'], attrs=OrderedDict([('perm', [0, 2, 1])]))
+    node = self.layer(op='MatMul', name='', inputs=[*transNode, *node], outputs=output_copy)
+    return node
+
+
 def add_position_input(graphPacked):
     collectGatherNodes = [node for node in graph.nodes if node.op == "Gather"]
     for gather in collectGatherNodes:
@@ -187,5 +252,41 @@ graph = add_position_input(graph)
 graph.cleanup().toposort()
 
 os.remove("./intermediate_model.onnx")
-onnx.save(gs.export_onnx(graph), "./model.onnx")
 
+onnx.save(gs.export_onnx(graph), "./intermediate_model.onnx")
+
+modelFloat = onnx.load("./intermediate_model.onnx")
+graph = gs.import_onnx(modelFloat)
+# print(graph)
+
+input_mask_node = None
+input_ids_node = None
+for node in graph.nodes:
+    if len(node.inputs) > 0 and node.inputs[0].name == 'input_mask':
+        print(node.inputs[0])
+        input_mask_node = node.inputs[0]
+    if len(node.inputs) > 1 and node.inputs[1].name == 'input_ids':
+        print(node.inputs[1])
+        input_ids_node = node.inputs[1]
+    if input_mask_node and input_ids_node:
+        break
+
+for node in graph.nodes:
+    if len(node.outputs) > 0 and node.outputs[0].name == "398":
+        print(node)
+#         print(node.attrs)
+        graph.replace_with_comp_mask(node.inputs, node.outputs, input_mask_node, input_ids_node)
+        break
+
+graph = graph.cleanup().toposort()
+print('done')
+for node in graph.nodes:
+    if node.outputs[0].name in ['396', '397', '400', '491'] or 'node8' in node.outputs[0].name:
+        print(node)
+    if len(node.inputs) > 0 and node.inputs[0].name == "input_mask":
+        print(node)
+        
+# print(graph)
+os.remove("./intermediate_model.onnx")
+
+onnx.save(gs.export_onnx(graph), "./model.onnx")

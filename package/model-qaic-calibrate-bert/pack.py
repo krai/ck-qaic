@@ -39,6 +39,8 @@ import pickle
 from pathlib import Path
 import sys
 
+MASK_SL = 8
+
 input_pickle_blob = Path(sys.argv[1])
 output_dir = Path(sys.argv[2])
 strategy_set_fp = Path(sys.argv[3])
@@ -66,23 +68,53 @@ def pack_and_write_data(data_list, dirpath, max_sl=384):
         segment_ids[offset : seq_len+offset] = np.array(feature.segment_ids, dtype=np.int64)[0:seq_len]
         offset += seq_len
 
-    mask = np.array([[i for i in range(len(data_list)) \
-                       for _ in range(sum(data_list[i].input_mask)) ]])
-    input_mask = 1 * np.equal(mask, mask.transpose())
+
+    # input_mask is just the list of sequence lengths
+    mask = np.array([sum(x.input_mask) for x in data_list])
+
+    #mask = np.array([[i for i in range(len(data_list)) \
+    #                   for _ in range(sum(data_list[i].input_mask)) ]])
+    #input_mask = 1 * np.equal(mask, mask.transpose())
 
     position_ids = np.concatenate([np.arange(sum(x.input_mask), dtype=np.int64) for x in data_list])
 
     pad_len = max_sl - offset
-    input_mask = np.pad(input_mask, [0, pad_len])
     position_ids = np.pad(position_ids, [0, pad_len])
-
-    input_mask = input_mask.astype(bool)
+    input_mask = np.pad(mask, [0, MASK_SL - len(mask)])
 
     dirpath.mkdir(exist_ok=True, parents=True)
     input_ids.tofile(dirpath / 'input_ids.raw')
     input_mask.tofile(dirpath / 'input_mask.raw')
     segment_ids.tofile(dirpath / 'segment_ids.raw')
     position_ids.tofile(dirpath / 'input_position_ids.raw')
+
+
+def pack_and_write_data_new(data_list, max_sl=384):
+    # data_list has [[input_ids_0, input_mask_0, segment_ids_0], ...]
+    input_ids = np.concatenate([x[0] for x in data_list])
+    segment_ids = np.concatenate([x[2] for x in data_list])
+
+    # input_mask is just the list of sequence lengths
+    mask = np.array([len(x[0]) for x in data_list])
+
+    # create input_position_ids
+    position_ids = np.concatenate([np.arange(len(x[0]), dtype=np.int64) for x in data_list])
+
+    # padding
+    pad_len = max_sl - len(input_ids)
+    assert pad_len >= 0
+    assert len(input_ids) == len(segment_ids)
+    input_ids = np.pad(input_ids, [0, pad_len])
+    segment_ids = np.pad(segment_ids, [0, pad_len])
+    input_mask = np.pad(mask, [0, MASK_SL - len(mask)])
+    position_ids = np.pad(position_ids, [0, pad_len])
+
+    dirpath.mkdir(exist_ok=True, parents=True)
+    input_ids.tofile(dirpath / 'input_ids.raw')
+    input_mask.tofile(dirpath / 'input_mask.raw')
+    segment_ids.tofile(dirpath / 'segment_ids.raw')
+    position_ids.tofile(dirpath / 'input_position_ids.raw')
+
 
 
 
