@@ -9,10 +9,10 @@
 
 ## Start the power server on an auxiliary machine (should be already started)
 
-``` 
+```
 ssh scourge
-``` 
-``` 
+```
+```
 sudo su
 nohup /usr/bin/python3.7 /local/mnt/workspace/mlcommons/power-dev/ptd_client_server/server.py \
 -c /local/mnt/workspace/mlcommons/power-dev/ptd_client_server/server.pr009.conf &
@@ -142,7 +142,7 @@ ipmitool -I lanplus -U admin -P password -H aus655-pci-bowie-bmc.qualcomm.com se
 ```
 <details>
   <summary>Click to see expected output!</summary>
-        
+
 ```
 Locating sensor record...
 Sensor ID              : BPB_FAN_1A (0xa0)
@@ -164,7 +164,7 @@ Sensor ID              : BPB_FAN_1A (0xa0)
  ```
 
 </details>
- 
+
 ### Check the presence of eight 16-NSP cards
 ```
 /opt/qti-aic/tools/qaic-util -q
@@ -172,8 +172,8 @@ Sensor ID              : BPB_FAN_1A (0xa0)
 
 <details>
   <summary>Click to see expected output!</summary>
-        
-```     
+
+```
 LRT QC_IMAGE_VERSION: LRT.AIC.5.2.1.5.6
 LRT IMAGE_VARIANT: LRT.AIC.REL
 Number of devices: 8
@@ -530,7 +530,7 @@ QID 7
         NSP Defective PG Mask: 0x0
         Board serial:PN471-12-343016
 ```
-        
+
 </details>
 
 # Docker Build (Optional)
@@ -563,7 +563,7 @@ REPOSITORY                          TAG           IMAGE ID       CREATED        
 krai/mlperf.bert.centos7            1.5.9         a7fa76eedc92   29 seconds ago   14.2GB
 ```
 
-# BERT-99 
+# BERT-99
 
 ## BERT-99 Offline
 
@@ -717,7 +717,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
     ],
 
 ```
-</details>        
+</details>
 
 ```
 grep -w 'avg_power' $(ck find experiment:*bert*mixed*offline*performance*client)/*0001.json
@@ -734,7 +734,7 @@ grep -w 'Samples per second' $(ck find experiment:*bert*mixed*offline*performanc
             "Samples per second: 5198.98",
 ```
 
-### Bert-99 Offline Compliance
+### BERT-99 Offline Compliance
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
@@ -754,7 +754,7 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.m
 
 ## BERT-99 Server
 
-### BERT-99 Server Accuracy 
+### BERT-99 Server Accuracy
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
@@ -841,7 +841,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
             "performance_sample_count : 10833\n",
             "\n",
 ```
-` "avg_power": 765.1739999999991, `       
+` "avg_power": 765.1739999999991, `
 </details>
 <details>
   <summary>Click to see reproduced result!</summary>
@@ -918,7 +918,7 @@ grep -w 'avg_power' $(ck find experiment:*bert*mixed*server*performance*client)/
         "avg_power": 769.1201666666668,
 `
 
-### Bert-99 Server Compliance
+### BERT-99 Server Compliance
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
@@ -936,18 +936,18 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.m
 mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.mixed-server-performance-compliance.TEST01-target_qps.4901
 ```
 
-# Bert-99.9
+# BERT-99.9
 
-## Bert-99.9 Offline
+## BERT-99.9 Offline
 
-### Bert-99.9 Offline Accuracy
+### BERT-99.9 Offline Accuracy
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
---mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=2700" 
+--mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=2700"
 ```
 #### Submitted Result
  `"f1": 90.79046230446818`
@@ -970,9 +970,9 @@ grep -w f1 $(ck find experiment:*bert*fp16*offline*accuracy*)/*0001.json
         "f1": 90.79046230446818,
 `
 
-### Bert-99.9 Offline Power and Performance
+### BERT-99.9 Offline Power and Performance
 
-``` 
+```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -981,8 +981,8 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 ```
 <details>
   <summary>Click to see submitted result!</summary>
-        
-``` 
+
+```
             "================================================\n",
             "MLPerf Results Summary\n",
             "================================================\n",
@@ -1039,11 +1039,11 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 
 <details>
   <summary>Click to see reproduced result!</summary>
-        
+
 ```
       "================================================\n",
       "MLPerf Results Summary\n",
-      "================================================\n",        
+      "================================================\n",
       "Scenario : Offline",
       "Mode     : PerformanceOnly",
       "Samples per second: 2642.19",
@@ -1094,7 +1094,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 </details>
 
 ```
-grep -w 'Samples per second' $(ck find experiment:*bert*fp16*offline*performance*client)/*0001.json    
+grep -w 'Samples per second' $(ck find experiment:*bert*fp16*offline*performance*client)/*0001.json
 ```
 ```
             "Samples per second: 2655.84",
@@ -1107,7 +1107,7 @@ grep -w 'avg_power' $(ck find experiment:*bert*fp16*offline*performance*client)/
         "avg_power": 842.0051928783388,
 ```
 
-### Bert-99.9 Offline Compliance
+### BERT-99.9 Offline Compliance
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
@@ -1125,11 +1125,11 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.f
 mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.fp16-offline-performance-compliance.TEST01-target_qps.2700
 ```
 
-## Bert-99.9 Server
+## BERT-99.9 Server
 
-### Bert-99.9 Server Accuracy
+### BERT-99.9 Server Accuracy
 
-``` 
+```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -1149,17 +1149,17 @@ Reading examples...
 ...
 ```
 -->
-``` 
-grep -w f1 $(ck find experiment:*bert*fp16*server*accuracy*)/*0001.json                                                               
+```
+grep -w f1 $(ck find experiment:*bert*fp16*server*accuracy*)/*0001.json
 ```
 `
 "f1": 90.79046230446818,
 `
 
 
-### Bert-99.9 Server Power and Performance
+### BERT-99.9 Server Power and Performance
 
-``` 
+```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -1226,10 +1226,10 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 
 ```
 ` "avg_power": 763.915973377704`
-</details>        
+</details>
 <details>
   <summary>Click to see reproduced result!</summary>
-        
+
 ```
       "================================================",
       "MLPerf Results Summary",
@@ -1289,7 +1289,7 @@ docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent g
 </details>
 
 
-``` 
+```
 grep -w 'Scheduled samples per second' $(ck find experiment:*bert*fp16*server*performance*client)/*0001.json
 ```
 ```
@@ -1297,14 +1297,14 @@ grep -w 'Scheduled samples per second' $(ck find experiment:*bert*fp16*server*pe
             "Scheduled samples per second : 2250.17",
 ```
 
-``` 
+```
 grep -w 'avg_power' $(ck find experiment:*bert*fp16*server*performance*client)/*0001.json
 ```
 `
         "avg_power": 769.2759999999993,
 `
 
-### Bert-99.9 Server Compliance 
+### BERT-99.9 Server Compliance
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
@@ -1478,8 +1478,8 @@ python3.8 $(ck locate env --tags=mlperf,inference,r1.1)/inference/tools/submissi
 ```
 <details>
         <summary>Click here to view full output</summary>
-        
-```        
+
+```
 INFO    Sucessfully loaded MLPerf log from closed/Qualcomm/results/r282_z93_q8-qaic-v1.5.9-aic100/bert-99.9/server/accuracy/mlperf_log_detail.txt.
 INFO    Detected power logs for closed/Qualcomm/results/r282_z93_q8-qaic-v1.5.9-aic100/bert-99.9/server
 INFO    Sucessfully loaded MLPerf log from closed/Qualcomm/results/r282_z93_q8-qaic-v1.5.9-aic100/bert-99.9/server/performance/run_1/mlperf_log_detail.txt.
@@ -1620,7 +1620,7 @@ INFO    Sucessfully loaded MLPerf log from closed/Qualcomm/results/r282_z93_q8-q
 [x] Check debug is disabled on server-side
 ```
 </details>
-        
+
 ```
 All checks passed. Warnings encountered, check for audit!
 
