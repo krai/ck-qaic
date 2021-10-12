@@ -140,6 +140,8 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
 
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_BRANCH}
+
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
  && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
