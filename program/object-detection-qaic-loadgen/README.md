@@ -386,7 +386,7 @@ The COCO 2017 training dataset takes `20G`. Use `--ask` to confirm the destinati
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> echo "vdetected" | ck detect soft:compiler.glow.profile \
---full_path=$(ck find repo:qualcomm-private)/profile/ssd-resnet34/bs.1/profile.yaml \
+--full_path=$(ck find repo:ck-qaic)/profile/ssd-resnet34/bs.1/profile.yaml \
 --extra_tags=detected,ssd_resnet34
 </pre>
 
