@@ -302,7 +302,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package \
 --dep_add_tags.dataset-source=original,full \
---tags=dataset,imagenet,val,full,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224
+--tags=dataset,imagenet,val,full,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,validation
 </pre>
 
 <a name="prepare_resnet50"></a>
