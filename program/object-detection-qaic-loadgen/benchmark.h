@@ -707,21 +707,21 @@ private:
   std::vector<int> get_random_images_finished;
   std::vector<int> get_random_images_turn;
 
-  uint8_t* copy_src[256][8];
-  uint8_t* copy_dest[256][8];
-  size_t copy_size[256][8];
-  bool copy_finished[256][8];
-  std::mutex copy_mutex[256][8];
+  uint8_t* copy_src[512][8];
+  uint8_t* copy_dest[512][8];
+  size_t copy_size[512][8];
+  bool copy_finished[512][8];
+  std::mutex copy_mutex[512][8];
 
 
   std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >
   nms_results;
   std::vector<std::vector<std::vector<std::vector<ResultData *> > > > reformatted_results;
 
-  std::mutex get_next_results_mutex[256];
-  std::mutex get_next_results_mutex2[256];
-  std::mutex get_next_results_mutex3[16];
-  std::mutex get_next_results_batch_mutex[256];
+  std::mutex get_next_results_mutex[512];
+  std::mutex get_next_results_mutex2[512];
+  std::mutex get_next_results_mutex3[32];
+  std::mutex get_next_results_batch_mutex[512];
 
   std::vector<std::vector<int> *> get_next_results_image_idxs;
   std::vector<std::vector<ResultData *> *> get_next_results_results;
