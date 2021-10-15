@@ -257,7 +257,7 @@ public:
         if(dev_idx == 4) OFFSET = 4;
 #endif
   
-        unsigned coreid = OFFSET + ((dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8);
+        unsigned coreid = OFFSET + AFFINITY_CARD(dev_idx);
         for (int i = 0; i < CTN; i++) {
           cpu_set_t cpuset;
           get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
@@ -287,7 +287,7 @@ public:
     for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
       std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
 #if defined(G292) || defined(R282)
-      unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
+      unsigned coreid = AFFINITY_CARD(dev_idx);
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
@@ -315,7 +315,7 @@ public:
         std::thread t(&Benchmark::get_next_results_worker, this,
                       dev_idx + i * dev_cnt);
 
-        unsigned coreid = (dev_idx > 7) ? -(START_CORE) + dev_idx * 8 : (START_CORE) + dev_idx * 8;
+        unsigned coreid = AFFINITY_CARD (dev_idx);
         cpu_set_t cpuset;
         CPU_ZERO(&cpuset);
 #ifdef R282
