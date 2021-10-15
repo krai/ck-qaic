@@ -86,7 +86,7 @@ Program::Program() {
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::thread t(&Program::InitDevices, this, d);
 
-    unsigned coreid = (d > 7) ? -(START_CORE) + d * 8 : (START_CORE) + d * 8;
+    unsigned coreid = AFFINITY_CARD(d);
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     for(int j = 0; j < 7; j++)
@@ -177,8 +177,9 @@ for(int i=0 ; i<num_setup_threads ; ++i) {
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
+    int coreid = AFFINITY_CARD(i);
     //CPU_SET(i*4, &cpuset);
-    CPU_SET(i*8+7, &cpuset);
+    CPU_SET(coreid+7, &cpuset);
     //CPU_SET(i*4+2, &cpuset);
     //CPU_SET(i*4+3, &cpuset);
     //CPU_SET(i*8+2, &cpuset);
