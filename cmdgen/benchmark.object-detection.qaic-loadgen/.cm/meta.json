@@ -322,7 +322,7 @@
           "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292"
+          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
         ],
         "compiler_tags": "gcc,v10",
         "model_tags": [
@@ -446,6 +446,7 @@
     "dataset_size": "5000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
+    "g292_default_config": "-DG292_CONFA",
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "power_server_port": "4950",
