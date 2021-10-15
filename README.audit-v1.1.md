@@ -53,6 +53,7 @@ ssh auditor@localhost
 ### Set up CK
 
 ```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 python3.8 -m pip install ck==1.55.5 --user
 python3.8 -m pip install pandas --user
 python3.8 -m pip install tabulate --user
