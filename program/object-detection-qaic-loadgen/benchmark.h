@@ -698,9 +698,9 @@ private:
   AnchorBoxConfig acConfig;
 
   std::vector<int> class_map;
-  std::mutex get_random_images_mutex[256];
-  std::mutex get_random_images_mutex2[256];
-  std::mutex get_random_images_mutex3[16];
+  std::mutex get_random_images_mutex[512];
+  std::mutex get_random_images_mutex2[512];
+  std::mutex get_random_images_mutex3[32];
   std::vector<const std::vector<mlperf::QuerySample>*> get_random_images_samples;
   std::vector<int> get_random_images_act_idx;
   std::vector<int> get_random_images_set_idx;
