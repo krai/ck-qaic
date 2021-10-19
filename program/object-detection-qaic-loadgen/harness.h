@@ -146,12 +146,16 @@ public:
   const int images_in_memory_max();
 
   static void setSUT(SystemUnderTestQAIC *s);
-
+  
+  static SystemUnderTestQAIC* getSUT() {
+    return sut;
+  }
   static BenchmarkSettings *settings;
 
   void InitDevices(int dev_idx);
   static int num_setup_threads;
-  static Payload* payloads[64];
+  static std::atomic<Payload*> payloads[512];
+
 
 private:
   static BenchmarkSession *session;
@@ -188,6 +192,10 @@ public:
   void QueryResponse(std::vector<mlperf::QuerySample> &samples,
                      std::vector<ResultData *> results);
 
+  mlperf::TestScenario getTestScenario() {
+    return scenario;
+  }
+  
   void FlushQueries() override;
 
   void ReportLatencyResults(
