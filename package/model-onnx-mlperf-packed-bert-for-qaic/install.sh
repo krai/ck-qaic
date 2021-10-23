@@ -38,6 +38,7 @@ function exit_if_error() {
 
 args=$@
 
+rm -rf ${INSTALL_DIR}/downloaded
 mkdir -p downloaded
 
 wget https://zenodo.org/record/3733868/files/model.ckpt-5474.data-00000-of-00001 -P ${INSTALL_DIR}/downloaded/

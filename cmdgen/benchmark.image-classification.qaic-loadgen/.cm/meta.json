@@ -146,6 +146,13 @@
         ]
       }
     },
+    "calibration_value": {
+      "###": {
+        "model_tags": [
+          "pcv.\"$(echo ###)\""
+        ]
+      }
+    },
     "no_record": {
       "yes": {
         "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"

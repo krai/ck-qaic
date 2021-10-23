@@ -37,7 +37,7 @@
         ],
         "mlperf,bert-packed": [
           {
-            "_MODEL_TO_CONVERT": ["compile_bert_mixed", "compile_bert_fp16"] 
+            "_MODEL_TO_CONVERT": ["compile_bert_99", "compile_bert_99.9"] 
           }
         ]
       }
@@ -136,7 +136,7 @@
       "enable_if_env": [
         {
           "_MODEL_TO_CONVERT": [
-            "compile_bert_mixed"
+            "compile_bert_99"
           ]
         }
       ],
@@ -424,23 +424,23 @@
         "bert"
       ]
     },
-    "bert.mixed": {
+    "bert-99": {
       "extra_env": {
-        "_MODEL_TO_CONVERT": "compile_bert_mixed",
+        "_MODEL_TO_CONVERT": "compile_bert_99",
         "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Mul,Add,Div,Erf,Softmax,Sub,Gather,LayerNormalization,Mul -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -aic-minimize-host-traffic  -quantization-precision-bias=Int32  -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -aic-compile-only-test"
       },
       "extra_tags": [
         "calibrated-by-qaic",
-        "bert-99"
+        "bert.mixed"
       ]
     },
-    "bert.fp16": {
+    "bert-99.9": {
       "extra_env": {
-        "_MODEL_TO_CONVERT": "compile_bert_fp16",
+        "_MODEL_TO_CONVERT": "compile_bert_99.9",
         "_COMPILER_PARAMS": "-convert-to-fp16  -aic-hw -aic-num-cores=4 -mos=4 -ols=1  '-compiler-args=-aic-perf-metrics -aic-time-passes -aic-version -aic-ddr-to-multicast -aic-form-axis-uniform-constants -aic-userdma-producer-dma -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,384'  -aic-compile-only-test"
       },
       "extra_tags": [
-        "bert-99.9"
+        "bert.fp16"
       ]
     },
     "bs.1": {

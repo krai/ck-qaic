@@ -121,13 +121,20 @@
       "bert-99.9": {
         "model_tags": [
           "bert",
-          "precision.fp16"
+          "bert-99.9"
         ]
       },
       "bert-99": {
         "model_tags": [
           "bert",
-          "precision.mixed"
+          "bert-99"
+        ]
+      }
+    },
+    "calibration_value": {
+      "###": {
+        "model_tags": [
+          "pcv.\"$(echo ###)\""
         ]
       }
     },
