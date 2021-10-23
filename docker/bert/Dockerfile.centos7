@@ -56,6 +56,7 @@ ARG GROUP_ID=1500
 ARG USER_ID=2000
 
 ARG CK_QAIC_BRANCH=main
+ARG CK_QAIC_PERCENTILE_CALIBRATION=no
 
 # Use the Austin timezone by default.
 ARG TIMEZONE=US/Central
@@ -214,10 +215,10 @@ RUN ck install package --tags=profile,qaic,bert-packed
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,compiled,bert,bert-99
+RUN if [[ CK_QAIC_PERCENTILE_CALIBRATION == "no" ]]; the nck install package --tags=model,compiled,bert,bert-99 fi
 RUN ck install package --tags=model,compiled,bert,bert-99.9
 
-RUN $(ck find repo:ck-qaic)/package/lib-qaic-compile/percentile-calibration.sh bert bert-99
+RUN if [[ CK_QAIC_PERCENTILE_CALIBRATION == "yes" ]]; $(ck find repo:ck-qaic)/package/lib-qaic-compile/percentile-calibration.sh bert bert-99 SDK_VER fi
 
 #-----------------------------------------------------------------------------#
 # Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
