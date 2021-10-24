@@ -66,7 +66,7 @@ do
   echo $install_cmd
   eval $install_cmd
   exit_if_error
-  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$rmodel --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv >/dev/null 2>&1"
+  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$rmodel --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
   echo $ck_run_cmd
   eval $ck_run_cmd
   exit_if_error
