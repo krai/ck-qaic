@@ -59,7 +59,7 @@ time docker build \
 --build-arg CK_QAIC_BRANCH=${_CK_QAIC_BRANCH} \
 --build-arg CK_QAIC_PERCENTILE_CALIBRATION=${_CK_QAIC_PERCENTILE_CALIBRATION} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
--t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}{tag_suffix} \
+-t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} \
 -f Dockerfile.${_BASE_OS} .
 END_OF_CMD
 echo "Running: ${CMD}"
