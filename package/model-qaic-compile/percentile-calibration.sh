@@ -59,7 +59,7 @@ if [ "$#" == 3 ]; then sdk=$3; else sdk=1.5.9; fi
 cprogram=$(get_cmdgen_program_name $bmodel)
 accuracy_metric=$(get_accuracy_metric $bmodel)
 if [ "$bmodel" == "bert" ]; then rmodel=$model; else rmodel=$bmodel; fi
-for i in {10..69..1}
+for i in {70..99..1}
 do
   pcv="99"$i
   install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv >/dev/null 2>&1"
