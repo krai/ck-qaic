@@ -46,6 +46,7 @@ QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
 _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
+if [[ ${_DEBUG_BUILD} != 'no' ]]; then tag_suffix='_DEBUG'; else tag_suffix=''; fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:bert) && \
 time docker build \
@@ -58,7 +59,7 @@ time docker build \
 --build-arg CK_QAIC_BRANCH=${_CK_QAIC_BRANCH} \
 --build-arg CK_QAIC_PERCENTILE_CALIBRATION=${_CK_QAIC_PERCENTILE_CALIBRATION} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
--t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER} \
+-t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}{tag_suffix} \
 -f Dockerfile.${_BASE_OS} .
 END_OF_CMD
 echo "Running: ${CMD}"
