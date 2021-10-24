@@ -60,6 +60,8 @@ if [[ -n ${_EXTERNAL_QUANTIZATION} ]]; then
   echo ${CK_ENV_COMPILER_GLOW_PROFILE_DIR}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[EXTERNAL_QUANTIZATION_FILE]"/$profile}
   LOAD_PROFILE=""
+elif [[ -n ${_NO_QUANTIZATION} ]]; then
+  LOAD_PROFILE=""
 else
   LOAD_PROFILE="-load-profile=${profile}"
 fi

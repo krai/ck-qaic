@@ -436,6 +436,7 @@
     },
     "bert-99.9": {
       "extra_env": {
+        "_NO_QUANTIZATION" : "yes",
         "_MODEL_TO_CONVERT": "compile_bert_99.9",
         "_COMPILER_PARAMS": "-convert-to-fp16  -aic-hw -aic-num-cores=4 -mos=4 -ols=1  '-compiler-args=-aic-perf-metrics -aic-time-passes -aic-version -aic-ddr-to-multicast -aic-form-axis-uniform-constants -aic-userdma-producer-dma -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,384'  -aic-compile-only-test"
       },

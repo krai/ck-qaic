@@ -58,6 +58,8 @@ ARG USER_ID=2000
 ARG CK_QAIC_BRANCH=main
 ARG CK_QAIC_PERCENTILE_CALIBRATION=no
 
+ARG DEBUG_BUILD=no
+
 # Use the Austin timezone by default.
 ARG TIMEZONE=US/Central
 RUN rm -rf /etc/localtime \
@@ -165,9 +167,6 @@ FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
 
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
-
 # Detect C/C++ compiler (gcc).
 RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
@@ -220,10 +219,13 @@ RUN ck install package --tags=model,compiled,bert,bert-99.9
 
 RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} != "no" ]]; then $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${SDK_VER}; fi
 
+# Set platform scripts (ensuring that ECC is on).
+RUN ck detect platform.os --platform_init_uoa=qaic
+
 #-----------------------------------------------------------------------------#
 # Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN rm -rf \
+RUN if [[ ${DEBUG_BUILD} != "no" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -232,7 +234,7 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,bert-packed)/*
+$(ck locate env --tags=model,bert-packed)/* fi
 
 ###############################################################################
 # FINAL STAGE
