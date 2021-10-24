@@ -217,7 +217,7 @@ RUN ck install package --tags=profile,qaic,bert-packed
 RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} == "no" ]]; then ck install package --tags=model,compiled,bert,bert-99; fi
 RUN ck install package --tags=model,compiled,bert,bert-99.9
 
-RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} != "no" ]]; then $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${SDK_VER}; fi
+RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} == "yes" ]]; then $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${SDK_VER}; fi
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
