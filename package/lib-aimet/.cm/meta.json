@@ -4,7 +4,7 @@
     "install_env": {
       "ENABLE_CUDA": "FALSE",
       "*PACKAGE_CONFIGURE_FLAGS": "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TENSORFLOW=FALSE $<<EXTRA_CONFIGURE_FLAGS>>$ -DENABLE_CUDA=$<<ENABLE_CUDA>>$",
-      "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DEigen3_DIR=$<<CK_ENV_EIGEN_HEADERS_LIB>>$ -DPython_ROOT_DIR=$<<CK_ENV_COMPILER_PYTHON_BIN>>$ -DTORCH_INCLUDE_DIR=$<<CK_ENV_PYTHON_PACKAGE_TORCH_INCLUDE_DIR>>$ -DPYTHONPATH=$<<CK_ENV_PYTHON_PACKAGE_TORCH_INCLUDE_DIR>>$/../../../../../../build -DPYTHON_MINOR_VERSION=.$<<CK_PYTHON3_MINOR_VERSION>>$",
+      "EXTRA_CONFIGURE_FLAGS": "-DOpenCV_DIR=$<<CK_ENV_LIB_OPENCV_STATIC_LIB_PATH>>$/../share/OpenCV -DLAPACKE_DIR=$<<CK_ENV_LIB_LAPACK>>$ -DEigen3_DIR=$<<CK_ENV_EIGEN_HEADERS_LIB>>$ -DPython_ROOT_DIR=/usr/bin/ -DTORCH_INCLUDE_DIR=$<<CK_ENV_PYTHON_PACKAGE_TORCH_INCLUDE_DIR>>$ -DPYTHONPATH=$<<CK_ENV_PYTHON_PACKAGE_TORCH_INCLUDE_DIR>>$/../../../../../../build -DPYTHON_MINOR_VERSION=.$<<CK_PYTHON3_MINOR_VERSION>>$ -DCMAKE_PREFIX_PATH=/usr",
       "BUILD_SHARED_LIBS": "OFF",
       "CMAKE_CONFIG": "Release",
       "FILE_EXT_LINUX": "",
@@ -13,7 +13,6 @@
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "",
       "PACKAGE_COPY": "NO",
       "PACKAGE_GIT": "YES",
-      "PACKAGE_GIT_CHECKOUT": "87a216f6164bc75f066627087f139eff77d9ebc3",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_RENAME": "YES",
       "PACKAGE_SKIP_CLEAN_INSTALL": "NO",
@@ -71,13 +70,13 @@
       "local": "yes",
       "name": "Python PyTorch library",
       "sort": 25,
-      "tags": "lib,pytorch,v1.4.0"
+      "tags": "lib,pytorch"
     },
     "python-setuptools": {
       "local": "yes",
-      "name": "Python Setuptools (v41)",
+      "name": "Python Setuptools",
       "sort": 30,
-      "tags": "python-package,setuptools,v41.0.1"
+      "tags": "python-package,setuptools"
     },
     "eigen3-headers": {
       "local": "yes",
@@ -101,7 +100,7 @@
   "suggested_path": "lib-aimet",
   "tags": [
     "lib",
-    "for-qaic",
+    "for.qaic",
     "aimet"
   ],
   "use_preprocess_scripts_from_another_entry": {
@@ -118,7 +117,6 @@
         "version": "master"
       },
       "extra_env": {
-        "PACKAGE_PATCH": "YES"
       },
       "extra_tags": [
         "vmaster"
