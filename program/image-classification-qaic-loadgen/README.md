@@ -319,26 +319,6 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 
 ### Obtain a profile using [MLPerf calibration option #1](https://github.com/mlcommons/inference/blob/master/calibration/ImageNet/cal_image_list_option_1.txt)
 
-#### Use precalibrated profiles
-
-##### 8 samples per batch (for the Server and Offline scenarios)
-
-<pre>
-<b>[anton@dyson ~]&dollar;</b> echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
---full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
---extra_tags=resnet50,mlperf.option1,bs.8
-</pre>
-
-##### 1 sample per batch (for the Single Stream scenario)
-
-<pre>
-<b>[anton@dyson ~]&dollar;</b> echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
---full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
---extra_tags=resnet50,mlperf.option1,bs.1
-</pre>
-
-
-#### Calibrate on your own
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package --dep_add_tags.imagenet-val=full \
@@ -349,13 +329,13 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 --extra_tags=calibration,mlperf.option1
 </pre>
 
-##### 8 samples per batch (for the Server and Offline scenarios)
+#### 8 samples per batch (for the Server and Offline scenarios)
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=profile,resnet50,mlperf.option1,bs.8
 </pre>
 
-##### 1 sample per batch (for the SingleStream scenario)
+#### 1 sample per batch (for the SingleStream scenario)
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=profile,resnet50,mlperf.option1,bs.1
