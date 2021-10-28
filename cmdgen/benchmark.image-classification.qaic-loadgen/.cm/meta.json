@@ -361,9 +361,9 @@
     },
     "target_qps": {
       "###": {
-        "ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<loadgen_target_qps>>>",
-        "record_tags": "target_qps.<<<loadgen_target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<loadgen_target_qps>>>"
+        "ck_env": "--env.CK_LOADGEN_TARGET_QPS=\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\"",
+        "record_tags": "target_qps.\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\"",
+        "record_uoa_parts": "target_qps.\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\""
       }
     },
     "verbose": {
@@ -401,6 +401,7 @@
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
+    "server_target_qps": "",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
