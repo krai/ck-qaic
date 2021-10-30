@@ -48,7 +48,8 @@ ARG PYTHON_VER=3.8.11
 # Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
 ARG GCC_MAJOR_VER=10
 # Use CK <= 1.55.5 with known behaviour.
-ARG CK_VER=1.55.5
+ARG CK_VER=2.5.8
+ARG SDK_VER=1.5.9
 
 # Fixed group id (recommended to be the same as that of 'qaic').
 ARG GROUP_ID=1500
@@ -166,12 +167,14 @@ RUN source /home/krai/.bashrc \
 FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
+ARG CK_QAIC_PERCENTILE_CALIBRATION
+ARG DEBUG_BUILD
 
 # Detect C/C++ compiler (gcc).
 RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
 # Install CMake.
-RUN ck install package --tags=tool,cmake,downloaded
+RUN echo '0' |  ck install package --tags=tool,cmake,downloaded
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
@@ -180,18 +183,18 @@ RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,absl \
  && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy \
- && ck install package --tags=python-package,onnx --force_version=1.8.1 \
+ && echo '0' | ck install package --tags=python-package,onnx --force_version=1.8.1 \
  && ck install package --tags=python-package,matplotlib \
- && ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 \
+ && echo '3' | ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 \
  && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
- && ck install package --tags=lib,python-package,tensorflow
+ && echo '0' | ck install package --tags=lib,python-package,tensorflow
 
 #-----------------------------------------------------------------------------#
 # Step 2. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source \
+RUN echo '0' | ck install package --tags=mlperf,inference,source \
  && ck install package --tags=mlperf,loadgen,static \
- && ck install package --tags=mlperf,power,source \
+ && echo '0' | ck install package --tags=mlperf,power,source \
  && ck compile program:packed-bert-qaic-loadgen
 
 #-----------------------------------------------------------------------------#
@@ -206,7 +209,7 @@ RUN ck install package --tags=dataset,calibration,squad,pickle,width.384
 RUN ck install package --tags=model,mlperf,qaic,bert-packed
 
 # Uncomment if not using precalibrated profile; comment out otherwise.
-RUN ck install package --tags=profile,qaic,bert-packed
+RUN echo '0' | ck install package --tags=profile,qaic,bert-packed
 
 # # Uncomment if using precalibrated profile; comment out otherwise.
 # RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
@@ -216,7 +219,7 @@ RUN ck install package --tags=profile,qaic,bert-packed
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "${CK_QAIC_PERCENTILE_CALIBRATION}" == "no" ]]; then ck install package --tags=model,compiled,bert,bert-99; fi
 RUN ck install package --tags=model,compiled,bert,bert-99.9
-
+RUN ck detect platform.os --platform_init_uoa=generic-linux-dummy
 RUN if [[ "${CK_QAIC_PERCENTILE_CALIBRATION}" == "yes" ]]; then $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${SDK_VER}; fi
 
 # Set platform scripts (ensuring that ECC is on).
@@ -235,6 +238,8 @@ $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*; fi
+
+RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} == "yes" ]]; then ck install package --tags=model,compiled,bert,bert-99; fi
 
 ###############################################################################
 # FINAL STAGE
