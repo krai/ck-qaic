@@ -84,7 +84,7 @@ $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*;'
    docker exec $result /bin/bash -c 'ck rm experiment:* --force'
-   docker commit $result krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix}'_percentile_calibrated'
+   docker commit $result krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}'_percentile_calibrated'
 fi
 echo
 echo "Done."
