@@ -46,6 +46,10 @@ QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
 _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
+if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
+  _DEBUG_BUILD=yes
+fi
+ 
 if [[ ${_DEBUG_BUILD} != 'no' ]]; then tag_suffix='_DEBUG'; else tag_suffix=''; fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:bert) && \
@@ -57,7 +61,6 @@ time docker build \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg CK_QAIC_BRANCH=${_CK_QAIC_BRANCH} \
---build-arg CK_QAIC_PERCENTILE_CALIBRATION=${_CK_QAIC_PERCENTILE_CALIBRATION} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} \
 -f Dockerfile.${_BASE_OS} .
@@ -67,5 +70,21 @@ if [ -z "${DRY_RUN}" ]; then
   eval ${CMD}
 fi
 
+if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then 
+   result=`docker run -d -t --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
+   docker exec $result /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${_SDK_VER};'
+   docker exec $result /bin/bash -c 'rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=model,bert-packed)/*;'
+   docker exec $result /bin/bash -c 'ck rm experiment:* --force'
+   docker commit $result krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix}'_percentile_calibrated'
+fi
 echo
 echo "Done."

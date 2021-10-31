@@ -57,7 +57,6 @@ ARG GROUP_ID=1500
 ARG USER_ID=2000
 
 ARG CK_QAIC_BRANCH=main
-ARG CK_QAIC_PERCENTILE_CALIBRATION=no
 
 ARG DEBUG_BUILD=no
 
@@ -167,7 +166,6 @@ RUN source /home/krai/.bashrc \
 FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
-ARG CK_QAIC_PERCENTILE_CALIBRATION
 ARG DEBUG_BUILD
 
 # Detect C/C++ compiler (gcc).
@@ -217,10 +215,8 @@ RUN echo '0' | ck install package --tags=profile,qaic,bert-packed
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "${CK_QAIC_PERCENTILE_CALIBRATION}" == "no" ]]; then ck install package --tags=model,compiled,bert,bert-99; fi
+RUN ck install package --tags=model,compiled,bert,bert-99
 RUN ck install package --tags=model,compiled,bert,bert-99.9
-RUN ck detect platform.os --platform_init_uoa=generic-linux-dummy
-RUN if [[ "${CK_QAIC_PERCENTILE_CALIBRATION}" == "yes" ]]; then $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${SDK_VER}; fi
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -238,8 +234,6 @@ $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*; fi
-
-RUN if [[ ${CK_QAIC_PERCENTILE_CALIBRATION} == "yes" ]]; then ck install package --tags=model,compiled,bert,bert-99; fi
 
 ###############################################################################
 # FINAL STAGE
