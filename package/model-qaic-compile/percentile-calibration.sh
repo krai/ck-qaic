@@ -74,8 +74,6 @@ do
   echo $ck_clean_package_cmd
   eval $ck_clean_package_cmd
   accuracy=`grep -w $accuracy_metric $(ck find experiment:*$model*$pcv*offline*accuracy*)/*0001.json | cut -d ':' -f2 | cut -d ' ' -f2`
-  #echo $accuracy_cmd
-  #accuracy=`$accuracy_cmd`
   #yes | ck rm experiment:*$model*$pcv*offline*accuracy* >/dev/null 2>&1
   #echo $pcv":"$f1
   #echo $pcv":"$f1 >>out
@@ -87,6 +85,6 @@ done
 echo $maxi
 install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$maxi --extra_tags=pcv.$maxi >/dev/null 2>&1"
 echo $install_cmd
-#eval $install_cmd
+eval $install_cmd
 #echo $max:$maxi>outm
 exit_if_error
