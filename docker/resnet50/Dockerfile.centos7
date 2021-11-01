@@ -178,36 +178,7 @@ RUN ck install package --tags=python-package,cython \
  && echo "latest" | ck install package --tags=python-package,numpy
 
 #-----------------------------------------------------------------------------#
-# Step 2. Prepare the ResNet50 workload.
-#-----------------------------------------------------------------------------#
-# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
-# to work around a current limitation in the toolchain.
-RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
-# Use precalibrated profiles.
-RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
---full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
---extra_tags=resnet50,mlperf.option1,bs.8
-RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
---full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
---extra_tags=resnet50,mlperf.option1,bs.1
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream
-
-#-----------------------------------------------------------------------------#
-# Step 3. Build the MLPerf LoadGen API.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source \
- && ck install package --tags=mlperf,loadgen,static \
- && ck install package --tags=mlperf,power,source
-
-#-----------------------------------------------------------------------------#
-# Step 4. Compile the Image Classification program.
-#-----------------------------------------------------------------------------#
-RUN ck compile program:image-classification-qaic-loadgen
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the dataset.
+# Step 2. Prepare the dataset.
 #-----------------------------------------------------------------------------#
 # Download the ImageNet labels.
 RUN ck install package --tags=dataset,imagenet,aux
@@ -231,6 +202,41 @@ else \
     ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation; \
   fi \
 fi
+
+#-----------------------------------------------------------------------------#
+# Step 3. Prepare the ResNet50 workload.
+#-----------------------------------------------------------------------------#
+# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
+# to work around a current limitation in the toolchain.
+RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
+# Use precalibrated profiles.
+#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
+#--extra_tags=resnet50,mlperf.option1,bs.8
+#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
+#--extra_tags=resnet50,mlperf.option1,bs.1
+# Calibrate the workload for bs.1 and bs.8
+RUN ck pull repo:ck-qaic
+RUN ck install package --tags=profile,resnet50,bs.1
+RUN ck install package --tags=profile,resnet50,bs.8
+
+# Compile the workload for the 16-NSP PCIe server cards.
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream
+
+#-----------------------------------------------------------------------------#
+# Step 4. Build the MLPerf LoadGen API.
+#-----------------------------------------------------------------------------#
+RUN ck install package --tags=mlperf,inference,source \
+ && ck install package --tags=mlperf,loadgen,static \
+ && ck install package --tags=mlperf,power,source
+
+#-----------------------------------------------------------------------------#
+# Step 5. Compile the Image Classification program.
+#-----------------------------------------------------------------------------#
+RUN ck compile program:image-classification-qaic-loadgen
+
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
