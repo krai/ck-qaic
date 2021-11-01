@@ -11,7 +11,7 @@
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
@@ -23,7 +23,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \
@@ -37,7 +37,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
@@ -49,7 +49,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \
@@ -63,7 +63,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
@@ -76,7 +76,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.9 \
 "ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \

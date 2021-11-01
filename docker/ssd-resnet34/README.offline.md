@@ -11,7 +11,7 @@
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -23,7 +23,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -35,7 +35,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -47,7 +47,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -61,7 +61,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -73,7 +73,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -85,7 +85,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -97,7 +97,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -111,7 +111,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -124,7 +124,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -137,7 +137,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
@@ -150,7 +150,7 @@ docker run --privileged \
 ```
 docker run --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
 "ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \

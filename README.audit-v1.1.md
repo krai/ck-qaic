@@ -71,7 +71,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 export CK_PYTHON=`which python3.8`
 export CK_REPOS=/local/mnt/workspace/$USER/CK_REPOS
 export CK_TOOLS=/local/mnt/workspace/$USER/CK_TOOLS
-export CK_EXPERIMENTS=$CK_REPOS/mlperf.$(hostname)/experiment
+export CK_EXPERIMENT_DIR=$CK_REPOS/mlperf.$(hostname)/experiment
 export POWER_pr009="--power=yes --power_server_ip=10.222.154.58 --power_server_port=4959"
 ```
 
@@ -100,10 +100,10 @@ mlperf.aus655-pci-bowie
 
 ### Make the repository group-writable
 
-All files under `$CK_EXPERIMENTS` must be group-writable:
+All files under `$CK_EXPERIMENT_DIR` must be group-writable:
 
 ```
-chgrp qaic $CK_EXPERIMENTS -R && chmod g+ws $CK_EXPERIMENTS -R
+chgrp qaic $CK_EXPERIMENT_DIR -R && chmod g+ws $CK_EXPERIMENT_DIR -R
 ```
 
 
@@ -571,7 +571,7 @@ krai/mlperf.bert.centos7            1.5.9         a7fa76eedc92   29 seconds ago 
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=5200"
@@ -598,7 +598,7 @@ grep -w f1 $(ck find experiment:*bert*mixed*offline*accuracy*)/*0001.json
 ### BERT-99 Offline Power and Performance
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=offline --override_batch_size=4096 --target_qps=5200 ${POWER_pr009}"
@@ -737,7 +737,7 @@ grep -w 'Samples per second' $(ck find experiment:*bert*mixed*offline*performanc
 ### BERT-99 Offline Compliance
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST01,TEST05 --scenario=offline --override_batch_size=4096 --target_qps=5200"
@@ -758,7 +758,7 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.m
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --mode=accuracy --scenario=server --override_batch_size=512 \
@@ -780,7 +780,7 @@ grep -w f1 $(ck find experiment:*bert*mixed*server*accuracy*)/*0001.json
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=server --override_batch_size=512 \
@@ -921,7 +921,7 @@ grep -w 'avg_power' $(ck find experiment:*bert*mixed*server*performance*client)/
 ### BERT-99 Server Compliance
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --compliance,=TEST01,TEST05 --scenario=server --override_batch_size=512 \
@@ -944,7 +944,7 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.m
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=2700"
@@ -974,7 +974,7 @@ grep -w f1 $(ck find experiment:*bert*fp16*offline*accuracy*)/*0001.json
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=offline --override_batch_size=1024 --target_qps=2700 ${POWER_pr009}"
@@ -1111,7 +1111,7 @@ grep -w 'avg_power' $(ck find experiment:*bert*fp16*offline*performance*client)/
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST01,TEST05 --scenario=offline --override_batch_size=1024 --target_qps=2700"
@@ -1131,7 +1131,7 @@ mlperf-closed-r282_z93_q8-qaic-v1.5.9-aic100-qaic-v1.5.9-aic100-bert-precision.f
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=accuracy --scenario=server --override_batch_size=1024 \
@@ -1161,7 +1161,7 @@ grep -w f1 $(ck find experiment:*bert*fp16*server*accuracy*)/*0001.json
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=server --override_batch_size=1024 \
@@ -1308,7 +1308,7 @@ grep -w 'avg_power' $(ck find experiment:*bert*fp16*server*performance*client)/*
 
 ```
 docker run --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENTS}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment --rm krai/mlperf.bert.centos7:1.5.9 \
 "ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --compliance,=TEST01,TEST05 --scenario=server --override_batch_size=1024 \
