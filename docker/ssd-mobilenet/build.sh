@@ -37,11 +37,21 @@ _BASE_IMAGE=${BASE_IMAGE:-qran-${_BASE_OS}}
 _SDK_VER=${SDK_VER:-1.5.6}
 _PYTHON_VER=${PYTHON_VER:-3.8.11}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
+_DEBUG_BUILD=${DEBUG_BUILD:-no}
+
+_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+_CK_QAIC_PCV=${CK_QAIC_PCV:-''}
+_CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
 
 QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
 _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
+if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
+  _DEBUG_BUILD=yes
+fi
+
+if [[ ${_DEBUG_BUILD} != 'no' ]]; then tag_suffix='_DEBUG'; else tag_suffix=''; fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:ssd-mobilenet) && \
 cp -r $(ck find repo:ck-qaic)/profile/ssd-mobilenet . && \
@@ -52,12 +62,36 @@ time docker build \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
+--build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
+--build-arg CK_QAIC_PCV=${_CK_QAIC_PCV} \
+--build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t krai/mlperf.ssd-mobilenet.${_BASE_OS}:${_SDK_VER} \
 -f Dockerfile.${_BASE_OS} .
 END_OF_CMD
 echo "Running: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then
   eval ${CMD}
+fi
+
+if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
+   CONTAINER=`docker run -dt --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.ssd-mobilenet.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
+   docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-mobilenet --force'
+   docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh ssd-mobilenet ssd-mobilenet.pcie.16nsp ${_SDK_VER};'
+   docker exec $CONTAINER /bin/bash -c 'rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=model,pytorch,for.qaic)/* \
+$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
+$(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
+touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg'
+   docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
+   docker commit $CONTAINER krai/mlperf.ssd-mobilenet.${_BASE_OS}:${_SDK_VER}'_pc'
 fi
 
 echo

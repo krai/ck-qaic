@@ -47,7 +47,6 @@ FROM $BASE_IMAGE:$SDK_VER AS preamble
 ARG PYTHON_VER=3.8.11
 # Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
 ARG GCC_MAJOR_VER=10
-# Use CK <= 1.55.5 with known behaviour.
 ARG CK_VER=2.5.8
 # Fixed group id (recommended to be the same as that of 'qaic'). 
 ARG GROUP_ID=1500
