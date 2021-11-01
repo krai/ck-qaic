@@ -26,7 +26,7 @@ Place the following into your `~/.bashrc`:
 export PATH=$HOME/.local/bin:$PATH
 export CK_REPOS=/local/mnt/workspace/$USER/CK-REPOS
 export CK_TOOLS=/local/mnt/workspace/$USER/CK-TOOLS
-export CK_EXPERIMENTS=$CK_REPOS/mlperf.$(hostname)/experiment
+export CK_EXPERIMENT_DIR=$CK_REPOS/mlperf.$(hostname)/experiment
 ```
 
 Init it:
@@ -52,10 +52,10 @@ mlperf.aus655-pci-bowie
 
 ### Make the repository group-writable
 
-All files under `$CK_EXPERIMENTS` must be group-writable:
+All files under `$CK_EXPERIMENT_DIR` must be group-writable:
 
 ```
-$ chgrp qaic $CK_EXPERIMENTS -R && chmod g+ws $CK_EXPERIMENTS -R
+$ chgrp qaic $CK_EXPERIMENT_DIR -R && chmod g+ws $CK_EXPERIMENT_DIR -R
 ```
 
 ### Run a quick test
