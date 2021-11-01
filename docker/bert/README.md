@@ -13,4 +13,9 @@ $(ck find ck-qaic:docker:bert)/build.sh
 - `DOCKER_OS=centos7`
 - `SDK_VER=1.5.9`
 - `CK_QAIC_CHECKOUT=main`
+- `DEBUG_BUILD=no`
+- `CK_QAIC_PERCENTILE_CALIBRATION=no`
+- `CK_QAIC_PCV=9985`
 - `...`
+
+`CK_QAIC_PERCENTILE_CALIBRATION=no` and `CK_QAIC_PCV=9985` should not be used together
