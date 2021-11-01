@@ -48,11 +48,16 @@ ARG PYTHON_VER=3.8.11
 # Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
 ARG GCC_MAJOR_VER=10
 # Use CK <= 1.55.5 with known behaviour.
-ARG CK_VER=1.55.5
+ARG CK_VER=2.5.8
 # Fixed group id (recommended to be the same as that of 'qaic'). 
 ARG GROUP_ID=1500
 # Fixed user id.
 ARG USER_ID=2000
+
+ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_PCV
+
+ARG DEBUG_BUILD=no
 
 # Use the Austin timezone by default.
 ARG TIMEZONE=US/Central
@@ -155,6 +160,8 @@ RUN source /home/krai/.bashrc \
 FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
+ARG DEBUG_BUILD
+ARG CK_QAIC_PCV
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -163,25 +170,25 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
 # Install CMake.
-RUN ck install package --tags=tool,cmake,downloaded
+RUN ck install package --tags=tool,cmake,downloaded --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,cython \
- && ck install package --tags=python-package,absl \
- && ck install package --tags=python-package,opencv-python-headless \
- && echo "latest" | ck install package --tags=python-package,numpy \
- && ck install package --tags=python-package,onnx --force_version=1.8.1 \
- && ck install package --tags=python-package,matplotlib \
- && ck install package --tags=tool,coco
+RUN ck install package --tags=python-package,cython --quiet \
+ && ck install package --tags=python-package,absl --quiet \
+ && ck install package --tags=python-package,opencv-python-headless --quiet \
+ && echo "latest" | ck install package --tags=python-package,numpy --quiet \
+ && ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
+ && ck install package --tags=python-package,matplotlib --quiet \
+ && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 2. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source \
- && ck install package --tags=mlperf,loadgen,static \
- && ck install package --tags=mlperf,power,source \
+RUN ck install package --tags=mlperf,inference,source --quiet \
+ && ck install package --tags=mlperf,loadgen,static --quiet \
+ && ck install package --tags=mlperf,power,source --quiet \
  && ck compile program:object-detection-qaic-loadgen
 
 #-----------------------------------------------------------------------------#
@@ -212,13 +219,12 @@ RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
 # Remove NMS.
 RUN ck install package --tags=model,onnx,mlperf,ssd-resnet34,no-nms
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream
+RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp; ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream; fi
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN rm -rf \
+RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -230,7 +236,7 @@ $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,onnx,no-nms)/* \
 $(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
 $(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
-touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg
+touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
 
 ###############################################################################
 # FINAL STAGE

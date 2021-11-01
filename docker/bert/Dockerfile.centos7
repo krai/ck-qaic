@@ -57,6 +57,7 @@ ARG GROUP_ID=1500
 ARG USER_ID=2000
 
 ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_PCV
 
 ARG DEBUG_BUILD=no
 
@@ -167,6 +168,7 @@ FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
 ARG DEBUG_BUILD
+ARG CK_QAIC_PCV
 
 # Detect C/C++ compiler (gcc).
 RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
@@ -215,7 +217,7 @@ RUN echo '0' | ck install package --tags=profile,qaic,bert-packed
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,compiled,bert,bert-99
+RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99; fi
 RUN ck install package --tags=model,compiled,bert,bert-99.9
 
 # Set platform scripts (ensuring that ECC is on).

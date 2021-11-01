@@ -40,6 +40,7 @@ _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+_CK_QAIC_PCV=${CK_QAIC_PCV:-''}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
 
 QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
@@ -61,6 +62,7 @@ time docker build \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
+--build-arg CK_QAIC_PCV=${_CK_QAIC_PCV} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} \
 -f Dockerfile.${_BASE_OS} .
@@ -85,7 +87,8 @@ $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*;'
    docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
-   docker commit $CONTAINER krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}'_percentile_calibrated'
+   docker commit $CONTAINER krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}'_pc'
 fi
+
 echo
 echo "Done."
