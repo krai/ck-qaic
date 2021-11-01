@@ -71,9 +71,9 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then 
-   result=`docker run -d -t --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
-   docker exec $result /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${_SDK_VER};'
-   docker exec $result /bin/bash -c 'rm -rf \
+   CONTAINER=`docker run -d -t --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
+   docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${_SDK_VER};'
+   docker exec $CONTAINER /bin/bash -c 'rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -83,8 +83,8 @@ $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*;'
-   docker exec $result /bin/bash -c 'ck rm experiment:* --force'
-   docker commit $result krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}'_percentile_calibrated'
+   docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
+   docker commit $CONTAINER krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}'_percentile_calibrated'
 fi
 echo
 echo "Done."
