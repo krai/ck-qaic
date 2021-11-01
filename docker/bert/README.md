@@ -12,5 +12,5 @@ $(ck find ck-qaic:docker:bert)/build.sh
 
 - `DOCKER_OS=centos7`
 - `SDK_VER=1.5.9`
-- `CK_QAIC_BRANCH=main`
+- `CK_QAIC_CHECKOUT=main`
 - `...`

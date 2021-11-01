@@ -39,7 +39,7 @@ _PYTHON_VER=${PYTHON_VER:-3.8.11}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 
-_CK_QAIC_BRANCH=${CK_QAIC_BRANCH:-main}
+_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
 
 QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
@@ -60,7 +60,7 @@ time docker build \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
---build-arg CK_QAIC_BRANCH=${_CK_QAIC_BRANCH} \
+--build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} \
 -f Dockerfile.${_BASE_OS} .
