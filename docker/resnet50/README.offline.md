@@ -4,7 +4,7 @@
 
 ## Load the container
 ```
-CONTAINER=`docker run --privileged \
+CONTAINER=`docker run -dt --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.resnet50.full.centos7:1.5.6 bash`
