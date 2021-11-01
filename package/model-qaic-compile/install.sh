@@ -60,6 +60,8 @@ if [[ -n ${_EXTERNAL_QUANTIZATION} ]]; then
   echo ${CK_ENV_COMPILER_GLOW_PROFILE_DIR}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[EXTERNAL_QUANTIZATION_FILE]"/$profile}
   LOAD_PROFILE=""
+elif [[ -n ${_NO_QUANTIZATION} ]]; then
+  LOAD_PROFILE=""
 else
   LOAD_PROFILE="-load-profile=${profile}"
 fi
@@ -73,6 +75,20 @@ if [[ -n ${CK_ENV_COMPILER_GLOW_PROFILE_DIR} ]]; then
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[NODE_PRECISION_FILE]"/$node_precision}
 fi
 
+if [[ -n ${_SEG} ]]; then
+  _COMPILER_PARAMS=${_COMPILER_PARAMS/"[SEG]"/$_SEG}
+fi
+
+if [[ ${_BATCH_SIZE} > 0 ]]; then
+  _COMPILER_PARAMS=${_COMPILER_PARAMS}" -batchsize=$_BATCH_SIZE"
+fi
+
+if [[ -n ${_PERCENTILE_CALIBRATION_VALUE} ]]; then
+  _EXTRA_COMPILER_PARAMS=${_EXTRA_COMPILER_PARAMS/"[PERCENTILE_CALIBRATION_VALUE]"/$_PERCENTILE_CALIBRATION_VALUE}
+fi
+
+_COMPILER_PARAMS="${_COMPILER_PARAMS} ${_EXTRA_COMPILER_PARAMS}"
+
 if [[ -n ${_COMPILER_PARAMS} ]]; then
   echo ${_COMPILER_PARAMS}
   # Compile only.
@@ -80,9 +96,8 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   echo "Compile QAIC network binaries:"
   read -d '' CMD <<END_OF_CMD
   ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec -model=${model} \
-  -batchsize=${_BATCH_SIZE} \
   ${LOAD_PROFILE} -aic-binary-dir=${aic_binary_dir} \
-  ${_COMPILER_PARAMS} ${_EXTRA_COMPILER_PARAMS}
+  ${_COMPILER_PARAMS}
 END_OF_CMD
 
   echo ${CMD}

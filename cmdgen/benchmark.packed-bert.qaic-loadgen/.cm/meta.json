@@ -121,13 +121,20 @@
       "bert-99.9": {
         "model_tags": [
           "bert",
-          "precision.fp16"
+          "bert-99.9"
         ]
       },
       "bert-99": {
         "model_tags": [
           "bert",
-          "precision.mixed"
+          "bert-99"
+        ]
+      }
+    },
+    "calibration_value": {
+      "###": {
+        "model_tags": [
+          "pcv.\"$(echo ###)\""
         ]
       }
     },
@@ -269,7 +276,7 @@
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_benchmark_prefix": "",
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"

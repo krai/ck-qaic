@@ -124,8 +124,8 @@ public:
   StaticBuffer(int size, const std::string &dir, TData *ptr = NULL)
       : _size(size), _dir(dir) {
     if (!ptr)
-      _buffer = (TData *)aligned_alloc(32, size);
-    //_buffer = new TData[size];
+      //_buffer = (TData *)aligned_alloc(32, size);
+      _buffer = new TData[size];
     else
       _buffer = ptr;
   }
@@ -241,39 +241,6 @@ public:
     int dev_cnt = settings->qaic_device_count;
     _in_batch.resize(dev_cnt);
     _out_batch.resize(dev_cnt);
-#if defined(G292) || defined(R282)
-    if(settings -> input_select == 0) {
-      unsigned OFFSET = 0;
-      const int CTN = settings -> copy_threads_per_device;
-      get_random_images_samples.resize(CTN*dev_cnt);
-      get_random_images_act_idx.resize(CTN*dev_cnt);
-      get_random_images_set_idx.resize(CTN*dev_cnt);
-      get_random_images_finished.resize(CTN*dev_cnt);
-      get_random_images_turn.resize(dev_cnt);
-    
-      for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
-        get_random_images_turn[dev_idx]=0;
-#ifdef R282
-        if(dev_idx == 4) OFFSET = 4;
-#endif
-  
-        unsigned coreid = OFFSET + AFFINITY_CARD(dev_idx);
-        for (int i = 0; i < CTN; i++) {
-          cpu_set_t cpuset;
-          get_random_images_mutex[dev_idx+ i*dev_cnt].lock();
-          std::thread t(&Benchmark::get_random_images_worker, this, dev_idx+ i*dev_cnt);
-      
-          CPU_ZERO(&cpuset);
-          CPU_SET(coreid+i%8, &cpuset);
-#ifdef R282
-         if(dev_idx < 4 || settings->qaic_device_count > 5)
-#endif
-            pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-          t.detach();
-        }
-      }
-    }
-#endif
 
 
 
@@ -285,53 +252,11 @@ public:
     reformatted_results.resize(settings->qaic_device_count);
 
     for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
-      std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
-#if defined(G292) || defined(R282)
-      unsigned coreid = AFFINITY_CARD(dev_idx);
-      cpu_set_t cpuset;
-      CPU_ZERO(&cpuset);
-      CPU_SET(coreid, &cpuset);
-#ifdef R282
-      if(dev_idx < 4 || settings->qaic_device_count > 5)
-#endif
-      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-#endif
-      t.join();
+      //std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
+      //t.join();
+      initResultsBuffer(dev_idx);
     }
-    const int CTN = settings->copy_threads_per_device;
-    get_next_results_image_idxs.resize(CTN * dev_cnt);
-    get_next_results_results.resize(CTN * dev_cnt);
-    get_next_results_act_idx.resize(CTN * dev_cnt);
-    get_next_results_set_idx.resize(CTN * dev_cnt);
-    get_next_results_finished.resize(CTN * dev_cnt);
-    get_next_results_batch_idx.resize(CTN * dev_cnt);
-    get_next_results_turn.resize(dev_cnt);
     
-#if defined(G292) || defined (R282)
-    for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
-      get_next_results_turn[dev_idx] = 0;
-      for (int i = 0; i < CTN; i++) {
-        get_next_results_mutex[dev_idx + i * dev_cnt].lock();
-        std::thread t(&Benchmark::get_next_results_worker, this,
-                      dev_idx + i * dev_cnt);
-
-        unsigned coreid = AFFINITY_CARD (dev_idx);
-        cpu_set_t cpuset;
-        CPU_ZERO(&cpuset);
-#ifdef R282
-        CPU_SET(coreid + i%8 + (dev_idx > 3 &&  settings->qaic_device_count > 5)*4 , &cpuset);
-#else
-        CPU_SET(coreid + i%8, &cpuset);
-#endif
-
-#ifdef R282
-        if(dev_idx < 4 || settings->qaic_device_count > 5)
-#endif
-        pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
-        t.detach();
-      }
-    }
-#endif
 
 #ifdef MODEL_R34
     std::vector<int> exclude{ 12, 26, 29, 30, 45, 66, 68, 69, 71, 83 };
@@ -416,66 +341,18 @@ public:
     }
   }
   
-#if defined(G292) || defined(R282)
-  void get_random_images_worker(int fake_idx) {
-    int dev_cnt =  _settings->qaic_device_count;
-    int dev_idx = fake_idx;
-    while(dev_idx - dev_cnt >= 0)
-     dev_idx -= dev_cnt;
-
-    while(true) {
-      get_random_images_mutex[fake_idx].lock();
-      const std::vector<mlperf::QuerySample> &samples = *get_random_images_samples[fake_idx];
-      const int act_idx = get_random_images_act_idx[fake_idx];
-      const int set_idx = get_random_images_set_idx[fake_idx];
-      for (int i = 0; i < samples.size(); ++i) {
-        TInputDataType *ptr =
-          ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
-          i * _settings->image_size_width() * _settings->image_size_height() *
-              _settings->num_channels();
-          _in_converter->convert(
-          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
-      }
-      get_random_images_finished[fake_idx] = true;
-      get_random_images_mutex2[fake_idx].unlock();
-    }
-  }
-
   void get_random_images(const std::vector<mlperf::QuerySample> &samples,
                          int dev_idx, int act_idx, int set_idx) override {
-    int dev_cnt =  _settings->qaic_device_count;
-    const int CTN = _settings->copy_threads_per_device;
-    get_random_images_mutex3[dev_idx].lock();
-    const int turn = (get_random_images_turn[dev_idx]+1)%CTN;
-    const int fake_idx = turn*dev_cnt + dev_idx;
-    get_random_images_turn[dev_idx] = turn;
-    get_random_images_mutex3[dev_idx].unlock();
-    get_random_images_mutex2[fake_idx].lock();
-    get_random_images_samples[fake_idx] = &samples;
-    get_random_images_act_idx[fake_idx] = act_idx;
-    get_random_images_set_idx[fake_idx] = set_idx;
 
-    get_random_images_finished[fake_idx] = false;
-    get_random_images_mutex[fake_idx].unlock();
-    while(true) {
-      if(get_random_images_finished[fake_idx])
-        return;
-      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-    }
-  }
-#else
-  void get_random_images(const std::vector<mlperf::QuerySample> &samples,
-                         int dev_idx, int act_idx, int set_idx) override {
-    for (int i = 0; i < samples.size(); ++i) {
+for (int i = 0; i < samples.size(); ++i) {
       TInputDataType *ptr =
           ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx]) +
           i * _settings->image_size_width() * _settings->image_size_height() *
               _settings->num_channels();
       _in_converter->convert(
-          _in_batch[0][session->idx2loc[samples[i].index]].get(), ptr);
+          _in_batch[dev_idx][session->idx2loc[samples[i].index]].get(), ptr);
     }
   }
-#endif
 
   virtual void *get_img_ptr(int dev_idx, int img_idx) {
 #if !defined(G292) && !defined(R282)
@@ -485,127 +362,6 @@ public:
 #endif
   }
 
-#if defined(G292) || defined(R282)
-  void get_next_results_worker(int fake_idx) {
-
-    int dev_cnt = _settings->qaic_device_count;
-    int dev_idx = fake_idx;
-    while (dev_idx - dev_cnt >= 0)
-      dev_idx -= dev_cnt;
-    while (true) {
-      get_next_results_mutex[fake_idx].lock();
-      int image_idx_in_batch = get_next_results_batch_idx[fake_idx];
-      int i = image_idx_in_batch;
-      get_next_results_batch_mutex[fake_idx].unlock();
-      const std::vector<int> &image_idxs =
-          *get_next_results_image_idxs[fake_idx];
-      std::vector<ResultData *> &results = *get_next_results_results[fake_idx];
-
-      const int act_idx = get_next_results_act_idx[fake_idx];
-      const int set_idx = get_next_results_set_idx[fake_idx];
-
-
-      TOutput1DataType *boxes_ptr =
-          (TOutput1DataType *)_out_ptrs[dev_idx][act_idx][set_idx][BOXES_INDEX];
-      TOutput2DataType *classes_ptr = (TOutput2DataType *)
-          _out_ptrs[dev_idx][act_idx][set_idx][CLASSES_INDEX];
-
-      nms_results[dev_idx][act_idx][set_idx][i].clear();
-
-      // get pointers to unique buffer for device->activation->set
-      std::vector<std::vector<float> > &nms_res =
-          nms_results[dev_idx][act_idx][set_idx][i];
-      ResultData *next_result_ptr =
-          reformatted_results[dev_idx][act_idx][set_idx][i];
-      TOutput1DataType *dataLoc =
-          boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
-      TOutput2DataType *dataConf =
-          classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
-
-      float idx = image_idxs[i];
-      if (_settings->qaic_skip_stage != "convert") {
-          anchor::fTensor tLoc =
-            anchor::fTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                              (float *)dataLoc });
-        anchor::fTensor tConf = anchor::fTensor(
-            { "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES }, (float *)dataConf });
-        nwOutputLayer->anchorBoxProcessingFloatPerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-      } else {
-        anchor::uTensor tLoc =
-            anchor::uTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                              (uint8_t *)dataLoc });
-#ifdef MODEL_R34
-        anchor::hfTensor tConf =
-            anchor::hfTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                               (uint16_t *)dataConf });
-        nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-#else
-        anchor::uTensor tConf =
-            anchor::uTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                               (uint8_t *)dataConf });
-        nwOutputLayer->anchorBoxProcessingUint8PerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-#endif
-      }
-
-      int num_elems = nms_res.size() < _settings->detections_buffer_size()
-                          ? nms_res.size()
-                          : _settings->detections_buffer_size();
-
-      next_result_ptr->set_size(num_elems * 7);
-      float *buffer = next_result_ptr->data();
-
-      for (int j = 0; j < num_elems; j++) {
-        buffer[0] = nms_res[j][0];
-        buffer[1] = nms_res[j][1];
-        buffer[2] = nms_res[j][2];
-        buffer[3] = nms_res[j][3];
-        buffer[4] = nms_res[j][4];
-        buffer[5] = nms_res[j][5];
-        buffer[6] = nms_res[j][6];
-        buffer += 7;
-      }
-
-      results.push_back(next_result_ptr);
-      get_next_results_finished[fake_idx]++;
-      if(get_next_results_finished[fake_idx] ==  _settings->qaic_batch_size)
-        get_next_results_mutex2[fake_idx].unlock();
-    }
-  }
-
-  void get_next_results(std::vector<int> &image_idxs,
-                        std::vector<ResultData *> &results, int dev_idx,
-                        int act_idx, int set_idx) override {
-    int dev_cnt = _settings->qaic_device_count;
-    const int CTN = _settings->copy_threads_per_device;
-    get_next_results_mutex3[dev_idx].lock();
-    const int turn = (get_next_results_turn[dev_idx] + 1) % CTN;
-    const int fake_idx = turn * dev_cnt + dev_idx;
-    get_next_results_turn[dev_idx] = turn;
-    get_next_results_mutex3[dev_idx].unlock();
-  
-    get_next_results_mutex2[fake_idx].lock();
-    get_next_results_image_idxs[fake_idx] = &image_idxs;
-    get_next_results_results[fake_idx] = &results;
-    get_next_results_act_idx[fake_idx] = act_idx;
-    get_next_results_set_idx[fake_idx] = set_idx;
-
-    get_next_results_finished[fake_idx] = 0;
-    results.clear();
-    for(int i = 0; i < image_idxs.size(); i++){
-      get_next_results_batch_mutex[fake_idx].lock();
-      get_next_results_batch_idx[fake_idx] = i;
-      get_next_results_mutex[fake_idx].unlock();
-    }
-    while (true) {
-      if (get_next_results_finished[fake_idx] == image_idxs.size())
-        return;
-      std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-    }
-  }
-#else
   void get_next_results(std::vector<int> &image_idxs,
                         std::vector<ResultData *> &results, int dev_idx,
                         int act_idx, int set_idx) override {
@@ -698,30 +454,18 @@ private:
   AnchorBoxConfig acConfig;
 
   std::vector<int> class_map;
-  std::mutex get_random_images_mutex[512];
-  std::mutex get_random_images_mutex2[512];
-  std::mutex get_random_images_mutex3[32];
   std::vector<const std::vector<mlperf::QuerySample>*> get_random_images_samples;
   std::vector<int> get_random_images_act_idx;
   std::vector<int> get_random_images_set_idx;
   std::vector<int> get_random_images_finished;
   std::vector<int> get_random_images_turn;
 
-  uint8_t* copy_src[512][8];
-  uint8_t* copy_dest[512][8];
-  size_t copy_size[512][8];
-  bool copy_finished[512][8];
-  std::mutex copy_mutex[512][8];
 
 
   std::vector<std::vector<std::vector<std::vector<std::vector<std::vector<float> > > > > >
   nms_results;
   std::vector<std::vector<std::vector<std::vector<ResultData *> > > > reformatted_results;
 
-  std::mutex get_next_results_mutex[512];
-  std::mutex get_next_results_mutex2[512];
-  std::mutex get_next_results_mutex3[32];
-  std::mutex get_next_results_batch_mutex[512];
 
   std::vector<std::vector<int> *> get_next_results_image_idxs;
   std::vector<std::vector<ResultData *> *> get_next_results_results;
@@ -809,4 +553,3 @@ private:
 
 } // namespace CK
 
-#endif

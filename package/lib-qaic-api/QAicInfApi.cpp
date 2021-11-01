@@ -152,7 +152,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
     status = qaicCreateExecObj(
         context_, &execObj, &execObjProperties_, program_,
         (ioDescQData_.data)?(&ioDescQData_):nullptr,
-        numBuffers_, &qbuffersSet_[i]);
+        &numBuffers_, &qbuffersSet_[i]);
     if ((status != QS_SUCCESS) || (execObj == nullptr)) {
       std::cerr << "Failed to create Exec obj" << std::endl;
       return status;
@@ -240,7 +240,6 @@ QAicInfApi::QAicInfApi()
     :
       context_(nullptr),
       constants_(nullptr), contextProperties_(QAIC_CONTEXT_DEFAULT),
-      constantsProperties_(QAIC_CONSTANTS_PROPERTIES_DEFAULT),
       execObjProperties_(QAIC_EXECOBJ_PROPERTIES_DEFAULT),
       queueProperties_{QAIC_QUEUE_PROPERTIES_ENABLE_MULTI_THREADED_QUEUES,
                        numThreadsPerQueueDefault},
@@ -412,8 +411,8 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     const char *name = "progName";
     QAicProgram *program = nullptr;
 
-    status = qaicCreateProgramQpcObj(
-        context_, &program, &programProperties_, dev_, name, qpcObj_, nullptr);
+    status = qaicCreateProgram(
+        context_, &program, &programProperties_, dev_, name, qpcObj_);
 
     if ((program == nullptr) || (status != QS_SUCCESS)) {
       std::cerr << "Failed to create program" << std::endl;

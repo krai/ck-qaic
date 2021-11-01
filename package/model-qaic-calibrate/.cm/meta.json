@@ -77,8 +77,7 @@
       "local": "yes",
       "name": "ImageNet calibration dataset",
       "sort": 100,
-      "tags": "dataset,imagenet,calibration,preprocessed",
-      "or_tags": "for.resnet;for.resnet50",
+      "tags": "dataset,imagenet,calibration,preprocessed,for.resnet50",
       "update_tags_if_env": {
         "first.5": [
           {
