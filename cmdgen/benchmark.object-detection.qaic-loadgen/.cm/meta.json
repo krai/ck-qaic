@@ -391,9 +391,9 @@
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_benchmark_prefix": "",
          "ck_env": [
-          "--env.QAIC_BYPASS_PPPs=enable",
+          "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
