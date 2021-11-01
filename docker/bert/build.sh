@@ -71,7 +71,8 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then 
-   CONTAINER=`docker run -d -t --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
+   CONTAINER=`docker run -dt --privileged --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic))  --rm krai/mlperf.bert.${_BASE_OS}:${_SDK_VER}${tag_suffix} bash`
+   docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,bert-99 --force'
    docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert bert-99 ${_SDK_VER};'
    docker exec $CONTAINER /bin/bash -c 'rm -rf \
 $(ck find repo:ctuning-programs)/* \
