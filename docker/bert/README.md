@@ -1,7 +1,7 @@
 # Qualcomm Cloud AI - MLPerf BERT Docker image
 ## With Exploration of Percentile Calibration Values
 ```
-CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find ck-qaic:docker:bert)/build.sh
+CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 ## With default Percentile Calibration Value
 ```
