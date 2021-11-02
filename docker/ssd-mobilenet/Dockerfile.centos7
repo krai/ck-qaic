@@ -143,7 +143,7 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
 
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ls && cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
@@ -222,10 +222,10 @@ RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 #--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
 #--extra_tags=detected,ssd_mobilenet,bs.1
 # Remove NMS.
-RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic
+RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
 # Generate calibration profiles.
-RUN ck install package --tags=profile,ssd_mobilenet,bs.1
-RUN ck install package --tags=profile,ssd_mobilenet,bs.4
+RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
+RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp; ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream fi
