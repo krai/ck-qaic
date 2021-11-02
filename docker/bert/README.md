@@ -18,4 +18,4 @@ $(ck find ck-qaic:docker:bert)/build.sh
 - `CK_QAIC_PCV=9985`
 - `...`
 
-**`CK_QAIC_PERCENTILE_CALIBRATION=no` and `CK_QAIC_PCV=9985` should not be used together**
+**`CK_QAIC_PERCENTILE_CALIBRATION=yes` and `CK_QAIC_PCV=9985` should not be used together**
