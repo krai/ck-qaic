@@ -233,7 +233,7 @@ RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
+RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then ck clean env --tags=dataset,coco.2017,train --force && rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -243,6 +243,7 @@ $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,pytorch,for.qaic)/* \
+$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
 $(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
 $(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
 touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
