@@ -3,7 +3,7 @@
 ## Build
 
 ```
-$(ck find ck-qaic:docker)/build.sh resnet50
+$(ck find repo:ck-qaic)/docker/build.sh resnet50
 ```
 
 ### Build parameters
