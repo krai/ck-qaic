@@ -3,7 +3,7 @@
 ## Build
 
 ```
-> $(ck find ck-qaic:docker:ssd-mobilenet)/build.sh
+$(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 ```
 
 ### Build parameters
