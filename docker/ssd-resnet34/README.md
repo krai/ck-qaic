@@ -3,14 +3,14 @@
 ## Build
 
 ```
-$(ck find ck-qaic:docker:ssd-resnet34)/build.sh
+$(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
 ```
 
 ### Build parameters
 
 - `SDK_VER=1.5.6`
 - `DOCKER_OS=centos7`
-- CK_QAIC_CHECKOUT=159e6e903e75879c7f3c7551c4e03f7caf61d569
+- `CK_QAIC_CHECKOUT=4eb006cd7af97ee281f073a5e17f790255143ed7`
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
 - `CK_QAIC_PCV=9985`
 - `...`
