@@ -47,14 +47,19 @@ FROM $BASE_IMAGE:$SDK_VER AS preamble
 ARG PYTHON_VER=3.7.11
 # Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
 ARG GCC_MAJOR_VER=10
-# Use CK <= 1.55.5 with known behaviour.
-ARG CK_VER=1.55.5
+ARG CK_VER=2.5.8
+ARG SDK_VER=1.5.9
 # Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 # Fixed group id (recommended to be the same as that of 'qaic').
 ARG GROUP_ID=1500
 # Fixed user id.
 ARG USER_ID=2000
+
+ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_PCV
+
+ARG DEBUG_BUILD=no
 
 # Use the Austin timezone by default.
 ARG TIMEZONE=US/Central
@@ -142,6 +147,8 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
 
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
  && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
@@ -159,6 +166,8 @@ FROM preamble AS builder
 ARG PYTHON_VER
 ARG GCC_MAJOR_VER
 ARG IMAGENET
+ARG DEBUG_BUILD
+ARG CK_QAIC_PCV
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -167,21 +176,21 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
 # Install CMake.
-RUN ck install package --tags=tool,cmake,downloaded
+RUN ck install package --tags=tool,cmake,downloaded --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,cython \
- && ck install package --tags=python-package,absl \
- && ck install package --tags=python-package,opencv-python-headless \
- && echo "latest" | ck install package --tags=python-package,numpy
+RUN ck install package --tags=python-package,cython --quiet \
+ && ck install package --tags=python-package,absl --quiet \
+ && ck install package --tags=python-package,opencv-python-headless --quiet \
+ && echo "latest" | ck install package --tags=python-package,numpy --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the dataset.
 #-----------------------------------------------------------------------------#
 # Download the ImageNet labels.
-RUN ck install package --tags=dataset,imagenet,aux
+RUN ck install package --tags=dataset,imagenet,aux --quiet
 # Add original ImageNet from an auxiliary image to preprocess it.
 COPY --from=imagenet /imagenet /imagenet
 # Add preprocessed ImageNet from an auxiliary image.
@@ -196,10 +205,10 @@ else \
   then \
     echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
     --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation; \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation --quiet; \
   else \
-    ck install package --tags=dataset,imagenet,val,min --no_tags=resized &&  \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation; \
+    ck install package --tags=dataset,imagenet,val,min --no_tags=resized --quiet&&  \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation --quiet; \
   fi \
 fi
 
@@ -208,7 +217,7 @@ fi
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
 # to work around a current limitation in the toolchain.
-RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
+RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
 # Use precalibrated profiles.
 #RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
 #--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
@@ -217,20 +226,19 @@ RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
 #--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
 #--extra_tags=resnet50,mlperf.option1,bs.1
 # Calibrate the workload for bs.1 and bs.8
-RUN ck pull repo:ck-qaic
-RUN ck install package --tags=profile,resnet50,bs.1
-RUN ck install package --tags=profile,resnet50,bs.8
+RUN ck install package --tags=profile,resnet50,bs.1 --quiet
+RUN ck install package --tags=profile,resnet50,bs.8 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp --quiet
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 4. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source \
- && ck install package --tags=mlperf,loadgen,static \
- && ck install package --tags=mlperf,power,source
+RUN ck install package --tags=mlperf,inference,source --quiet \
+ && ck install package --tags=mlperf,loadgen,static --quiet \
+ && ck install package --tags=mlperf,power,source --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 5. Compile the Image Classification program.
