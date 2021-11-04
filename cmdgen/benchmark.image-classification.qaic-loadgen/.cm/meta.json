@@ -95,8 +95,8 @@
     },
     "max_query_count": {
       "###": {
-        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=\"$(echo ###)\"",
-        "record_tags": "max_query_count.\"$(echo ###)\""
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=###",
+        "record_tags": "max_query_count.###"
       }
     },
     "mode": {
@@ -190,17 +190,18 @@
     },
     "query_count": {
       "###": {
-        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=\"$(echo ###)\" --env.CK_LOADGEN_MIN_QUERY_COUNT=\"$(echo ###)\"",
-        "record_tags": "query_count.\"$(echo ###)\"",
-        "record_uoa_parts": "query_count.\"$(echo ###)\""
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
+        "record_tags": "query_count.###",
+        "record_uoa_parts": "query_count.###"
       }
     },
     "scenario": {
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "loadgen_target_qps": "<<<target_qps>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<target_qps>>>",
+        "record_tags": "target_qps.<<<target_qps>>>",
+        "record_uoa_parts": "target_qps.<<<target_qps>>>",
         "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
@@ -214,8 +215,9 @@
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "loadgen_target_qps": "<<<server_target_qps>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>  --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>  --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_or_offline_qps>>>",
+        "record_tags": "target_qps.<<<server_or_offline_qps>>>",
+        "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>",
         "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
@@ -355,15 +357,8 @@
       "###": {
         "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=$CK_LOADGEN_TARGET_LATENCY",
         "record_tags": "target_latency.$CK_LOADGEN_TARGET_LATENCY",
-        "shell_preamble": "export CK_LOADGEN_TARGET_LATENCY=$(awk -vX=\"<<<sut>>>,<<<library>>>,<<<model_readable>>>\" 'X==$1{print $2;exit}' < ###); [ \"$CK_LOADGEN_TARGET_LATENCY\" ] || { echo 'Error: entry <<<sut>>>,<<<library>>>,<<<model_readable>>> not found in ###, exiting'; exit 1; }; ",
+        "shell_preamble": "export CK_LOADGEN_TARGET_LATENCY=$(awk -vX=<<<?escape_char>>>\"<<<sut>>>,<<<library>>>,<<<model_readable>>><<<?escape_char>>>\" 'X==$1{print $2;exit}' < ###); [ <<<?escape_char>>>\"$CK_LOADGEN_TARGET_LATENCY<<<?escape_char>>>\" ] || { echo 'Error: entry <<<sut>>>,<<<library>>>,<<<model_readable>>> not found in ###, exiting'; exit 1; }; ",
         "target_latency": "$CK_LOADGEN_TARGET_LATENCY"
-      }
-    },
-    "target_qps": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_TARGET_QPS=\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\"",
-        "record_tags": "target_qps.\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\"",
-        "record_uoa_parts": "target_qps.\"$(if [[ -n \"<<<loadgen_target_qps>>>\" ]]; then echo \"<<<loadgen_target_qps>>>\"; else echo \"###\"; fi)\""
       }
     },
     "verbose": {
@@ -374,17 +369,86 @@
       "yes": {
         "print_output_file": "<<<print_output_file_cmd>>>"
       }
-    }
+    },
+    "server_target_qps": {
+      "###": {
+        "server_or_offline_qps": "###"
+      }
+
+    },
+    "docker": {
+      "yes": {
+	"docker_run": "<<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
+        "double_quote": "\"",
+	"escape_char": "\\"
+      },
+      "container_only": {
+        "wrapped_ck_benchmark_program":"echo 'Creating and running container...' CONTAINER_ID=<<<container>>>;  ${CONTAINER_ID}"
+      }
+   },
+   "cache_dir": {
+     "yes": {
+       "cache_opt": "1",
+       "volume_cache": "--volume <<<cache_dir_default>>>:<<<docker_preprocess_dir>>> "
+     },
+     "###": {
+       "cache_opt": "1",
+       "volume_cache": "--volume ###:<<<docker_preprocess_dir>>> "
+     }
+   },
+   "cache": {
+     "yes": {
+       "cache_opt": "1"
+     },
+     "###": {
+       "cache_opt": "###"
+     }
+   },
+   "experiment_dir": {
+     "yes": {
+       "volume_experiment": "--volume <<<experiment_dir_default>>>:<<<docker_experiment_dir_default>>> "
+     },
+     "###": {
+       "volume_experiment": "--volume ###:<<<docker_experiment_dir_default>>> "
+     }
+   },
+   "volume": {
+     "yes":{
+       "volume_opt": ""
+     },
+     "###": { 
+       "volume_opt": "--volume ### "
+     }
+   },
+   "container": {
+     "###": {
+       "docker_run": "<<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
+       "double_quote": "\"",
+       "escape_char": "\\"
+     }
+   }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
     "buffer_size": "<<<recommended_buffer_size>>>",
+    "cache_dir_default": "/data/image-classification.qaic-loadgen.cache",
+    "cache_opt": "0",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
+    "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
     "dataset_size": "50000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
+    "docker_image" : "krai/mlperf.resnet50.full.centos7:1.5.9 ",
+    "docker_mode": "--privileged ",
+    "docker_group_add": "--group-add <<<shared_group_id>>> ",
+    "docker_user": "--user=krai:kraig ",
+    "docker_exec_command": "time docker exec",
+    "docker_bash_command": "/bin/bash -c",
+    "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
+    "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
+    "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
     "g292_default_config": "-DG292_CONFA",
     "input_select": "<<<recommended_input_select>>>",
     "max_wait": "10000",
@@ -393,7 +457,8 @@
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "program_name": "image-classification-qaic-loadgen",
-    "print_output_file_cmd": "&& cat `ck find program:<<<program_name>>>`/tmp/<<<output_file>>>",
+    "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
+    "print_container_only": "&& CONTAINER=<<<container>>>",
     "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
@@ -401,12 +466,14 @@
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
-    "server_target_qps": "",
+    "server_or_offline_qps": "<<<target_qps>>>",
+    "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
+    "shared_group_name": "qaic",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
-    "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ] && [ -z  \"<<<replace_existing>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n \"`ck list local:experiment:<<<record_uoa>>>`\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> ; fi",
+    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; fi<<<?double_quote>>>",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {
