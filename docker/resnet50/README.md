@@ -48,7 +48,7 @@ ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=resnet50 \
 --group.edge --group.closed --target_qps=111111 --target_latency=1.5 \
---container=$CONTAINER_ID
+--container=$CONTAINER_ID --power
 ```
 
 ### `r282_z93_q8`
