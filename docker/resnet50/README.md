@@ -33,6 +33,8 @@ $(ck find repo:ck-qaic)/docker/build.sh resnet50
 CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen  --docker=container_only --out=none`
 ```
 
+## SUTs
+
 ### `r282_z93_q1`
 
 ```
