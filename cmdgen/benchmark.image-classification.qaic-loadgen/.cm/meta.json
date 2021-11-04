@@ -285,6 +285,8 @@
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
+        "power_server_ip": "10.222.147.109",
+        "power_server_port": "4953",
         "recommended_activation_count": "2",
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
@@ -304,6 +306,8 @@
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
+        "power_server_ip": "10.222.154.58",
+        "power_server_port": "4959",
         "recommended_activation_count": "2",
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
@@ -383,7 +387,7 @@
 	"escape_char": "\\"
       },
       "container_only": {
-        "wrapped_ck_benchmark_program":"echo 'Creating and running container...' CONTAINER_ID=<<<container>>>;  ${CONTAINER_ID}"
+        "wrapped_ck_benchmark_program":"CONTAINER_ID=<<<container>>>; echo ${CONTAINER_ID}"
       }
    },
    "cache_dir": {
