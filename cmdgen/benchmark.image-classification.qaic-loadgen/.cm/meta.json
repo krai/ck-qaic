@@ -136,7 +136,8 @@
         ],
         "recommended_accuracy_buffer_size": "5000",
         "recommended_performance_buffer_size": "1024",
-        "workload": "###"
+        "workload": "###",
+        "model_name": "resnet50"
       }
     },
     "model_extra_tags": {
@@ -389,7 +390,8 @@
 	"escape_char": "\\"
       },
       "container_only": {
-        "wrapped_ck_benchmark_program":"CONTAINER_ID=<<<container>>>; echo ${CONTAINER_ID}"
+        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"resnet50\" ]; then echo \"Please enter the model name to build the Docker image for(resnet50)\n\";  else CONTAINER_ID=<<<container>>> && echo ${CONTAINER_ID}; fi",
+        "wrapped_ck_benchmark_program2":"CONTAINER_ID=<<<container>>>; echo ${CONTAINER_ID}"
       }
    },
    "cache_dir": {
@@ -446,7 +448,7 @@
     "dataset_size": "50000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
-    "docker_image" : "krai/mlperf.resnet50.full.centos7:1.5.9 ",
+    "docker_image" : "krai/mlperf.<<<model_name>>>.full.centos7:<<<sdk>>> ",
     "docker_mode": "--privileged ",
     "docker_group_add": "--group-add <<<shared_group_id>>> ",
     "docker_user": "--user=krai:kraig ",
