@@ -145,7 +145,8 @@
           "###"
         ],
         "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "64"
+        "recommended_performance_buffer_size": "64",
+        "model_name": "ssd-resnet34"
       },
       "ssd_mobilenet": {
         "ck_env": [
@@ -170,7 +171,8 @@
           "###"
         ],
         "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "256"
+        "recommended_performance_buffer_size": "256",
+        "model_name": "ssd-mobilenet"
       }
     },
     "model_extra_tags": {
@@ -544,7 +546,7 @@
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
-    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n<<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z  <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; fi<<<?double_quote>>>",
+    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; fi<<<?double_quote>>>",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {
