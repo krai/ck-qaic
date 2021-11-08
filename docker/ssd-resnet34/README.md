@@ -87,19 +87,22 @@ ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --mode=accuracy \
 --scenario=offline --target_qps=111112 --docker --experiment_dir
 ```
-Optional parameters:
+When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
 
-`--experiment_dir` - directory with experimental data
+
+`--experiment_dir` - directory with experimental data (`${CK_EXPERIMENT_DIR}`by default)
 
 `--volume <experiment_dir_default>:<docker_experiment_dir_default>` - map directory in docker to directory in local machine
 
-`"docker_experiment_dir_default: "/home/krai/CK_REPOS/local/experiment"`
+`--docker_experiment_dir_default`  - `/home/krai/CK_REPOS/local/experiment` by default
 
-`"experiment_dir_default": "${CK_EXPERIMENT_DIR}"`
+` --experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
  
-`--docker_image   - "krai/mlperf.<model_name>.centos7:<sdk> "`
+`--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
 
-`<model_name> - "ssd-resnet34"`       
+`<model_name>` - `ssd-resnet34`      
 
-`<sdk> - for example, "1.5.6"`
- 
+`<sdk>` - for example, `1.5.6`
+
+`--shared_group_name` - `qaic` by default
+
