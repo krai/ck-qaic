@@ -99,6 +99,7 @@ Optional parameters:
  
 `--docker_image   - "krai/mlperf.<model_name>.centos7:<sdk> "`
 
-<model_name> - "ssd-resnet34"
+`<model_name> - "ssd-resnet34"`       
 
-<sdk> - for example, 1.5.6
+`<sdk> - for example, "1.5.6"`
+ 
