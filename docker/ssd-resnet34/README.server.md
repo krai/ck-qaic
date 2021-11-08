@@ -2,6 +2,38 @@
 
 ## Benchmark
 
+### Load the container
+```
+CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=ssd-resnet34`
+```
+To see experiments outside of container (--experiment_dir):
+
+```
+CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=ssd-resnet34 --experiment_dir`
+```
+#### Optional parameters
+
+When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
+
+
+`--experiment_dir` - directory with experimental data (`${CK_EXPERIMENT_DIR}`by default)
+
+`--volume <experiment_dir_default>:<docker_experiment_dir_default>` - map directory in docker to directory in local machine
+
+`--docker_experiment_dir_default`  - `/home/krai/CK_REPOS/local/experiment` by default
+
+` --experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
+ 
+`--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
+
+`<model_name>` - `ssd-resnet34`      
+
+`<sdk>` - for example, `1.5.6`
+
+`--shared_group_name` - `qaic` by default
+
 ### Server
 
 #### Accuracy
@@ -9,25 +41,17 @@
 ##### `r282_z93_q8`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
---mode=accuracy --scenario=server --target_qps=3380"
+--mode=accuracy --scenario=server --target_qps=3380 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
---mode=accuracy --scenario=server --target_qps=6866"
+--mode=accuracy --scenario=server --target_qps=6866 --container=$CONTAINER_ID
 ```
 
 #### Performance
@@ -35,25 +59,17 @@ docker run --privileged \
 ##### `r282_z93_q8` [optional]
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
---mode=performance --scenario=server --target_qps=3380"
+--mode=performance --scenario=server --target_qps=3380 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16` [optional]
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
---mode=performance --scenario=server --target_qps=6866"
+--mode=performance --scenario=server --target_qps=6866 --container=$CONTAINER_ID
 ```
 
 #### Power
@@ -61,25 +77,17 @@ docker run --privileged \
 ##### `r282_z93_q8`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
 --mode=performance --scenario=server --target_qps=3380 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4959"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4959 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.ssd-resnet34.centos7:1.5.6 \
-"ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
 --mode=performance --scenario=server --target_qps=6866 \
---power=yes --power_server_ip=10.222.147.109 --power_server_port=4953"
+--power=yes --power_server_ip=10.222.147.109 --power_server_port=4953 --container=$CONTAINER_ID
 ```
