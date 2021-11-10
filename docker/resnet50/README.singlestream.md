@@ -2,32 +2,36 @@
 
 ## Benchmark
 
-### Offline
+## Load the container
+```
+CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen  --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=resnet50`
+```
+
+To see experiments outside of container (--experiment_dir):
+
+```
+CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=resnet50 --experiment_dir`
+```
+### Singlestream
 
 #### Accuracy
 
 ##### `r282_z93_q1`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
---mode=accuracy --scenario=singlestream --target_latency=0.5"
+--mode=accuracy --scenario=singlestream --target_latency=0.5 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q5`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \
---mode=accuracy --scenario=singlestream --target_latency=0.5"
+--mode=accuracy --scenario=singlestream --target_latency=0.5 --container=$CONTAINER_ID
 ```
 
 #### Performance
@@ -35,25 +39,17 @@ docker run --privileged \
 ##### `r282_z93_q1`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
---mode=performance --scenario=singlestream --target_latency=0.5"
+--mode=performance --scenario=singlestream --target_latency=0.5 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q5` [optional]
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \
---mode=performance --scenario=singlestream --target_latency=0.5"
+--mode=performance --scenario=singlestream --target_latency=0.5 --container=$CONTAINER_ID
 ```
 
 #### Power
@@ -61,25 +57,45 @@ docker run --privileged \
 ##### `r282_z93_q1` [optional]
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=resnet50 \
 --mode=performance --scenario=singlestream --target_latency=0.5 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4956"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4956 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q5`
 
 ```
-docker run --privileged \
---user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
---volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
---rm krai/mlperf.resnet50.full.centos7:1.5.9 \
-"ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=resnet50 \
 --mode=performance --scenario=singlestream --target_latency=0.5 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4956"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4956 --container=$CONTAINER_ID
 ```
+## --docker option
+
+`--docker` allows to load the container and use it. 
+
+```
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=resnet50 --mode=accuracy \
+--scenario=singlestream --target_latency=0.5 --docker --experiment_dir
+```
+
+When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
+
+
+`--experiment_dir` - directory with experimental data (`${CK_EXPERIMENT_DIR}`by default)
+
+`--volume <experiment_dir_default>:<docker_experiment_dir_default>` - map directory in docker to directory in local machine
+
+`--docker_experiment_dir_default`  - `/home/krai/CK_REPOS/local/experiment` by default
+
+` --experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
+ 
+`--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
+
+`<model_name>` - `ssd-mobilenet`      
+
+`<sdk>` - for example, `1.5.6`
+
+`--shared_group_name` - `qaic` by default
