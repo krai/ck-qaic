@@ -21,7 +21,6 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 
 * `--power` adds power measurement to the experiment run
 * `--group.edge` runs two scenarios: `--scenario=offline` and `--scenario=singlestream`
-* `--group.datacenter` runs two scenarios: `--scenario=offline` and `--scenario=server`
 * `--group.open` runs the following modes: `--mode=accuracy` and `--mode=performance`
 * `--group.closed` runs the modes for `--group.open` and in addition the following compliance tests: `--compilance,=TEST01,TEST04-A,TEST04-B,TEST05`
 
@@ -31,7 +30,7 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 ## Load the container
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=container_only --out=none \ 
---sdk=1.5.6 --model_name=ssd-resnet34`
+--sdk=1.5.6 --model_name=ssd-mobilenet`
 ```
 To see experiments outside of container (--experiment_dir):
 
@@ -47,7 +46,7 @@ CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=con
 ```
 ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd-mobilenet \
---group.edge --group.closed --target_qps=22222 --target_latency=1.5 \
+--group.edge --group.closed --target_qps=19500 --target_latency=1 \
 --container=$CONTAINER_ID
 ```
 
@@ -56,25 +55,7 @@ ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 -model=ssd-mobilenet \
---group.edge --group.closed --target_qps=111111 --target_latency=1.5 \
---container=$CONTAINER_ID --power
-```
-
-### `r282_z93_q8`
-
-```
-ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=r282_z93_q8 --sdk=1.5.6 --model=ssd-mobilenet \
---group.datacenter --group.closed --target_qps=166666 --server_target_qps=145000 \
---container=$CONTAINER_ID --power
-```
-
-### `g292_z43_q16`
-
-```
-ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
---sut=g292_z43_q16 --sdk=1.5.6 --model=ssd-mobilenet \
---group.datacenter --group.closed --target_qps=333333 --server_target_qps=310000 \
+--group.edge --group.closed --target_qps=97500 --target_latency=1 \
 --container=$CONTAINER_ID --power
 ```
 
@@ -85,7 +66,7 @@ ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd-mobilenet --mode=accuracy \
---scenario=offline --target_qps=111112 --docker --experiment_dir
+--scenario=offline --target_qps=97500 --docker --experiment_dir
 ```
 
 When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
