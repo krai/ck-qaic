@@ -94,7 +94,7 @@ When `--docker=container_only` or `--docker` are set the following optional para
  
 `--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
 
-`<model_name>` - `ssd-mobilenet`      
+`<model_name>` - `resnet50`      
 
 `<sdk>` - for example, `1.5.6`
 
