@@ -30,7 +30,15 @@ $(ck find repo:ck-qaic)/docker/build.sh resnet50
 
 ## Load the container
 ```
-CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen  --docker=container_only --out=none`
+CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen  --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=resnet50`
+```
+
+To see experiments outside of container (--experiment_dir):
+
+```
+CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none \ 
+--sdk=1.5.6 --model_name=resnet50 --experiment_dir`
 ```
 
 ## SUTs
@@ -70,3 +78,31 @@ ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --group.datacenter --group.closed --target_qps=333333 --server_target_qps=310000 \
 --container=$CONTAINER_ID --power
 ```
+## --docker option
+
+`--docker` allows to load the container and use it. 
+
+```
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.5.6 --model=resnet50 --mode=accuracy \
+--scenario=offline --target_qps=111111 --docker --experiment_dir
+```
+
+When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
+
+
+`--experiment_dir` - directory with experimental data (`${CK_EXPERIMENT_DIR}`by default)
+
+`--volume <experiment_dir_default>:<docker_experiment_dir_default>` - map directory in docker to directory in local machine
+
+`--docker_experiment_dir_default`  - `/home/krai/CK_REPOS/local/experiment` by default
+
+` --experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
+ 
+`--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
+
+`<model_name>` - `ssd-mobilenet`      
+
+`<sdk>` - for example, `1.5.6`
+
+`--shared_group_name` - `qaic` by default
