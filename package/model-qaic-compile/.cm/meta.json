@@ -427,7 +427,7 @@
     "bert-99": {
       "extra_env": {
         "_MODEL_TO_CONVERT": "compile_bert_99",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Mul,Add,Div,Erf,Softmax,Sub,Gather,LayerNormalization,Mul -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -aic-minimize-host-traffic  -quantization-precision-bias=Int32  -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -aic-compile-only-test"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Add,Div,Erf,Softmax,Sub,Gather,LayerNormalization,Mul -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -aic-minimize-host-traffic  -quantization-precision-bias=Int32  -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -aic-compile-only-test"
       },
       "extra_tags": [
         "calibrated-by-qaic",
