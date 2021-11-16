@@ -450,13 +450,12 @@
     },
     "docker": {
       "yes": {
-	"docker_run": "<<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
+	"docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
         "double_quote": "\"",
 	"escape_char": "\\"
       },
       "container_only": {
-        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-resnet34\" ] && [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(one of ssd-resnet34, ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && echo ${CONTAINER_ID}; fi",
-    "wrapped_ck_benchmark_program2": "CONTAINER_ID=<<<container>>>;echo ${CONTAINER_ID}"
+        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-resnet34\" ] && [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(one of ssd-resnet34, ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
       }
    },
    "cache_dir": {
@@ -495,9 +494,11 @@
    },
    "container": {
      "###": {
-       "docker_run": "<<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
+       "docker_run": "time <<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
        "double_quote": "\"",
-       "escape_char": "\\"
+       "escape_char": "\\",
+       "check_param_container_begin": "<<<check_param_container_begin_def>>>",
+       "check_param_container_end": "<<<check_param_container_end_def>>>"
      }
    }
   },
@@ -506,6 +507,8 @@
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "cache_opt": "0",
+    "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model>>> ]]; then echo 'SDK or/and model are not correct for this container. Container: sdk='\\$sdk_container' and model='\\$model_name_container; else",
+    "check_param_container_end_def": "fi;",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
@@ -513,11 +516,12 @@
     "dataset_size": "5000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
+    "docker_config": "/home/krai/container.config",
     "docker_image" : "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
     "docker_mode": "--privileged ",
     "docker_group_add": "--group-add <<<shared_group_id>>> ",
     "docker_user": "--user=krai:kraig ",
-    "docker_exec_command": "time docker exec",
+    "docker_exec_command": "docker exec",
     "docker_bash_command": "/bin/bash -c",
     "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
@@ -546,8 +550,9 @@
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
-    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; fi<<<?double_quote>>>",
-    "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
+    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>>  if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>>> fi<<<?double_quote>>>",
+
+     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {
 	 "edge": [
