@@ -102,7 +102,7 @@
     },
     "max_query_count": {
       "###": {
-        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=###)",
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=###",
         "record_tags": "max_query_count.###"
       }
     },
