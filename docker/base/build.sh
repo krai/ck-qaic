@@ -33,9 +33,7 @@
 #
 
 # Obtain qaic-docker-1.0.tar.gz from Qualcomm and extract it to e.g. $HOME.
-_DOCKER_DIR=${DOCKER_DIR:-$HOME/qaic-docker-1.0}
 _DOCKER_OS=${DOCKER_OS:-centos7}
-
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 _SDK_VER=${SDK_VER:-1.5.6}
 
@@ -44,6 +42,7 @@ if [[ ! -f "${_APPS_SDK}" ]]; then
   echo "ERROR: File '${_APPS_SDK}' does not exist!"
   exit 1
 fi
+echo "Using Apps SDK: ${_APPS_SDK}"
 
 _PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"}
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
@@ -53,18 +52,25 @@ if [[ ! -f "${_PLATFORM_SDK}" ]]; then
   echo "ERROR: File '${_PLATFORM_SDK}' does not exist!"
   exit 1
 fi
+echo "Using Platform SDK: ${_PLATFORM_SDK}"
 
-read -d '' CMD <<END_OF_CMD
-cd ${_DOCKER_DIR} && rm -rf ./temp && chmod u+x ./build_image.sh && \
-time ./build_image.sh --os ${_DOCKER_OS} --tag ${_SDK_VER} \
---apps-sdk ${_APPS_SDK} --platform-sdk ${_PLATFORM_SDK}
-END_OF_CMD
-
-echo "Running ..."
-echo "${CMD}"
-if [ -z "${DRY_RUN}" ]; then
-  eval ${CMD}
+TMP_DIR=$(pwd)/tmp
+echo $TMP_DIR
+if [ ! -d "${TMP_DIR}" ]; then
+  mkdir -p "${TMP_DIR}"
+  if [ $? -ne 0 ]; then
+    echo "Failed to create ${TMP_DIR}"
+    exit 1
+  fi
 fi
+
+#rm -rvf *
+
+cp -vf ${_APPS_SDK} $TMP_DIR
+cp -vf ${_PLATFORM_SDK} $TMP_DIR
+
+echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
+docker build -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 
 echo
 echo "Done."

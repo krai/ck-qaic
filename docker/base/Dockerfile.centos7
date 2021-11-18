@@ -1,0 +1,21 @@
+FROM centos:7.9.2009
+
+RUN mkdir -p /root/qaic
+WORKDIR /root/qaic
+
+RUN echo "min=1" >> /etc/yum.conf \
+ && echo "timeout=1200" >> /etc/yum.conf
+
+RUN yum update -y \
+ && update-ca-trust force-enable \
+ && yum install -y python python3 unzip wget ca-certificates sudo pciutils \
+ && yum clean all
+
+COPY tmp/qaic-*.zip ./
+
+RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
+&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
+
+ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64
+
+ENV PATH "/usr/local/bin:${PATH}"
