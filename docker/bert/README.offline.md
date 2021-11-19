@@ -4,10 +4,18 @@
 
 ### Load the container
 ```
-CONTAINER=`docker run -dt --privileged \
+CONTAINER_ID=`docker run -dt --privileged \
 --user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
 --volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
 --rm krai/mlperf.bert.centos7:1.5.9`
+```
+To see experiments outside of container (--experiment_dir):
+
+```
+CONTAINER_ID=`docker run -dt --privileged \
+--user=krai:kraig --group-add $(cut -d: -f3 < <(getent group qaic)) \
+--volume ${CK_EXPERIMENT_DIR}:/home/krai/CK_REPOS/local/experiment \
+--rm krai/mlperf.bert.centos7:1.5.9 --experiment_dir`
 ```
 
 ### Offline
@@ -19,10 +27,9 @@ CONTAINER=`docker run -dt --privileged \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
---mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=600"
+--mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=600 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q5`
@@ -31,10 +38,9 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
---mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=1700"
+--mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=1700 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q8`
@@ -42,19 +48,17 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
---mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=5200"
+--mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=5200 --container=$CONTAINER_ID
 ```
 
 ###### precision fp16
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
---mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=2700"
+--mode=accuracy --scenario=offline --override_batch_size=1024 --target_qps=2700 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16`
@@ -62,20 +66,18 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99 \
---mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=10600"
+--mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=10600 --container=$CONTAINER_ID
 ```
 
 
 ###### precision fp16
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99.9 \
---mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=5000"
+--mode=accuracy --scenario=offline --override_batch_size=4096 --target_qps=5000 --container=$CONTAINER_ID
 ```
 
 #### Performance
@@ -84,10 +86,9 @@ docker exec $CONTAINER /bin/bash -c \
 
 ###### precision mixed
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
---mode=performance --scenario=offline --override_batch_size=4096 --target_qps=650"
+--mode=performance --scenario=offline --override_batch_size=4096 --target_qps=650 --container=$CONTAINER_ID
 ```
 
 
@@ -96,10 +97,9 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
---mode=performance --scenario=offline --override_batch_size=1024 --target_qps=3200"
+--mode=performance --scenario=offline --override_batch_size=1024 --target_qps=3200 --container=$CONTAINER_ID
 ```
 
 
@@ -109,18 +109,16 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
---mode=performance --scenario=offline --override_batch_size=512 --target_qps=5201"
+--mode=performance --scenario=offline --override_batch_size=512 --target_qps=5201 --container=$CONTAINER_ID
 ```
 
 ###### precision fp16
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
---mode=performance --scenario=offline --override_batch_size=1024 --target_qps=2700"
+--mode=performance --scenario=offline --override_batch_size=1024 --target_qps=2700 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16` [optional]
@@ -128,18 +126,16 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99 \
---mode=performance --scenario=offline --override_batch_size=4096 --target_qps=10600"
+--mode=performance --scenario=offline --override_batch_size=4096 --target_qps=10600 --container=$CONTAINER_ID
 ```
 
 ###### precision fp16
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99.9 \
---mode=performance --scenario=offline --override_batch_size=1024 --target_qps=5520"
+--mode=performance --scenario=offline --override_batch_size=1024 --target_qps=5520 --container=$CONTAINER_ID
 ```
 
 #### Power
@@ -149,11 +145,10 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=offline --override_batch_size=4096 --target_qps=650 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4956"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4956 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q5` [optional]
@@ -161,11 +156,10 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=offline --override_batch_size=1024 --target_qps=3200 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4956"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4956 --container=$CONTAINER_ID
 ```
 
 ##### `r282_z93_q8`
@@ -173,20 +167,18 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=offline --override_batch_size=512 --target_qps=5201 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4959"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4959 --container=$CONTAINER_ID
 ```
 
 ###### precision fp16
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=offline --override_batch_size=1024 --target_qps=2700 \
---power=yes --power_server_ip=10.222.154.58 --power_server_port=4959"
+--power=yes --power_server_ip=10.222.154.58 --power_server_port=4959 --container=$CONTAINER_ID
 ```
 
 ##### `g292_z43_q16`
@@ -194,18 +186,16 @@ docker exec $CONTAINER /bin/bash -c \
 ###### precision mixed
 
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99 \
 --mode=performance --scenario=offline --override_batch_size=4096 --target_qps=10600 \
---power=yes --power_server_ip=10.222.147.109 --power_server_port=4953"
+--power=yes --power_server_ip=10.222.147.109 --power_server_port=4953 --container=$CONTAINER_ID
 ```
 
 ###### precision fp16
 ```
-docker exec $CONTAINER /bin/bash -c \
-"ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.5.9 --model=bert-99.9 \
 --mode=performance --scenario=offline --override_batch_size=1024 --target_qps=5520 \
---power=yes --power_server_ip=10.222.147.109 --power_server_port=4953"
+--power=yes --power_server_ip=10.222.147.109 --power_server_port=4953 --container=$CONTAINER_ID
 ```
