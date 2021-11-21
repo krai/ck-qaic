@@ -42,7 +42,7 @@ MODEL=$1
 echo "Building the Docker image for '${MODEL}'";
 
 _BASE_OS=${BASE_OS:-centos7}
-_BASE_IMAGE=${BASE_IMAGE:-qran-${_BASE_OS}}
+_BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
 _SDK_VER=${SDK_VER:-1.5.9}
 _PYTHON_VER=${PYTHON_VER:-3.8.12}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
