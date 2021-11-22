@@ -49,10 +49,12 @@ ARG PYTHON_VER=3.8.11
 ARG GCC_MAJOR_VER=10
 # Use CK <= 1.55.5 with known behaviour.
 ARG CK_VER=2.5.8
-ARG SDK_VER=1.5.9
+ARG SDK_VER
+#1.5.9
 
 # Fixed group id (recommended to be the same as that of 'qaic').
-ARG GROUP_ID=1500
+ARG GROUP_ID
+#1500
 # Fixed user id.
 ARG USER_ID=2000
 
