@@ -76,9 +76,14 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
 fi
 
 if [[ ${_DEBUG_BUILD} != 'no' ]]; then tag_suffix='_DEBUG'; else tag_suffix=''; fi
+
+if [ ! -z "${NO_CACHE}" ]; then
+  _NO_CACHE="--no-cache"
+fi
+
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
-time docker build \
+time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
