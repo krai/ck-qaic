@@ -63,7 +63,7 @@
 
 #include "settings.h"
 
-#include "NMS_ABP/CLASS_SPECIFIC_NMS/include/AnchorBoxSSD.hpp"
+#include "nms_abp.h"
 
 #include "affinity.h"
 
@@ -229,6 +229,13 @@ public:
       }
     }
   }
+#ifdef MODEL_R34
+  NMS_ABP<TOutput1DataType, TOutput2DataType, R34_Params> nms_abp_processor;
+  R34_Params modelParams;
+#else
+  NMS_ABP<TOutput1DataType, TOutput2DataType, MV1_Params> nms_abp_processor;
+  MV1_Params modelParams;
+#endif
   Benchmark(
       BenchmarkSettings *settings,
       std::vector<std::vector<std::vector<void *> > > &in_ptrs,
@@ -244,9 +251,7 @@ public:
 
 
 
-    acConfig.priorfilename = _settings->nms_priors_bin_path();
 
-    nwOutputLayer = new AnchorBoxProc(acConfig);
 
     nms_results.resize(settings->qaic_device_count);
     reformatted_results.resize(settings->qaic_device_count);
@@ -367,9 +372,9 @@ for (int i = 0; i < samples.size(); ++i) {
                         int act_idx, int set_idx) override {
 
     TOutput1DataType *boxes_ptr =
-        (TOutput1DataType *)_out_ptrs[dev_idx][act_idx][set_idx][BOXES_INDEX];
+        (TOutput1DataType *)_out_ptrs[dev_idx][act_idx][set_idx][modelParams.BOXES_INDEX];
     TOutput2DataType *classes_ptr = (TOutput2DataType *)
-        _out_ptrs[dev_idx][act_idx][set_idx][CLASSES_INDEX];
+        _out_ptrs[dev_idx][act_idx][set_idx][modelParams.CLASSES_INDEX];
 
     for(int i = 0; i < image_idxs.size(); i++){
       nms_results[dev_idx][act_idx][set_idx][i].clear();
@@ -380,37 +385,11 @@ for (int i = 0; i < samples.size(); ++i) {
       ResultData *next_result_ptr =
           reformatted_results[dev_idx][act_idx][set_idx][i];
       TOutput1DataType *dataLoc =
-          boxes_ptr + i * TOTAL_NUM_BOXES * NUM_COORDINATES;
+          boxes_ptr + i * modelParams.TOTAL_NUM_BOXES * NUM_COORDINATES;
       TOutput2DataType *dataConf =
-          classes_ptr + i * TOTAL_NUM_BOXES * NUM_CLASSES;
+          classes_ptr + i * modelParams.TOTAL_NUM_BOXES * modelParams.NUM_CLASSES;
 
-      float idx = image_idxs[i];
-      if (_settings->qaic_skip_stage != "convert") {
-          anchor::fTensor tLoc =
-            anchor::fTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                              (float *)dataLoc });
-        anchor::fTensor tConf = anchor::fTensor(
-            { "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES }, (float *)dataConf });
-        nwOutputLayer->anchorBoxProcessingFloatPerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-      } else {
-        anchor::uTensor tLoc =
-            anchor::uTensor({ "tLoc", { TOTAL_NUM_BOXES, NUM_COORDINATES },
-                              (uint8_t *)dataLoc });
-#ifdef MODEL_R34
-        anchor::hfTensor tConf =
-            anchor::hfTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                               (uint16_t *)dataConf });
-        nwOutputLayer->anchorBoxProcessingUint8Float16PerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-#else
-        anchor::uTensor tConf =
-            anchor::uTensor({ "tConf", { TOTAL_NUM_BOXES, NUM_CLASSES },
-                               (uint8_t *)dataConf });
-        nwOutputLayer->anchorBoxProcessingUint8PerBatch(
-            std::ref(tLoc), std::ref(tConf), std::ref(nms_res), idx);
-#endif
-      }
+      nms_abp_processor.anchorBoxProcessing(dataLoc, dataConf, std::ref(nms_res), (float)image_idxs[i]);
 
       int num_elems = nms_res.size() < _settings->detections_buffer_size()
                           ? nms_res.size()
@@ -450,8 +429,6 @@ private:
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
 
-  AnchorBoxProc *nwOutputLayer;
-  AnchorBoxConfig acConfig;
 
   std::vector<int> class_map;
   std::vector<const std::vector<mlperf::QuerySample>*> get_random_images_samples;

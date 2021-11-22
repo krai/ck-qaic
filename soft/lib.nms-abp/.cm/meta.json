@@ -2,7 +2,7 @@
   "auto_detect": "yes",
   "customize": {
     "add_include_path": "yes",
-    "env_prefix": "CK_ENV_LIB_AIMET",
+    "env_prefix": "CK_ENV_LIB_NMS_ABP",
     "limit_recursion_dir_search": {
       "linux": 4
     },
@@ -12,9 +12,11 @@
       "linux": "lib"
     }
   },
-  "soft_name": "AI Model Efficiency Toolkit",
+  "soft_name": "NMS-ABP library for Object Detection",
   "tags": [
     "lib",
-    "aimet"
+    "nms-abp",
+    "nms",
+    "abp"
   ]
 }

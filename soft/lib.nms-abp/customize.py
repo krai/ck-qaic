@@ -109,12 +109,7 @@ def setup(i):
     if pi!='' and ep!='':
        env[ep]=pi
     
-    aimet_path=pi+sdirs+".."+sdirs+".."+sdirs
-    export_aimet_path=aimet_path+"python"+":"+aimet_path+"x86_64-linux-gnu"
-    env[ep+"_PYTHONPATH"]=export_aimet_path
-    env['PYTHONPATH']='$'+ep+'_PYTHONPATH:$PYTHONPATH'
-
     if win=='':
-      env[ep+"_LIB"]=export_aimet_path
-      env[ellp]='$'+ep+'_LIB:$'+ellp
+      env[ellp]='$'+ep+'/lib:$'+ellp
+      env['PRIOR_BIN_PATH']=pi+sdirs+"share"
     return {'return':0, 'bat': s}
