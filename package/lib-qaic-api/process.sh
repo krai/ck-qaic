@@ -38,8 +38,8 @@ echo ""
 
 mkdir -p ${INSTALL_DIR}/install/
 
-cp ${PACKAGE_DIR}/*.h ${INSTALL_DIR}/install/
-cp ${PACKAGE_DIR}/*.cpp ${INSTALL_DIR}/install/
+cp ${PACKAGE_DIR}/${_VERSION}/*.h ${INSTALL_DIR}/install/
+cp ${PACKAGE_DIR}/${_VERSION}/*.cpp ${INSTALL_DIR}/install/
 
 rm -f ${INSTALL_DIR}/install/lib
 
