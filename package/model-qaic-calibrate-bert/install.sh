@@ -56,6 +56,6 @@ done
 
 #-compiler-args="-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,${_PACKED_SEQ_LEN} -profiling-backend=CPU -cpu-memory=8000000" --profiling-threads=1 \
 ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec -m=${CK_ENV_ONNX_MODEL_ROOT}/model.onnx \
--compiler-args="-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,${_PACKED_SEQ_LEN} -profiling-backend=CPU -cpu-memory=8000000" \
--input-list-file=${INSTALL_DIR}/packed/inputfiles.txt -num-histogram-bins=512 -dump-profile=${INSTALL_DIR}/profile.yaml
+-compiler-args="-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,${_PACKED_SEQ_LEN} -profiling-backend=CPU -cpu-memory=6000000" \
+-input-list-file=${INSTALL_DIR}/packed/inputfiles.txt -num-histogram-bins=512 -dump-profile=${INSTALL_DIR}/profile.yaml -profiling-threads=4
 
