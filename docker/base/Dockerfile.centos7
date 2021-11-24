@@ -3,11 +3,6 @@
 ###############################################################################
 FROM centos:7.9.2009 AS preamble
 
-###############################################################################
-## BUILDER STAGE
-################################################################################
-FROM preamble AS builder
-
 RUN mkdir -p /root/qaic
 WORKDIR /root/qaic
 
@@ -19,20 +14,25 @@ RUN yum update -y \
  && yum install -y python python3 unzip wget ca-certificates sudo pciutils pciutils-libs \
  && yum clean all
 
+###############################################################################
+### BUILDER STAGE
+###############################################################################
+FROM preamble AS builder
+
 COPY tmp/qaic-*.zip ./
 
 RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
 && unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
 
+###############################################################################
+### FINAL STAGE
+###############################################################################
+FROM preamble AS final
+
+COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
 ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64
 
 ENV PATH "/usr/local/bin:${PATH}"
 
-###############################################################################
-## FINAL STAGE
-################################################################################
-FROM preamble AS final
-
-COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
