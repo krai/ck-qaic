@@ -3,9 +3,6 @@
 ###############################################################################
 FROM centos:7.9.2009 AS preamble
 
-RUN mkdir -p /root/qaic
-WORKDIR /root/qaic
-
 RUN echo "min=1" >> /etc/yum.conf \
  && echo "timeout=1200" >> /etc/yum.conf
 
@@ -19,8 +16,10 @@ RUN yum update -y \
 ###############################################################################
 FROM preamble AS builder
 
-COPY tmp/qaic-*.zip ./
+RUN mkdir -p /tmp
 
+COPY tmp/qaic-*.zip /tmp/
+WORKDIR /tmp
 RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
 && unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
 
