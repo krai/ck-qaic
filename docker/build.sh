@@ -83,6 +83,7 @@ fi
 
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
+cp -r $(ck find repo:ck-qaic)/profile/${MODEL} . && \
 time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
