@@ -78,7 +78,8 @@ fi
 if [[ ${_DEBUG_BUILD} != 'no' ]]; then tag_suffix='_DEBUG'; else tag_suffix=''; fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
-time docker build \
+cp -r $(ck find repo:ck-qaic)/profile/${MODEL} . && \
+time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
