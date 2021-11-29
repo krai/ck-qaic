@@ -113,14 +113,19 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
  && chmod -R g+ws ${CK_REPOS}/local/experiment
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 
 #Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
  && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
  && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
- && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources onnx-simplifier
+ && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
+# Install explicit dependencies.
+RUN ck install package --tags=python-package,cython \
+ && ck install package --tags=python-package,absl \
+ && ck install package --tags=python-package,matplotlib --force_version=3.4.2 \
+ && ck install package --tags=python-package,opencv-python-headless \
+ && echo "latest" | ck install package --tags=python-package,numpy
 
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
