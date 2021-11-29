@@ -98,12 +98,7 @@ RUN echo '0' |  ck install package --tags=tool,cmake,downloaded
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,cython \
- && ck install package --tags=python-package,absl \
- && ck install package --tags=python-package,opencv-python-headless \
- && echo "latest" | ck install package --tags=python-package,numpy \
- && echo '0' | ck install package --tags=python-package,onnx --force_version=1.8.1 \
- && ck install package --tags=python-package,matplotlib --force_version=3.4.2 \
+RUN echo '0' | ck install package --tags=python-package,onnx --force_version=1.8.1 \
  && echo '3' | ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 \
  && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
  && echo '0' | ck install package --tags=lib,python-package,tensorflow
