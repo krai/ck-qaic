@@ -47,16 +47,18 @@ ARG PYTHON_VER=3.8.11
 ARG GCC_MAJOR_VER=10
 # Fixed group id (recommended to be the same as that of 'qaic').
 ARG GROUP_ID=1500
-# # Fixed user id.
+# Fixed user id.
 ARG USER_ID=2000
-ARG CK_QAIC_CHECKOUT=docker-update
+ARG CK_QAIC_CHECKOUT=main
+
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
-#
+
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
+
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH 
-#
+
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
  'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)";\
@@ -69,7 +71,6 @@ RUN ck pull all
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
- #&& ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
  && ${CK_PYTHON} -m pip install --user onnx-simplifier \
  && ${CK_PYTHON} -m pip install --user tokenization \
  && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
