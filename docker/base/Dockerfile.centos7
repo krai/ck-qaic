@@ -66,6 +66,7 @@ FROM preamble AS final
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 ARG CK_VER=2.5.8
+ARG GCC_MAJOR_VER=10
 ARG PYTHON_VER=3.8.11
 ARG CK_QAIC_CHECKOUT=docker-update
 
@@ -120,12 +121,22 @@ RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
  && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
+# Detect C/C++ compiler (gcc).
+RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+
+# Install CMake.
+RUN echo '0' |  ck install package --tags=tool,cmake,downloaded
+
 # Install explicit dependencies.
 RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,absl \
  && ck install package --tags=python-package,matplotlib --force_version=3.4.2 \
  && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy
+
+RUN ck install package --tags=mlperf,inference,source --quiet \
+ && ck install package --tags=mlperf,loadgen,static \
+ && ck install package --tags=mlperf,power,source --quiet
 
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
