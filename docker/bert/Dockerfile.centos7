@@ -89,12 +89,6 @@ ARG GCC_MAJOR_VER
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
 
-# Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
-
-# Install CMake.
-RUN echo '0' |  ck install package --tags=tool,cmake,downloaded
-
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
@@ -104,12 +98,9 @@ RUN echo '0' | ck install package --tags=python-package,onnx --force_version=1.8
  && echo '0' | ck install package --tags=lib,python-package,tensorflow
 
 #-----------------------------------------------------------------------------#
-# Step 2. Build the MLPerf LoadGen API.
+# Step 2. Compile packed-bert-qaic-loadgen.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source --quiet \
- && ck install package --tags=mlperf,loadgen,static \
- && ck install package --tags=mlperf,power,source --quiet \
- && ck compile program:packed-bert-qaic-loadgen --quiet
+RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
