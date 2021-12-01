@@ -69,8 +69,12 @@ fi
 cp -vf ${_APPS_SDK} $TMP_DIR
 cp -vf ${_PLATFORM_SDK} $TMP_DIR
 
+if [ ! -z "${NO_CACHE}" ]; then
+  _NO_CACHE="--no-cache"
+fi
+
 echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
-docker build -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 
 echo
 echo "Done."
