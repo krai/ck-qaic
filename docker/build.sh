@@ -47,6 +47,8 @@ _SDK_VER=${SDK_VER:-1.5.9}
 _PYTHON_VER=${PYTHON_VER:-3.8.12}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-10}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
+_OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
+_NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 
 if [[ ${MODEL} == "resnet50" ]]; then
   _IMAGENET=${IMAGENET:-full}
@@ -84,6 +86,7 @@ fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 cp -r $(ck find repo:ck-qaic)/profile/${MODEL} . && \
+sed -i "s/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g" ./${MODEL}/bs.1/profile.yaml && \
 time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
