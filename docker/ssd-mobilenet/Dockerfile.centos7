@@ -47,24 +47,11 @@ FROM $BASE_IMAGE:$SDK_VER AS preamble
 ARG PYTHON_VER=3.8.11
 # Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
 ARG GCC_MAJOR_VER=10
-ARG CK_VER=2.5.8
-# Fixed group id (recommended to be the same as that of 'qaic').
+ARG CK_QAIC_CHECKOUT=main
+# Fixed group id (recommended to be the same as that of 'qaic'). 
 ARG GROUP_ID=1500
 # Fixed user id.
 ARG USER_ID=2000
-
-ARG CK_QAIC_CHECKOUT=main
-ARG CK_QAIC_PCV
-
-ARG DEBUG_BUILD=no
-
-# Use the Austin timezone by default.
-ARG TIMEZONE=US/Central
-RUN rm -rf /etc/localtime \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && ls -la /etc/localtime
-
-LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -72,84 +59,21 @@ SHELL ["/bin/bash", "-c"]
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
 
-# Install known system dependencies and immediately clean up to make the image smaller.
-# CK needs: git, wget, zip, unzip.
-# Python 3 needs: openssl-devel, bzip2-devel, libffi-devel.
-# MLPerf implementation needs: numactl.
-RUN yum upgrade -y\
- && yum install -y\
- make which patch\
- git wget zip unzip\
- openssl-devel bzip2-devel libffi-devel\
- numactl\
- && yum clean all
-
-# NB: Must be two separate calls to yum install.
-RUN yum install -y centos-release-scl \
- && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
-
-# Install Python >= 3.7.
-RUN cd /usr/src \
- && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
- && tar xzf Python-${PYTHON_VER}.tgz \
- && rm Python-${PYTHON_VER}.tgz \
- && cd Python-${PYTHON_VER} \
- && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations --enable-shared && make altinstall" \
- && cd /usr/src \
- && rm -rf Python-${PYTHON_VER}*
-
-# Create a non-root user with a fixed group id and a fixed user id.
-RUN groupadd -g ${GROUP_ID} kraig
-RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
-USER krai:kraig
-WORKDIR /home/krai
+ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
- 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)" >> /home/krai/.bashrc;\
-  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)" >> /home/krai/.bashrc;\
-  echo export PYTHON_PATCH_VER="$(echo ${PYTHON_VER} | cut -d '.' -f3)" >> /home/krai/.bashrc' \
-&& source /home/krai/.bashrc \
-&& /bin/bash -l -c \
- 'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
+ 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)";\
+  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)";\
+  echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}"'
 
-# Install Collective Knowledge (CK).
-ENV CK_ROOT=/home/krai/CK \
-    CK_REPOS=/home/krai/CK_REPOS \
-    CK_TOOLS=/home/krai/CK_TOOLS \
-    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
-    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
-    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
-    CK_CC=gcc \
-    GIT_USER="krai" \
-    GIT_EMAIL="info@krai.ai" \
-    LANG=C.UTF-8
-RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS}
-RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
-RUN git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT}
-RUN cd ${CK_ROOT} \
- && source /home/krai/.bashrc \
- && ${CK_PYTHON} setup.py install --user\
- && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
- && chmod -R g+rx /home/krai/.local
-
-# Explicitly create a CK experiment entry, a folder that will be mounted
-# (with '--volume=<folder_for_results>:/home/krai/CK_REPOS/local/experiment').
-# as a shared volume between the host and the container, and make it group-writable.
-# For consistency, use the "canonical" uid from ck-analytics:module:experiment.
-RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${CK_REPOS}/local\
- && chmod -R g+ws ${CK_REPOS}/local/experiment
-
-# Pull CK repositories (including ck-mlperf and ck-env).
-RUN ck pull repo --url=https://github.com/krai/ck-qaic
-
+# Pull CK repositories.
 RUN ls && cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ck pull all
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
- && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
- && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
- && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources onnx-simplifier
+ && ${CK_PYTHON} -m pip install --user onnx-simplifier
 
 ###############################################################################
 # BUILDER STAGE
@@ -160,38 +84,25 @@ RUN source /home/krai/.bashrc \
 ###############################################################################
 FROM preamble AS builder
 ARG PYTHON_VER
-ARG GCC_MAJOR_VER
-ARG DEBUG_BUILD
+ARG GCC_MAJOR_VER=10
+ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
+ARG CK_CC=gcc
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
 
-# Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
-
-# Install CMake.
-RUN ck install package --tags=tool,cmake,downloaded --quiet
-
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,cython --quiet \
- && ck install package --tags=python-package,absl --quiet \
- && ck install package --tags=python-package,opencv-python-headless --quiet \
- && echo "latest" | ck install package --tags=python-package,numpy --quiet \
- && ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
+RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
  && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
- && ck install package --tags=python-package,matplotlib --quiet \
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 2. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=mlperf,inference,source --quiet \
- && ck install package --tags=mlperf,loadgen,static --quiet \
- && ck install package --tags=mlperf,power,source --quiet \
- && ck compile program:object-detection-qaic-loadgen
+RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
