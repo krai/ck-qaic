@@ -70,7 +70,10 @@ cp -vf ${_APPS_SDK} $TMP_DIR
 cp -vf ${_PLATFORM_SDK} $TMP_DIR
 
 echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
-docker build -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+echo "docker build -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_bare ."
+docker build --no-cache  -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}"_bare" .
+echo "docker build --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_try ."
+docker build --no-cache --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_try .
 
 echo
 echo "Done."

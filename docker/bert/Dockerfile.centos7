@@ -41,40 +41,14 @@
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM $BASE_IMAGE:${SDK_VER}_bare AS preamble
 
-ARG PYTHON_VER=3.8.11
-ARG GCC_MAJOR_VER=10
-# Fixed group id (recommended to be the same as that of 'qaic').
-ARG GROUP_ID=1500
-# Fixed user id.
-ARG USER_ID=2000
 ARG CK_QAIC_CHECKOUT=main
-
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
-
-ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH 
-
-# Work out the subversions of Python and place them into the Bash resource file.
-RUN /bin/bash -l -c  \
- 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)";\
-  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)";\
-  echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}"'
-
-# Pull CK repositories
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
-
-# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
-RUN source /home/krai/.bashrc \
- && ${CK_PYTHON} -m pip install --user onnx-simplifier \
- && ${CK_PYTHON} -m pip install --user tokenization \
- && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
- && ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 
 ###############################################################################
 # BUILDER STAGE
@@ -83,19 +57,30 @@ RUN source /home/krai/.bashrc \
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM preamble AS builder
-ARG PYTHON_VER
-ARG GCC_MAJOR_VER
+FROM $BASE_IMAGE:${SDK_VER}_try AS builder
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
+ARG CK_QAIC_CHECKOUT=main
+
+
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+RUN source /home/krai/.bashrc \
+ && ${CK_PYTHON} -m pip install --user onnx-simplifier \
+ && ${CK_PYTHON} -m pip install --user tokenization \
+ && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
+ && ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
+
+# Pull CK repositories
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ck pull all
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN echo '0' | ck install package --tags=python-package,onnx --force_version=1.8.1 \
- && echo '3' | ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 \
+RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
+ && ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet \
  && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
- && echo '0' | ck install package --tags=lib,python-package,tensorflow
+ && ck install package --tags=lib,python-package,tensorflow --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 2. Compile packed-bert-qaic-loadgen.
@@ -117,12 +102,12 @@ RUN ck install package --tags=model,mlperf,qaic,bert-packed
 RUN echo '0' | ck install package --tags=profile,qaic,bert-packed
 
 # # Uncomment if using precalibrated profile; comment out otherwise.
-# RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
-# --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
-# --extra_tags=detected,profile,qaic,bert-packed,mixed
+RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect soft:compiler.glow.profile \
+ --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
+ --extra_tags=detected,profile,qaic,bert-packed,mixed,pcv.${CK_QAIC_PCV:-9980}; fi
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99,quantization.calibration; fi
+RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99,quantization.calibration; fi
 RUN ck install package --tags=model,compiled,bert,bert-99.9
 
 # Set platform scripts (ensuring that ECC is on).
@@ -153,6 +138,8 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
+COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local /home/krai/.local
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

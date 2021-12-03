@@ -1,0 +1,76 @@
+#
+# Copyright (c) 2021 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+###############################################################################
+# PREABMLE STAGE
+#
+# In this stage, only perform steps that benefit the final image.
+#
+###############################################################################
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
+# (CentOS 7 comes with 1.13.)
+ARG BASE_IMAGE
+ARG SDK_VER
+FROM ${BASE_IMAGE}:${SDK_VER}_bare AS preamble
+ARG BASE_IMAGE
+ARG SDK_VER
+
+
+###############################################################################
+# BUILD STAGE
+#
+# In this stage, simply remove unnecessary tools from CK_TOOLS
+#
+###############################################################################
+FROM krai/mlperf.bert.centos7:${SDK_VER}_PC AS builder
+RUN rm -rf \
+$(ck locate env --tags=python-package,pytorch)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=model,bert-packed)/*; 
+
+
+FROM preamble AS final
+COPY --from=builder /home/krai/CK       /home/krai/CK
+COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
+COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
+COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local /home/krai/.local
+
+#-----------------------------------------------------------------------------#
+# Show the status of QAIC devices.
+#-----------------------------------------------------------------------------#
+CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
