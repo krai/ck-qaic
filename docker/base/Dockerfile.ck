@@ -3,7 +3,7 @@
 ###############################################################################
 ARG BASE_IMAGE=krai/qaic.centos7
 ARG SDK_VER=1.6.16
-FROM $BASE_IMAGE:${SDK_VER}_bare AS preamble
+FROM $BASE_IMAGE:${SDK_VER} AS preamble
 
 ARG PYTHON_VER=3.8.11
 ARG GCC_MAJOR_VER=10
