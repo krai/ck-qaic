@@ -45,6 +45,8 @@ _BASE_OS=${BASE_OS:-centos7}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
 _SDK_VER=${SDK_VER:-1.5.9}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
+_OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
+_NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 
 if [[ ${MODEL} == "resnet50" ]]; then
   _IMAGENET=${IMAGENET:-full}
@@ -82,6 +84,7 @@ fi
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 cp -r $(ck find repo:ck-qaic)/profile/${MODEL} . && \
+sed -i "s/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g" ./${MODEL}/bs.1/profile.yaml && \
 time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \

@@ -69,11 +69,15 @@ fi
 cp -vf ${_APPS_SDK} $TMP_DIR
 cp -vf ${_PLATFORM_SDK} $TMP_DIR
 
+if [ ! -z "${NO_CACHE}" ]; then
+  _NO_CACHE="--no-cache"
+fi
+
 echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
-echo "docker build -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_bare ."
-docker build --no-cache  -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}"_bare" .
-echo "docker build --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_try ."
-docker build --no-cache --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_try .
+echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} ."
+docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}"" .
+echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_ck ."
+docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS} --build-arg SDK_VER=${_SDK_VER} -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}_ck .
 
 echo
 echo "Done."
