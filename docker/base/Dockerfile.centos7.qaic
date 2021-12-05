@@ -5,6 +5,7 @@ FROM centos:7.9.2009 AS preamble
 
 ARG PYTHON_VER=3.8.11
 ARG GCC_MAJOR_VER=10
+ARG CK_VER=2.5.8
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 
@@ -45,6 +46,31 @@ RUN cd /tmp \
  && cd /tmp \
  && rm -rf Python-${PYTHON_VER}*
 
+###############################################################################
+### BUILDER STAGE
+###############################################################################
+FROM preamble AS builder
+
+RUN mkdir -p /tmp
+
+COPY tmp/qaic-*.zip /tmp/
+WORKDIR /tmp
+RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
+&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
+
+
+###############################################################################
+### FINAL STAGE
+###############################################################################
+FROM preamble AS final
+ARG GROUP_ID=1500
+ARG USER_ID=2000
+
+
+COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
+
+ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64
+
 ENV PATH "/usr/local/bin:${PATH}"
 
 # Create a non-root user with a fixed group id and a fixed user id.
@@ -63,6 +89,7 @@ ENV CK_ROOT=/home/krai/CK \
     GIT_USER="krai" \
     GIT_EMAIL="info@krai.ai" \
     LANG=C.UTF-8
+
 RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

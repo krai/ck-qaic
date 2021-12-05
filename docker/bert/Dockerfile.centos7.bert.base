@@ -36,15 +36,12 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-#FROM qran-centos7:1.5.6
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+#FROM qran-centos7:1.5.9
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
-ARG BASE_IMAGE
-ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM krai/qaic.centos7 AS preamble
 
 ARG CK_QAIC_CHECKOUT=main
-
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
@@ -58,64 +55,42 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/mlperf.centos7.resnet50 AS builder
-ARG CK_QAIC_PCV
+FROM krai/qaic.centos7_ck AS builder
 ARG DEBUG_BUILD=no
+ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT=main
 
-COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
 
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+RUN source /home/krai/.bashrc \
+ && ${CK_PYTHON} -m pip install --user onnx-simplifier \
+ && ${CK_PYTHON} -m pip install --user tokenization \
+ && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
+ && ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 
-ENV PATH "/usr/local/bin:${PATH}"
-
-# Pull CK repositories.
+# Pull CK repositories
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 RUN ck pull all
 
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
+#-----------------------------------------------------------------------------#
+# Step 1. Install explicit Python dependencies.
+#-----------------------------------------------------------------------------#
+RUN ck install package --tags=python-package,onnx --quiet \
+ && ck install package --tags=lib,python-package,pytorch  --quiet \
+ && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
+ && ck install package --tags=lib,python-package,tensorflow --quiet
+
 
 #-----------------------------------------------------------------------------#
-# Step 2. Prepare the ResNet50 workload.
+# Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
-# to work around a current limitation in the toolchain.
-
-# Use precalibrated profiles.
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.8
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.1
-# Calibrate the workload for bs.1 and bs.8
-RUN ck install package --tags=profile,resnet50,bs.1 --quiet
-RUN ck install package --tags=profile,resnet50,bs.8 --quiet
-
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp --quiet
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
+RUN ck install package --tags=dataset,squad,raw,width.384
+RUN ck install package --tags=dataset,calibration,squad,pickle,width.384
 
 #-----------------------------------------------------------------------------#
-# Step 3. Compile the Image Classification program.
+# Step 4. Prepare the BERT workload.
 #-----------------------------------------------------------------------------#
-RUN ck compile program:image-classification-qaic-loadgen --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
-#-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=python-package,tensorflow)/* \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,fix_input_shape)/*; fi
+RUN ck install package --tags=model,mlperf,qaic,bert-packed
 
 ###############################################################################
 # FINAL STAGE
@@ -127,11 +102,6 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
-COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local /home/krai/.local
 
-#-----------------------------------------------------------------------------#
-# Show the status of QAIC devices.
-#-----------------------------------------------------------------------------#
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

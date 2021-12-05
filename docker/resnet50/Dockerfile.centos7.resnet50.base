@@ -39,10 +39,10 @@
 #FROM qran-centos7:1.5.6
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
-ARG BASE_IMAGE
-ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM krai/qaic.centos7 AS preamble
 
+# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
+ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
 
 # Use the Bash shell.
@@ -58,64 +58,39 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/mlperf.centos7.resnet50 AS builder
-ARG CK_QAIC_PCV
-ARG DEBUG_BUILD=no
+FROM krai/qaic.centos7_ck AS builder
+ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
-
-COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
-
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
-
-ENV PATH "/usr/local/bin:${PATH}"
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 RUN ck pull all
 
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
+
+#-----------------------------------------------------------------------------#
+# Step 1 . Prepare the dataset.
+#-----------------------------------------------------------------------------#
+# Download the ImageNet labels.
+RUN ck install package --tags=dataset,imagenet,aux --quiet
+# Add original ImageNet from an auxiliary image to preprocess it.
+COPY --from=imagenet /imagenet /imagenet
+
+RUN if [[ "${IMAGENET}" == "full" ]]; \
+  then \
+    echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
+    --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation --quiet; \
+  else \
+    ck install package --tags=dataset,imagenet,val,min --no_tags=resized --quiet&&  \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation --quiet; \
+  fi
 
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the ResNet50 workload.
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
 # to work around a current limitation in the toolchain.
-
-# Use precalibrated profiles.
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.8
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.1
-# Calibrate the workload for bs.1 and bs.8
-RUN ck install package --tags=profile,resnet50,bs.1 --quiet
-RUN ck install package --tags=profile,resnet50,bs.8 --quiet
-
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp --quiet
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 3. Compile the Image Classification program.
-#-----------------------------------------------------------------------------#
-RUN ck compile program:image-classification-qaic-loadgen --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
-#-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=python-package,tensorflow)/* \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,fix_input_shape)/*; fi
+RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
 
 ###############################################################################
 # FINAL STAGE
@@ -130,8 +105,3 @@ COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
 COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
-
-#-----------------------------------------------------------------------------#
-# Show the status of QAIC devices.
-#-----------------------------------------------------------------------------#
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

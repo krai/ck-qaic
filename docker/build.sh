@@ -63,6 +63,11 @@ else
   EXTRA_DOCKER_ARG=""
 fi
 
+if [[ ${MODEL} == "ssd-resnet34" ]]; then
+  HASH_REPLACE="sed -i 's/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g' ./${MODEL}/bs.1/profile.yaml &&";
+else
+  HASH_REPLACE=""
+fi
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 _CK_QAIC_PCV=${CK_QAIC_PCV:-''}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
@@ -81,10 +86,24 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
+if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then 
+  docker image rm krai/mlperf.${_BASE_OS}.${MODEL} --force; 
+fi
+
+
+if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
+  cd $(ck find ck-qaic:docker:base) && ./build.sh
+fi
+
+if [[ "$(docker images -q krai/mlperf.${_BASE_OS}.${MODEL} 2> /dev/null)" == "" ]]; then
+  cd $(ck find ck-qaic:docker:base) && ../build_ck.sh ${MODEL}
+fi
+  
+
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 cp -r $(ck find repo:ck-qaic)/profile/${MODEL} . && \
-sed -i "s/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g" ./${MODEL}/bs.1/profile.yaml && \
+${HASH_REPLACE} \
 time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \

@@ -57,49 +57,30 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM $BASE_IMAGE:${SDK_VER}_ck AS builder
+FROM krai/qaic.centos7.bert AS builder
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT=main
 
+COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
 
-# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
-RUN source /home/krai/.bashrc \
- && ${CK_PYTHON} -m pip install --user onnx-simplifier \
- && ${CK_PYTHON} -m pip install --user tokenization \
- && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
- && ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
+
+ENV PATH "/usr/local/bin:${PATH}"
 
 # Pull CK repositories
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 RUN ck pull all
 
-#-----------------------------------------------------------------------------#
-# Step 1. Install explicit Python dependencies.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
- && ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet \
- && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
- && ck install package --tags=lib,python-package,tensorflow --quiet
+
 
 #-----------------------------------------------------------------------------#
 # Step 2. Compile packed-bert-qaic-loadgen.
 #-----------------------------------------------------------------------------#
 RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
-#-----------------------------------------------------------------------------#
-# Step 3. Download the dataset.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,squad,raw,width.384
-RUN ck install package --tags=dataset,calibration,squad,pickle,width.384
-
-#-----------------------------------------------------------------------------#
-# Step 4. Prepare the BERT workload.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=model,mlperf,qaic,bert-packed
-
 # Uncomment if not using precalibrated profile; comment out otherwise.
-RUN echo '0' | ck install package --tags=profile,qaic,bert-packed
+RUN ck install package --tags=profile,qaic,bert-packed --quiet
 
 # # Uncomment if using precalibrated profile; comment out otherwise.
 RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect soft:compiler.glow.profile \
@@ -110,7 +91,7 @@ RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect s
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package \
   --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
   --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99,quantization.calibration; fi
-RUN ck install package --tags=model,compiled,bert,bert-99.9
+RUN ck install package --tags=model,compiled,bert,bert-99.9 --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic

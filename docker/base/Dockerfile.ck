@@ -2,13 +2,11 @@
 # PREABMLE STAGE
 ###############################################################################
 ARG BASE_IMAGE=krai/qaic.centos7
-ARG SDK_VER=1.6.16
-FROM $BASE_IMAGE:${SDK_VER} AS preamble
+FROM $BASE_IMAGE AS preamble
 
 ARG PYTHON_VER=3.8.11
 ARG GCC_MAJOR_VER=10
 ARG CK_VER=2.5.8
-ARG CK_QAIC_CHECKOUT=main
 
 #USER krai:kraig
 #WORKDIR /home/krai
@@ -21,7 +19,6 @@ FROM preamble AS builder
 ARG CK_VER=2.5.8
 ARG GCC_MAJOR_VER=10
 ARG PYTHON_VER=3.8.11
-ARG CK_QAIC_CHECKOUT=main
 
 
 # Work out the subversions of Python and place them into the Bash resource file.
@@ -71,7 +68,7 @@ RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy
 
-RUN ck install package --tags=mlperf,inference,source --quiet \
+RUN ck install package --tags=mlperf,inference,source,nvidia-coco --quiet \
  && ck install package --tags=mlperf,loadgen,static \
  && ck install package --tags=mlperf,power,source --quiet
 

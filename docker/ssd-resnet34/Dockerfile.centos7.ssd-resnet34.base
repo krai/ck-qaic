@@ -37,19 +37,18 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.5.6
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+# NB: Setting FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
-ARG BASE_IMAGE
-ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM krai/qaic.centos7 AS preamble
 
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT=docker-update
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
+
 
 ###############################################################################
 # BUILDER STAGE
@@ -58,64 +57,37 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/mlperf.centos7.resnet50 AS builder
-ARG CK_QAIC_PCV
-ARG DEBUG_BUILD=no
-ARG CK_QAIC_CHECKOUT=main
-
-COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
-
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
-
-ENV PATH "/usr/local/bin:${PATH}"
+FROM krai/qaic.centos7_ck AS builder
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 RUN ck pull all
-
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
+RUN source /home/krai/.bashrc && ${CK_PYTHON} -m pip install --user pybind11
 
 #-----------------------------------------------------------------------------#
-# Step 2. Prepare the ResNet50 workload.
+# Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
-# to work around a current limitation in the toolchain.
-
-# Use precalibrated profiles.
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.8
-#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
-#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
-#--extra_tags=resnet50,mlperf.option1,bs.1
-# Calibrate the workload for bs.1 and bs.8
-RUN ck install package --tags=profile,resnet50,bs.1 --quiet
-RUN ck install package --tags=profile,resnet50,bs.8 --quiet
-
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp --quiet
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
+RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
+ && ck install package --tags=tool,coco,nvidia --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 3. Compile the Image Classification program.
+# Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-RUN ck compile program:image-classification-qaic-loadgen --quiet
+RUN ck install package --tags=dataset,coco.2017,val --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
+# The steps below are SSD-ResNet34 specific.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=python-package,tensorflow)/* \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,fix_input_shape)/*; fi
+
+#-----------------------------------------------------------------------------#
+# Step 4. Preprocess the dataset for quantized SSD-ResNet34.
+#-----------------------------------------------------------------------------#
+RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
+--tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
+--extra_tags=validation --quiet
+
+RUN ck install package --tags=model,onnx,ssd-resnet34,no-nms --quiet
 
 ###############################################################################
 # FINAL STAGE
@@ -127,11 +99,6 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
 COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
 
-#-----------------------------------------------------------------------------#
-# Show the status of QAIC devices.
-#-----------------------------------------------------------------------------#
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

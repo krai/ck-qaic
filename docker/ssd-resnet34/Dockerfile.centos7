@@ -42,17 +42,8 @@
 ARG BASE_IMAGE
 ARG SDK_VER
 FROM $BASE_IMAGE:$SDK_VER AS preamble
-
-# Use Python >= 3.7, as required by the MLPerf Power workflow.
-ARG PYTHON_VER=3.8.11
-# Use GCC >= 9, as MLPerf LoadGen requires C++14. (CentOS 7 comes with ancient GCC 4.)
-ARG GCC_MAJOR_VER=10
-# Fixed group id (recommended to be the same as that of 'qaic'). 
-ARG GROUP_ID=1500
-# Fixed user id.
-ARG USER_ID=2000
-
 ARG CK_QAIC_CHECKOUT=docker-update
+ARG DEBUG_BUILD=no
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -60,16 +51,6 @@ SHELL ["/bin/bash", "-c"]
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
 
-ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH
-# Work out the subversions of Python.
-RUN /bin/bash -l -c  \
- 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)";\
-  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)";\
-  echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}"'
-
-# Pull CK repositories.
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
 
 ###############################################################################
 # BUILDER STAGE
@@ -78,42 +59,36 @@ RUN ck pull all
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM preamble AS builder
-ARG PYTHON_VER
-ARG GCC_MAJOR_VER
-ARG DEBUG_BUILD
-ARG CK_QAIC_PCV
+FROM krai/mlperf.centos7.ssd-resnet34 AS builder
+ARG CK_QAIC_PCV=9980
+ARG CK_QAIC_CHECKOUT=docker-update
+ARG DEBUG_BUILD=no
+
+
+COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
+
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
+
+ENV PATH "/usr/local/bin:${PATH}"
+
+
+# Pull CK repositories.
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ck pull all
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
 
 #-----------------------------------------------------------------------------#
-# Step 1. Install explicit Python dependencies.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
- && ck install package --tags=tool,coco --quiet
-
-#-----------------------------------------------------------------------------#
 # Step 2. Compile object-detection-qaic-loadgen.
 #-----------------------------------------------------------------------------#
-RUN ck compile program:object-detection-qaic-loadgen
-
-#-----------------------------------------------------------------------------#
-# Step 3. Download the dataset.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,coco.2017,val
+RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
 # The steps below are SSD-ResNet34 specific.
 #-----------------------------------------------------------------------------#
 
-#-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized SSD-ResNet34.
-#-----------------------------------------------------------------------------#
-RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
---extra_tags=validation
 
 #-----------------------------------------------------------------------------#
 # Step 5. Prepare the SSD-ResNet34 workload.
@@ -123,15 +98,19 @@ ADD ssd-resnet34/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1
 RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
 --full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1/profile.yaml \
 --extra_tags=detected,ssd_resnet34
-# Remove NMS.
-RUN ck install package --tags=model,onnx,mlperf,ssd-resnet34,no-nms
+
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp; ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream; fi
+RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp,quantization.calibration \
+  --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
+  --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream,quantization.calibration \
+  --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream; fi
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -155,6 +134,8 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
+COPY --from=builder /home/krai/.local /home/krai/.local
+COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.
