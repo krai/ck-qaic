@@ -1,14 +1,25 @@
 # Qualcomm Cloud AI - MLPerf BERT Docker image
-## With Exploration of Percentile Calibration Values
+
+## Building the base CK Image
+
+This image is independent of SDK
+```
+$(ck find ck-qaic)/docker/build_ck.sh bert
+```
+
+## Docker Build
+
+### With Exploration of Percentile Calibration Values 
+
 ```
 CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
-## With default Percentile Calibration Value
+### With default Percentile Calibration Value
 ```
-$(ck find ck-qaic:docker:bert)/build.sh
+$(ck find ck-qaic)/docker/build.sh bert
 ```
 
-## Parameters
+### Parameters
 
 - `DOCKER_OS=centos7`
 - `SDK_VER=1.5.9`
@@ -16,9 +27,11 @@ $(ck find ck-qaic:docker:bert)/build.sh
 - `DEBUG_BUILD=no`
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
 - `CK_QAIC_PCV=9985`
+- `CLEAN_MODEL_BASE=yes`
 - `...`
 
 **`CK_QAIC_PERCENTILE_CALIBRATION=yes` and `CK_QAIC_PCV=9985` should not be used together**
+** `CLEAN_MODEL_BASE=yes` will rebuild the base CK docker container
 
 ## Run Options
 
