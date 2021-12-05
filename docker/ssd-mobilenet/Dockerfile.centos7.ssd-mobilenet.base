@@ -72,27 +72,20 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
+RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
  && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
  && ck install package --tags=tool,coco,nvidia --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,object-detection,coco,2017,cal --quiet
-RUN ck install package --tags=dataset,coco.2017,val --quiet
-
-#-----------------------------------------------------------------------------#
-# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
-# The steps below are SSD-MobileNet specific.
-#-----------------------------------------------------------------------------#
+RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration --quiet
+RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
+--tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
 
 #-----------------------------------------------------------------------------#
 # Step 4. Preprocess the dataset for quantized SSD-MobileNet.
 #-----------------------------------------------------------------------------#
-RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full \
---extra_tags=validation
 
 #-----------------------------------------------------------------------------#
 # Step 5. Prepare the SSD-MobileNet workload.
@@ -100,6 +93,9 @@ RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 # Remove NMS.
 RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
 
+RUN rm -rf $(ck locate env --tags=dataset,coco.2017,original,train)/*  \
+  $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
+  touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; 
 
 ###############################################################################
 # FINAL STAGE

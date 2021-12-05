@@ -89,6 +89,8 @@ RUN if [[ "${IMAGENET}" == "full" ]]; \
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
 # to work around a current limitation in the toolchain.
+RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet;
+RUN ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet;
 RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
 
 ###############################################################################

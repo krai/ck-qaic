@@ -82,18 +82,6 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
-# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
-# The steps below are SSD-MobileNet specific.
-#-----------------------------------------------------------------------------#
-
-#-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized SSD-MobileNet.
-#-----------------------------------------------------------------------------#
-RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full \
---extra_tags=validation
-
-#-----------------------------------------------------------------------------#
 # Step 5. Prepare the SSD-MobileNet workload.
 #-----------------------------------------------------------------------------#
 # Use a precalibrated profile.
@@ -130,11 +118,12 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,pytorch,for.qaic)/* \
-$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
-$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
-$(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
-touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
+$(ck locate env --tags=model,pytorch)/* \
+$(ck locate env --tags=python-package,torch)/* \
+$(ck locate env --tags=profile,bs.1)/*.raw \
+$(ck locate env --tags=profile,bs.4)/*.raw \
+$(ck locate env --tags=preprocessed,calibration)/* \
+$(ck locate env --tags=python-package,onnx,for.qaic)/*;  fi
 
 ###############################################################################
 # FINAL STAGE
