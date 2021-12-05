@@ -4,7 +4,7 @@
 
 This image is independent of SDK
 ```
-$(ck find ck-qaic)/docker/build_ck.sh bert
+$(ck find ck-qaic)/docker/build_ck.sh resnet50
 ```
 
 ## Docker Build
