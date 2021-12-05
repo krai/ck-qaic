@@ -40,7 +40,7 @@ CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=con
 --sdk=1.5.6 --model_name=ssd-resnet34 --experiment_dir`
 ```
 
-### Quick Accuracy Check
+## Quick Accuracy Check
 ```
 ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
