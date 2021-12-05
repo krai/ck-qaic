@@ -41,6 +41,15 @@ CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker
 --sdk=1.5.6 --model_name=resnet50 --experiment_dir`
 ```
 
+## Quick Accuracy Check
+
+```
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=r282_z93_q1 --sdk=1.5.6 --model=resnet50 \
+--mode=accuracy --scenario=offline --target_qps=22222 \
+--container=$CONTAINER_ID
+```
+
 ## SUTs
 
 ### `r282_z93_q1`
