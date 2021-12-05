@@ -39,9 +39,9 @@
 #FROM qran-centos7:1.5.9
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
+ARG CK_QAIC_CHECKOUT=main
 FROM krai/qaic.centos7 AS preamble
 
-ARG CK_QAIC_CHECKOUT=main
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
@@ -56,8 +56,6 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM krai/qaic.centos7_ck AS builder
-ARG DEBUG_BUILD=no
-ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT=main
 
 

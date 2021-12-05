@@ -39,11 +39,9 @@
 #FROM qran-centos7:1.5.6
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
-FROM krai/qaic.centos7 AS preamble
-
-# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
+FROM krai/qaic.centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -59,6 +57,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM krai/qaic.centos7_ck AS builder
+# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
 
