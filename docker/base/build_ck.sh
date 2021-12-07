@@ -32,13 +32,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Obtain qaic-docker-1.0.tar.gz from Qualcomm and extract it to e.g. $HOME.
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
+cd $(ck find ck-qaic:docker:base)
 echo "Creating image: krai/qaic.${_DOCKER_OS}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS} ."
 docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}"" .
