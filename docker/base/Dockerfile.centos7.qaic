@@ -29,7 +29,7 @@ RUN echo "min=1" >> /etc/yum.conf \
 
 RUN yum update -y \
  && update-ca-trust force-enable \
- && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl\
+ && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools\
  && yum clean all
 
 # NB: Must be two separate calls to yum install.
