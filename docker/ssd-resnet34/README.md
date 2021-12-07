@@ -1,5 +1,12 @@
 # Qualcomm Cloud AI - MLPerf SSD-ResNet34 Docker image
 
+## Building the base CK Image
+
+This image is independent of SDK
+```
+$(ck find ck-qaic)/docker/build_ck.sh ssd-resnet34
+```
+
 ## Docker Build
 
 ```
@@ -13,9 +20,11 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
 - `CK_QAIC_CHECKOUT=4eb006cd7af97ee281f073a5e17f790255143ed7`
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
 - `CK_QAIC_PCV=9985`
+- `CLEAN_MODEL_BASE=yes`
 - `...`
 
 **`CK_QAIC_PERCENTILE_CALIBRATION=yes` and `CK_QAIC_PCV=9985` should not be used together**
+** `CLEAN_MODEL_BASE=yes` will rebuild the base CK docker container
 
 ## Run Options
 
