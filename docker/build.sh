@@ -87,7 +87,7 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then 
-  docker image rm krai/mlperf.${_BASE_OS}.${MODEL} --force; 
+  docker image rm krai/ck.${MODEL}.${_BASE_OS} --force; 
 fi
 
 

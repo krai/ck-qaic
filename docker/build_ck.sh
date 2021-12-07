@@ -54,8 +54,8 @@ if [[ "$(docker images -q krai/ck.${_BASE_OS} 2> /dev/null)" == "" ]]; then
 fi
 
 echo "Creating image: krai/mlperf.${_DOCKER_OS}.${MODEL}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/ck.${MODEL}.${_DOCKER_OS} ."
-cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/ck.${MODEL}.${_DOCKER_OS} .
+echo "docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} ."
+cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} .
 
 echo
 echo "Done."

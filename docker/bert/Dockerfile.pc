@@ -40,7 +40,7 @@
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG SDK_VER
-FROM ${BASE_IMAGE}:${SDK_VER}_bare AS preamble
+FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
 ARG BASE_IMAGE
 ARG SDK_VER
 
