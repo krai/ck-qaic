@@ -41,7 +41,7 @@
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/qaic.centos7 AS preamble
+FROM krai/centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
