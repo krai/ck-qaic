@@ -16,7 +16,7 @@ CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 ### With default Percentile Calibration Value
 ```
-$(ck find ck-qaic)/docker/build.sh bert
+$(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 
 ### Parameters
