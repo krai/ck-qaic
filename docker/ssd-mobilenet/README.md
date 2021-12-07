@@ -4,7 +4,7 @@
 
 This image is independent of SDK
 ```
-$(ck find ck-qaic)/docker/build_ck.sh ssd-mobilenet
+$(ck find repo:ck-qaic)/docker/build_ck.sh ssd-mobilenet
 ```
 
 ## Docker Build
