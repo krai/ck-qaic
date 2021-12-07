@@ -4,7 +4,7 @@
 
 This image is independent of SDK
 ```
-$(ck find ck-qaic)/docker/build_ck.sh ssd-resnet34
+$(ck find repo:ck-qaic)/docker/build_ck.sh ssd-resnet34
 ```
 
 ## Docker Build
