@@ -36,5 +36,18 @@
     "v0.1",
     "v0",
     "channel-stable"
-  ]
+  ],
+  "variations": {
+    "master": {
+      "extra_env": {
+        "_VERSION": "master"
+      },
+      "on_by_default": "yes"
+    },
+    "v1.5": {
+      "extra_env": {
+        "_VERSION": "1.5"
+      }
+    }
+  } 
 }

@@ -73,6 +73,7 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
+cd $(ck find ck-qaic:docker:base)
 echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} ."
 docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}"" .

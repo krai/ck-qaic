@@ -4,7 +4,7 @@
 
 This image is independent of SDK
 ```
-$(ck find ck-qaic)/docker/build_ck.sh resnet50
+$(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
 ```
 
 ## Docker Build
@@ -48,6 +48,15 @@ To see experiments outside of container (--experiment_dir):
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none \ 
 --sdk=1.5.6 --model_name=resnet50 --experiment_dir`
+```
+
+## Quick Accuracy Check
+
+```
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=r282_z93_q1 --sdk=1.5.6 --model=resnet50 \
+--mode=accuracy --scenario=offline --target_qps=22222 \
+--container=$CONTAINER_ID
 ```
 
 ## SUTs

@@ -37,11 +37,10 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.5.6
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
-ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/qaic.centos7 AS preamble
+FROM krai/centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -56,42 +55,47 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/qaic.centos7_ck AS builder
-# Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
-ARG IMAGENET=full
+FROM krai/ck.centos7 AS builder
 ARG CK_QAIC_CHECKOUT=main
 
 # Pull CK repositories.
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ls && cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 RUN ck pull all
 
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+RUN source /home/krai/.bashrc \
+ && ${CK_PYTHON} -m pip install --user onnx-simplifier \
+ && ${CK_PYTHON} -m pip install --user pybind11
+# Set platform scripts (ensuring that ECC is on).
+RUN ck detect platform.os --platform_init_uoa=qaic
 
 #-----------------------------------------------------------------------------#
-# Step 1 . Prepare the dataset.
+# Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-# Download the ImageNet labels.
-RUN ck install package --tags=dataset,imagenet,aux --quiet
-# Add original ImageNet from an auxiliary image to preprocess it.
-COPY --from=imagenet /imagenet /imagenet
-
-RUN if [[ "${IMAGENET}" == "full" ]]; \
-  then \
-    echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
-    --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation --quiet; \
-  else \
-    ck install package --tags=dataset,imagenet,val,min --no_tags=resized --quiet&&  \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation --quiet; \
-  fi
+RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
+ && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
+ && ck install package --tags=tool,coco,nvidia --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 2. Prepare the ResNet50 workload.
+# Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
-# to work around a current limitation in the toolchain.
-RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet;
-RUN ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet;
-RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
+RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration --quiet
+RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
+--tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
+
+#-----------------------------------------------------------------------------#
+# Step 4. Preprocess the dataset for quantized SSD-MobileNet.
+#-----------------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------------#
+# Step 5. Prepare the SSD-MobileNet workload.
+#-----------------------------------------------------------------------------#
+# Remove NMS.
+RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
+
+RUN rm -rf $(ck locate env --tags=dataset,coco.2017,original,train)/*  \
+  $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
+  touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; 
 
 ###############################################################################
 # FINAL STAGE
@@ -103,6 +107,5 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
 COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc

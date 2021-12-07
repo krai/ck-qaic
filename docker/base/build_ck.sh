@@ -32,19 +32,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Obtain qaic-docker-1.0.tar.gz from Qualcomm and extract it to e.g. $HOME.
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-echo "Creating image: krai/qaic.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS} ."
-docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/qaic.${_DOCKER_OS}"" .
-echo "Creating image: krai/qaic.${_DOCKER_OS}_ck"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS}  -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}_ck ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/qaic.${_DOCKER_OS}  -f Dockerfile.ck -t krai/qaic.${_DOCKER_OS}_ck .
+cd $(ck find ck-qaic:docker:base)
+echo "Creating image: krai/${_DOCKER_OS}"
+echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
+docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS}"" .
+echo "Creating image: krai/ck.${_DOCKER_OS}"
+echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.${_DOCKER_OS} ."
+docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.${_DOCKER_OS} .
 
 echo
 echo "Done."

@@ -4,7 +4,7 @@
 
 This image is independent of SDK
 ```
-$(ck find ck-qaic)/docker/build_ck.sh ssd-resnet34
+$(ck find repo:ck-qaic)/docker/build_ck.sh ssd-resnet34
 ```
 
 ## Docker Build
@@ -47,6 +47,13 @@ To see experiments outside of container (--experiment_dir):
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=container_only --out=none \ 
 --sdk=1.5.6 --model_name=ssd-resnet34 --experiment_dir`
+```
+
+## Quick Accuracy Check
+```
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
+--mode=accuracy --scenario=offline --target_qps=425 --container=$CONTAINER_ID
 ```
 
 ## SUTs
@@ -96,7 +103,7 @@ ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --mode=accuracy \
 --scenario=offline --target_qps=111112 --docker --experiment_dir
 ```
-When `--docker=container_only` or `--docker` are set the following optional parameters can be used:
+When `--docker=container_only` or `--docker` is set the following optional parameters can be used:
 
 
 `--experiment_dir` - directory with experimental data (`${CK_EXPERIMENT_DIR}`by default)

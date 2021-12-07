@@ -36,11 +36,11 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-#FROM qran-centos7:1.5.6
+#FROM qran-centos7:1.5.9
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/qaic.centos7 AS preamble
+FROM krai/centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -55,47 +55,40 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/qaic.centos7_ck AS builder
+FROM krai/ck.centos7 AS builder
 ARG CK_QAIC_CHECKOUT=main
 
-# Pull CK repositories.
-RUN ls && cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user onnx-simplifier \
- && ${CK_PYTHON} -m pip install --user pybind11
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
+ && ${CK_PYTHON} -m pip install --user tokenization \
+ && ${CK_PYTHON} -m pip install --user nvidia-pyindex \
+ && ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
+
+# Pull CK repositories
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
+RUN ck pull all
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
- && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
- && ck install package --tags=tool,coco,nvidia --quiet
+RUN ck install package --tags=python-package,onnx --quiet \
+ && ck install package --tags=lib,python-package,pytorch  --quiet \
+ && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
+ && ck install package --tags=lib,python-package,tensorflow --quiet
+
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration --quiet
-RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
+RUN ck install package --tags=dataset,squad,raw,width.384
+RUN ck install package --tags=dataset,calibration,squad,pickle,width.384
 
 #-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized SSD-MobileNet.
+# Step 4. Prepare the BERT workload.
 #-----------------------------------------------------------------------------#
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the SSD-MobileNet workload.
-#-----------------------------------------------------------------------------#
-# Remove NMS.
-RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
-
-RUN rm -rf $(ck locate env --tags=dataset,coco.2017,original,train)/*  \
-  $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
-  touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; 
+RUN ck install package --tags=model,mlperf,qaic,bert-packed
 
 ###############################################################################
 # FINAL STAGE
@@ -107,5 +100,6 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local /home/krai/.local
+
