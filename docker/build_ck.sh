@@ -49,13 +49,13 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-if [[ "$(docker images -q krai/qaic.${_BASE_OS}_ck 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/ck.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build_ck.sh
 fi
 
 echo "Creating image: krai/mlperf.${_DOCKER_OS}.${MODEL}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/mlperf.${_DOCKER_OS}.${MODEL} ."
-cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/mlperf.${_DOCKER_OS}.${MODEL} .
+echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/ck.${MODEL}.${_DOCKER_OS} ."
+cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.${MODEL}.base -t krai/ck.${MODEL}.${_DOCKER_OS} .
 
 echo
 echo "Done."

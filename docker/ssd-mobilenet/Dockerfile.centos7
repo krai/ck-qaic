@@ -58,7 +58,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/mlperf.centos7.ssd-mobilenet AS builder
+FROM krai/ck.ssd-mobilenet.centos7 AS builder
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/

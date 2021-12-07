@@ -57,7 +57,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/qaic.centos7.bert AS builder
+FROM krai/ck.bert.centos7 AS builder
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT=main

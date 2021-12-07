@@ -95,7 +95,7 @@ if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == ""
   cd $(ck find ck-qaic:docker:base) && ./build.sh
 fi
 
-if [[ "$(docker images -q krai/mlperf.${_BASE_OS}.${MODEL} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ../build_ck.sh ${MODEL}
 fi
   

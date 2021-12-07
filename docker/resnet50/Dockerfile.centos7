@@ -58,7 +58,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/mlperf.centos7.resnet50 AS builder
+FROM krai/ck.resnet50.centos7 AS builder
 ARG CK_QAIC_PCV
 ARG DEBUG_BUILD=no
 ARG CK_QAIC_CHECKOUT=main
