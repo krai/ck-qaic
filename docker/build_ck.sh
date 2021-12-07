@@ -49,7 +49,7 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-if [[ "$(docker images -q krai/ck.${_BASE_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/ck.common.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build_ck.sh
 fi
 

@@ -43,8 +43,8 @@ echo "Creating image: krai/${_DOCKER_OS}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
 docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS}"" .
 echo "Creating image: krai/ck.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.${_DOCKER_OS} ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.${_DOCKER_OS} .
+echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.common.${_DOCKER_OS} ."
+docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.common.${_DOCKER_OS} .
 
 echo
 echo "Done."
