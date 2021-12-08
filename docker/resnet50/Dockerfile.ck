@@ -56,7 +56,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.centos7 AS builder
+FROM krai/ck.common.centos7 AS builder
 # Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main

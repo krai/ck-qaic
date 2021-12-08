@@ -55,7 +55,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.centos7 AS builder
+FROM krai/ck.common.centos7 AS builder
 ARG CK_QAIC_CHECKOUT=main
 
 # Pull CK repositories.
