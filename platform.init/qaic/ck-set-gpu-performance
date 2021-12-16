@@ -4,6 +4,15 @@
 # Copyright (c) 2021 Krai Ltd.
 #
 
+for cmd in pre watch; do
+    cmdfile=/opt/qti-aic/logs/${cmd}.config
+    if [ -e $cmdfile ]; then
+       while read cmd; do
+          eval $cmd
+       done < $cmdfile
+    fi
+done
+
 echo "Setting ECC for all available QAIC devices."
 echo ""
 

@@ -29,7 +29,7 @@ RUN echo "min=1" >> /etc/yum.conf \
 
 RUN yum update -y \
  && update-ca-trust force-enable \
- && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools\
+ && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools lm_sensors acl\
  && yum clean all
 
 # NB: Must be two separate calls to yum install.
@@ -58,7 +58,6 @@ WORKDIR /tmp
 RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
 && unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
 
-
 ###############################################################################
 ### FINAL STAGE
 ###############################################################################
@@ -66,17 +65,23 @@ FROM preamble AS final
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 
-
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
-ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64
-
-ENV PATH "/usr/local/bin:${PATH}"
+ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 \
+    PATH="/usr/local/bin:${PATH}" \
+    LOGS_PATH="/opt/qti-aic/logs"
 
 # Create a non-root user with a fixed group id and a fixed user id.
 RUN groupadd -g ${GROUP_ID} kraig
 RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+
 RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN mkdir -p ${LOGS_PATH} && \
+    chgrp kraig ${LOGS_PATH} && \
+    chmod g+ws ${LOGS_PATH} && \
+    setfacl -R -d -m group:kraig:rw ${LOGS_PATH}
+
 USER krai:kraig
 WORKDIR /home/krai
 

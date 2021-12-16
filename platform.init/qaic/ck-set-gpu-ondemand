@@ -1,3 +1,14 @@
 #! /bin/bash
 
 # DUMMY
+
+cmdfile=/opt/qti-aic/logs/post.config
+if [ -e $cmdfile ]; then
+
+ while read cmd;
+  do
+    eval $cmd
+  done < $cmdfile
+fi
+
+cat /opt/qti-aic/logs/watch.procs | xargs kill

@@ -94,7 +94,6 @@ RUN ck install package --tags=model,compiled,bert,bert-99.9 --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
-
 #-----------------------------------------------------------------------------#
 # Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
