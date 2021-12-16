@@ -120,7 +120,7 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
-  if [[ "$(docker images -q ${DOCKER_IMAGE_NAME}:${_SDK_VER}$_PC 2> /dev/null)" == "" ]]; then
+  if [[ "$(docker images -q ${DOCKER_IMAGE_NAME}:${_SDK_VER}_PC 2> /dev/null)" == "" ]]; then
 
     CONTAINER=$(docker run -dt --privileged --user=krai:kraig --group-add $(getent group qaic \
       | cut -d: -f3) --rm ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} bash)
