@@ -3,9 +3,10 @@
 ###############################################################################
 FROM centos:7.9.2009 AS preamble
 
-ARG PYTHON_VER=3.8.11
-ARG GCC_MAJOR_VER=10
 ARG CK_VER=2.5.8
+ARG GCC_MAJOR_VER=11
+ARG PYTHON_VER=3.8.12
+
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 
@@ -22,7 +23,6 @@ SHELL ["/bin/bash", "-c"]
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
-
 
 RUN echo "min=1" >> /etc/yum.conf \
  && echo "timeout=1200" >> /etc/yum.conf
@@ -66,17 +66,16 @@ FROM preamble AS final
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 
-
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
-ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64
-
+ENV LD_LIBRARY_PATH "/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}"
 ENV PATH "/usr/local/bin:${PATH}"
 
 # Create a non-root user with a fixed group id and a fixed user id.
 RUN groupadd -g ${GROUP_ID} kraig
 RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
 RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 USER krai:kraig
 WORKDIR /home/krai
 

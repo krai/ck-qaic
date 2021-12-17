@@ -4,12 +4,9 @@
 ARG BASE_IMAGE=krai/qaic.centos7
 FROM $BASE_IMAGE AS preamble
 
-ARG PYTHON_VER=3.8.11
-ARG GCC_MAJOR_VER=10
 ARG CK_VER=2.5.8
-
-#USER krai:kraig
-#WORKDIR /home/krai
+ARG GCC_MAJOR_VER=11
+ARG PYTHON_VER=3.8.12
 
 ###############################################################################
 ### BUILDER STAGE
@@ -17,9 +14,8 @@ ARG CK_VER=2.5.8
 FROM preamble AS builder
 
 ARG CK_VER=2.5.8
-ARG GCC_MAJOR_VER=10
-ARG PYTHON_VER=3.8.11
-
+ARG GCC_MAJOR_VER=11
+ARG PYTHON_VER=3.8.12
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
@@ -49,7 +45,7 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
 
-#Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
  && ck detect soft:compiler.python --full_path=$(which ${CK_PYTHON}) \
  && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
@@ -72,17 +68,15 @@ RUN ck install package --tags=mlperf,inference,source,nvidia-coco --quiet \
  && ck install package --tags=mlperf,loadgen,static \
  && ck install package --tags=mlperf,power,source --quiet
 
-
 ###############################################################################
 ### FINAL STAGE
 ###############################################################################
 FROM preamble AS final
 
-COPY --from=builder /home/krai/CK /home/krai/CK
+COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local /home/krai/.local
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
-
+COPY --from=builder /home/krai/.local   /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

@@ -72,7 +72,7 @@ _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 _CK_QAIC_PCV=${CK_QAIC_PCV:-''}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
 
-QAIC_GROUP_ID=$(cut -d: -f3 < <(getent group qaic))
+QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
 _GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _USER_ID=${USER_ID:-2000}
 
@@ -86,10 +86,9 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then 
-  docker image rm krai/ck.${MODEL}.${_BASE_OS} --force; 
+if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then
+  docker image rm krai/ck.${MODEL}.${_BASE_OS} --force
 fi
-
 
 if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.sh
@@ -98,7 +97,6 @@ fi
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ../build_ck.sh ${MODEL}
 fi
-  
 
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
@@ -163,4 +161,6 @@ END_OF_CMD
     fi
   fi
 fi
+
+echo
 echo "Done."
