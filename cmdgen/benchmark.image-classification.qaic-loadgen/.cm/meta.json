@@ -282,7 +282,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
@@ -303,7 +303,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
@@ -323,7 +323,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
@@ -343,7 +343,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
           "resnet50.pcie.16nsp"
         ],
