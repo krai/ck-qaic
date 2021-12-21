@@ -267,7 +267,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS3=-DG292",
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -278,7 +278,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -289,7 +289,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -302,7 +302,7 @@
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
           "--env.CK_ENV_COPY_THREADS_PER_DEVICE=4"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       }

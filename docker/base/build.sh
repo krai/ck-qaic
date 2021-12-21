@@ -55,7 +55,7 @@ fi
 echo "Using Platform SDK: ${_PLATFORM_SDK}"
 
 TMP_DIR=$(pwd)/tmp
-echo $TMP_DIR
+echo ${TMP_DIR}
 if [ ! -d "${TMP_DIR}" ]; then
   mkdir -p "${TMP_DIR}"
   if [ $? -ne 0 ]; then
@@ -64,10 +64,9 @@ if [ ! -d "${TMP_DIR}" ]; then
   fi
 fi
 
-#rm -rvf *
-
-cp -vf ${_APPS_SDK} $TMP_DIR
-cp -vf ${_PLATFORM_SDK} $TMP_DIR
+rm -rvf ${TMP_DIR}/*
+cp -vf ${_APPS_SDK} ${TMP_DIR}
+cp -vf ${_PLATFORM_SDK} ${TMP_DIR}
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"

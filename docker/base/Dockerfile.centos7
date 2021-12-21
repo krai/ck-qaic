@@ -3,8 +3,9 @@
 ###############################################################################
 FROM centos:7.9.2009 AS preamble
 
-ARG PYTHON_VER=3.8.11
-ARG GCC_MAJOR_VER=10
+ARG GCC_MAJOR_VER=11
+ARG PYTHON_VER=3.8.12
+
 ARG GROUP_ID=1500
 ARG USER_ID=2000
 
@@ -21,7 +22,6 @@ SHELL ["/bin/bash", "-c"]
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
-
 
 RUN echo "min=1" >> /etc/yum.conf \
  && echo "timeout=1200" >> /etc/yum.conf
