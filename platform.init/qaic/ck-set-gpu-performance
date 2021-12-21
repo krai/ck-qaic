@@ -5,11 +5,11 @@
 #
 
 for cmd in pre watch; do
-    cmdfile=/opt/qti-aic/logs/${cmd}.config
-    if [ -e $cmdfile ]; then
-       while read cmd; do
-          eval $cmd
-       done < $cmdfile
+  cmdfile=/opt/qti-aic/logs/${cmd}.config
+  if [ -e $cmdfile ]; then
+    while read cmd; do
+      eval $cmd
+    done < $cmdfile
     fi
 done
 
