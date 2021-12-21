@@ -28,7 +28,7 @@ RUN echo "min=1" >> /etc/yum.conf \
 
 RUN yum update -y \
  && update-ca-trust force-enable \
- && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl\
+ && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools lm_sensors acl\
  && yum clean all
 
 # NB: Must be two separate calls to yum install.
@@ -44,6 +44,9 @@ RUN cd /tmp \
  && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations --enable-shared && make altinstall" \
  && cd /tmp \
  && rm -rf Python-${PYTHON_VER}*
+
+# Start IPMI tool 
+RUN sudo systemctl enable ipmi.service
 
 ENV PATH "/usr/local/bin:${PATH}"
 
