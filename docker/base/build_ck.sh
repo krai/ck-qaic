@@ -1,7 +1,7 @@
 #/bin/bash
 
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -39,12 +39,14 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 cd $(ck find ck-qaic:docker:base)
+
 echo "Creating image: krai/${_DOCKER_OS}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
-docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS}"" .
+docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} .
+
 echo "Creating image: krai/ck.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.common.${_DOCKER_OS} ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS}  -f Dockerfile.ck -t krai/ck.common.${_DOCKER_OS} .
+echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
+docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
 
 echo
 echo "Done."

@@ -1,7 +1,7 @@
 #/bin/bash
 
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -32,7 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Obtain qaic-docker-1.0.tar.gz from Qualcomm and extract it to e.g. $HOME.
 _DOCKER_OS=${DOCKER_OS:-centos7}
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 _SDK_VER=${SDK_VER:-1.5.6}
@@ -75,7 +74,7 @@ fi
 cd $(ck find ck-qaic:docker:base)
 echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} ."
-docker build ${_NO_CACHE}  -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER}"" .
+docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 
 echo
 echo "Done."
