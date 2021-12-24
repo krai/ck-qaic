@@ -114,8 +114,8 @@
       "local": "yes",
       "name": "MLPerf Inference source",
       "sort": 45,
-      "no_tags": "for.aimet",
-      "tags": "mlperf,inference,source"
+      "no_tags": "for.aimet,nvidia-coco",
+      "tags": "mlperf,inference,source,r1.1"
     },
     "python": {
       "force_target_as_host": "yes",
@@ -128,8 +128,8 @@
       "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python API for COCO",
-      "sort": 35,
-      "tags": "tool,coco"
+      "sort": 15,
+      "tags": "tool,coco,nvidia"
     },
     "weights": {
       "force_target_as_host": "yes",
