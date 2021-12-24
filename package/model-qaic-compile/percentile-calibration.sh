@@ -50,7 +50,7 @@ function get_accuracy_metric() {
     elif [[ "$bmodel" == "resnet50" ]]; then echo "Accuracy"; 
   fi
 }
-if [[ $# < 2 ]]; then echo "Model base name (for e.g., bert) and Model unique name for compilation (for e.g., ssd_resnet34.pcie.16nsp) required!"; exit 1; fi
+if [[ $# < 2 ]]; then echo "Model base name (one among [bert,ssd_resnet34,ssd_mobilenet,resnet50]) and Model unique name for compilation (for e.g., ssd_resnet34.pcie.16nsp) required!"; exit 1; fi
 max=0
 maxi=0
 bmodel=$1
@@ -66,7 +66,7 @@ do
   echo $install_cmd
   eval $install_cmd
   exit_if_error
-  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$rmodel --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
+  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$rmodel --target_qps=1 --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
   echo $ck_run_cmd
   eval $ck_run_cmd
   exit_if_error

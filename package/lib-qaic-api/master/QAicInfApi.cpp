@@ -163,13 +163,13 @@ QStatus ActivationSet::init(uint32_t setSize) {
       return status;
     }
     execObjSet_.push_back(execObj);
-    const QAicApiFunctionTable *aicApi_ = qaicGetFunctionTable(); 
-    //status = qaicExecObjGetIoBuffers(execObj, &numBuffers_, qbuffersSet_[i]);
-    status = aicApi_ -> qaicExecObjGetIoBuffers( execObj, &numBuffers_, &qbuffersSet_[i]);
-    //status = context_ -> getAicApi() -> qaicExecObjGetIoBuffers(execObj, &numBuffers_, qbuffersSet_[i]);
-    if ((status != QS_SUCCESS)) {
-      std::cerr << "Failed to get IO buffers" << std::endl;
-      return status;
+    if (std::getenv("QAIC_BYPASS_PPP")) {
+      const QAicApiFunctionTable *aicApi_ = qaicGetFunctionTable(); 
+      status = aicApi_ -> qaicExecObjGetIoBuffers( execObj, &numBuffers_, &qbuffersSet_[i]);
+      if ((status != QS_SUCCESS)) {
+        std::cerr << "Failed to get IO buffers" << std::endl;
+        return status;
+      }
     }
 
     QAicEvent *event = nullptr;
@@ -183,16 +183,6 @@ QStatus ActivationSet::init(uint32_t setSize) {
   }
   return QS_SUCCESS;
 }
-
-/*QStatus qaicExecObjGetIoBuffers(const QAicExecObj *execObj,
-                                uint32_t *numBuffers, QBuffer **buffers) {
-  if ((execObj == nullptr) || (execObj->shExecObj == nullptr) ||
-      (numBuffers == nullptr) || (buffers == nullptr)) {
-    LogErrorG("Invalid null pointer");
-    return QS_INVAL;
-  }
-  return execObj->shExecObj->getIoBuffers(*numBuffers, *buffers);
-}*/
 
 QStatus ActivationSet::setData(std::vector<std::vector<QBuffer>> &buffers) {
   QStatus status = QS_SUCCESS;
@@ -534,7 +524,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
       ioDescQData.data = nullptr;
       ioDescQData.size = 0;
     }
-    #if 1
+    #if 0
     {
       google::protobuf::util::JsonPrintOptions jsonPrintOption;
       jsonPrintOption.add_whitespace = true;

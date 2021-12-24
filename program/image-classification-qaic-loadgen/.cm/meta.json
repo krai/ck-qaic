@@ -90,9 +90,7 @@
       "local": "yes",
       "name": "ImageNet dataset (preprocessed subset)",
       "sort": 3,
-      "tags": "dataset,imagenet,preprocessed",
-      "or_tags": "validation;val",
-      "no_tags": "calibration"
+      "tags": "dataset,imagenet,preprocessed,validation"
     },
     "lib-python-numpy": {
       "force_target_as_host": "yes",
