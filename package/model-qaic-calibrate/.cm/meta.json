@@ -224,7 +224,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -compiler-args='-profiling-backend=CPU -cpu-memory=8000000'",
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -compiler-args=' -cpu-memory=8000000'",
         "_MODEL_TO_CONVERT": "calibrate_resnet50_tf",
         "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
       },
@@ -244,7 +244,7 @@
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_NODE_PRECISION_FILE_PATH": "ssd-resnet34/node-precision.yaml",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -node-precision-info=[NODE_PRECISION_FILE]",
+        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -profiling-backend=Interpreter -profiling-threads=32 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
