@@ -92,7 +92,7 @@
       "name": "Preprocessed images",
       "no_tags": "calibration",
       "sort": 20,
-      "tags": "dataset,object-detection,preprocessed"
+      "tags": "dataset,object-detection,preprocessed,validation"
     },
     "lib-python-matplotlib": {
       "force_target_as_host": "yes",
