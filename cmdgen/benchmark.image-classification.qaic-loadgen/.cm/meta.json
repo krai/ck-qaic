@@ -282,9 +282,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
         ],
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953",
@@ -303,9 +303,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
@@ -323,9 +323,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
@@ -337,15 +337,15 @@
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_benchmark_prefix": "numactl",
         "ck_env": [
           "--env.QAIC_BYPASS_PPP=enable",
           "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
-        "compiler_tags": "gcc,v10",
+        "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
         ],
         "recommended_activation_count": "2",
         "recommended_input_select": "0",

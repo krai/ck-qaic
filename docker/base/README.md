@@ -1,17 +1,17 @@
-# Qualcomm Cloud AI - MLPerf base Docker image
+# Qualcomm Cloud AI - MLPerf Inference - base Docker images
 
-## Build the SDK independent docker images
+## Build an SDK-independent Docker image
 
-The below command will build a base image for the OS (centos7 by default) which is used to build another base image for the CK packages common for all MLCommons benchmarks
+The below command will build a base image for the OS (CentOS 7 by default) which is used to build another base image for the CK packages common for all supported MLPerf Inference benchmarks.
 
 ```
 $(ck find ck-qaic:docker:base)/build_ck.sh
 ```
+
 ### Parameters
 - `DOCKER_OS=centos7`
 
-## Build the docker image for a given SDK
-Obtain `qaic-docker-1.0.tar.gz` from Qualcomm and extract it to e.g. $HOME.
+## Build a Docker image for a given SDK
 
 ```
 SDK_VER=1.5.6 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/build.sh
@@ -19,7 +19,6 @@ SDK_VER=1.5.6 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/
 
 ### Parameters
 
-- `DOCKER_DIR=$HOME/qaic-docker-v1.0/`
 - `DOCKER_OS=centos7`
 - `SDK_DIR=/local/mnt/workspace/sdks/`
 - `SDK_VER=1.5.6`
