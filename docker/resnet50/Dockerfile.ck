@@ -78,7 +78,7 @@ RUN if [[ "${IMAGENET}" == "full" ]]; \
   then \
     echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
     --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation --quiet; \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full,validation --quiet; \
   else \
     ck install package --tags=dataset,imagenet,val,min --no_tags=resized --quiet&&  \
     ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation --quiet; \
