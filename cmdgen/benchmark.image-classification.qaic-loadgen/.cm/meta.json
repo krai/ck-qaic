@@ -284,7 +284,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
+          "resnet50.pcie.16nsp"
         ],
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953",
@@ -305,7 +305,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
+          "resnet50.pcie.16nsp"
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
@@ -333,7 +333,8 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
+        "recommended_batch_size": "8",
+        "recommended_singlestream_suffix": ""
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -351,7 +352,8 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
+        "recommended_batch_size": "8",
+        "recommended_singlestream_suffix": ""
       }
     },
     "target_latency": {
