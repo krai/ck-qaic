@@ -427,7 +427,17 @@
     "bert-99": {
       "extra_env": {
         "_MODEL_TO_CONVERT": "compile_bert_99",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Add,Div,Erf,Softmax,Sub,Gather,LayerNormalization,Mul -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32  -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+      },
+      "extra_tags": [
+        "calibrated-by-qaic",
+        "bert.mixed"
+      ]
+    },
+    "bert-99.singlestream": {
+      "extra_env": {
+        "_MODEL_TO_CONVERT": "compile_bert_99",
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       },
       "extra_tags": [
         "calibrated-by-qaic",
