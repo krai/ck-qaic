@@ -96,7 +96,7 @@ RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy
 
-RUN ck install package --tags=mlperf,inference,source,nvidia-coco --quiet \
+RUN ck install package --tags=mlperf,inference,source,r1.1 --quiet \
  && ck install package --tags=mlperf,loadgen,static \
  && ck install package --tags=mlperf,power,source --quiet
 
