@@ -47,6 +47,9 @@ _SDK_VER=${SDK_VER:-1.5.9}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 _OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 _NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
+_SAVE_IMAGE=${SAVE_IMAGE:-no}
+
+EXTRA_DOCKER_ARG=""
 
 if [[ ${MODEL} == "resnet50" ]]; then
   _IMAGENET=${IMAGENET:-full}
@@ -57,10 +60,8 @@ if [[ ${MODEL} == "resnet50" ]]; then
     _IMAGENET_SUFFIX="min"
   fi
   DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_IMAGENET_SUFFIX}.${_BASE_OS}"
-  EXTRA_DOCKER_ARG="--build-arg IMAGENET=${_IMAGENET}"
 else
   DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_BASE_OS}"
-  EXTRA_DOCKER_ARG=""
 fi
 
 if [[ ${MODEL} == "ssd-resnet34" ]]; then
@@ -95,7 +96,7 @@ if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == ""
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
-  cd $(ck find ck-qaic:docker:base) && ../build_ck.sh ${MODEL}
+  cd $(ck find ck-qaic:docker:base) &&  IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
 fi
 
 read -d '' CMD <<END_OF_CMD
@@ -160,6 +161,10 @@ END_OF_CMD
       eval ${CMD}
     fi
   fi
+fi
+
+if [[ ${_SAVE_IMAGE} == 'yes' ]]; then
+   docker image save ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
 fi
 
 echo
