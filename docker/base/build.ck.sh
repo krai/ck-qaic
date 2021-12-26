@@ -41,6 +41,8 @@ _PYTHON_VER=${PYTHON_VER:-3.8.12}
 # Use CK >= 1.17.0.
 _CK_VER=${CK_VER:-2.5.8}
 # Create a non-root user with a fixed group id and a fixed user id.
+#QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
+#_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _GROUP_ID=${GROUP_ID:-1500}
 _USER_ID=${USER_ID:-2000}
 
