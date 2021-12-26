@@ -17,7 +17,7 @@
 #define AFFINITY_CARD(i) ((i > 7) * -128 + 64 + 8 * i)
 
 #elif defined (R282)
-#define AFFINITY_CARD(i) ((i < 4) ?  8 * i: 8*(4-i) + 4)
+#define AFFINITY_CARD(i) ((i < 4) ?  8 * i: 8*(i-4) + 4)
 
 #else
 #define AFFINITY_CARD(i) (4 * i)
