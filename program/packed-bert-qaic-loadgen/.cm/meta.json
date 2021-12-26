@@ -130,7 +130,7 @@
       "local": "yes",
       "name": "Bert Packed model",
       "sort": 20,
-      "tags": "model,qaic,compiled,bert,quantization.calibration"
+      "tags": "model,qaic,compiled"
     }
   },
   "run_vars": {

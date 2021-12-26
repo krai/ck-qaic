@@ -44,13 +44,13 @@ function get_cmdgen_program_name() {
 }
 function get_accuracy_metric() {
   bmodel=$1
-  if [[ "$bmodel" == "bert" ]]; then echo "f1"; 
+  if [[ "$bmodel" == "bert-99" ]]; then echo "f1"; 
     elif [[ "$bmodel" == "ssd_resnet34" ]]; then echo "mAP"; 
     elif [[ "$bmodel" == "ssd_mobilenet" ]]; then echo "mAP"; 
     elif [[ "$bmodel" == "resnet50" ]]; then echo "Accuracy"; 
   fi
 }
-if [[ $# < 2 ]]; then echo "Model base name (one among [bert,ssd_resnet34,ssd_mobilenet,resnet50]) and Model unique name for compilation (for e.g., ssd_resnet34.pcie.16nsp) required!"; exit 1; fi
+if [[ $# < 2 ]]; then echo "Model base name (one among [bert-99, ssd_resnet34, ssd_mobilenet, resnet50]) and Model unique name for compilation (for e.g., ssd_resnet34.pcie.16nsp) required!"; exit 1; fi
 max=0
 maxi=0
 bmodel=$1
@@ -58,7 +58,6 @@ model=$2
 if [ "$#" == 3 ]; then sdk=$3; else sdk=1.5.9; fi
 cprogram=$(get_cmdgen_program_name $bmodel)
 accuracy_metric=$(get_accuracy_metric $bmodel)
-if [ "$bmodel" == "bert" ]; then rmodel=$model; else rmodel=$bmodel; fi
 for i in {70..99..1}
 do
   pcv="99"$i
@@ -66,7 +65,7 @@ do
   echo $install_cmd
   eval $install_cmd
   exit_if_error
-  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$rmodel --target_qps=1 --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
+  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$bmodel --target_qps=1 --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
   echo $ck_run_cmd
   eval $ck_run_cmd
   exit_if_error

@@ -124,7 +124,8 @@
       },
       "bert-99": {
         "model_tags": [
-          "bert-99"
+          "bert-99",
+          "quantization.calibration"
         ]
       }
     },
@@ -267,6 +268,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS3=-DG292"
         ],
         "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -278,6 +282,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
         "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -289,6 +296,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
         ],
         "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       },
@@ -301,6 +311,9 @@
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
         ],
         "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+        ],
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       }
