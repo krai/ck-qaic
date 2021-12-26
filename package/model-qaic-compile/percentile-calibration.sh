@@ -62,7 +62,7 @@ if [ "$bmodel" == "bert" ]; then rmodel=$model; else rmodel=$bmodel; fi
 for i in {70..99..1}
 do
   pcv="99"$i
-  install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv >/dev/null 2>&1"
+  install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv --quiet >/dev/null 2>&1"
   echo $install_cmd
   eval $install_cmd
   exit_if_error
@@ -82,6 +82,7 @@ do
     maxi=99$i
   fi
 done
+echo $max
 echo $maxi
 install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$maxi --extra_tags=pcv.$maxi >/dev/null 2>&1"
 echo $install_cmd
