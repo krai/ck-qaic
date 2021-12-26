@@ -38,19 +38,16 @@ ARG GCC_MAJOR_VER
 ARG PYTHON_VER
 ARG TIMEZONE
 
-#ARG GROUP_ID=1500
-#ARG USER_ID=2000
-
-# Set the timezone.
-RUN rm -rf /etc/localtime \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && ls -la /etc/localtime
-
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
+
+# Set the timezone.
+RUN rm -rf /etc/localtime \
+ && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+ && ls -la /etc/localtime
 
 RUN echo "min=1" >> /etc/yum.conf \
  && echo "timeout=1200" >> /etc/yum.conf
@@ -68,36 +65,13 @@ RUN yum install -y centos-release-scl \
  && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
 
 # Install Python >= 3.7.
-RUN mkdir -p /tmp
-RUN cd /tmp \
+RUN mkdir -p /tmp && cd /tmp \
  && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
  && tar xzf Python-${PYTHON_VER}.tgz \
  && rm Python-${PYTHON_VER}.tgz \
  && cd Python-${PYTHON_VER} \
- && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations --enable-shared && make altinstall" \
+ && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations && make -j 10 altinstall" \
  && cd /tmp \
  && rm -rf Python-${PYTHON_VER}*
 
-#ENV PATH "/usr/local/bin:${PATH}"
-#
-## Create a non-root user with a fixed group id and a fixed user id.
-#RUN groupadd -g ${GROUP_ID} kraig
-#RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
-#RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#
-#USER krai:kraig
-#WORKDIR /home/krai
-#
-#ENV CK_ROOT=/home/krai/CK \
-#    CK_REPOS=/home/krai/CK_REPOS \
-#    CK_TOOLS=/home/krai/CK_TOOLS \
-#    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
-#    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
-#    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
-#    CK_CC=gcc \
-#    GIT_USER="krai" \
-#    GIT_EMAIL="info@krai.ai" \
-#    LANG=C.UTF-8
-#RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
-
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
+CMD ["rpm -q centos-release"]

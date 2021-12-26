@@ -45,7 +45,7 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-echo "Creating image: krai/base.${_DOCKER_OS}"
+echo "Creating image: 'krai/base.${_DOCKER_OS}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
@@ -57,10 +57,6 @@ time docker build ${_NO_CACHE} \
 END_OF_CMD
 echo ${CMD}
 eval ${CMD}
-
-#echo "Creating image: krai/ck.${_DOCKER_OS}"
-#echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
-#docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
 
 echo
 echo "Done."

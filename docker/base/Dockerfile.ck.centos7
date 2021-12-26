@@ -111,4 +111,4 @@ COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /home/krai/.local   /home/krai/.local
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
 
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
+CMD ["ck version"]

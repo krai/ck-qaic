@@ -33,6 +33,7 @@
 #
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
+
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 _SDK_VER=${SDK_VER:-1.5.6}
 
@@ -71,10 +72,15 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-cd $(ck find ck-qaic:docker:base)
-echo "Creating image: krai/qaic.${_DOCKER_OS}:${_SDK_VER}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} ."
-docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS}.qaic -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+echo "Creating image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
+read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:base) && \
+time docker build ${_NO_CACHE} \
+-f Dockerfile.qaic.${_DOCKER_OS} \
+-t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+END_OF_CMD
+echo ${CMD}
+eval ${CMD}
 
 echo
 echo "Done."
