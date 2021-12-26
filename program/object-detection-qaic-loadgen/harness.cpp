@@ -172,7 +172,7 @@ Program::Program() {
     int coreid = AFFINITY_CARD(card_num)+(i/settings->qaic_device_count)%8;
     CPU_SET(coreid, &cpuset);
 #ifdef R282
-    if(d < 4 || settings->qaic_device_count > 5)
+    if(card_num < 4 || settings->qaic_device_count > 5)
 #endif
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
