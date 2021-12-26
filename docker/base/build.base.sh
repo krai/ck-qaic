@@ -34,19 +34,33 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+# Use GCC >= 10.
+_GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
+# Use Python >= 3.7.
+_PYTHON_VER=${PYTHON_VER:-3.8.12}
+# Use the Austin time zone by default.
+_TIMEZONE=${TIMEZONE:-"US/Central"}
+
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-cd $(ck find ck-qaic:docker:base)
+echo "Creating image: krai/base.${_DOCKER_OS}"
+read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:base) && \
+time docker build ${_NO_CACHE} \
+--build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
+--build-arg PYTHON_VER=${_PYTHON_VER} \
+--build-arg TIMEZONE=${_TIMEZONE} \
+-f Dockerfile.base.${_DOCKER_OS} \
+-t krai/base.${_DOCKER_OS} .
+END_OF_CMD
+echo ${CMD}
+eval ${CMD}
 
-echo "Creating image: krai/${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
-docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} .
-
-echo "Creating image: krai/ck.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
+#echo "Creating image: krai/ck.${_DOCKER_OS}"
+#echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
+#docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
 
 echo
 echo "Done."

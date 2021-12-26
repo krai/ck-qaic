@@ -30,24 +30,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-###############################################################################
-# PREABMLE STAGE
-###############################################################################
-FROM centos:7.9.2009 AS preamble
+FROM centos:7.9.2009
 
-ARG GCC_MAJOR_VER=11
-ARG PYTHON_VER=3.8.12
+LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
-ARG GROUP_ID=1500
-ARG USER_ID=2000
+ARG GCC_MAJOR_VER
+ARG PYTHON_VER
+ARG TIMEZONE
 
-# Use the US timezone by default.
-ARG TIMEZONE=US/Central
+#ARG GROUP_ID=1500
+#ARG USER_ID=2000
+
+# Set the timezone.
 RUN rm -rf /etc/localtime \
  && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
  && ls -la /etc/localtime
-
-LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -63,9 +60,13 @@ RUN yum update -y \
  && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools lm_sensors acl \
  && yum clean all
 
+# Start IPMI tool.
+RUN sudo systemctl enable ipmi.service
+
 # NB: Must be two separate calls to yum install.
 RUN yum install -y centos-release-scl \
  && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
+
 # Install Python >= 3.7.
 RUN mkdir -p /tmp
 RUN cd /tmp \
@@ -77,29 +78,26 @@ RUN cd /tmp \
  && cd /tmp \
  && rm -rf Python-${PYTHON_VER}*
 
-# Start IPMI tool.
-RUN sudo systemctl enable ipmi.service
-
-ENV PATH "/usr/local/bin:${PATH}"
-
-# Create a non-root user with a fixed group id and a fixed user id.
-RUN groupadd -g ${GROUP_ID} kraig
-RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
-RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-USER krai:kraig
-WORKDIR /home/krai
-
-ENV CK_ROOT=/home/krai/CK \
-    CK_REPOS=/home/krai/CK_REPOS \
-    CK_TOOLS=/home/krai/CK_TOOLS \
-    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
-    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
-    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
-    CK_CC=gcc \
-    GIT_USER="krai" \
-    GIT_EMAIL="info@krai.ai" \
-    LANG=C.UTF-8
-RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
+#ENV PATH "/usr/local/bin:${PATH}"
+#
+## Create a non-root user with a fixed group id and a fixed user id.
+#RUN groupadd -g ${GROUP_ID} kraig
+#RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+#RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#
+#USER krai:kraig
+#WORKDIR /home/krai
+#
+#ENV CK_ROOT=/home/krai/CK \
+#    CK_REPOS=/home/krai/CK_REPOS \
+#    CK_TOOLS=/home/krai/CK_TOOLS \
+#    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
+#    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
+#    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
+#    CK_CC=gcc \
+#    GIT_USER="krai" \
+#    GIT_EMAIL="info@krai.ai" \
+#    LANG=C.UTF-8
+#RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
