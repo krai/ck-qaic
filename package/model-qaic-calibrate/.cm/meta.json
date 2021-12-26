@@ -224,7 +224,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -compiler-args=' -cpu-memory=8000000'",
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -compiler-args='  -profiling-threads=8 -cpu-memory=8000000'",
         "_MODEL_TO_CONVERT": "calibrate_resnet50_tf",
         "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
       },
@@ -262,7 +262,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -num-histogram-bins=512",
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -profiling-threads=8 -num-histogram-bins=512",
         "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
       },
       "extra_tags": [
