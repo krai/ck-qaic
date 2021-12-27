@@ -88,9 +88,12 @@ RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect s
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package \
-  --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
-  --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99,quantization.calibration; fi
-RUN ck install package --tags=model,compiled,bert,bert-99.9 --quiet
+  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --quiet \
+  --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
+  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
+  --extra_tags=pcv.$CK_QAIC_PCV --quiet;  else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; fi
+RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
