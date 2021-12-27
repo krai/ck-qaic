@@ -466,42 +466,42 @@
     },
     "bert-99.aedk_25w.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.aedk_25w.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.aedk_20w.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.aedk_20w.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.aedk_15w.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.aedk_15w.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.pcie.14nsp.offline": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=4 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.pcie.14nsp.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=14 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=14 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.pcie.16nsp.offline": {
@@ -511,7 +511,7 @@
     },
     "bert-99.pcie.16nsp.singlestream": {
       "extra_env": {
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
+        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=16 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization  -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8  -quantization-precision-bias=Int32 -use-producer-dma=1 -compiler-args='-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma' -compile-only"
       }
     },
     "bert-99.9.pcie.14nsp.offline": {
