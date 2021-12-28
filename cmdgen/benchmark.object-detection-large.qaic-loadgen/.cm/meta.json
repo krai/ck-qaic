@@ -1,0 +1,99 @@
+{
+  "_base_entry": "cmdgen:05ee58d2d664fb59",
+  "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
+  "accu_init": {
+    "record_tags": [
+      "task.object-detection",
+      "workload.<<<hyphenated_model_name>>>",
+      "<<<preprocessed_tag>>>"
+    ]
+  },
+  "build_map": {
+    "model": {
+      "ssd_resnet34": {
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_R34",
+          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
+          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
+          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
+          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full"
+        ],
+        "division": "closed",
+        "hyphenated_model_name": "ssd-resnet34",
+        "model_name": "ssd-resnet34",
+        "model_tags": [
+          "###"
+        ],
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "64"
+      }
+    },
+    "sut": {
+      "aedk_15w": {
+        "recommended_activation_count": "8",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_20w": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_25w": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "g292_z43_q16": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q1": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "r282_z93_q5": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "r282_z93_q8": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "3"
+      }
+    }
+  },
+  "defaults": {
+    "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
+    "dataset_size": "5000",
+    "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
+    "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
+    "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
+    "preprocessed_using": "opencv"
+  }
+}

@@ -46,6 +46,31 @@
     "shell_preamble": []
   },
   "build_map": {
+    "cache": {
+      "###": {
+        "cache_opt": "###"
+      },
+      "yes": {
+        "cache_opt": "1"
+      }
+    },
+    "cache_dir": {
+      "###": {
+        "cache_opt": "1",
+        "volume_cache": "--volume ###:<<<docker_preprocess_dir>>> "
+      },
+      "yes": {
+        "cache_opt": "1",
+        "volume_cache": "--volume <<<cache_dir_default>>>:<<<docker_preprocess_dir>>> "
+      }
+    },
+    "calibration_value": {
+      "###": {
+        "model_tags": [
+          "pcv.\"$(echo ###)\""
+        ]
+      }
+    },
     "compile": {
       "yes": {
         "shell_wrapped_cmd": "<<<ck_compile_program>>>"
@@ -63,40 +88,38 @@
         "record_tags": "compliance.###"
       }
     },
+    "container": {
+      "###": {
+        "check_param_container_begin": "<<<check_param_container_begin_def>>>",
+        "check_param_container_end": "<<<check_param_container_end_def>>>",
+        "docker_run": "time <<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
+        "double_quote": "\"",
+        "escape_char": "\\"
+      }
+    },
+    "docker": {
+      "container_only": {
+        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-resnet34\" ] && [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(one of ssd-resnet34, ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
+      },
+      "yes": {
+        "docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
+        "double_quote": "\"",
+        "escape_char": "\\"
+      }
+    },
+    "experiment_dir": {
+      "###": {
+        "volume_experiment": "--volume ###:<<<docker_experiment_dir_default>>> "
+      },
+      "yes": {
+        "volume_experiment": "--volume <<<experiment_dir_default>>>:<<<docker_experiment_dir_default>>> "
+      }
+    },
     "fan_mode": {
       "###": {
         "ck_env": "--env.CK_FAN_MODE=###",
         "record_tags": "fan_mode.###",
         "record_uoa_parts": "fan_mode.###"
-      }
-    },
-    "sdk": {
-      "###": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "object-detection-qaic-loadgen",
-        "library": "qaic-v###-aic100",
-        "inference_engine": "qaic",
-        "inference_engine_version": "v###",
-        "inference_engine_backend": "aic100"
-      }
-    },
-    "library": {
-      "qaic-v1.4.00-aic100": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "object-detection-qaic-loadgen",
-        "inference_engine": "qaic",
-        "inference_engine_version": "v1.4.00",
-        "inference_engine_backend": "aic100"
-      },
-      "qaic-v1.3.14-aic100": {
-        "ck_env": "",
-        "deps": "",
-        "program_name": "object-detection-qaic-loadgen",
-        "inference_engine": "qaic",
-        "inference_engine_version": "v1.3.14",
-        "inference_engine_backend": "aic100"
       }
     },
     "max_query_count": {
@@ -121,70 +144,10 @@
         "recommended_verbosity": "0"
       }
     },
-    "model": {
-      "ssd_resnet34": {
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_R34",
-          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
-          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
-          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
-          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-        ],
-        "deps": [
-          "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full"
-        ],
-        "division": "closed",
-        "hyphenated_model_name": "ssd-resnet34",
-        "model_tags": [
-          "###"
-        ],
-        "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "64",
-        "model_name": "ssd-resnet34"
-      },
-      "ssd_mobilenet": {
-        "ck_env": [
-          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
-          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
-          "--env.CK_ENV_QAIC_COPY_THREADS_PER_DEVICE=8",
-          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
-          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<ssd_mobilenet_queue_length>>>",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<ssd_mobilenet_threads_per_queue>>>",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<ssd_mobilenet_batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<ssd_mobilenet_activation_count>>>"
-        ],
-        "deps": [
-          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
-        ],
-        "division": "closed",
-        "hyphenated_model_name": "ssd-mobilenet",
-        "model_tags": [
-          "###"
-        ],
-        "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "256",
-        "model_name": "ssd-mobilenet"
-      }
-    },
     "model_extra_tags": {
       "###": {
         "model_tags": [
           "###"
-        ]
-      }
-    },
-    "calibration_value": {
-      "###": {
-        "model_tags": [
-          "pcv.\"$(echo ###)\""
         ]
       }
     },
@@ -234,94 +197,108 @@
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ssd_mobilenet_batch_size": "<<<recommended_ssd_mobilenet_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<target_qps>>>",
-        "record_tags": "target_qps.<<<target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<target_qps>>>",
         "input_select": "<<<recommended_input_select>>>",
-        "performance_mode_extension": ""
+        "performance_mode_extension": "",
+        "record_tags": "target_qps.<<<target_qps>>>",
+        "record_uoa_parts": "target_qps.<<<target_qps>>>"
       },
       "range_singlestream": {
         "activation_count": "1",
         "batch_size": "1",
-        "ssd_mobilenet_batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "0",
+        "model_suffix": "singlestream",
         "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
       },
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ssd_mobilenet_batch_size": "<<<recommended_ssd_mobilenet_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_or_offline_qps>>>",
-        "record_tags": "target_qps.<<<server_or_offline_qps>>>",
-        "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>",
         "input_select": "0",
-        "performance_mode_extension": ""
+        "performance_mode_extension": "",
+        "record_tags": "target_qps.<<<server_or_offline_qps>>>",
+        "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>"
       },
       "singlestream": {
         "activation_count": "1",
         "batch_size": "1",
-        "ssd_mobilenet_batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
+        "model_suffix": "singlestream",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>"
+      }
+    },
+    "sdk": {
+      "###": {
+        "ck_env": "",
+        "deps": "",
+        "inference_engine": "qaic",
+        "inference_engine_backend": "aic100",
+        "inference_engine_version": "v###",
+        "library": "qaic-v###-aic100",
+        "program_name": "object-detection-qaic-loadgen"
+      }
+    },
+    "server_target_qps": {
+      "###": {
+        "server_or_offline_qps": "###"
       }
     },
     "sut": {
       "###": {
         "compiler_tags": "gcc"
       },
-      "aedk_25w": {
+      "aedk_15w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "<<<model>>>.aedk_20w.<<<scenario>>>"
+          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ],
-        "recommended_activation_count": "16",
-        "ssd_mobilenet_activation_count": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_activation_count": "8",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_ssd_mobilenet_queue_length": "8",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
         "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8"
+        "ssd_mobilenet_activation_count": "1"
       },
       "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "<<<model>>>.aedk_20w.<<<scenario>>>"
+          "<<<model>>>.aedk_20w.<<<model_suffix>>>"
         ],
         "recommended_activation_count": "16",
-        "ssd_mobilenet_activation_count": "1",
         "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_input_select": "1",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_ssd_mobilenet_queue_length": "8",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
         "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8"
+        "ssd_mobilenet_activation_count": "1"
       },
-      "aedk_15w": {
+      "aedk_25w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc,v8",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<scenario>>>"
+          "<<<model>>>.aedk_20w.<<<model_suffix>>>"
         ],
-        "recommended_activation_count": "8",
-        "ssd_mobilenet_activation_count": "1",
+        "recommended_activation_count": "16",
         "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_input_select": "1",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_ssd_mobilenet_queue_length": "8",
+        "recommended_ssd_mobilenet_threads_per_queue": "8",
         "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8"
+        "ssd_mobilenet_activation_count": "1"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -334,16 +311,60 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_input_select": "0",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "recommended_queue_length": "8"
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q1": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_ssd_mobilenet_queue_length": "3",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_threads_per_queue": "8"
+      },
+      "r282_z93_q5": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_ssd_mobilenet_queue_length": "3",
+        "recommended_ssd_mobilenet_threads_per_queue": "3",
+        "recommended_threads_per_queue": "8"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -357,60 +378,16 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
         "recommended_input_select": "0",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "recommended_queue_length": "8"
-      },
-      "r282_z93_q5": {
-        "all_device_ids": "0,1,2,3,4",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_input_select": "0",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8"
-      },
-      "r282_z93_q1": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_input_select": "0",
-        "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
+        "recommended_ssd_mobilenet_batch_size": "4",
+        "recommended_ssd_mobilenet_queue_length": "3",
         "recommended_ssd_mobilenet_threads_per_queue": "3",
-        "recommended_ssd_mobilenet_queue_length": "3"
+        "recommended_threads_per_queue": "3"
       }
     },
     "target_latency": {
@@ -436,65 +413,14 @@
         "print_output_file": "<<<print_output_file_cmd>>>"
       }
     },
-   "server_target_qps": {
+    "volume": {
       "###": {
-        "server_or_offline_qps": "###"
-      }
-
-    },
-    "docker": {
-      "yes": {
-	"docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
-        "double_quote": "\"",
-	"escape_char": "\\"
+        "volume_opt": "--volume ### "
       },
-      "container_only": {
-        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-resnet34\" ] && [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(one of ssd-resnet34, ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
+      "yes": {
+        "volume_opt": ""
       }
-   },
-   "cache_dir": {
-     "yes": {
-       "cache_opt": "1",
-       "volume_cache": "--volume <<<cache_dir_default>>>:<<<docker_preprocess_dir>>> "
-     },
-     "###": {
-       "cache_opt": "1",
-       "volume_cache": "--volume ###:<<<docker_preprocess_dir>>> "
-     }
-   },
-   "cache": {
-     "yes": {
-       "cache_opt": "1"
-     },
-     "###": {
-       "cache_opt": "###"
-     }
-   },
-   "experiment_dir": {
-     "yes": {
-       "volume_experiment": "--volume <<<experiment_dir_default>>>:<<<docker_experiment_dir_default>>> "
-     },
-     "###": {
-       "volume_experiment": "--volume ###:<<<docker_experiment_dir_default>>> "
-     }
-   },
-   "volume": {
-     "yes":{
-       "volume_opt": ""
-     },
-     "###": { 
-       "volume_opt": "--volume ### "
-     }
-   },
-   "container": {
-     "###": {
-       "docker_run": "time <<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
-       "double_quote": "\"",
-       "escape_char": "\\",
-       "check_param_container_begin": "<<<check_param_container_begin_def>>>",
-       "check_param_container_end": "<<<check_param_container_end_def>>>"
-     }
-   }
+    }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
@@ -510,64 +436,88 @@
     "dataset_size": "5000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
-    "docker_config": "/home/krai/container.config",
-    "docker_image" : "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
-    "docker_mode": "--privileged ",
-    "docker_group_add": "--group-add <<<shared_group_id>>> ",
-    "docker_user": "--user=krai:kraig ",
-    "docker_exec_command": "docker exec",
     "docker_bash_command": "/bin/bash -c",
+    "docker_config": "/home/krai/container.config",
+    "docker_exec_command": "docker exec",
     "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
+    "docker_group_add": "--group-add <<<shared_group_id>>> ",
+    "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
+    "docker_mode": "--privileged ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
+    "docker_user": "--user=krai:kraig ",
     "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
     "g292_default_config": "-DG292_CONFA",
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
+    "model_suffix": "offline",
     "power_server_port": "4950",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
-    "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
-    "ssd_mobilenet_activation_count": "<<<activation_count>>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "server_or_offline_qps": "<<<target_qps>>>",
     "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
     "shared_group_name": "qaic",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
-    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
+    "ssd_mobilenet_activation_count": "<<<activation_count>>>",
+    "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
     "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>",
+    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
     "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>>  if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>>> fi<<<?double_quote>>>",
-
-     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
+    "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {
-	 "edge": [
-		 {"scenario": "singlestream"},
-		 {"scenario": "offline"}
-	 ],
-	 "datacenter": [
-		 {"scenario": "server"},
-		 {"scenario": "offline"}
-	 ],
-	 "open": [
-		 {"mode": "accuracy"},
-		 {"mode": "performance"}
-	 ],
-	 "closed": [
-		 {"mode": "accuracy"},
-		 {"mode": "performance"},
-		 {"compliance": "TEST01"},
-		 {"compliance": "TEST04-A"},
-		 {"compliance": "TEST04-B"},
-		 {"compliance": "TEST05"}
-	 ]
+    "closed": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      },
+      {
+        "compliance": "TEST01"
+      },
+      {
+        "compliance": "TEST04-A"
+      },
+      {
+        "compliance": "TEST04-B"
+      },
+      {
+        "compliance": "TEST05"
+      }
+    ],
+    "datacenter": [
+      {
+        "scenario": "server"
+      },
+      {
+        "scenario": "offline"
+      }
+    ],
+    "edge": [
+      {
+        "scenario": "singlestream"
+      },
+      {
+        "scenario": "offline"
+      }
+    ],
+    "open": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      }
+    ]
   }
 }
