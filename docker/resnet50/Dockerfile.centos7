@@ -94,7 +94,7 @@ RUN ck install package --tags=profile,resnet50,bs.1 --quiet
 RUN ck install package --tags=profile,resnet50,bs.8 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp --quiet
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline --quiet
 RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
 
 #-----------------------------------------------------------------------------#

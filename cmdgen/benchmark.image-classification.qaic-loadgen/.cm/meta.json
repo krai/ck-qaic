@@ -203,14 +203,12 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<target_qps>>>",
         "record_tags": "target_qps.<<<target_qps>>>",
         "record_uoa_parts": "target_qps.<<<target_qps>>>",
-        "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
       "range_singlestream": {
         "activation_count": "1",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "singlestream_suffix": ".singlestream",
         "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
       },
       "server": {
@@ -219,14 +217,12 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>  --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_or_offline_qps>>>",
         "record_tags": "target_qps.<<<server_or_offline_qps>>>",
         "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>",
-        "singlestream_suffix": "",
         "performance_mode_extension": ""
       },
       "singlestream": {
         "activation_count": "1",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "singlestream_suffix": ".singlestream",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>"
       }
     },
@@ -284,7 +280,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp.<<<scenario>>>"
         ],
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953",
@@ -305,7 +301,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp"
+          "resnet50.pcie.16nsp.<<<scenario>>>"
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
@@ -325,7 +321,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
+          "resnet50.pcie.16nsp.<<<scenario>>>"
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
@@ -333,8 +329,7 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
-        "recommended_batch_size": "8",
-        "recommended_singlestream_suffix": ""
+        "recommended_batch_size": "8"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -346,14 +341,13 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "resnet50.pcie.16nsp<<<singlestream_suffix>>>"
+          "resnet50.pcie.16nsp.<<<scenario>>>"
         ],
         "recommended_activation_count": "2",
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
-        "recommended_batch_size": "8",
-        "recommended_singlestream_suffix": ""
+        "recommended_batch_size": "8"
       }
     },
     "target_latency": {

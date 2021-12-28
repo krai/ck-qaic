@@ -126,7 +126,7 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
     if [[ ${MODEL} == "bert" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,bert-99 --force'
       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        bert bert-99 ${_SDK_VER};'
+        bert-99 bert-99.pcie.16nsp ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "resnet50" ]]; then

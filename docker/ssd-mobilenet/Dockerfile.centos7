@@ -99,11 +99,11 @@ RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package \
-  --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp,quantization.calibration \
+  --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline,quantization.calibration \
   --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream,quantization.calibration \
   --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  else ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp; \
+  else ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline; \
   ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream; fi
 
 #-----------------------------------------------------------------------------#

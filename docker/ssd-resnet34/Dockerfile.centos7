@@ -100,11 +100,11 @@ RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
 --extra_tags=detected,ssd_resnet34
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp,quantization.calibration \
+RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline,quantization.calibration \
   --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
   --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream,quantization.calibration \
   --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; else \
-  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline; \
   ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream; fi
 
 #-----------------------------------------------------------------------------#
