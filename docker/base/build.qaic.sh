@@ -34,6 +34,12 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+# Create a non-root user with a fixed group id and a fixed user id.
+#QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
+#_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
+_GROUP_ID=${GROUP_ID:-1500}
+_USER_ID=${USER_ID:-2000}
+
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 _SDK_VER=${SDK_VER:-1.5.6}
 
@@ -76,6 +82,8 @@ echo "Creating image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
+--build-arg GROUP_ID=${_GROUP_ID} \
+--build-arg USER_ID=${_USER_ID} \
 -f Dockerfile.qaic.${_DOCKER_OS} \
 -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 END_OF_CMD

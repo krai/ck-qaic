@@ -34,6 +34,8 @@
 # PREABMLE STAGE
 ###############################################################################
 FROM krai/base.centos7:latest AS preamble
+ARG GROUP_ID
+ARG USER_ID
 
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
@@ -53,39 +55,38 @@ RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh
 ### FINAL STAGE
 ###############################################################################
 FROM preamble AS final
-#ARG GROUP_ID=1500
-#ARG USER_ID=2000
+ARG GROUP_ID
+ARG USER_ID
 
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
-ENV LD_LIBRARY_PATH="/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}"
-#    LOGS_PATH="/opt/qti-aic/logs"
+ENV LD_LIBRARY_PATH="/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}" \
+    LOGS_PATH="/opt/qti-aic/logs"
 
-# # Create a non-root user with a fixed group id and a fixed user id.
-# RUN groupadd -g ${GROUP_ID} kraig
-# RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
-# 
-# RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-# 
-# RUN mkdir -p ${LOGS_PATH} && \
-#     chgrp kraig ${LOGS_PATH} && \
-#     chmod g+ws ${LOGS_PATH} && \
-#     setfacl -R -d -m group:kraig:rw ${LOGS_PATH}
-# 
-# USER krai:kraig
-# WORKDIR /home/krai
-# 
-# ENV CK_ROOT=/home/krai/CK \
-#     CK_REPOS=/home/krai/CK_REPOS \
-#     CK_TOOLS=/home/krai/CK_TOOLS \
-#     PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
-#     LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
-#     LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
-#     CK_CC=gcc \
-#     GIT_USER="krai" \
-#     GIT_EMAIL="info@krai.ai" \
-#     LANG=C.UTF-8
-# 
-# RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
+# Create a non-root user with a fixed group id and a fixed user id.
+RUN groupadd -g ${GROUP_ID} kraig
+RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN mkdir -p ${LOGS_PATH} && \
+    chgrp kraig ${LOGS_PATH} && \
+    chmod g+ws ${LOGS_PATH} && \
+    setfacl -R -d -m group:kraig:rw ${LOGS_PATH}
+
+USER krai:kraig
+WORKDIR /home/krai
+
+ENV CK_ROOT=/home/krai/CK \
+    CK_REPOS=/home/krai/CK_REPOS \
+    CK_TOOLS=/home/krai/CK_TOOLS \
+    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
+    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
+    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
+    CK_CC=gcc \
+    GIT_USER="krai" \
+    GIT_EMAIL="info@krai.ai" \
+    LANG=C.UTF-8
+
+RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
