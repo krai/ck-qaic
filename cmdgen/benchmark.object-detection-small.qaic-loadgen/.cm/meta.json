@@ -89,6 +89,11 @@
       }
     }
   },
+  "docker": {
+    "container_only": {
+      "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
+    }
+  },
   "defaults": {
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "dataset_size": "5000",

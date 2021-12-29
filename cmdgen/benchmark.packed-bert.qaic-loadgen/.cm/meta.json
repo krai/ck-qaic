@@ -59,56 +59,13 @@
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       }
-    },
-   "pre_ipmitool_mc_info": {
-     "yes": {
-       "pre_ipmitool_mc_info_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>>"
-     }
-   },
-   "pre_ipmitool_fru_print": {
-     "yes": {
-       "pre_ipmitool_fru_print_cmd": "<<<pre_ipmitool_fru_print_cmd_def>>>"
-     }
-   },
-   "pre_ipmitool_sdr_elist_full": {
-     "yes": {
-       "pre_ipmitool_sdr_elist_full_cmd": "<<<pre_ipmitool_sdr_elist_full_cmd_def>>>"
-     }
-   },
-   "watch_sensors": {
-     "yes": {
-       "watch_sensors_cmd": "<<<watch_sensors_cmd_def>>>"
-     }
-   },
-   "watch_ipmitool_get_sys_power": {
-     "yes": {
-       "watch_ipmitool_get_sys_power_cmd": "<<<watch_ipmitool_get_sys_power_cmd_def>>>"
-    } 
-   },
-   "watch": {
-     "yes": {
-       "watch_cmd": "<<<watch_sensors_cmd_def>>> <<<watch_ipmitool_get_sys_power_cmd_def>>>"
-     }
-   },
-
-   "post_ipmitool_mc_info": {
-     "yes": {
-       "post_ipmitool_mc_info_cmd": "<<<post_ipmitool_mc_info_cmd_def>>>"
-     }
-   },
-   "post_ipmitool_sdr_elist_full": {
-     "yes": {
-       "post_ipmitool_sdr_elist_full_cmd": "<<<post_ipmitool_sdr_elist_full_cmd_def>>>"
-     }
-   },
-
-   "ipmitool_all": {
-     "yes": {
-       "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
-     }
-   }
+    }
   },
-  "cmd_template": "<<<shell_wrapped_cmd>>>",
+  "docker": {
+    "container_only": {
+      "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"bert\" ]; then echo \"Please enter the model name to build the Docker image for(bert)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
+    }
+  },
   "defaults": {
     "cache_dir_default": "/data/packed-bert.qaic-loadgen.cache",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/packed-bert-qaic-loadgen/tmp/preprocessed",

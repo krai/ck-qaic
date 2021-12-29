@@ -96,9 +96,6 @@
       }
     },
     "docker": {
-      "container_only": {
-        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"ssd-resnet34\" ] && [ \"<<<model_name>>>\" != \"ssd-mobilenet\" ]; then echo \"Please enter the model name to build the Docker image for(one of ssd-resnet34, ssd-mobilenet)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
-      },
       "yes": {
         "docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
         "double_quote": "\"",
@@ -257,11 +254,7 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "8",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
-        "recommended_threads_per_queue": "8",
-        "ssd_mobilenet_activation_count": "1"
+        "recommended_threads_per_queue": "8"
       },
       "aedk_20w": {
         "all_device_ids": "0",
@@ -274,11 +267,7 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "8",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
-        "recommended_threads_per_queue": "8",
-        "ssd_mobilenet_activation_count": "1"
+        "recommended_threads_per_queue": "8"
       },
       "aedk_25w": {
         "all_device_ids": "0",
@@ -291,11 +280,7 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "8",
-        "recommended_ssd_mobilenet_threads_per_queue": "8",
-        "recommended_threads_per_queue": "8",
-        "ssd_mobilenet_activation_count": "1"
+        "recommended_threads_per_queue": "8"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -315,9 +300,6 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
         "recommended_threads_per_queue": "3"
       },
       "r282_z93_q1": {
@@ -339,9 +321,6 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
         "recommended_threads_per_queue": "8"
       },
       "r282_z93_q5": {
@@ -363,9 +342,6 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
         "recommended_threads_per_queue": "8"
       },
       "r282_z93_q8": {
@@ -388,9 +364,6 @@
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "8",
-        "recommended_ssd_mobilenet_batch_size": "4",
-        "recommended_ssd_mobilenet_queue_length": "3",
-        "recommended_ssd_mobilenet_threads_per_queue": "3",
         "recommended_threads_per_queue": "3"
       }
     },
@@ -483,9 +456,6 @@
     "shared_group_name": "qaic",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
     "sleep_before_ck_benchmark_sec": "0",
-    "ssd_mobilenet_activation_count": "<<<activation_count>>>",
-    "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
-    "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
     "watch_sensors_sleep": "1",
