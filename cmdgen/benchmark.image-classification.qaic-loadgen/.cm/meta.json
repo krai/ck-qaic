@@ -1,121 +1,77 @@
 {
+  "_base_entry": "cmdgen:05ee58d2d664fb59",
+  "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
   "accu_init": {
-    "ck_env": [
-      "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
-      "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
-      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
-      "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
-      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-      "--env.CK_VERBOSE=<<<verbosity>>>"
-    ],
-    "deps": [
-      "--dep_add_tags.compiler=<<<compiler_tags>>>",
-      "--dep_add_tags.python=v3",
-      "--dep_add_tags.mlperf-inference-src=r1.1",
-      "--dep_add_tags.weights=<<<model_tags,>>>",
-      "--dep_add_tags.images=crop.875,preprocessed,using-<<<preprocessed_using>>>"
-    ],
     "record_tags": [
-      "mlperf",
-      "division.<<<division>>>",
       "task.image-classification",
-      "platform.<<<sut>>>",
-      "inference_engine.<<<inference_engine>>>",
-      "inference_engine_version.<<<inference_engine_version>>>",
-      "inference_engine_backend.<<<inference_engine_backend>>>",
-      "scenario.<<<scenario>>>",
-      "mode.<<<mode>>>",
-      "buffer_size.<<<buffer_size>>>",
-      "workload.<<<workload>>>",
-      "<<<preprocessed_tag>>>",
-      "input_select.<<<input_select>>>",
-      "queue_length.<<<queue_length>>>",
-      "threads_per_queue.<<<threads_per_queue>>>"
-    ],
-    "record_uoa_parts": [
-      "mlperf",
-      "<<<division>>>",
-      "<<<sut>>>",
-      "<<<library>>>",
-      "<<<inference_engine>>>",
-      "<<<inference_engine_version>>>",
-      "<<<inference_engine_backend>>>",
-      "<<<model_readable>>>",
-      "<<<scenario>>>",
-      "<<<mode>>><<<mode_extension>>>",
-      "buffer_size.<<<buffer_size>>>"
-    ],
-    "shell_preamble": []
+      "workload.<<<hyphenated_model_name>>>",
+      "<<<preprocessed_tag>>>"
+    ]
   },
   "build_map": {
-    "compile": {
-      "yes": {
-        "shell_wrapped_cmd": "<<<ck_compile_program>>>"
-      }
-    },
-    "compliance": {
-      "###": {
-        "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=### --env.CK_LOADGEN_MODE=PerformanceOnly",
-        "mode": "performance",
-        "mode_extension": "-compliance.###",
-        "output_file": "mlperf_log_summary.txt",
-        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
-        "recommended_repetitions": "1",
-        "recommended_verbosity": "0",
-        "record_tags": "compliance.###"
-      }
-    },
-    "fan_mode": {
-      "###": {
-        "ck_env": "--env.CK_FAN_MODE=###",
-        "record_tags": "fan_mode.###",
-        "record_uoa_parts": "fan_mode.###"
-      }
-    },
-    "sdk": {
-      "###": {
-        "library": "qaic-v###-aic100",
-        "inference_engine": "qaic",
-        "inference_engine_version": "v###",
-        "inference_engine_backend": "aic100"
-      }
-    },
-    "library": {
-      "qaic-v1.4.00-aic100": {
-        "inference_engine": "qaic",
-        "inference_engine_version": "v1.4.00",
-        "inference_engine_backend": "aic100"
+    "program_name": "object-detection-qaic-loadgen",
+    "sut": {
+      "aedk_25w": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "4"
       },
-      "qaic-v1.3.14-aic100": {
-        "inference_engine": "qaic",
-        "inference_engine_version": "v1.3.14",
-        "inference_engine_backend": "aic100"
-      }
-    },
-    "max_query_count": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=###",
-        "record_tags": "max_query_count.###"
-      }
-    },
-    "mode": {
-      "accuracy": {
-        "ck_env": "--env.CK_LOADGEN_MODE=AccuracyOnly",
-        "mode_extension": "-dataset_size.<<<dataset_size>>>-<<<preprocessed_tag>>>",
-        "output_file": "accuracy.txt",
-        "recommended_buffer_size": "<<<recommended_accuracy_buffer_size>>>",
-        "recommended_verbosity": "1"
+      "aedk_20w": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "4"
       },
-      "performance": {
-        "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
-        "mode_extension": "<<<performance_mode_extension>>>",
-        "output_file": "mlperf_log_summary.txt",
-        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
-        "recommended_verbosity": "0"
-      }
-    },
-    "model": {
+      "aedk_15w": {
+        "recommended_activation_count": "1",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "4"
+      },
+      "g292_z43_q16": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
+        "recommended_batch_size": "8"
+      },
+      "r282_z93_q8": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
+        "recommended_batch_size": "8"
+      },
+      "r282_z93_q5": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "4"
+      },
+      "r282_z93_q1": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "4"
+      }   
+  },
+  "model": {
       "resnet50": {
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=resnet50",
@@ -139,371 +95,20 @@
         "workload": "###",
         "model_name": "resnet50"
       }
-    },
-    "model_extra_tags": {
-      "###": {
-        "model_tags": [
-          "###"
-        ]
-      }
-    },
-    "calibration_value": {
-      "###": {
-        "model_tags": [
-          "pcv.\"$(echo ###)\""
-        ]
-      }
-    },
-    "no_record": {
-      "yes": {
-        "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"
-      }
-    },
-    "power": {
-      "###": {},
-      "yes": {
-        "_power_log_helper": "mkdir -p <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\" && cp <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/../mlperf_log_* <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/",
-        "power_command_args": [
-          "ck",
-          "benchmark",
-          "--env.CK_MLPERF_POWER_CLIENT_ADDRESS=<<<power_server_ip>>>",
-          "--env.CK_MLPERF_POWER_CLIENT_PORT=<<<power_server_port>>>",
-          "--env.CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS=<<<?escape_char>>>\"$(ck find program:<<<program_name>>>)<<<?escape_char>>>\"/tmp/loadgen_logs",
-          "--env.CK_MLPERF_POWER_CLIENT_WORKLOAD=<<<?escape_char>>>\\\"<<<?escape_char>>>\\\"<<<?escape_char>>>\"$_cmd<<<?escape_char>>>\"",
-          "--record",
-          "--record_repo=local",
-          "--repetitions=1",
-          "--record_uoa=<<<record_uoa_parts->>>-power.client",
-          "--tags=<<<record_tags,>>>,power.client",
-          "program:mlperf-power-client"
-        ],
-        "record_tags_inner": "<<<record_tags,>>>,power.workload",
-        "record_uoa": "<<<record_uoa_parts->>>-power.workload",
-        "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\";_cmd=<<<?escape_char>>>\"$(printf <<<?escape_char>>>\"%s\\n<<<?escape_char>>>\" <<<?escape_char>>>\"$_cmd<<<?escape_char>>>\" | sed <<<?escape_char>>>\"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/<<<?escape_char>>>\" )\"; <<<power_command_args >>> ; fi"
-      }
-    },
-    "power_mode": {
-      "###": {
-        "ck_env": "--env.CK_POWER_MODE=###",
-        "record_tags": "power_mode.###",
-        "record_uoa_parts": "power_mode.###"
-      }
-    },
-    "query_count": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
-        "record_tags": "query_count.###",
-        "record_uoa_parts": "query_count.###"
-      }
-    },
-    "scenario": {
-      "offline": {
-        "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<target_qps>>>",
-        "record_tags": "target_qps.<<<target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<target_qps>>>",
-        "performance_mode_extension": ""
-      },
-      "range_singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
-      },
-      "server": {
-        "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>>  --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_or_offline_qps>>>",
-        "record_tags": "target_qps.<<<server_or_offline_qps>>>",
-        "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>",
-        "performance_mode_extension": ""
-      },
-      "singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "performance_mode_extension": "-target_latency.<<<target_latency>>>"
-      }
-    },
-    "sut": {
-      "###": {
-        "compiler_tags": "gcc"
-      },
-      "aedk_25w": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
-        "model_tags": [
-          "resnet50.aedk_20w.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "2",
-        "recommended_input_select": "1",
-        "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8",
-        "recommended_batch_size": "8"
-      },
-      "aedk_20w": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
-        "model_tags": [
-          "resnet50.aedk_20w.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "2",
-        "recommended_input_select": "1",
-        "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8",
-        "recommended_batch_size": "8"
-      },
-      "aedk_15w": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
-        "model_tags": [
-          "resnet50.aedk_15w.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "1",
-        "recommended_input_select": "1",
-        "recommended_threads_per_queue": "8",
-        "recommended_queue_length": "8",
-        "recommended_batch_size": "8"
-      },
-      "g292_z43_q16": {
-        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "resnet50.pcie.16nsp.<<<scenario>>>"
-        ],
-        "power_server_ip": "10.222.147.109",
-        "power_server_port": "4953",
-        "recommended_activation_count": "2",
-        "recommended_input_select": "0",
-        "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
-      },
-      "r282_z93_q8": {
-        "all_device_ids": "0,1,2,3,4,5,6,7",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "resnet50.pcie.16nsp.<<<scenario>>>"
-        ],
-        "power_server_ip": "10.222.154.58",
-        "power_server_port": "4959",
-        "recommended_activation_count": "2",
-        "recommended_input_select": "0",
-        "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
-      },
-      "r282_z93_q5": {
-        "all_device_ids": "0,1,2,3,4",
-        "ck_benchmark_prefix": "numactl --interleave=all",
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "resnet50.pcie.16nsp.<<<scenario>>>"
-        ],
-        "power_server_ip": "10.222.154.58",
-        "power_server_port": "4956",
-        "recommended_activation_count": "2",
-        "recommended_input_select": "0",
-        "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
-      },
-      "r282_z93_q1": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl",
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
-          "--env.CK_EXTRA_COMPILER_DEPS=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "resnet50.pcie.16nsp.<<<scenario>>>"
-        ],
-        "recommended_activation_count": "2",
-        "recommended_input_select": "0",
-        "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "6",
-        "recommended_batch_size": "8"
-      }
-    },
-    "target_latency": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=###",
-        "record_tags": "target_latency.###"
-      }
-    },
-    "target_latency_file": {
-      "###": {
-        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=$CK_LOADGEN_TARGET_LATENCY",
-        "record_tags": "target_latency.$CK_LOADGEN_TARGET_LATENCY",
-        "shell_preamble": "export CK_LOADGEN_TARGET_LATENCY=$(awk -vX=<<<?escape_char>>>\"<<<sut>>>,<<<library>>>,<<<model_readable>>><<<?escape_char>>>\" 'X==$1{print $2;exit}' < ###); [ <<<?escape_char>>>\"$CK_LOADGEN_TARGET_LATENCY<<<?escape_char>>>\" ] || { echo 'Error: entry <<<sut>>>,<<<library>>>,<<<model_readable>>> not found in ###, exiting'; exit 1; }; ",
-        "target_latency": "$CK_LOADGEN_TARGET_LATENCY"
-      }
-    },
-    "verbose": {
-      "all": {
-        "print_output_file": "<<<print_output_file_cmd>>>",
-        "screen_output": ""
-      },
-      "yes": {
-        "print_output_file": "<<<print_output_file_cmd>>>"
-      }
-    },
-    "server_target_qps": {
-      "###": {
-        "server_or_offline_qps": "###"
-      }
-
-    },
-    "docker": {
-      "yes": {
-	"docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
-        "double_quote": "\"",
-	"escape_char": "\\"
-      },
-      "container_only": {
-        "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"resnet50\" ]; then echo \"Please enter the model name to build the Docker image for(resnet50)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\"&& echo ${CONTAINER_ID}; fi"
-      }
-   },
-   "cache_dir": {
-     "yes": {
-       "cache_opt": "1",
-       "volume_cache": "--volume <<<cache_dir_default>>>:<<<docker_preprocess_dir>>> "
-     },
-     "###": {
-       "cache_opt": "1",
-       "volume_cache": "--volume ###:<<<docker_preprocess_dir>>> "
      }
-   },
-   "cache": {
-     "yes": {
-       "cache_opt": "1"
-     },
-     "###": {
-       "cache_opt": "###"
-     }
-   },
-   "experiment_dir": {
-     "yes": {
-       "volume_experiment": "--volume <<<experiment_dir_default>>>:<<<docker_experiment_dir_default>>> "
-     },
-     "###": {
-       "volume_experiment": "--volume ###:<<<docker_experiment_dir_default>>> "
-     }
-   },
-   "volume": {
-     "yes":{
-       "volume_opt": ""
-     },
-     "###": { 
-       "volume_opt": "--volume ### "
-     }
-   },
-   "container": {
-     "###": {
-       "docker_run": "time <<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
-       "double_quote": "\"",
-       "escape_char": "\\",
-       "check_param_container_begin": "<<<check_param_container_begin_def>>>",
-       "check_param_container_end": "<<<check_param_container_end_def>>>"
-     }
-   }
+    },
+  "docker": {
+    "container_only": {
+      "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"resnet50\" ]; then echo \"Please enter the model name to build the Docker image for(resnet50)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\"&& echo ${CONTAINER_ID}; fi"
+    }
   },
-  "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/image-classification.qaic-loadgen.cache",
-    "cache_opt": "0",
-    "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model>>> ]]; then echo -e 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model>>>.'; else",
-    "check_param_container_end_def": "fi;",
-    "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
-    "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
-    "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
-    "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
     "dataset_size": "50000",
-    "device_ids": "<<<all_device_ids>>>",
-    "division": "open",
-    "docker_config": "/home/krai/container.config",
     "docker_image" : "krai/mlperf.<<<model_name>>>.full.centos7:<<<sdk>>> ",
-    "docker_mode": "--privileged ",
-    "docker_group_add": "--group-add <<<shared_group_id>>> ",
-    "docker_user": "--user=krai:kraig ",
-    "docker_exec_command": "docker exec",
-    "docker_bash_command": "/bin/bash -c",
-    "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
-    "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
-    "g292_default_config": "-DG292_CONFA",
-    "input_select": "<<<recommended_input_select>>>",
     "max_wait": "10000",
-    "model_readable": "<<<model_tags->>>",
-    "power_server_port": "4950",
-    "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
-    "preprocessed_using": "opencv",
-    "program_name": "image-classification-qaic-loadgen",
-    "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
-    "print_container_only": "&& CONTAINER=<<<container>>>",
-    "queue_length": "<<<recommended_queue_length>>>",
-    "record_tags_inner": "<<<record_tags,>>>",
-    "record_uoa": "<<<record_uoa_parts->>>",
-    "repetitions": "1",
-    "replace_existing": "",
-    "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
-    "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
-    "server_or_offline_qps": "<<<target_qps>>>",
-    "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
-    "shared_group_name": "qaic",
-    "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
-    "sleep_before_ck_benchmark_sec": "0",
-    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
-    "verbosity": "<<<recommended_verbosity>>>",
-    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>>> fi<<<?double_quote>>>",
-    "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
-  },
-  "groups": {
-	 "edge": [
-		 {"scenario": "singlestream"},
-		 {"scenario": "offline"}
-	 ],
-	 "datacenter": [
-		 {"scenario": "server"},
-		 {"scenario": "offline"}
-	 ],
-	 "open": [
-		 {"mode": "accuracy"},
-		 {"mode": "performance"}
-	 ],
-	 "closed": [
-		 {"mode": "accuracy"},
-		 {"mode": "performance"},
-		 {"compliance": "TEST01"},
-		 {"compliance": "TEST04-A"},
-		 {"compliance": "TEST04-B"},
-		 {"compliance": "TEST05"}
-	 ]
+    "program_name": "image-classification-qaic-loadgen"
   }
 }

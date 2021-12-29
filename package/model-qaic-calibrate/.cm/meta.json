@@ -8,6 +8,7 @@
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1"
     },
+    "version": "2.0",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "package_name": "Profile for QAIC model",
@@ -244,7 +245,7 @@
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_NODE_PRECISION_FILE_PATH": "ssd-resnet34/node-precision.yaml",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -profiling-backend=Interpreter -profiling-threads=16 -node-precision-info=[NODE_PRECISION_FILE]",
+        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -profiling-backend=Interpreter -profiling-threads=5 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
