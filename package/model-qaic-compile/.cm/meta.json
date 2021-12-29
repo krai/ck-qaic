@@ -115,6 +115,11 @@
             "_BATCH_SIZE": "1"
           }
         ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
         "bs.8": [
           {
             "_BATCH_SIZE": "8"
@@ -260,6 +265,27 @@
         "bs.1"
       ]
     },
+    "resnet50.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_ARGS_NAME_PREFIX": "_14NSP",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "resnet50.pcie.16nsp.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
@@ -277,7 +303,7 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
-        "bs.8"
+        "bs.4"
       ]
     },
     "resnet50.pcie.16nsp.singlestream": {
@@ -285,27 +311,6 @@
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "resnet50.pcie.14nsp.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_ARGS_NAME_PREFIX": "_14NSP",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
-      },
-      "extra_tags": [
-        "bs.8"
-      ]
-    },
-    "resnet50.pcie.14nsp.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
       },
       "extra_tags": [
         "bs.1"

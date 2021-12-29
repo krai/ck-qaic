@@ -189,6 +189,14 @@
       }
     },
     "scenario": {
+      "multistream": {
+        "activation_count": "<<<recommended_multistream_activation_count>>>",
+        "batch_size": "<<<recommended_multistream_batch_size>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=MultiStream",
+        "input_select": "<<<recommended_input_select>>>",
+        "model_suffix": "multistream",
+        "performance_mode_extension": "-target_latency.<<<target_latency>>>"
+      },
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
