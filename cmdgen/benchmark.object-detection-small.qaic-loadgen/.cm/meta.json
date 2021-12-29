@@ -9,34 +9,6 @@
     ]
   },
   "build_map": {
-    "model": {
-      "ssd_mobilenet": {
-        "ck_env": [
-          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
-          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
-          "--env.CK_ENV_QAIC_COPY_THREADS_PER_DEVICE=8",
-          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
-          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-        ],
-        "deps": [
-          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
-        ],
-        "division": "closed",
-        "hyphenated_model_name": "ssd-mobilenet",
-        "model_name": "ssd-mobilenet",
-        "model_tags": [
-          "###"
-        ],
-        "recommended_accuracy_buffer_size": "500",
-        "recommended_performance_buffer_size": "256"
-      }
-    },
     "sut": {
       "aedk_15w": {
         "recommended_activation_count": "1",
@@ -87,6 +59,34 @@
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       }
+    },
+    "model": {
+      "ssd_mobilenet": {
+        "ck_env": [
+          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
+          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
+          "--env.CK_ENV_QAIC_COPY_THREADS_PER_DEVICE=8",
+          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
+          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
+          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
+        ],
+        "division": "closed",
+        "hyphenated_model_name": "ssd-mobilenet",
+        "model_name": "ssd-mobilenet",
+        "model_tags": [
+          "###"
+        ],
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "256"
+      }
     }
   },
   "docker": {
@@ -101,9 +101,6 @@
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
-    "program_name": "object-detection-qaic-loadgen",
-    "ssd_mobilenet_activation_count": "<<<activation_count>>>",
-    "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
-    "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>"
+    "program_name": "object-detection-qaic-loadgen"
   }
 }

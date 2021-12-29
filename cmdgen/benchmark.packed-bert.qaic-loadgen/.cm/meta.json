@@ -4,7 +4,18 @@
   "accu_init": {
     "ck_env": [
       "--env.ML_MODEL_MODEL_NAME=bert",
-      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>"
+      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>",
+      "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
+      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
+      "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
+      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+      "--env.CK_VERBOSE=<<<verbosity>>>",
+      "--env.ML_MODEL_MODEL_NAME=bert",
+      "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+    ],
+    "deps": [
+      "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
     ],
     "record_tags": [
       "task.bert-question-answering"
@@ -14,22 +25,6 @@
     ]
   },
   "build_map": {
-    "model": {
-      "bert-99.9": {
-        "model_tags": [
-          "bert-99.9"
-        ]
-      },
-      "bert-99": {
-        "model_tags": [
-          "bert-99",
-          "quantization.calibration"
-        ]
-      },
-      "deps": [
-        "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
-      ]
-    },
     "sut": {
       "aedk_15w": {
         "recommended_activation_count": "4",
@@ -59,6 +54,41 @@
         "recommended_activation_count": "4",
         "recommended_batch_size": "1000"
       }
+    },
+    "model": {
+      "bert-99.9": {
+        "model_tags": [
+          "bert-99.9"
+        ]
+      },
+      "bert-99": {
+        "model_tags": [
+          "bert-99",
+          "quantization.calibration"
+        ]
+      }
+    },
+    "scenario": {
+      "offline": {
+        "activation_count": "<<<recommended_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "input_select": "<<<recommended_input_select>>>"
+      },
+      "range_singlestream": {
+        "activation_count": "1",
+        "batch_size": "1",
+        "input_select": "0"
+      },
+      "server": {
+        "activation_count": "<<<recommended_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "input_select": "0"
+      },
+      "singlestream": {
+        "activation_count": "1",
+        "batch_size": "1",
+        "input_select": "<<<recommended_input_select>>>"
+      }
     }
   },
   "docker": {
@@ -73,6 +103,7 @@
     "model_name": "bert",
     "override_batch_size": "<<<batch_size>>>",
     "program_name": "packed-bert-qaic-loadgen",
+    "recommended_input_select": "0",
     "queue_length": "8",
     "threads_per_queue": "8"
   }

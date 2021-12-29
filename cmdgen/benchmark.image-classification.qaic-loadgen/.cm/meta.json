@@ -10,32 +10,6 @@
   },
   "build_map": {
     "program_name": "object-detection-qaic-loadgen",
-    "model": {
-      "resnet50": {
-        "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=resnet50",
-          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
-          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
-          "--env.CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE=224",
-          "--env.CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE=float32",
-          "--env.CK_MLPERF_ACCURACY_IMAGENET_TYPE=float32",
-          "--env.CK_ENV_QAIC_OUTPUT_COUNT=1",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-        ],
-        "deps": "--dep_add_tags.images=preprocessed,using-opencv,for.resnet50.quantized,full",
-        "division": "closed",
-        "model_tags": [
-          "###"
-        ],
-        "recommended_accuracy_buffer_size": "5000",
-        "recommended_performance_buffer_size": "1024",
-        "workload": "###",
-        "model_name": "resnet50"
-      }
-     }
-    },
     "sut": {
       "aedk_25w": {
         "recommended_activation_count": "2",
@@ -87,12 +61,39 @@
         "recommended_batch_size": "8"
       }   
   },
+  "model": {
+      "resnet50": {
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=resnet50",
+          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
+          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
+          "--env.CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE=224",
+          "--env.CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE=float32",
+          "--env.CK_MLPERF_ACCURACY_IMAGENET_TYPE=float32",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=1",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
+          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+        ],
+        "deps": "--dep_add_tags.images=preprocessed,using-opencv,for.resnet50.quantized,full",
+        "division": "closed",
+        "model_tags": [
+          "###"
+        ],
+        "recommended_accuracy_buffer_size": "5000",
+        "recommended_performance_buffer_size": "1024",
+        "workload": "###",
+        "model_name": "resnet50"
+      }
+     }
+    },
   "docker": {
     "container_only": {
       "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"resnet50\" ]; then echo \"Please enter the model name to build the Docker image for(resnet50)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\"&& echo ${CONTAINER_ID}; fi"
     }
   },
   "defaults": {
+    "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/image-classification.qaic-loadgen.cache",
     "dataset_size": "50000",
     "docker_image" : "krai/mlperf.<<<model_name>>>.full.centos7:<<<sdk>>> ",
