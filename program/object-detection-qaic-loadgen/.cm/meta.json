@@ -129,7 +129,7 @@
       "local": "yes",
       "name": "Python API for COCO",
       "sort": 15,
-      "tags": "tool,coco,nvidia"
+      "tags": "tool,coco"
     },
     "weights": {
       "force_target_as_host": "yes",
