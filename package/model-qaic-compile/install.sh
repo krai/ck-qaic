@@ -94,7 +94,7 @@ fi
 _COMPILER_PARAMS="${_COMPILER_PARAMS} ${_QUANTIZATION_PARAMS} ${_EXTRA_COMPILER_PARAMS}"
 
 if [[ -n ${_COMPILER_PARAMS} ]]; then
-  echo ${_COMPILER_PARAMS}
+  echo "Compiler Params: ${_COMPILER_PARAMS}"
   # Compile only.
   echo
   echo "Compile QAIC network binaries:"
@@ -103,13 +103,12 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   ${LOAD_PROFILE} -aic-binary-dir=${aic_binary_dir} \
   ${_COMPILER_PARAMS}
 END_OF_CMD
-
   echo ${CMD}
   eval ${CMD}
   exit_if_error
+  export COMPILER_PARAMS=${_COMPILER_PARAMS}
   echo "Done."
   exit
 fi
-
 exit -1
 

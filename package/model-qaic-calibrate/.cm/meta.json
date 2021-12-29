@@ -8,6 +8,7 @@
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1"
     },
+    "version": "2.0",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "package_name": "Profile for QAIC model",
