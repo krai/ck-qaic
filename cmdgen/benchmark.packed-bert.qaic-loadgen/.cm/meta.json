@@ -14,9 +14,6 @@
       "--env.ML_MODEL_MODEL_NAME=bert",
       "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
     ],
-    "deps": [
-      "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
-    ],
     "record_tags": [
       "task.bert-question-answering"
     ],
@@ -59,12 +56,18 @@
       "bert-99.9": {
         "model_tags": [
           "bert-99.9"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ]
       },
       "bert-99": {
         "model_tags": [
-          "bert-99",
-          "quantization.calibration"
+          "bert-99"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw",
+          "--dep_add_tags.weights=quantization.calibration"
         ]
       }
     },
