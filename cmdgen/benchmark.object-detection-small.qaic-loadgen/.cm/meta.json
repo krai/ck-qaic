@@ -101,6 +101,7 @@
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
+    "program_name": "object-detection-qaic-loadgen",
     "ssd_mobilenet_activation_count": "<<<activation_count>>>",
     "ssd_mobilenet_queue_length": "<<<recommended_ssd_mobilenet_queue_length>>>",
     "ssd_mobilenet_threads_per_queue": "<<<recommended_ssd_mobilenet_threads_per_queue>>>"

@@ -99,6 +99,7 @@
     "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
-    "preprocessed_using": "opencv"
+    "preprocessed_using": "opencv",
+    "program_name": "object-detection-qaic-loadgen"
   }
 }
