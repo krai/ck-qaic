@@ -6,7 +6,7 @@
       "PACKAGE_VERSION": "1",
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1",
-      "_SEG": "384"
+      "_SEG": "384"      
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -195,9 +195,14 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "ML_MODEL_MODEL_NAME": "resnet50",
-        "_COMPILER_ARGS": "",
+        "_COMPILER_ARGS_NAME_PREFIX": "",
         "_MODEL_TO_CONVERT": "compile_resnet50_tf",
-        "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -aic-num-of-instances=1 -use-producer-dma=0  -aic-device-id=0 -output-node-name=ArgMax -compile-only",
+        "_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0'",
+        "_14NSP_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4,4,2 -aic-max-outchannel-split=1,1,4,2 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0'",
+        "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1'",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -use-producer-dma=0",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$  -mos=4 -ols=1"
       },
       "extra_tags": [
         "image-classification",
@@ -208,7 +213,8 @@
     "resnet50.aedk_25w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "16",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -use-producer-dma=0 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
         "bs.16"
@@ -217,7 +223,8 @@
     "resnet50.aedk_20w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -use-producer-dma=0 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -226,7 +233,8 @@
     "resnet50.aedk_20w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
       },
       "extra_tags": [
         "bs.1"
@@ -235,7 +243,8 @@
     "resnet50.aedk_15w.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -use-producer-dma=0 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -244,25 +253,8 @@
     "resnet50.aedk_15w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -compile-only"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "resnet50.pcie.14nsp.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=14 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4,4,2 -aic-max-outchannel-split=1,1,4,2 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=2 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
-      },
-      "extra_tags": [
-        "bs.8"
-      ]
-    },
-    "resnet50.pcie.14nsp.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=14 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4,4,2 -aic-max-outchannel-split=1,1,4,2 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=2 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
       },
       "extra_tags": [
         "bs.1"
@@ -271,7 +263,18 @@
     "resnet50.pcie.16nsp.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -aic-num-of-instances=1 -use-producer-dma=0 -compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0' -ols=4 -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -280,7 +283,29 @@
     "resnet50.pcie.16nsp.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS": "-aic-hw -aic-hw-version=2.0 -aic-num-cores=8 -mos=4 -ols=1 -aic-num-of-instances=1 -compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1' -aic-device-id=0 -output-node-name=ArgMax -compile-only"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_ARGS_NAME_PREFIX": "_14NSP",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
       },
       "extra_tags": [
         "bs.1"
