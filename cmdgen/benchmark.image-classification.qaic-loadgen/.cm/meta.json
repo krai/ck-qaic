@@ -17,7 +17,7 @@
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "4"
       },
       "aedk_20w": {
@@ -26,7 +26,7 @@
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "4"
       },
       "aedk_15w": {
@@ -35,7 +35,7 @@
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "4"
       },
       "g292_z43_q16": {
@@ -58,7 +58,7 @@
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "4"
       },
       "r282_z93_q1": {
@@ -67,7 +67,7 @@
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "6",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "4"
       }   
   },
@@ -108,7 +108,7 @@
     "dataset_size": "50000",
     "docker_image" : "krai/mlperf.<<<model_name>>>.full.centos7:<<<sdk>>> ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
-    "max_wait": "10000",
+    "max_wait": "2000",
     "program_name": "image-classification-qaic-loadgen"
   }
 }
