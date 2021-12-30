@@ -51,7 +51,7 @@
         }
       ],
       "local": "yes",
-      "name": "SSD-Resnet34 Profile for QAIC model",
+      "name": "SSD-ResNet34 profile for QAIC model",
       "sort": 100,
       "tags": "profile,ssd_resnet34",
       "update_tags_if_env": {
@@ -71,7 +71,7 @@
         }
       ],
       "local": "yes",
-      "name": "SSD-Mobilenet Profile for QAIC model",
+      "name": "SSD-MobileNet profile for QAIC model",
       "sort": 100,
       "tags": "profile,ssd_mobilenet",
       "update_tags_if_env": {
@@ -106,7 +106,7 @@
         }
       ],
       "local": "yes",
-      "name": "Resnet50 Profile for QAIC model",
+      "name": "ResNet50 profile for QAIC model",
       "sort": 100,
       "tags": "profile,resnet50",
       "update_tags_if_env": {
@@ -146,7 +146,7 @@
         }
       ],
       "local": "yes",
-      "name": "Bert Profile for QAIC model",
+      "name": "BERT profile for QAIC model",
       "sort": 100,
       "tags": "profile,qaic,bert-packed",
       "update_tags_if_env": {
@@ -318,7 +318,7 @@
     },
     "ssd_resnet34": {
       "extra_customize": {
-        "package_name": "QAIC model (MLPerf ResNet34 No NMS)"
+        "package_name": "QAIC model (MLPerf SSD-ResNet34 No NMS)"
       },
       "extra_env": {
         "CK_CALIBRATE_COCO": "yes",
@@ -397,7 +397,7 @@
     },
     "ssd_mobilenet": {
       "extra_customize": {
-        "package_name": "QAIC model (MLPerf SSD-Mobilenet No NMS)"
+        "package_name": "QAIC model (MLPerf SSD-MobileNet No NMS)"
       },
       "extra_env": {
         "CK_CALIBRATE_COCO": "yes",

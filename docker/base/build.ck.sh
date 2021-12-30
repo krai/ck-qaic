@@ -34,19 +34,36 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+# Use GCC >= 10.
+_GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
+# Use Python >= 3.7.
+_PYTHON_VER=${PYTHON_VER:-3.8.12}
+# Use CK >= 1.17.0.
+_CK_VER=${CK_VER:-2.5.8}
+# Create a non-root user with a fixed group id and a fixed user id.
+#QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
+#_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
+_GROUP_ID=${GROUP_ID:-1500}
+_USER_ID=${USER_ID:-2000}
+
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-cd $(ck find ck-qaic:docker:base)
-
-echo "Creating image: krai/${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
-docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} .
-
-echo "Creating image: krai/ck.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
+echo "Creating image: 'krai/ck.common.${_DOCKER_OS}'"
+read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:base) && \
+time docker build ${_NO_CACHE} \
+--build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
+--build-arg PYTHON_VER=${_PYTHON_VER} \
+--build-arg CK_VER=${_CK_VER} \
+--build-arg GROUP_ID=${_GROUP_ID} \
+--build-arg USER_ID=${_USER_ID} \
+-f Dockerfile.ck.${_DOCKER_OS} \
+-t krai/ck.common.${_DOCKER_OS} .
+END_OF_CMD
+echo ${CMD}
+eval ${CMD}
 
 echo
 echo "Done."

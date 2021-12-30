@@ -33,21 +33,47 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-ARG BASE_IMAGE=krai/qaic.centos7
+ARG BASE_IMAGE=krai/base.centos7
 FROM $BASE_IMAGE AS preamble
 
-ARG CK_VER=2.5.8
 ARG GCC_MAJOR_VER=11
-ARG PYTHON_VER=3.8.12
+ARG PYTHON_VER
+ARG CK_VER
+
+ARG GROUP_ID
+ARG USER_ID
+
+# Create a non-root user with a fixed group id and a fixed user id.
+RUN groupadd -g ${GROUP_ID} kraig
+RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+# Allow this user to execute commands with sudo.
+RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+USER krai:kraig
+WORKDIR /home/krai
+
+ENV CK_ROOT=/home/krai/CK \
+    CK_REPOS=/home/krai/CK_REPOS \
+    CK_TOOLS=/home/krai/CK_TOOLS \
+    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
+    LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH} \
+    LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH} \
+    CK_CC=gcc \
+    GIT_USER="krai" \
+    GIT_EMAIL="info@krai.ai" \
+    LANG=C.UTF-8
+
+RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL} \
+ && git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT} \
+ && mkdir -p ${CK_REPOS} ${CK_TOOLS} .local
 
 ###############################################################################
 ### BUILDER STAGE
 ###############################################################################
 FROM preamble AS builder
 
-ARG CK_VER=2.5.8
-ARG GCC_MAJOR_VER=11
-ARG PYTHON_VER=3.8.12
+ARG GCC_MAJOR_VER
+ARG PYTHON_VER
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
@@ -59,11 +85,9 @@ RUN /bin/bash -l -c  \
  'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
 
 # Install Collective Knowledge (CK).
-RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
-RUN git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT}
 RUN cd ${CK_ROOT} \
  && source /home/krai/.bashrc \
- && ${CK_PYTHON} setup.py install --user\
+ && ${CK_PYTHON} setup.py install --user \
  && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
  && chmod -R g+rx /home/krai/.local
 
@@ -111,4 +135,4 @@ COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /home/krai/.local   /home/krai/.local
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
 
-CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
+CMD ["ck version"]

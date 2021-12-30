@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -36,22 +36,19 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
-# (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG SDK_VER
 FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
-ARG BASE_IMAGE
-ARG SDK_VER
-
 
 ###############################################################################
 # BUILD STAGE
 #
-# In this stage, simply remove unnecessary tools from CK_TOOLS
+# In this stage, simply remove unnecessary tools from CK_TOOLS.
 #
 ###############################################################################
 FROM krai/mlperf.bert.centos7:${SDK_VER}_PC AS builder
+ARG SDK_VER
+
 RUN rm -rf \
 $(ck locate env --tags=python-package,pytorch)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -62,13 +59,19 @@ $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=model,bert-packed)/*; 
 
-
+###############################################################################
+# FINAL STAGE
+#
+# In this stage, simply copy CK, CK_TOOLS, CK_REPOS to the final image.
+#
+###############################################################################
 FROM preamble AS final
+
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
-COPY --from=builder /home/krai/.local /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
+COPY --from=builder /home/krai/.local   /home/krai/.local
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

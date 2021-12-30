@@ -1,7 +1,7 @@
 #/bin/bash
 
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -39,7 +39,7 @@ fi
 
 MODEL=$1
 
-echo "Building the Docker image for '${MODEL}'";
+echo "Building the Docker image for '${MODEL}' ..."
 
 _BASE_OS=${BASE_OS:-centos7}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
@@ -96,7 +96,7 @@ if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == ""
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
-  cd $(ck find ck-qaic:docker:base) &&  IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
+  cd $(ck find ck-qaic:docker:base) && IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
 fi
 
 read -d '' CMD <<END_OF_CMD
@@ -164,7 +164,7 @@ END_OF_CMD
 fi
 
 if [[ ${_SAVE_IMAGE} == 'yes' ]]; then
-   docker image save ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
+  docker image save ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
 fi
 
 echo
