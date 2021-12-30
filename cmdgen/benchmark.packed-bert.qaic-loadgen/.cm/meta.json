@@ -101,6 +101,7 @@
   },
   "defaults": {
     "cache_dir_default": "/data/packed-bert.qaic-loadgen.cache",
+    "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model_name>>> ]]; then echo 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model_name>>>.'; else",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/packed-bert-qaic-loadgen/tmp/preprocessed",
     "max_wait": "50000",
     "model_name": "bert",
