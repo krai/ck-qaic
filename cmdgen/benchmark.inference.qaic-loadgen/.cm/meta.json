@@ -6,6 +6,9 @@
       "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
       "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
+      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+      "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>",
       "--env.CK_VERBOSE=<<<verbosity>>>"
     ],
     "deps": [
