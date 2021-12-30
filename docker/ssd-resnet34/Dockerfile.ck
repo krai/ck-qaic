@@ -67,7 +67,7 @@ RUN source /home/krai/.bashrc && ${CK_PYTHON} -m pip install --user pybind11
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet \
- && ck install package --tags=tool,coco,nvidia --quiet
+ && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.

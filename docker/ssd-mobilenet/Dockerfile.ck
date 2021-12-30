@@ -74,7 +74,7 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
  && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
- && ck install package --tags=tool,coco,nvidia --quiet
+ && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
