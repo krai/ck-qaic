@@ -3,7 +3,7 @@
 This package calibrates:
 - [ResNet50](#resnet50) using the QAIC toolchain.
 - [SSD-ResNet34](#ssd_resnet34) using the QAIC toolchain.
-- [SSD-Mobilenet](#ssd_mobilenet) using the QAIC toolchain.
+- [SSD-MobileNet](#ssd_mobilenet) using the QAIC toolchain.
 
 <a name="resnet50"></a>
 ## Calibrate ResNet50
@@ -139,9 +139,9 @@ Then, you can detect the profile on that machine e.g.:
 </pre>
 
 <a name="ssd_mobilenet"></a>
-## Calibrate SSD-Mobilenet
+## Calibrate SSD-MobileNet
 
-The SSD-Mobilenet model is calibrated using the QAIC toolchain based on
+The SSD-MobileNet model is calibrated using the QAIC toolchain based on
 [Glow](https://github.com/pytorch/glow).
 
 <a name="ssd_mobilenet_calbration_dataset"></a>
@@ -188,7 +188,7 @@ you can register it with CK again if needed (e.g. if you reset your CK environme
 
 <a name="ssd_mobilenet_calibrate"></a>
 ### Calibrate
-#### 4 samples per batch (for Offline scenario)
+#### 4 samples per batch (for the Offline scenario)
 
 <pre>
 <b>[anton@ax530b-03-giga ~]&dollar;</b> ck install package --tags=profile,ssd_mobilenet,bs.4

@@ -128,7 +128,7 @@
     "weights": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "Bert Packed model",
+      "name": "BERT Packed model",
       "sort": 20,
       "tags": "model,qaic,compiled"
     }
