@@ -457,7 +457,9 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
 void SystemUnderTestQAIC::IssueQuery(
     const std::vector<mlperf::QuerySample> &samples) {
 
-  if(scenario == mlperf::TestScenario::SingleStream || scenario == mlperf::TestScenario::Offline) {
+    if (scenario == mlperf::TestScenario::SingleStream ||
+        scenario == mlperf::TestScenario::MultiStream ||
+        scenario == mlperf::TestScenario::Offline) {
 
     ++query_counter;
     auto vl = prg->settings->verbosity_level;

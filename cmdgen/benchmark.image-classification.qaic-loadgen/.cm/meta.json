@@ -108,7 +108,7 @@
     "dataset_size": "50000",
     "docker_image" : "krai/mlperf.<<<model_name>>>.full.centos7:<<<sdk>>> ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
-    "max_wait": "10000",
+    "max_wait": "2000",
     "program_name": "image-classification-qaic-loadgen"
   }
 }
