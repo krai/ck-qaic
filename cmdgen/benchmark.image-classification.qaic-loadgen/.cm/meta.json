@@ -72,8 +72,8 @@
       }   
   },
   "model": {
-      "resnet50": {
-        "ck_env": [
+    "resnet50": {
+      "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=resnet50",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
@@ -95,11 +95,6 @@
         "workload": "###",
         "model_name": "resnet50"
       }
-     }
-    },
-  "docker": {
-    "container_only": {
-      "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"resnet50\" ]; then echo \"Please enter the model name to build the Docker image for(resnet50)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\"&& echo ${CONTAINER_ID}; fi"
     }
   },
   "defaults": {
@@ -110,6 +105,6 @@
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
     "max_wait": "2000",
     "program_name": "image-classification-qaic-loadgen",
-    "zero_copy": "disable"
+    "zero_copy": "enable"
   }
 }

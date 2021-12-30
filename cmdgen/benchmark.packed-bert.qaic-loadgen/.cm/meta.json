@@ -16,9 +16,6 @@
     ],
     "record_tags": [
       "task.bert-question-answering"
-    ],
-    "record_uoa_parts": [
-      "<<<mode>>><<<mode_extension>>>"
     ]
   },
   "build_map": {
@@ -70,39 +67,15 @@
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ]
       }
-    },
-    "scenario": {
-      "offline": {
-        "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
-        "input_select": "<<<recommended_input_select>>>"
-      },
-      "range_singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "input_select": "0"
-      },
-      "server": {
-        "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
-        "input_select": "0"
-      },
-      "singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "input_select": "<<<recommended_input_select>>>"
-      }
-    }
-  },
-  "docker": {
-    "container_only": {
-      "wrapped_ck_benchmark_program": "if [ \"<<<model_name>>>\" != \"bert\" ]; then echo \"Please enter the model name to build the Docker image for(bert)\n\";  else CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID}; fi"
     }
   },
   "defaults": {
+    "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/packed-bert.qaic-loadgen.cache",
+    "cache_opt": "0",
     "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model_name>>> ]]; then echo 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model_name>>>.'; else",
-    "dataset_size": "10833",  
+    "dataset_size": "10833",
+    "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ", 
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/packed-bert-qaic-loadgen/tmp/preprocessed",
     "max_wait": "50000",
     "model_name": "bert",
@@ -110,6 +83,8 @@
     "program_name": "packed-bert-qaic-loadgen",
     "queue_length": "8",
     "recommended_input_select": "0",
+    "recommended_accuracy_buffer_size": "10833",
+    "recommended_performance_buffer_size": "10833",
     "threads_per_queue": "8",
     "zero_copy": "disable"
   }
