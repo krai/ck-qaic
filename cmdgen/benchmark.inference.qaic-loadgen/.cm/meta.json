@@ -27,6 +27,7 @@
       "<<<preprocessed_tag>>>",
       "input_select.<<<input_select>>>",
       "queue_length.<<<queue_length>>>",
+      "task.<<<task_name>>>",
       "threads_per_queue.<<<threads_per_queue>>>"
     ],
     "record_uoa_parts": [

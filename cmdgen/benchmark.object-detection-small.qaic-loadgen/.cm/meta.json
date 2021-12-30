@@ -97,6 +97,7 @@
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "program_name": "object-detection-qaic-loadgen",
+    "task_name": "object-detection",
     "zero_copy": "enable"
   }
 }

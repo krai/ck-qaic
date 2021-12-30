@@ -13,9 +13,6 @@
       "--env.CK_VERBOSE=<<<verbosity>>>",
       "--env.ML_MODEL_MODEL_NAME=bert",
       "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-    ],
-    "record_tags": [
-      "task.bert-question-answering"
     ]
   },
   "build_map": {
@@ -85,6 +82,7 @@
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
     "recommended_performance_buffer_size": "10833",
+    "task_name": "bert-question-answering",
     "threads_per_queue": "8",
     "zero_copy": "disable"
   }

@@ -105,6 +105,7 @@
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
     "max_wait": "2000",
     "program_name": "image-classification-qaic-loadgen",
+    "task_name": "image-classification",
     "zero_copy": "enable"
   }
 }
