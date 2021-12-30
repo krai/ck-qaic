@@ -2,11 +2,6 @@
   "_base_entry": "cmdgen:05ee58d2d664fb59",
   "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
   "accu_init": {
-    "record_tags": [
-      "task.image-classification",
-      "workload.<<<hyphenated_model_name>>>",
-      "<<<preprocessed_tag>>>"
-    ]
   },
   "build_map": {
     "program_name": "object-detection-qaic-loadgen",
