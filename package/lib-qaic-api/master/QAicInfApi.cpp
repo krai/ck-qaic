@@ -145,7 +145,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
 
   qbuffersSet_.resize(setSize_);
 
-  if (std::getenv("QAIC_BYPASS_PPP")){
+  if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
     execObjProperties_ |= QAIC_EXECOBJ_PROPERTIES_ZERO_COPY_BUFFERS;
   }
 
@@ -163,7 +163,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
       return status;
     }
     execObjSet_.push_back(execObj);
-    if (std::getenv("QAIC_BYPASS_PPP")) {
+    if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
       const QAicApiFunctionTable *aicApi_ = qaicGetFunctionTable(); 
       status = aicApi_ -> qaicExecObjGetIoBuffers( execObj, &numBuffers_, &qbuffersSet_[i]);
       if ((status != QS_SUCCESS)) {
@@ -187,7 +187,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
 QStatus ActivationSet::setData(std::vector<std::vector<QBuffer>> &buffers) {
   QStatus status = QS_SUCCESS;
   int i = 0;
-  if (std::getenv("QAIC_BYPASS_PPP")) {
+  if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
     // no setdata is required when using dma buf path
 
     std::cerr << "no setdata is required when using dma buf path" << std::endl;
@@ -540,7 +540,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
     #endif
     uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
-    if (std::getenv("QAIC_BYPASS_PPP")) {
+    if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
       numBuffers = ioDescProto.dma_buf_size();
       ioDescQData.data = nullptr;
     }
@@ -562,7 +562,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
   }
 
-  if (!std::getenv("QAIC_BYPASS_PPP")) {
+  if (!(std::getenv("QAIC_BYPASS_PPP") == std::string("enable"))) {
     setData();
   }
 
@@ -574,7 +574,7 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::sha
   inferenceBuffersList_.resize(inferenceBuffersList_.size() + 1);
 
   inferenceBuffersList_[idx].resize(setSize_);
-  if (std::getenv("QAIC_BYPASS_PPP")) {
+  if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
     for (uint32_t y = 0; y < setSize_; y++) {
       
       QBuffer* dmaBuffVect = shActivation->getDmaBuffers(y);

@@ -101,6 +101,7 @@
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
-    "program_name": "object-detection-qaic-loadgen"
+    "program_name": "object-detection-qaic-loadgen",
+    "zero_copy": "disable"
   }
 }

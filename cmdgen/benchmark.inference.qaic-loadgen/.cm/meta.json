@@ -297,7 +297,7 @@
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
@@ -317,7 +317,7 @@
         "all_device_ids": "0",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=enable",
+          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -415,7 +415,6 @@
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
-    "dataset_size": "5000",
     "device_ids": "<<<all_device_ids>>>",
     "division": "open",
     "docker_bash_command": "/bin/bash -c",
