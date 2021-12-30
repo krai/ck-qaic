@@ -34,6 +34,10 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+if [[ "$(docker images -q krai/base.${DOCKER_OS} 2> /dev/null)" == "" ]]; then
+  cd $(ck find ck-qaic:docker:base) && ./build.base.sh
+fi
+
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 # Use Python >= 3.7.

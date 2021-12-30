@@ -92,7 +92,7 @@ if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then
 fi
 
 if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
-  cd $(ck find ck-qaic:docker:base) && ./build.sh
+  cd $(ck find ck-qaic:docker:base) && SDK_VER=${_SDK_VER} ./build.qaic.sh
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
