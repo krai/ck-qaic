@@ -644,7 +644,7 @@
     },
     "quantization.calibration": {
       "extra_env": {
-        "_PERCENTILE_CALIBRATION_VALUE": "99.9980",
+        "_PERCENTILE_CALIBRATION_VALUE": "99.9985",
         "_QUANTIZATION_PARAMS": "-quantization-calibration=Percentile  -percentile-calibration-value=[PERCENTILE_CALIBRATION_VALUE]"
       }
     },
