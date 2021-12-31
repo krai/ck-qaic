@@ -53,7 +53,8 @@
         ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
-        ]
+        ],
+        "division": "closed"
       },
       "bert-99": {
         "model_tags": [
@@ -62,7 +63,8 @@
         ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
-        ]
+        ],
+        "division": "closed"
       }
     }
   },
