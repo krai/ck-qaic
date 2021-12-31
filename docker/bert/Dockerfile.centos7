@@ -65,6 +65,7 @@ USER krai:kraig
 WORKDIR /home/krai
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
  && ck pull all
+RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Set platform scripts (ensuring that ECC is on).
