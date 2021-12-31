@@ -146,6 +146,7 @@ QStatus ActivationSet::init(uint32_t setSize) {
   qbuffersSet_.resize(setSize_);
 
   if (std::getenv("QAIC_BYPASS_PPP") == std::string("enable")) {
+      std::cout << "Zero Copy enabled\n";
     execObjProperties_ |= QAIC_EXECOBJ_PROPERTIES_ZERO_COPY_BUFFERS;
   }
 
