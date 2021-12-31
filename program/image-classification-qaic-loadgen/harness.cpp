@@ -167,7 +167,7 @@ Program::Program() {
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     int card_num = i%settings->qaic_device_count;
-    int coreid = AFFINITY_CARD(card_num)+i/settings->qaic_device_count;
+    int coreid = AFFINITY_CARD(card_num)+(i/settings->qaic_device_count)%2;
     CPU_SET(coreid, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
