@@ -60,15 +60,10 @@
         "ck_env": [
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
-          "--env.CK_ENV_QAIC_COPY_THREADS_PER_DEVICE=8",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin"
         ],
         "deps": [
           "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"

@@ -30,28 +30,28 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
-        "recommended_queue_length": "8",
+        "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
       "r282_z93_q1": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3"
       },
       "r282_z93_q5": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3"
       },
       "r282_z93_q8": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
-        "recommended_queue_length": "8",
+        "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       }
   },
@@ -63,11 +63,7 @@
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-          "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "deps": [
           "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full"

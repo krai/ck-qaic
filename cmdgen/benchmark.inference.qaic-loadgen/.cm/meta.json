@@ -4,11 +4,12 @@
       "--env.ML_MODEL_MODEL_NAME=<<<hyphenated_model_name>>>",
       "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
       "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
-      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
+      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
       "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
       "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
       "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>",
+      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
       "--env.CK_VERBOSE=<<<verbosity>>>"
     ],
     "deps": [
@@ -236,7 +237,9 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
-        "performance_mode_extension": "-target_latency.<<<target_latency>>>"
+        "performance_mode_extension": "-target_latency.<<<target_latency>>>",
+        "queue_length": "1",
+        "threads_per_queue": "1"
       }
     },
     "sdk": {
@@ -265,8 +268,6 @@
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ],
-        "recommended_activation_count": "8",
-        "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
@@ -278,8 +279,6 @@
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
         ],
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
@@ -291,8 +290,6 @@
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
         ],
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
@@ -311,11 +308,7 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "g292_default_config": "-DG292_CONFA",
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
-        "recommended_input_select": "0",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "3"
+        "recommended_input_select": "0"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -348,11 +341,7 @@
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
-        "recommended_input_select": "0",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_input_select": "0"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -361,8 +350,7 @@
           "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
-          "--env.CK_ENV_QAIC_COPY_THREADS_PER_DEVICE=4"
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
         ],
         "compiler_tags": "gcc",
         "model_tags": [
@@ -370,11 +358,7 @@
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
-        "recommended_activation_count": "16",
-        "recommended_batch_size": "1",
-        "recommended_input_select": "0",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "3"
+        "recommended_input_select": "0"
       }
     },
     "target_latency": {

@@ -4,7 +4,7 @@
   "accu_init": {
   },
   "build_map": {
-    "program_name": "object-detection-qaic-loadgen",
+    "program_name": "image-classification-qaic-loadgen",
     "sut": {
       "aedk_25w": {
         "recommended_activation_count": "2",
@@ -76,9 +76,7 @@
           "--env.CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE=float32",
           "--env.CK_MLPERF_ACCURACY_IMAGENET_TYPE=float32",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=1",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
-          "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "deps": "--dep_add_tags.images=preprocessed,using-opencv,for.resnet50.quantized,full",
         "division": "closed",

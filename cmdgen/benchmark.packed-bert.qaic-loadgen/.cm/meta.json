@@ -2,48 +2,36 @@
   "_base_entry": "cmdgen:05ee58d2d664fb59",
   "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
   "accu_init": {
-    "ck_env": [
-      "--env.ML_MODEL_MODEL_NAME=bert",
-      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>",
-      "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
-      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
-      "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
-      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
-      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
-      "--env.CK_VERBOSE=<<<verbosity>>>",
-      "--env.ML_MODEL_MODEL_NAME=bert",
-      "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>"
-    ]
   },
   "build_map": {
     "sut": {
       "aedk_15w": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "aedk_20w": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "aedk_25w": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "g292_z43_q16": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "r282_z93_q1": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "r282_z93_q5": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       },
       "r282_z93_q8": {
         "recommended_activation_count": "4",
-        "recommended_batch_size": "1000"
+        "recommended_batch_size": "<<<override_batch_size>>>"
       }
     },
     "model": {
@@ -54,6 +42,10 @@
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=bert",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>"
+        ],
         "division": "closed"
       },
       "bert-99": {
@@ -63,6 +55,10 @@
         ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
+        ],
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=bert",
+          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>"
         ],
         "division": "closed"
       }
@@ -79,7 +75,7 @@
     "hyphenated_model_name": "<<<model>>>",
     "max_wait": "50000",
     "model_name": "bert",
-    "override_batch_size": "<<<batch_size>>>",
+    "override_batch_size": "1000",
     "program_name": "packed-bert-qaic-loadgen",
     "queue_length": "8",
     "recommended_input_select": "0",
