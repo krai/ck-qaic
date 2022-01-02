@@ -53,21 +53,19 @@ using namespace CK;
 
 void Program::InitDevices(int d) {
 
-    std::cout << "Creating device " << d << std::endl;
-    runners.push_back(new QAicInfApi());
+  std::cout << "Creating device " << d << std::endl;
+  runners.push_back(new QAicInfApi());
 
-    runners[d]->setModelBasePath(settings->qaic_model_root);
-    runners[d]->setNumActivations(settings->qaic_activation_count);
-    runners[d]->setSetSize(settings->qaic_set_size);
-    runners[d]->setNumThreadsPerQueue(settings->qaic_threads_per_queue);
-    runners[d]->setSkipStage(settings->qaic_skip_stage);
-    QStatus status = runners[d]->init(settings->qaic_hw_ids[d], PostResults);
+  runners[d]->setModelBasePath(settings->qaic_model_root);
+  runners[d]->setNumActivations(settings->qaic_activation_count);
+  runners[d]->setSetSize(settings->qaic_set_size);
+  runners[d]->setNumThreadsPerQueue(settings->qaic_threads_per_queue);
+  runners[d]->setSkipStage(settings->qaic_skip_stage);
+  QStatus status = runners[d]->init(settings->qaic_hw_ids[d], PostResults);
 
-    if (status != QS_SUCCESS)
-      throw "Failed to invoke qaic";
-
+  if (status != QS_SUCCESS)
+    throw "Failed to invoke qaic";
 }
-
 
 Program::Program() {
 
@@ -76,28 +74,29 @@ Program::Program() {
   session = new BenchmarkSession(settings);
 
   // device, activation, set
-  std::vector<std::vector<std::vector<void *>>> in(settings->qaic_device_count);
+  std::vector<std::vector<std::vector<void *> > > in(
+      settings->qaic_device_count);
 
   // device, activation, set, buffer no
-  std::vector<std::vector<std::vector<std::vector<void *>>>> out(settings->qaic_device_count);
+  std::vector<std::vector<std::vector<std::vector<void *> > > > out(
+      settings->qaic_device_count);
 
-
-#if defined (G292) || defined (R282)
+#if defined(G292) || defined(R282)
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::thread t(&Program::InitDevices, this, d);
 
     unsigned coreid = AFFINITY_CARD(d);
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    for(int j = 0; j < 7; j++)
-      CPU_SET(coreid +j, &cpuset);
+    for (int j = 0; j < 7; j++)
+      CPU_SET(coreid + j, &cpuset);
 #ifdef R282
-    if(d < 4 || settings->qaic_device_count > 5)
+    if (d < 4 || settings->qaic_device_count > 5)
 #endif
-    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
-#else 
+#else
   for (int d = 0; d < settings->qaic_device_count; ++d) {
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -114,38 +113,41 @@ Program::Program() {
   }
 #endif
 
-
   // get references to all the buffers devices->activations->set
-  for (int d = 0; d < settings->qaic_device_count ; ++d) {
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
     in[d].resize(settings->qaic_activation_count);
     out[d].resize(settings->qaic_activation_count);
     for (int a = 0; a < settings->qaic_activation_count; ++a) {
       out[d][a].resize(settings->qaic_set_size);
       for (int s = 0; s < settings->qaic_set_size; ++s) {
         in[d][a].push_back((float *)runners[d]->getBufferPtr(a, s, 0));
-        for(int o = 0 ; o < settings->output_count ; ++o) {
-          out[d][a][s].push_back(
-              (void *)runners[d]->getBufferPtr(a, s, o+1));
-          }
+        for (int o = 0; o < settings->output_count; ++o) {
+          out[d][a][s].push_back((void *)runners[d]->getBufferPtr(a, s, o + 1));
+        }
       }
     }
   }
   if (settings->qaic_skip_stage != "convert")
-    benchmark.reset(new Benchmark<InCopy, OutCopy, float, float, float>(settings, in, out));
+    benchmark.reset(
+        new Benchmark<InCopy, OutCopy, float, float, float>(settings, in, out));
   else
 #ifdef MODEL_R34
-    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(settings, in, out));
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(
+        settings, in, out));
 #else
-    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(settings, in, out));
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
+        settings, in, out));
 #endif
 
   // create enough ring buffers for each activation within all devices
-  ring_buf.resize(settings->qaic_activation_count*settings->qaic_device_count);
+  ring_buf.resize(settings->qaic_activation_count *
+                  settings->qaic_device_count);
 
   // fill ring buffer with d0a0, d1a0, ... dna0, d0a1, d1a1, ... dnan
   for (int a = 0; a < settings->qaic_activation_count; ++a)
-    for (int d = 0; d < settings->qaic_device_count ; ++d)
-      ring_buf[d+a*settings->qaic_device_count] = new RingBuffer(d, a, settings->qaic_set_size);
+    for (int d = 0; d < settings->qaic_device_count; ++d)
+      ring_buf[d + a * settings->qaic_device_count] =
+          new RingBuffer(d, a, settings->qaic_set_size);
 
   samples_queue.resize(samples_queue_len);
   sfront = sback = 0;
@@ -153,33 +155,35 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 #ifdef __amd64__
-    num_setup_threads = 2*settings->qaic_activation_count* settings->qaic_device_count;
+  num_setup_threads = settings->qaic_activation_count *
+                      settings->qaic_set_size * settings->qaic_device_count;
 #else
-    num_setup_threads = 2;
+  num_setup_threads = 2;
 #endif
 
-//std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
-  //payloads = new Payload[num_setup_threads];
-  for(int i=0 ; i<num_setup_threads ; ++i) {
+  // std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
+  // payloads = new Payload[num_setup_threads];
+  for (int i = 0; i < num_setup_threads; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
 
 #ifdef __amd64__
-    // Create a cpu_set_t object representing a set of CPUs. Clear it and mark
+    // Create a cpu_set_t object representing a set of CPUs. Clear it and
+    // mark
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    int card_num = i%settings->qaic_device_count;
-    int coreid = AFFINITY_CARD(card_num)+(i/settings->qaic_device_count)%8;
+    int card_num = i % settings->qaic_device_count;
+    int coreid =
+        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 8;
     CPU_SET(coreid, &cpuset);
 #ifdef R282
-    if(card_num < 4 || settings->qaic_device_count > 5)
+    if (card_num < 4 || settings->qaic_device_count > 5)
 #endif
-    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
     t.detach();
   }
- 
 }
 
 Program::~Program() {
@@ -218,25 +222,25 @@ void Program::ColdRun() {
     cout << 'C' << flush;
   }
 
-  // QStatus status = runner->run(totalSetsCompleted, totalInferencesCompleted);
+  // QStatus status = runner->run(totalSetsCompleted,
+  // totalInferencesCompleted);
   // if (status != QS_SUCCESS)
   //  throw "Failed to invoke qaic";
 }
 
 void Program::Inference(std::vector<mlperf::QuerySample> samples) {
 
-  while(sback >= sfront+samples_queue_len)
+  while (sback >= sfront + samples_queue_len)
     std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 
-  samples_queue[sback%samples_queue_len] = samples;
+  samples_queue[sback % samples_queue_len] = samples;
   ++sback;
 }
 
 void Program::EnqueueShim(int id) {
-  while(!terminate) {
-    if(payloads[id] != nullptr) {
-      Payload* p = Program::payloads[id];
-
+  while (!terminate) {
+    if (payloads[id] != nullptr) {
+      Payload *p = Program::payloads[id];
 
       // set the images
       if (settings->input_select == 0) {
@@ -284,15 +288,16 @@ void Program::QueueScheduler() {
     qs = samples_queue[sfront % samples_queue_len];
     ++sfront;
 
-    if(settings->verbosity_server)
+    if (settings->verbosity_server)
       std::cout << "<" << sback - sfront << ">";
     mtx_queue.unlock();
     unsigned round = 0;
     while (!terminate) {
-      if(activation + 1 == activation_count) round = (round +1)%(num_setup_threads/activation_count);
+      if (activation + 1 == activation_count)
+        round = (round + 1) % (num_setup_threads / activation_count);
       activation = (activation + 1) % activation_count;
 
-      Payload * p = ring_buf[activation]->getPayload();
+      Payload *p = ring_buf[activation]->getPayload();
 
 #if !defined(G292) && !defined(R282)
       std::this_thread::sleep_for(std::chrono::nanoseconds(500));
@@ -301,7 +306,7 @@ void Program::QueueScheduler() {
       // count and then continue
       if (p == nullptr) {
 #ifndef SERVER_MODE
-        if(getSUT() -> getTestScenario() !=  mlperf::TestScenario::Server)
+        if (getSUT()->getTestScenario() != mlperf::TestScenario::Server)
           std::this_thread::sleep_for(std::chrono::nanoseconds(50));
 #endif
         continue;
@@ -310,19 +315,17 @@ void Program::QueueScheduler() {
       // add the image samples to the payload
       p->samples = qs;
 
-      while(Program::payloads[round*activation_count +activation] != nullptr){
+      while (Program::payloads[round * activation_count + activation] !=
+             nullptr) {
         std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       }
 
-      Program::payloads[round*activation_count+activation] = p;
+      Program::payloads[round * activation_count + activation] = p;
 
       break;
     }
   }
 }
-
-
-
 
 void Program::PostResults(QAicEvent *event,
                           QAicEventCompletionType eventCompletion,
@@ -331,18 +334,19 @@ void Program::PostResults(QAicEvent *event,
   if (eventCompletion == QAIC_EVENT_DEVICE_COMPLETE) {
 
     Payload *p = (Payload *)userData;
-    // std::cout << "releasing " << p->device << " " << p->activation << " " << p->set << std::endl;
+    // std::cout << "releasing " << p->device << " " << p->activation << " "
+    // << p->set << std::endl;
 
     std::vector<int> img_idxs;
 
-    for(int i=0 ; i < p->samples.size() ; ++i) {
+    for (int i = 0; i < p->samples.size(); ++i) {
       img_idxs.push_back(p->samples[i].index);
     }
 
     std::vector<ResultData *> results;
 
-    benchmark->get_next_results(img_idxs, results,
-                                p->device, p->activation, p->set);
+    benchmark->get_next_results(img_idxs, results, p->device, p->activation,
+                                p->set);
 
     sut->QueryResponse(p->samples, results);
 
@@ -352,8 +356,8 @@ void Program::PostResults(QAicEvent *event,
   }
 }
 
-void Program::UnloadBatch(
-    const std::vector<mlperf::QuerySampleIndex> &img_indices) {
+void
+Program::UnloadBatch(const std::vector<mlperf::QuerySampleIndex> &img_indices) {
   auto b_size = img_indices.size();
 
   auto vl = settings->verbosity_level;
@@ -382,12 +386,12 @@ SystemUnderTestQAIC *Program::sut = nullptr;
 BenchmarkSession *Program::session = nullptr;
 BenchmarkSettings *Program::settings = nullptr;
 
-std::vector<QAicInfApi*> Program::runners;
+std::vector<QAicInfApi *> Program::runners;
 
 std::vector<RingBuffer *> Program::ring_buf;
 
 std::mutex Program::mtx_queue;
-std::vector<std::vector<mlperf::QuerySample>> Program::samples_queue;
+std::vector<std::vector<mlperf::QuerySample> > Program::samples_queue;
 int Program::samples_queue_len = 16384;
 
 unique_ptr<IBenchmark> Program::benchmark;
@@ -397,8 +401,8 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-//Payload* Program::payloads[64] = {nullptr};
-std::atomic <Payload*> Program::payloads[512];
+// Payload* Program::payloads[64] = {nullptr};
+std::atomic<Payload *> Program::payloads[512];
 
 int Program::num_setup_threads = 0;
 
@@ -408,7 +412,8 @@ int Program::num_setup_threads = 0;
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 
-SystemUnderTestQAIC::SystemUnderTestQAIC(Program *_prg, mlperf::TestScenario _scenario)
+SystemUnderTestQAIC::SystemUnderTestQAIC(Program *_prg,
+                                         mlperf::TestScenario _scenario)
     : mlperf::SystemUnderTest() {
   prg = _prg;
   prg->setSUT(this);
@@ -416,34 +421,36 @@ SystemUnderTestQAIC::SystemUnderTestQAIC(Program *_prg, mlperf::TestScenario _sc
 
   // kick of worker thread in server mode to coalesce
   // multiple samples into the one batch
-  if(scenario == mlperf::TestScenario::Server) {
+  if (scenario == mlperf::TestScenario::Server) {
     terminate = false;
-//we donot need scheduler for bs.1
-   // scheduler = std::thread(&SystemUnderTestQAIC::ServerModeScheduler, this);
+    // we donot need scheduler for bs.1
+    // scheduler = std::thread(&SystemUnderTestQAIC::ServerModeScheduler,
+    // this);
   }
 };
 
 SystemUnderTestQAIC::~SystemUnderTestQAIC() {
-  if(scenario == mlperf::TestScenario::Server) {
+  if (scenario == mlperf::TestScenario::Server) {
     terminate = true;
-    //scheduler.join();
+    // scheduler.join();
   }
 }
 
 void SystemUnderTestQAIC::ServerModeScheduler() {
 
   prev = std::chrono::steady_clock::now();
-  std::chrono::microseconds max_wait = std::chrono::microseconds(prg->settings->max_wait);
+  std::chrono::microseconds max_wait =
+      std::chrono::microseconds(prg->settings->max_wait);
 
-  while(!terminate) {
+  while (!terminate) {
     auto now = std::chrono::steady_clock::now();
 
     mtx_samples_queue.lock();
     int qlen = samples_queue.size();
 
-    if( qlen != 0  && (now - prev) > max_wait) {
-      if(prg->settings->verbosity_server)
-        std::cout << "(" << qlen <<  ")";
+    if (qlen != 0 && (now - prev) > max_wait) {
+      if (prg->settings->verbosity_server)
+        std::cout << "(" << qlen << ")";
       prg->Inference(samples_queue);
       samples_queue.clear();
       prev = now;
@@ -453,13 +460,12 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
   }
 }
 
-
 void SystemUnderTestQAIC::IssueQuery(
     const std::vector<mlperf::QuerySample> &samples) {
 
-    if (scenario == mlperf::TestScenario::SingleStream ||
-        scenario == mlperf::TestScenario::MultiStream ||
-        scenario == mlperf::TestScenario::Offline) {
+  if (scenario == mlperf::TestScenario::SingleStream ||
+      scenario == mlperf::TestScenario::MultiStream ||
+      scenario == mlperf::TestScenario::Offline) {
 
     ++query_counter;
     auto vl = prg->settings->verbosity_level;
@@ -486,15 +492,13 @@ void SystemUnderTestQAIC::IssueQuery(
       }
 
       prg->Inference(batch_samples);
-
     }
-  }
-  else { // must be Server
+  } else { // must be Server
     mtx_samples_queue.lock();
     // There should only ever be one sample issued at a time in server mode
     // std::cout << "pushing sample to server queue." << std::endl;
     samples_queue.emplace_back(samples[0]);
-    if(samples_queue.size() == prg->settings->qaic_batch_size) {
+    if (samples_queue.size() == prg->settings->qaic_batch_size) {
       prg->Inference(samples_queue);
       samples_queue.clear();
       prev = std::chrono::steady_clock::now();
@@ -503,26 +507,26 @@ void SystemUnderTestQAIC::IssueQuery(
   }
 };
 
-
 // TODO - check if we can have this per object
 std::mutex mtx_response;
-void SystemUnderTestQAIC::QueryResponse(
-    std::vector<mlperf::QuerySample> &samples, std::vector<ResultData *> results) {
+void
+SystemUnderTestQAIC::QueryResponse(std::vector<mlperf::QuerySample> &samples,
+                                   std::vector<ResultData *> results) {
 
   std::vector<mlperf::QuerySampleResponse> responses;
   responses.reserve(samples.size());
 
   for (int i = 0; i < samples.size(); ++i) {
 
-   auto vl = prg->settings->verbosity_level;
-   if( vl > 1 ) {
-      cout << "Query image index: " << samples[i].index << " -> Predicted class: " << *results[i]->data() << endl << endl;
-    } else if ( vl ) {
+    auto vl = prg->settings->verbosity_level;
+    if (vl > 1) {
+      cout << "Query image index: " << samples[i].index
+           << " -> Predicted class: " << *results[i]->data() << endl << endl;
+    } else if (vl) {
       cout << 'p' << flush;
     }
-    responses.push_back({samples[i].id,
-                         uintptr_t(results[i]->data()),
-                         results[i]->size() * sizeof(float)});
+    responses.push_back({ samples[i].id, uintptr_t(results[i]->data()),
+                          results[i]->size() * sizeof(float) });
   }
 
   mtx_response.lock();
@@ -557,26 +561,20 @@ void SystemUnderTestQAIC::ReportLatencyResults(
   size_t p50 = size * 0.5;
   size_t p90 = size * 0.9;
   cout << endl << "Number of queries run: " << size;
-  cout << endl
-       << "Min latency:                      " << sorted_lat[0] << "ns  ("
-       << 1e9 / sorted_lat[0] << " fps)";
-  cout << endl
-       << "Median latency:                   " << sorted_lat[p50] << "ns  ("
-       << 1e9 / sorted_lat[p50] << " fps)";
-  cout << endl
-       << "Average latency:                  " << avg << "ns  (" << 1e9 / avg
-       << " fps)";
-  cout << endl
-       << "90 percentile latency:            " << sorted_lat[p90] << "ns  ("
-       << 1e9 / sorted_lat[p90] << " fps)";
+  cout << endl << "Min latency:                      " << sorted_lat[0]
+       << "ns  (" << 1e9 / sorted_lat[0] << " fps)";
+  cout << endl << "Median latency:                   " << sorted_lat[p50]
+       << "ns  (" << 1e9 / sorted_lat[p50] << " fps)";
+  cout << endl << "Average latency:                  " << avg << "ns  ("
+       << 1e9 / avg << " fps)";
+  cout << endl << "90 percentile latency:            " << sorted_lat[p90]
+       << "ns  (" << 1e9 / sorted_lat[p90] << " fps)";
 
   if (!prg->settings->trigger_cold_run) {
-    cout << endl
-         << "First query (cold model) latency: " << latencies_ns[0] << "ns  ("
-         << 1e9 / latencies_ns[0] << " fps)";
+    cout << endl << "First query (cold model) latency: " << latencies_ns[0]
+         << "ns  (" << 1e9 / latencies_ns[0] << " fps)";
   }
-  cout << endl
-       << "Max latency:                      " << sorted_lat[size - 1]
+  cout << endl << "Max latency:                      " << sorted_lat[size - 1]
        << "ns  (" << 1e9 / sorted_lat[size - 1] << " fps)";
   cout << endl
        << "------------------------------------------------------------ "
@@ -599,8 +597,8 @@ public:
     return prg->images_in_memory_max();
   }
 
-  void LoadSamplesToRam(
-      const std::vector<mlperf::QuerySampleIndex> &samples) override {
+  void LoadSamplesToRam(const std::vector<mlperf::QuerySampleIndex> &samples)
+      override {
     prg->LoadNextBatch(samples);
     return;
   }
@@ -612,7 +610,7 @@ public:
   }
 
 private:
-  std::string name_{"QAIC_QSL"};
+  std::string name_{ "QAIC_QSL" };
   Program *prg;
 };
 
@@ -692,7 +690,8 @@ int main(int argc, char *argv[]) {
     Program *prg = new Program();
     TestQAIC(prg);
     delete prg;
-  } catch (const string &error_message) {
+  }
+  catch (const string &error_message) {
     cerr << "ERROR: " << error_message << endl;
     return -1;
   }

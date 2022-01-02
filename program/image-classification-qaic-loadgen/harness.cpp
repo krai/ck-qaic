@@ -92,7 +92,7 @@ Program::Program() {
 #endif
     unsigned coreid = OFFSET+ AFFINITY_CARD(d);
     CPU_SET(coreid, &cpuset);
-    CPU_SET(coreid+1, &cpuset);
+    CPU_SET(coreid + 1, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
