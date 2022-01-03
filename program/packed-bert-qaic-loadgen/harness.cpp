@@ -117,7 +117,7 @@ Program::Program() {
   scheduler = std::thread(QueueScheduler);
 
 #ifdef __amd64__
-  num_setup_threads = 8;
+  num_setup_threads = 1;
 #else
   num_setup_threads = 2;
 #endif
@@ -231,7 +231,7 @@ void Program::EnqueueShim(int id) {
 
       Program::payloads[id] = nullptr;
     }
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
   }
 }
 
@@ -254,6 +254,7 @@ void Program::QueueScheduler() {
     if (sfront == sback) {
       // No samples then continue
       mtx_queue.unlock();
+      std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       continue;
     }
 
@@ -283,7 +284,7 @@ void Program::QueueScheduler() {
       p->samples = qs;
 
       while(Program::payloads[round_robin] != nullptr){
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       }
 
       Program::payloads[round_robin] = p;
