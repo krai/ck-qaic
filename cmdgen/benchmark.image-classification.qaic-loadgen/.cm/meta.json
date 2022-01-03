@@ -37,7 +37,7 @@
         "recommended_activation_count": "2",
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "3",
+        "recommended_queue_length": "8",
         "recommended_batch_size": "8"
       },
       "r282_z93_q8": {
