@@ -41,7 +41,7 @@
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/centos7 AS preamble
+FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -56,7 +56,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS builder
+FROM preamble AS builder
 # Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main

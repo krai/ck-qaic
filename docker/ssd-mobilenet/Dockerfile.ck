@@ -40,7 +40,7 @@
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/centos7 AS preamble
+FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -55,7 +55,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS builder
+FROM preamble AS builder
 ARG CK_QAIC_CHECKOUT=main
 
 # Pull CK repositories.
