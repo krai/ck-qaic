@@ -155,8 +155,8 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 #ifdef __amd64__
-  num_setup_threads = settings->qaic_activation_count *
-                      settings->qaic_set_size * settings->qaic_device_count;
+  num_setup_threads =
+      settings->qaic_activation_count * settings->qaic_device_count;
   if (num_setup_threads > 512)
     num_setup_threads = 512;
 #else
