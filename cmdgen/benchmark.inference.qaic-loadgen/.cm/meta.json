@@ -214,14 +214,6 @@
         "record_tags": "target_qps.<<<target_qps>>>",
         "record_uoa_parts": "target_qps.<<<target_qps>>>"
       },
-      "range_singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "input_select": "0",
-        "model_suffix": "singlestream",
-        "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
-      },
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
@@ -233,6 +225,7 @@
       },
       "singlestream": {
         "activation_count": "1",
+        "device_ids": "0",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
