@@ -34,6 +34,17 @@
         "recommended_batch_size": "<<<override_batch_size>>>"
       }
     },
+    "scenario": {
+      "multistream": {
+        "batch_size": "<<<multistream_overrride_batch_size>>>"
+      },
+      "offline": {
+        "batch_size": "<<<offline_override_batch_size>>>"
+      },
+      "server": {
+        "batch_size": "<<<server_override_batch_size>>>"
+      }
+    },
     "model": {
       "bert-99.9": {
         "model_tags": [
@@ -43,8 +54,7 @@
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
         "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=bert",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>"
+          "--env.ML_MODEL_MODEL_NAME=bert"
         ],
         "division": "closed"
       },
@@ -57,8 +67,7 @@
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
         "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=bert",
-          "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<override_batch_size>>>"
+          "--env.ML_MODEL_MODEL_NAME=bert"
         ],
         "division": "closed"
       }
@@ -75,12 +84,14 @@
     "hyphenated_model_name": "<<<model>>>",
     "max_wait": "50000",
     "model_name": "bert",
+    "offline_override_batch_size": "<<<override_batch_size>>>",
     "override_batch_size": "1000",
     "program_name": "packed-bert-qaic-loadgen",
     "queue_length": "8",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
     "recommended_performance_buffer_size": "10833",
+    "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
     "threads_per_queue": "8",
     "zero_copy": "disable"
