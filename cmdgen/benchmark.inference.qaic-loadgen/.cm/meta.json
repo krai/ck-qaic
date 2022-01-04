@@ -418,6 +418,7 @@
     "ipmitool_mc_info_cmd_part": "sudo ipmitool mc info > <<<logs_dir>>>",
     "ipmitool_fru_print_cmd_part": "sudo ipmitool fru print > <<<logs_dir>>>",
     "ipmitool_sdr_elist_full_cmd_part": "sudo ipmitool sdr elist full > <<<logs_dir>>>",
+    "ipmitool_set_fan_raw_part": "ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1",
     "logs_dir": "/opt/qti-aic/logs/",
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
@@ -426,12 +427,19 @@
     "post_ipmitool_sdr_elist_full_log": "post.ipmitool_sdr_elist_full.log",
     "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",
     "post_ipmitool_sdr_elist_full_cmd_def": "echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<post_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>post.config; ",
+    "post_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'sleep 5' >> <<<logs_dir>>>post.config; <<<post_ipmitool_sdr_elist_full_cmd_def>>>",
+    "post_ipmitool_set_fan_raw_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF  > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'sleep 5' >> <<<logs_dir>>>post.config;",
     "pre_ipmitool_mc_info_log": "pre.ipmitool_mc_info.log",
     "pre_ipmitool_fru_print_log": "pre.ipmitool_fru_print.log",
     "pre_ipmitool_sdr_elist_full_log": "pre.ipmitool_sdr_elist_full.log",
+    "pre_ipmitool_raw_log":"pre_ipmitool_raw.log",
+    "post_ipmitool_raw_log":"post_ipmitool_raw.log",
     "pre_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<pre_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>pre.config; ",
     "pre_ipmitool_fru_print_cmd_def": "echo '<<<ipmitool_fru_print_cmd_part>>><<<pre_ipmitool_fru_print_log>>>' >> <<<logs_dir>>>pre.config; ",
     "pre_ipmitool_sdr_elist_full_cmd_def": "echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<pre_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>pre.config; ",
+    "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<pre_fan_raw>>> 0xFF  > <<<logs_dir>>><<<pre_ipmitool_raw_log>>>' >> <<<logs_dir>>>pre.config; echo 'sleep 5' >> <<<logs_dir>>>pre.config; <<<pre_ipmitool_sdr_elist_full_cmd_def>>>",
+    "pre_ipmitool_set_fan_raw_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<pre_fan_raw>>> 0xFF  > <<<logs_dir>>><<<pre_ipmitool_raw_log>>>' >> <<<logs_dir>>>pre.config; echo 'sleep 5' >> <<<logs_dir>>>pre.config;",
+    "ipmitool_fan_raw_cmd":"",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "print_container_only": "&& CONTAINER=<<<container>>>",
@@ -463,7 +471,7 @@
     "watch_ipmitool_get_sys_power_log": "watch.ipmitool_get_sys_power.log",
     "watch_sensors_cmd_def": "<<<watch_cmd_begin>>> <<<watch_sensor_cmd_part>>><<<watch_sensor_log>>> <<<watch_cmd_separator>>><<<watch_sensor_log>>><<<separator>>><<<watch_sleep>>><<<watch_sensors_sleep>>><<<separator>>><<<watch_cmd_end>>>",
     "watch_ipmitool_get_sys_power_cmd_def": "<<<watch_cmd_begin>>><<<watch_ipmitool_get_sys_power_cmd_part>>><<<watch_ipmitool_get_sys_power_log>>> <<<watch_cmd_separator>>><<<watch_ipmitool_get_sys_power_log>>><<<separator>>><<<watch_sleep>>><<<watch_ipmitool_get_sys_power_sleep>>><<<separator>>><<<watch_cmd_end>>>",
-    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>>  if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>>> fi<<<?double_quote>>>",
+    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else rm -f /opt/qti-aic/logs/*; <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>><<<?watch_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>> fi<<<?double_quote>>>",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {
@@ -554,7 +562,17 @@
   },
   "ipmitool_all": {
     "yes": {
-      "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+    "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+     }
+  },
+  "pre_ipmitool_set_fan_raw": {
+    "yes":{
+      "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+    }
+  },
+  "post_ipmitool_set_fan_raw": {
+    "yes":{
+      "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
     }
   }
 }
