@@ -308,6 +308,8 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "g292_default_config": "-DG292_CONFA",
+        "power_server_ip": "10.222.147.109",
+        "power_server_port": "4953",
         "recommended_input_select": "0"
       },
       "r282_z93_q1": {
@@ -322,9 +324,7 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.147.109",
-        "power_server_port": "4953"
+        ]
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
