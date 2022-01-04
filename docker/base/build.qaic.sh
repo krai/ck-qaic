@@ -34,19 +34,61 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+# Create a non-root user with a fixed group id and a fixed user id.
+#QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
+#_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
+_GROUP_ID=${GROUP_ID:-1500}
+_USER_ID=${USER_ID:-2000}
+
+_SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
+_SDK_VER=${SDK_VER:-1.5.6}
+
+_APPS_SDK=${APPS_SDK:-"${_SDK_DIR}/qaic-apps-${_SDK_VER}.zip"}
+if [[ ! -f "${_APPS_SDK}" ]]; then
+  echo "ERROR: File '${_APPS_SDK}' does not exist!"
+  exit 1
+fi
+echo "Using Apps SDK: ${_APPS_SDK}"
+
+_PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"}
+if [[ ! -f "${_PLATFORM_SDK}" ]]; then
+  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-x86_64-${_SDK_VER}.zip"
+fi
+if [[ ! -f "${_PLATFORM_SDK}" ]]; then
+  echo "ERROR: File '${_PLATFORM_SDK}' does not exist!"
+  exit 1
+fi
+echo "Using Platform SDK: ${_PLATFORM_SDK}"
+
+TMP_DIR=$(pwd)/tmp
+echo ${TMP_DIR}
+if [ ! -d "${TMP_DIR}" ]; then
+  mkdir -p "${TMP_DIR}"
+  if [ $? -ne 0 ]; then
+    echo "Failed to create ${TMP_DIR}"
+    exit 1
+  fi
+fi
+
+rm -rvf ${TMP_DIR}/*
+cp -vf ${_APPS_SDK} ${TMP_DIR}
+cp -vf ${_PLATFORM_SDK} ${TMP_DIR}
+
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-cd $(ck find ck-qaic:docker:base)
-
-echo "Creating image: krai/${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} ."
-docker build ${_NO_CACHE} -f Dockerfile.${_DOCKER_OS} -t krai/${_DOCKER_OS} .
-
-echo "Creating image: krai/ck.${_DOCKER_OS}"
-echo "docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} ."
-docker build ${_NO_CACHE} --build-arg BASE_IMAGE=krai/${_DOCKER_OS} -f Dockerfile.${_DOCKER_OS}.ck -t krai/ck.common.${_DOCKER_OS} .
+echo "Creating image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
+read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:base) && \
+time docker build ${_NO_CACHE} \
+--build-arg GROUP_ID=${_GROUP_ID} \
+--build-arg USER_ID=${_USER_ID} \
+-f Dockerfile.qaic.${_DOCKER_OS} \
+-t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+END_OF_CMD
+echo ${CMD}
+eval ${CMD}
 
 echo
 echo "Done."

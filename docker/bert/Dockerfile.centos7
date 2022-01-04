@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -36,19 +36,9 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-#FROM qran-centos7:1.5.9
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
-# (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG SDK_VER
-FROM $BASE_IMAGE:${SDK_VER} AS preamble
-
-ARG CK_QAIC_CHECKOUT=main
-# Use the Bash shell.
-SHELL ["/bin/bash", "-c"]
-
-# Allow stepping into the Bash shell interactively.
-ENTRYPOINT ["/bin/bash", "-c"]
+FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
 
 ###############################################################################
 # BUILDER STAGE
@@ -58,23 +48,32 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM krai/ck.bert.centos7 AS builder
-ARG DEBUG_BUILD=no
-ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT=main
-
-COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
-
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
-
-ENV PATH "/usr/local/bin:${PATH}"
-
-# Pull CK repositories
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
-
+ARG CK_QAIC_PCV
+ARG DEBUG_BUILD=no
 
 #-----------------------------------------------------------------------------#
-# Step 2. Compile packed-bert-qaic-loadgen.
+# Step 1. Copy the QAIC SDKs (needed for compilation).
+#-----------------------------------------------------------------------------#
+COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
+ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}
+
+#-----------------------------------------------------------------------------#
+# Step 2. Update CK repositories.
+#-----------------------------------------------------------------------------#
+USER krai:kraig
+WORKDIR /home/krai
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
+ && ck pull all
+RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
+
+#-----------------------------------------------------------------------------#
+# Step 3. Set platform scripts (ensuring that ECC is on).
+#-----------------------------------------------------------------------------#
+RUN ck detect platform.os --platform_init_uoa=qaic
+
+#-----------------------------------------------------------------------------#
+# Step 4. Compile packed-bert-qaic-loadgen.
 #-----------------------------------------------------------------------------#
 RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
@@ -88,12 +87,13 @@ RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect s
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package \
-  --tags=model,compiled,bert,bert-99,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
-  --extra_tags=pcv.$CK_QAIC_PCV; else ck install package --tags=model,compiled,bert,bert-99,quantization.calibration; fi
-RUN ck install package --tags=model,compiled,bert,bert-99.9 --quiet
+  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --quiet \
+  --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
+  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
+  --extra_tags=pcv.$CK_QAIC_PCV --quiet;  else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; fi
+RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
-# Set platform scripts (ensuring that ECC is on).
-RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
@@ -116,11 +116,12 @@ $(ck locate env --tags=model,bert-packed)/*; fi
 #
 ###############################################################################
 FROM preamble AS final
+
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
-COPY --from=builder /home/krai/.local /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
+COPY --from=builder /home/krai/.local   /home/krai/.local
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

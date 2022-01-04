@@ -40,7 +40,7 @@
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/centos7 AS preamble
+FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -55,7 +55,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS builder
+FROM preamble AS builder
 ARG CK_QAIC_CHECKOUT=main
 
 # Pull CK repositories.
@@ -74,7 +74,7 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
  && ck install package --tags=lib,python-package,torch --force_version=1.8.1 --quiet \
- && ck install package --tags=tool,coco,nvidia --quiet
+ && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.

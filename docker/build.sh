@@ -1,7 +1,7 @@
 #/bin/bash
 
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -39,7 +39,7 @@ fi
 
 MODEL=$1
 
-echo "Building the Docker image for '${MODEL}'";
+echo "Building the Docker image for '${MODEL}' ..."
 
 _BASE_OS=${BASE_OS:-centos7}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
@@ -47,6 +47,9 @@ _SDK_VER=${SDK_VER:-1.5.9}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 _OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 _NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
+_SAVE_IMAGE=${SAVE_IMAGE:-no}
+
+EXTRA_DOCKER_ARG=""
 
 if [[ ${MODEL} == "resnet50" ]]; then
   _IMAGENET=${IMAGENET:-full}
@@ -57,10 +60,8 @@ if [[ ${MODEL} == "resnet50" ]]; then
     _IMAGENET_SUFFIX="min"
   fi
   DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_IMAGENET_SUFFIX}.${_BASE_OS}"
-  EXTRA_DOCKER_ARG="--build-arg IMAGENET=${_IMAGENET}"
 else
   DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_BASE_OS}"
-  EXTRA_DOCKER_ARG=""
 fi
 
 if [[ ${MODEL} == "ssd-resnet34" ]]; then
@@ -91,11 +92,13 @@ if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then
 fi
 
 if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
-  cd $(ck find ck-qaic:docker:base) && ./build.sh
+  echo 'Building sdk base';
+  cd $(ck find ck-qaic:docker:base) && SDK_VER=${_SDK_VER} ./build.qaic.sh
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
-  cd $(ck find ck-qaic:docker:base) && ../build_ck.sh ${MODEL}
+  echo "Building base CK image for ${MODEL}";
+  cd $(ck find ck-qaic:docker:base) && IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
 fi
 
 read -d '' CMD <<END_OF_CMD
@@ -125,25 +128,25 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
     if [[ ${MODEL} == "bert" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,bert-99 --force'
       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        bert bert-99 ${_SDK_VER};'
+        bert-99 bert-99.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "resnet50" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,resnet50.pcie.16nsp --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        resnet50 resnet50.pcie.16nsp ${_SDK_VER};'
+        resnet50 resnet50.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-resnet34" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-resnet34 --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-resnet34 ssd-resnet34.pcie.16nsp ${_SDK_VER};'
+        ssd-resnet34 ssd-resnet34.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-mobilenet" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-mobilenet --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-mobilenet ssd-mobilenet.pcie.16nsp ${_SDK_VER};'
+        ssd-mobilenet ssd-mobilenet.pcie.16nsp.offline ${_SDK_VER};'
     fi
     docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
     docker commit $CONTAINER ${DOCKER_IMAGE_NAME}:${_SDK_VER}'_PC'
@@ -160,6 +163,10 @@ END_OF_CMD
       eval ${CMD}
     fi
   fi
+fi
+
+if [[ ${_SAVE_IMAGE} == 'yes' ]]; then
+  docker image save ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
 fi
 
 echo

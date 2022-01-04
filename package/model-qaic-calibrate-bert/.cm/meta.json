@@ -15,13 +15,13 @@
   "deps": {
     "mlperf-source": {
       "local": "yes",
-      "name": "MLPerf Source",
+      "name": "MLPerf Inference source",
       "sort": 36,
       "tags": "mlperf,inference,source"
     },
     "model-source": {
       "local": "yes",
-      "name": "Bert Packed model",
+      "name": "BERT Packed model",
       "sort": 5,
       "tags": "model,mlperf,bert-packed"
     },

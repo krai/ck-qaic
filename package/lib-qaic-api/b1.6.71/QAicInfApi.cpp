@@ -75,7 +75,7 @@ class ActivationSet {
   QStatus deinit();
   void setOutBufIndex(uint32_t outBufIndex) { outBufIndex_ = outBufIndex;}
   std::string filename;
-  uint32_t getNumBuffers() { return numBuffers_; }
+
 private:
   std::vector<QAicEvent *> eventExecSet_;
   std::vector<QAicExecObj *> execObjSet_;
@@ -144,12 +144,6 @@ QStatus ActivationSet::init(uint32_t setSize) {
   setSize_ = setSize;
 
   qbuffersSet_.resize(setSize_);
-
-  if (!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable")) {
-     // std::cout << "Zero Copy enabled\n";
-    execObjProperties_ |= QAIC_EXECOBJ_PROPERTIES_ZERO_COPY_BUFFERS;
-  }
-
   for (uint32_t i = 0; i < setSize_; i++) {
     QAicExecObj *execObj = nullptr;
     qbuffersSet_[i] = nullptr;
@@ -158,21 +152,12 @@ QStatus ActivationSet::init(uint32_t setSize) {
     status = qaicCreateExecObj(
         context_, &execObj, &execObjProperties_, program_,
         (ioDescQData_.data)?(&ioDescQData_):nullptr,
-        nullptr, nullptr);
+        &numBuffers_, &qbuffersSet_[i]);
     if ((status != QS_SUCCESS) || (execObj == nullptr)) {
       std::cerr << "Failed to create Exec obj" << std::endl;
       return status;
     }
     execObjSet_.push_back(execObj);
-    if (!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable")) {
-      const QAicApiFunctionTable *aicApi_ = qaicGetFunctionTable(); 
-      status = aicApi_ -> qaicExecObjGetIoBuffers( execObj, &numBuffers_, &qbuffersSet_[i]);
-      if ((status != QS_SUCCESS)) {
-        std::cerr << "Failed to get IO buffers" << std::endl;
-        return status;
-      }
-    }
-
     QAicEvent *event = nullptr;
     status = qaicCreateEvent(context_, &event,
                                       QAIC_EVENT_DEVICE_COMPLETE);
@@ -182,13 +167,14 @@ QStatus ActivationSet::init(uint32_t setSize) {
     }
     eventExecSet_.push_back(event);
   }
+
   return QS_SUCCESS;
 }
 
 QStatus ActivationSet::setData(std::vector<std::vector<QBuffer>> &buffers) {
   QStatus status = QS_SUCCESS;
   int i = 0;
-  if (!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable")) {
+  if (std::getenv("QAIC_BYPASS_PPP")) {
     // no setdata is required when using dma buf path
 
     std::cerr << "no setdata is required when using dma buf path" << std::endl;
@@ -525,7 +511,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
       ioDescQData.data = nullptr;
       ioDescQData.size = 0;
     }
-    #if 0
+    #if 1
     {
       google::protobuf::util::JsonPrintOptions jsonPrintOption;
       jsonPrintOption.add_whitespace = true;
@@ -541,7 +527,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
     #endif
     uint32_t numBuffers = ioDescProto.selected_set().bindings().size();
-    if (!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable")) {
+    if (std::getenv("QAIC_BYPASS_PPP")) {
       numBuffers = ioDescProto.dma_buf_size();
       ioDescQData.data = nullptr;
     }
@@ -563,7 +549,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
     }
   }
 
-  if (!(!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable"))) {
+  if (!std::getenv("QAIC_BYPASS_PPP")) {
     setData();
   }
 
@@ -575,14 +561,36 @@ QStatus QAicInfApi::createBuffers(int idx, aicapi::IoDesc& ioDescProto, std::sha
   inferenceBuffersList_.resize(inferenceBuffersList_.size() + 1);
 
   inferenceBuffersList_[idx].resize(setSize_);
-  if (!strcmp(std::getenv("QAIC_BYPASS_PPP"),"enable")) {
+  if (std::getenv("QAIC_BYPASS_PPP")) {
     for (uint32_t y = 0; y < setSize_; y++) {
       
       QBuffer* dmaBuffVect = shActivation->getDmaBuffers(y);
-
-      for (uint32_t i = 0; i < shActivation->getNumBuffers(); i++) {
-        inferenceBuffersList_[idx][y].push_back(dmaBuffVect[i]);
+      aicapi::IoSet ioSet;
+      for (int i = 0; i < ioDescProto.io_sets_size(); i++) {
+        if (ioDescProto.io_sets(i).name().compare("dma") == 0) {
+          ioSet = ioDescProto.io_sets(i);
+          break;
+        }
       }
+
+      uint32_t outBufIndex = 0;
+      for (uint32_t i = 0; i < (uint32_t)ioSet.bindings_size(); i++) {
+        if (ioSet.bindings(i).dir() == aicapi::BUFFER_IO_TYPE_INPUT) {
+          outBufIndex++;
+        }
+        QBuffer qbuf = { 0, nullptr, 0, 0, QBUFFER_TYPE_HEAP };
+        auto dmaInfo = ioSet.bindings(i).dma_buf_info(0);
+        if ((dmaInfo.dma_offset() + dmaInfo.dma_size()) >
+                dmaBuffVect[dmaInfo.dma_buf_index()].size) {
+          std::cerr << "failed to prepare buffer" << std::endl;
+          return QS_ERROR;
+        }
+        qbuf.buf = dmaBuffVect[dmaInfo.dma_buf_index()].buf + dmaInfo.dma_offset();
+        qbuf.size = dmaInfo.dma_size();
+        inferenceBuffersList_[idx][y].push_back(qbuf);
+      }
+      // idealy we need to call it once only
+      shActivation->setOutBufIndex(outBufIndex);
     }
     return QS_SUCCESS;
   }
@@ -669,15 +677,7 @@ QStatus QAicInfApi::run(uint32_t activation,
 
   return status;
 }
-/*QStatus qaicExecObjGetIoBuffers(const QAicExecObj *execObj,
-                                uint32_t *numBuffers, QBuffer **buffers) {
-  if ((execObj == nullptr) || (execObj->shExecObj == nullptr) ||
-      (numBuffers == nullptr) || (buffers == nullptr)) {
-  //  LogErrorG("Invalid null pointer");
-    return QS_INVAL;
-  }
-  return execObj->shExecObj->getIoBuffers(*numBuffers, *buffers);
-}*/
+
 
 QStatus QAicInfApi::deinit() {
   QStatus status;

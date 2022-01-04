@@ -103,8 +103,7 @@ RUN echo "vfull" | ck detect soft:dataset.imagenet.val \
   --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" \
   --extra_tags=ilsvrc2012,full
 RUN ck install package \
-  --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full \
-  --extra_tags=validation
+  --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full,validation
 
 ###############################################################################
 # FINAL STAGE

@@ -41,7 +41,7 @@
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
-FROM krai/centos7 AS preamble
+FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -56,7 +56,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS builder
+FROM preamble AS builder
 # Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT=main
@@ -78,7 +78,7 @@ RUN if [[ "${IMAGENET}" == "full" ]]; \
   then \
     echo "vfull" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
     --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" && \
-    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full --extra_tags=validation --quiet; \
+    ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full,validation --quiet; \
   else \
     ck install package --tags=dataset,imagenet,val,min --no_tags=resized --quiet&&  \
     ck install package --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224 --extra_tags=full,validation --quiet; \

@@ -33,59 +33,45 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-FROM centos:7.9.2009 AS preamble
-
-ARG GCC_MAJOR_VER=11
-ARG PYTHON_VER=3.8.12
-
-ARG GROUP_ID=1500
-ARG USER_ID=2000
-
-# Use the US timezone by default.
-ARG TIMEZONE=US/Central
-RUN rm -rf /etc/localtime \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && ls -la /etc/localtime
+FROM krai/base.centos7:latest AS preamble
+ARG GROUP_ID
+ARG USER_ID
 
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
-# Use the Bash shell.
-SHELL ["/bin/bash", "-c"]
+###############################################################################
+### BUILDER STAGE
+###############################################################################
+FROM preamble AS builder
 
-# Allow stepping into the Bash shell interactively.
-ENTRYPOINT ["/bin/bash", "-c"]
-
-RUN echo "min=1" >> /etc/yum.conf \
- && echo "timeout=1200" >> /etc/yum.conf
-
-RUN yum update -y \
- && update-ca-trust force-enable \
- && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools lm_sensors acl \
- && yum clean all
-
-# NB: Must be two separate calls to yum install.
-RUN yum install -y centos-release-scl \
- && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
-# Install Python >= 3.7.
 RUN mkdir -p /tmp
-RUN cd /tmp \
- && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
- && tar xzf Python-${PYTHON_VER}.tgz \
- && rm Python-${PYTHON_VER}.tgz \
- && cd Python-${PYTHON_VER} \
- && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations --enable-shared && make altinstall" \
- && cd /tmp \
- && rm -rf Python-${PYTHON_VER}*
 
-# Start IPMI tool.
-RUN sudo systemctl enable ipmi.service
+COPY tmp/qaic-*.zip /tmp/
+WORKDIR /tmp
+RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
+&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
 
-ENV PATH "/usr/local/bin:${PATH}"
+###############################################################################
+### FINAL STAGE
+###############################################################################
+FROM preamble AS final
+ARG GROUP_ID
+ARG USER_ID
+
+COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
+
+ENV LD_LIBRARY_PATH="/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}" \
+    LOGS_PATH="/opt/qti-aic/logs"
 
 # Create a non-root user with a fixed group id and a fixed user id.
 RUN groupadd -g ${GROUP_ID} kraig
 RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
 RUN echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN mkdir -p ${LOGS_PATH} && \
+    chgrp kraig ${LOGS_PATH} && \
+    chmod g+ws ${LOGS_PATH} && \
+    setfacl -R -d -m group:kraig:rw ${LOGS_PATH}
 
 USER krai:kraig
 WORKDIR /home/krai
@@ -100,6 +86,7 @@ ENV CK_ROOT=/home/krai/CK \
     GIT_USER="krai" \
     GIT_EMAIL="info@krai.ai" \
     LANG=C.UTF-8
+
 RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

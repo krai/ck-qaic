@@ -92,7 +92,7 @@ Program::Program() {
 #endif
     unsigned coreid = OFFSET+ AFFINITY_CARD(d);
     CPU_SET(coreid, &cpuset);
-    CPU_SET(coreid+1, &cpuset);
+    CPU_SET(coreid + 1, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
@@ -151,7 +151,8 @@ Program::Program() {
   scheduler = std::thread(QueueScheduler);
 
 #ifdef __amd64__
-    num_setup_threads = 192;
+    num_setup_threads = settings->qaic_device_count *  
+      settings->qaic_activation_count *  settings->qaic_set_size;
 #else
     num_setup_threads = 2;
 #endif
@@ -167,7 +168,7 @@ Program::Program() {
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     int card_num = i%settings->qaic_device_count;
-    int coreid = AFFINITY_CARD(card_num)+i/settings->qaic_device_count;
+    int coreid = AFFINITY_CARD(card_num)+(i/settings->qaic_device_count)%2;
     CPU_SET(coreid, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
@@ -453,8 +454,9 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
 void SystemUnderTestQAIC::IssueQuery(
     const std::vector<mlperf::QuerySample> &samples) {
 
-  if (scenario == mlperf::TestScenario::SingleStream ||
-      scenario == mlperf::TestScenario::Offline) {
+    if (scenario == mlperf::TestScenario::SingleStream ||
+        scenario == mlperf::TestScenario::MultiStream ||
+        scenario == mlperf::TestScenario::Offline) {
 
     ++query_counter;
     auto vl = prg->settings->verbosity_level;

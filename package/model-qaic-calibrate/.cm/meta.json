@@ -8,6 +8,7 @@
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1"
     },
+    "version": "2.0",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "package_name": "Profile for QAIC model",
@@ -224,7 +225,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -compiler-args='-profiling-backend=CPU -cpu-memory=8000000'",
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -profiling-threads=8 -compiler-args='-cpu-memory=8000000'",
         "_MODEL_TO_CONVERT": "calibrate_resnet50_tf",
         "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
       },
@@ -244,7 +245,7 @@
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_NODE_PRECISION_FILE_PATH": "ssd-resnet34/node-precision.yaml",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -node-precision-info=[NODE_PRECISION_FILE]",
+        "_COMPILER_PARAMS": "-enable-channelwise -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -profiling-backend=Interpreter -profiling-threads=5 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
@@ -262,7 +263,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -num-histogram-bins=512",
+        "_COMPILER_PARAMS": "-quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -profiling-threads=8 -num-histogram-bins=512",
         "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
       },
       "extra_tags": [

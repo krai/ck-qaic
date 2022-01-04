@@ -512,7 +512,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
       ioDescQData.data = nullptr;
       ioDescQData.size = 0;
     }
-    #if 0
+    #if 1
     {
       google::protobuf::util::JsonPrintOptions jsonPrintOption;
       jsonPrintOption.add_whitespace = true;
