@@ -214,14 +214,6 @@
         "record_tags": "target_qps.<<<offline_target_qps>>>",
         "record_uoa_parts": "target_qps.<<<offline_target_qps>>>"
       },
-      "range_singlestream": {
-        "activation_count": "1",
-        "batch_size": "1",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
-        "input_select": "0",
-        "model_suffix": "singlestream",
-        "performance_mode_extension": "-max_query_count.<<<max_query_count>>>"
-      },
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
@@ -233,6 +225,7 @@
       },
       "singlestream": {
         "activation_count": "1",
+        "device_ids": "0",
         "batch_size": "1",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
@@ -303,6 +296,8 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "g292_default_config": "-DG292_CONFA",
+        "power_server_ip": "10.222.147.109",
+        "power_server_port": "4953",
         "recommended_input_select": "0"
       },
       "r282_z93_q1": {
@@ -317,9 +312,7 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.147.109",
-        "power_server_port": "4953"
+        ]
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
