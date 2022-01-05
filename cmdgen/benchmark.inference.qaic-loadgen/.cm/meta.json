@@ -159,11 +159,11 @@
         "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"
       }
     },
-    "power": {
+    "power2": {
       "###": {},
       "yes": {
-        "_power_log_helper": "mkdir -p <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\" && cp <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/../mlperf_log_* <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/",
-        "power_command_args": [
+        "_power_log_helper2": "mkdir -p <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\" && cp <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/../mlperf_log_* <<<?escape_char>>>\"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/",
+        "power_command_args2": [
           "ck",
           "benchmark",
           "--env.CK_MLPERF_POWER_CLIENT_ADDRESS=<<<power_server_ip>>>",
@@ -177,9 +177,32 @@
           "--tags=<<<record_tags,>>>,power.client",
           "program:mlperf-power-client"
         ],
+        "record_tags_inner2": "<<<record_tags,>>>,power.workload",
+        "record_uoa2": "<<<record_uoa_parts->>>-power.workload",
+        "wrapped_ck_benchmark_program2": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\";_cmd=<<<?escape_char>>>\"$(printf <<<?escape_char>>><<<?escape_char>>>\"%s<<<?escape_char>>>\\n<<<?escape_char>>><<<?escape_char>>>\" <<<?escape_char>>><<<?escape_char>>>\"$_cmd<<<?escape_char>>><<<?escape_char>>>\" | sed <<<?escape_char>>><<<?escape_char>>>\"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/<<<?escape_char>>><<<?escape_char>>>\" )<<<?escape_char>>>\"; <<<power_command_args >>> ; fi<<<?double_quote>>>"
+      }
+    },
+ "power": {
+      "###": {},
+      "yes": {
+        "_power_log_helper": "mkdir -p <<<?escape_char>>>\"<<<?escape_char>>>$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\" && cp <<<?escape_char>>>\"<<<?escape_char>>>$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/../mlperf_log_* <<<?escape_char>>>\"<<<?escape_char>>>$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS<<<?escape_char>>>\"/",
+        "power_command_args": [
+          "ck",
+          "benchmark",
+          "--env.CK_MLPERF_POWER_CLIENT_ADDRESS=<<<power_server_ip>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_PORT=<<<power_server_port>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS=<<<?escape_char>>>\"<<<?escape_char>>>$(ck find program:<<<program_name>>>)<<<?escape_char>>>\"/tmp/loadgen_logs",
+          "--env.CK_MLPERF_POWER_CLIENT_WORKLOAD=<<<?escape_char>>>\\\"<<<?escape_char>>>\\\"<<<?escape_char>>>\"<<<?escape_char>>>$_cmd<<<?escape_char>>>\"",
+          "--record",
+          "--record_repo=local",
+          "--repetitions=1",
+          "--record_uoa=<<<record_uoa_parts->>>-power.client",
+          "--tags=<<<record_tags,>>>,power.client",
+          "program:mlperf-power-client"
+        ],
         "record_tags_inner": "<<<record_tags,>>>,power.workload",
         "record_uoa": "<<<record_uoa_parts->>>-power.workload",
-        "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\";_cmd=<<<?escape_char>>>\"$(printf <<<?escape_char>>><<<?escape_char>>>\"%s<<<?escape_char>>>\\n<<<?escape_char>>><<<?escape_char>>>\" <<<?escape_char>>><<<?escape_char>>>\"$_cmd<<<?escape_char>>><<<?escape_char>>>\" | sed <<<?escape_char>>><<<?escape_char>>>\"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/<<<?escape_char>>><<<?escape_char>>>\" )<<<?escape_char>>>\"; <<<power_command_args >>> ; fi<<<?double_quote>>>"
+        "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\"; _cmd=<<<?escape_char>>>\"'<<<?escape_char>>>$(echo <<<?escape_char>>>$_cmd | sed 's/\\x27/\\x27<<<?escape_char>>>\\<<<?escape_char>>>\\\\x27\\x27/g')'<<<?escape_char>>>\"; <<<power_command_args >>> ; <<<?check_param_container_end>>> fi<<<?double_quote>>>"
       }
     },
     "power_mode": {
