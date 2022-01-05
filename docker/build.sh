@@ -37,6 +37,10 @@ if [[ $# < 1 ]]; then
   exit 1;
 fi
 
+function exit_if_error() {
+    if [ "${?}" != "0" ]; then exit 1; fi
+}
+
 MODEL=$1
 
 echo "Building the Docker image for '${MODEL}' ..."
@@ -94,11 +98,13 @@ fi
 if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
   echo 'Building sdk base';
   cd $(ck find ck-qaic:docker:base) && SDK_VER=${_SDK_VER} ./build.qaic.sh
+  exit_if_error
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   echo "Building base CK image for ${MODEL}";
   cd $(ck find ck-qaic:docker:base) && IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
+  exit_if_error
 fi
 
 read -d '' CMD <<END_OF_CMD
@@ -119,6 +125,7 @@ echo "Running: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then
   eval ${CMD}
 fi
+exit_if_error
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
   if [[ "$(docker images -q ${DOCKER_IMAGE_NAME}:${_SDK_VER}_PC 2> /dev/null)" == "" ]]; then
