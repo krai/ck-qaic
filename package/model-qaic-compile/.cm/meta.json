@@ -515,7 +515,7 @@
       "extra_env": {
         "_BATCH_SIZE": "0",
         "_MODEL_TO_CONVERT": "compile_bert_99",
-        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -execute-nodes-in-fp16=Mul,Div,Add,Softmax,Sub,Gather,Erf,LayerNormalization",
         "_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma'",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-buffer-dealloc-delay=1'",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
@@ -578,7 +578,7 @@
     "bert-99.pcie.16nsp.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
     "bert-99.pcie.16nsp.multistream": {
