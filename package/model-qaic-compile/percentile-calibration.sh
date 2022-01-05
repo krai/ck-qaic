@@ -36,7 +36,7 @@ function exit_if_error() {
 }
 function get_cmdgen_program_name() {
   bmodel=$1
-  if [[ "$bmodel" == "bert" ]]; then echo "benchmark.packed-bert.qaic-loadgen"; 
+  if [[ "$bmodel" == "bert-99" ]]; then echo "benchmark.packed-bert.qaic-loadgen"; 
     elif [[ "$bmodel" == "ssd_resnet34" ]]; then echo "benchmark.object-detection.qaic-loadgen"; 
     elif [[ "$bmodel" == "ssd_mobilenet" ]]; then echo "benchmark.object-detection.qaic-loadgen"; 
     elif [[ "$bmodel" == "resnet50" ]]; then echo "benchmark.image-classification.qaic-loadgen"; 
@@ -57,8 +57,12 @@ bmodel=$1
 model=$2
 if [ "$#" == 3 ]; then sdk=$3; else sdk=1.5.9; fi
 cprogram=$(get_cmdgen_program_name $bmodel)
+if [[ $cprogram == "" ]]; then
+  echo "Program for $bmodel not found";
+  exit -1;
+fi
 accuracy_metric=$(get_accuracy_metric $bmodel)
-for i in {70..99..1}
+for i in {80..99..1}
 do
   pcv="99"$i
   install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv --quiet >/dev/null 2>&1"
