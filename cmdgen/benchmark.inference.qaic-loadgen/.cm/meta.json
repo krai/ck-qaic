@@ -208,11 +208,11 @@
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<target_qps>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>>",
         "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": "",
-        "record_tags": "target_qps.<<<target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<target_qps>>>"
+        "record_tags": "target_qps.<<<offline_target_qps>>>",
+        "record_uoa_parts": "target_qps.<<<offline_target_qps>>>"
       },
       "range_singlestream": {
         "activation_count": "1",
@@ -225,11 +225,11 @@
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_or_offline_qps>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
         "input_select": "0",
         "performance_mode_extension": "",
-        "record_tags": "target_qps.<<<server_or_offline_qps>>>",
-        "record_uoa_parts": "target_qps.<<<server_or_offline_qps>>>"
+        "record_tags": "target_qps.<<<server_target_qps>>>",
+        "record_uoa_parts": "target_qps.<<<server_target_qps>>>"
       },
       "singlestream": {
         "activation_count": "1",
@@ -250,11 +250,6 @@
         "inference_engine_backend": "aic100",
         "inference_engine_version": "v###",
         "library": "qaic-v###-aic100"
-      }
-    },
-    "server_target_qps": {
-      "###": {
-        "server_or_offline_qps": "###"
       }
     },
     "sut": {
@@ -452,7 +447,8 @@
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "separator": ";",
-    "server_or_offline_qps": "<<<target_qps>>>",
+    "server_target_qps": "<<<target_qps>>>",
+    "offline_target_qps": "<<<target_qps>>>",
     "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
     "shared_group_name": "qaic",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
