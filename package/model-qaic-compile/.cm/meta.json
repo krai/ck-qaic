@@ -2,6 +2,7 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
+      "_COMPILER_ARGS_NAME_PREFIX": "",
       "MODEL_NAME": "converted_model",
       "PACKAGE_VERSION": "1",
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
@@ -200,7 +201,6 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "ML_MODEL_MODEL_NAME": "resnet50",
-        "_COMPILER_ARGS_NAME_PREFIX": "",
         "_MODEL_TO_CONVERT": "compile_resnet50_tf",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -aic-num-of-instances=1 -use-producer-dma=0  -aic-device-id=0 -output-node-name=ArgMax -compile-only",
         "_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4 -aic-max-outchannel-split=1,4 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0'",
