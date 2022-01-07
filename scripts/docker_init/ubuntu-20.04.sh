@@ -1,5 +1,5 @@
 #!/bin/bash
-#Usage: WORKSPACE=/local/mnt/workspace ./ubuntu-20.04.sh
+#Usage: WORKSPACE=/local/mnt/workspace bash ubuntu-20.04.sh
 WORKSPACE=${WORKSPACE:-$HOME/MLC2.0}
 sudo apt upgrade -y
 sudo apt install -y \
