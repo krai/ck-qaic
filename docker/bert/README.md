@@ -50,16 +50,12 @@ $(ck find repo:ck-qaic)/docker/build_ck.sh bert
 
 
 ## Load the container
-```
-CONTAINER_ID=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none \ 
---sdk=1.6.80 --model_name=bert`
-```
-To see experiments outside of container (--experiment_dir):
 
 ```
-CONTAINER_ID=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none \ 
+CONTAINER_ID=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none \
 --sdk=1.5.9 --model_name=bert --experiment_dir`
 ```
+To see experiments outside of container (--experiment_dir)
 
 ## Quick Accuracy Check
 
