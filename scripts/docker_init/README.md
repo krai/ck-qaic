@@ -7,4 +7,4 @@
 
 ## Create and Launch the Benchmark docker Containers
 
-1. [https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md](Bert-99 and Bert-99.9)
+1. [Bert-99 and Bert-99.9](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
