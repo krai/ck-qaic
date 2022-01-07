@@ -25,5 +25,3 @@ sudo service docker start
 docker system info
 
 sudo usermod -aG qaic,docker,sudo $USER
-
-bash ck_init.sh
