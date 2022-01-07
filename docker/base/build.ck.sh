@@ -34,7 +34,7 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
-if [[ "$(docker images -q krai/base.${DOCKER_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
 fi
 
