@@ -8,6 +8,7 @@ SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qai
 ```
 
 ### With Exploration of Percentile Calibration Values 
+Only needed to do if we need a higher accuracy value
 
 ```
 CK_QAIC_PERCENTILE_CALIBRATION=yes SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qaic)/docker/build.sh bert
