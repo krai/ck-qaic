@@ -140,12 +140,12 @@ When `--docker=container_only` or `--docker` are set the following optional para
 
 `--docker_experiment_dir_default`  - `/home/krai/CK_REPOS/local/experiment` by default
 
-` --experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
+`--experiment_dir_default`  - `${CK_EXPERIMENT_DIR}` by default
  
 `--docker_image`   - `krai/mlperf.<model_name>.centos7:<sdk>` by default
 
 `<model_name>` - `bert`      
 
-`<sdk>` - for example, `1.5.9`
+`<sdk>` - for example, `1.6.80`
 
 `--shared_group_name` - `qaic` by default
