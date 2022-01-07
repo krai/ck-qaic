@@ -21,7 +21,7 @@ CK_QAIC_PERCENTILE_CALIBRATION=yes SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/m
 - `SDK_VER=1.6.80`
 - `SDK_DIR=/local/mnt/workspace/mlcommons/sdks`
 - `CK_QAIC_CHECKOUT=main`
-- `DEBUG_BUILD=no`
+- `DEBUG_BUILD=no` (if we need to recompile model binary in the docker container) 
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
 - `CK_QAIC_PCV=9985`
 - `CLEAN_MODEL_BASE=yes`
