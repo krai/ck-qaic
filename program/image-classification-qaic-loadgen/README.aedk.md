@@ -12,11 +12,11 @@ python3 -m pip install ck==2.6.1
 ### All-in-one, no power (6 experiments per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.closed --group.edge \
+--sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --group.closed \
 --dataset_size=50000 --target_qps=9696 --target_latency=1
 ```
 <details>
-Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the following modes and scenarios required for the Closed division under the Edge category:
+Specifying <tt>--group.edge --group.closed</tt> runs the benchmark in the following modes required for the Closed division and scenarios required under the Edge category:
 <ul>
 <li>Accuracy with the given <tt>--dataset_size</tt> for the Offline and Single Stream scenarios.</li>
 <li>Performance with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario.</li>
