@@ -9,7 +9,7 @@ python3 -m pip install ck==2.6.1
 ## AEDK @ 20W TDP
 
 <a name="aedk_20w_all-in-one"></a>
-### All-in-one, no power (12 experiments)
+### All-in-one, no power (6 experiments per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.closed --group.edge \
@@ -25,7 +25,7 @@ Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the follow
 </details>
 
 <a name="aedk_20w_accuracy"></a>
-### Accuracy (2 experiments)
+### Accuracy (1 experiment per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=accuracy \
@@ -36,7 +36,7 @@ Specifying <tt>--group.edge --mode=accuracy</tt> runs the benchmark in the Accur
 </details>
 
 <a name="aedk_20w_performance"></a>
-### Performance
+### Performance (1 experiment per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=performance \
@@ -47,7 +47,7 @@ Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Pe
 </details>
 
 <a name="aedk_20w_power"></a>
-### Power (2 experiments, with 2 CK entries each)
+### Power (1 experiment per scenario, with 2 CK entries each)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=performance \
@@ -60,11 +60,10 @@ Power consumption gets measured as per the [MLPerf Power rules](https://github.c
 </details>
 
 <a name="aedk_20w_compliance"></a>
-### Compliance (8 experiments)
+### Compliance (4 experiments per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge \
---compliance,=TEST04-A,TEST04-B,TEST05,TEST01 \
+--sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --compliance,=TEST04-A,TEST04-B,TEST05,TEST01 \
 --target_qps=9696 --target_latency=1
 ```
 <details>
