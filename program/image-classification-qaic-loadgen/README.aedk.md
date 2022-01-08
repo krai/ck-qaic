@@ -1,3 +1,6 @@
+:toc:
+:toclevels: 2
+
 # Qualcomm Cloud AI - MLPerf Inference - Image Classification
 
 **NB:** The `--group.*` commands are only supported with CK &leq; v1.17.0 or &geq; v2.6.0 e.g.:
@@ -25,8 +28,7 @@ Specifying <tt>--group.edge --group.closed</tt> runs the benchmark in the follow
 </details>
 
 <a name="aedk_20w_all-in-one_power"></a>
-#### All-in-one with Power (8 CK experiment entries per scenario)
-
+#### With Power (8 CK entries per scenario)
 To measure power consumption as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc), specify additional flags e.g.:
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
@@ -58,10 +60,8 @@ Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Pe
 </details>
 
 <a name="aedk_20w_performance_power"></a>
-#### Performance with Power (1 experiment per scenario, with 2 CK entries each)
-
+#### With Power (2 CK entries per scenario)
 To measure power consumption as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc), specify additional flags e.g.:
-
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=performance \
