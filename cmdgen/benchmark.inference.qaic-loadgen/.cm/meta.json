@@ -208,7 +208,7 @@
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
         "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": "",
         "record_tags": "target_qps.<<<offline_target_qps>>>",
