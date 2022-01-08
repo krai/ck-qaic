@@ -3,7 +3,7 @@
 
 # Qualcomm Cloud AI - MLPerf Inference - Image Classification
 
-**NB:** The `--group.*` commands are only supported with CK &leq; v1.17.0 or &geq; v2.6.0 e.g.:
+**NB:** The `--group.*` commands are only supported with CK &geq; v2.6.0 e.g.:
 ```
 python3 -m pip install ck==2.6.1
 ```
