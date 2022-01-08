@@ -9,7 +9,7 @@ python3 -m pip install ck==2.6.1
 ## AEDK @ 20W TDP
 
 <a name="aedk_20w_all-in-one"></a>
-### All-in-one, no power (6 experiments per scenario)
+### All-in-one (6 experiments per scenario)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --group.closed \
@@ -23,6 +23,17 @@ Specifying <tt>--group.edge --group.closed</tt> runs the benchmark in the follow
 <li>Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario.</li>
 </ul>
 </details>
+
+<a name="aedk_20w_all-in-one_power"></a>
+#### All-in-one with Power (8 CK experiment entries per scenario)
+
+To measure power consumption as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc), specify additional flags e.g.:
+```
+time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --group.closed \
+--dataset_size=50000 --target_qps=9696 --target_latency=1 \
+--power=yes --power_server_ip=192.168.0.3 --power_server_port=4949 --sleep_before_ck_benchmark_sec=30
+```
 
 <a name="aedk_20w_accuracy"></a>
 ### Accuracy (1 experiment per scenario)
@@ -46,18 +57,17 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario required under the Edge category.
 </details>
 
-<a name="aedk_20w_power"></a>
-### Power (1 experiment per scenario, with 2 CK entries each)
+<a name="aedk_20w_performance_power"></a>
+#### Performance with Power (1 experiment per scenario, with 2 CK entries each)
+
+To measure power consumption as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc), specify additional flags e.g.:
+
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=performance \
 --target_qps=9696 --target_latency=1 --sleep_before_ck_benchmark_sec=30 \
 --power=yes --power_server_ip=192.168.0.3 --power_server_port=4949
 ```
-<details>
-Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario required under the Edge category.
-Power consumption gets measured as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc).
-</details>
 
 <a name="aedk_20w_compliance"></a>
 ### Compliance (4 experiments per scenario)
