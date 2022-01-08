@@ -28,7 +28,7 @@ Specifying <tt>--group.edge --group.closed</tt> runs the benchmark in the follow
 </details>
 
 <a name="aedk_20w_all-in-one_power"></a>
-#### With Power (8 CK entries per scenario)
+#### With Power (7 CK entries per scenario)
 To measure power consumption as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc), specify additional flags e.g.:
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
