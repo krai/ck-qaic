@@ -9,7 +9,7 @@ python3 -m pip install ck==2.6.1
 ## AEDK @ 20W TDP
 
 <a name="aedk_20w_all-in-one"></a>
-### All-in-one (12 experiments)
+### All-in-one, no power (12 experiments)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.closed --group.edge \
@@ -18,9 +18,9 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 <details>
 Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the following modes and scenarios required for the Closed division under the Edge category:
 <ul>
-<li>Accuracy with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios.</li>
-<li>Performance with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.</li>
-<li>Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.</li>
+<li>Accuracy with the given <tt>--dataset_size</tt> for the Offline and Single Stream scenarios.</li>
+<li>Performance with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario.</li>
+<li>Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario.</li>
 </ul>
 </details>
 
@@ -32,7 +32,7 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --dataset_size=50000 --target_qps=9696 
 ```
 <details>
-Specifying <tt>--group.edge --mode=accuracy</tt> runs the benchmark in the Accuracy mode with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios required under the Edge category.
+Specifying <tt>--group.edge --mode=accuracy</tt> runs the benchmark in the Accuracy mode with the given <tt>--dataset_size</tt> for the Offline and Single Stream scenarios required under the Edge category.
 </details>
 
 <a name="aedk_20w_performance"></a>
@@ -43,11 +43,11 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --target_qps=9696 --target_latency=1
 ```
 <details>
-Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario required under the Edge category.
+Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario required under the Edge category.
 </details>
 
 <a name="aedk_20w_power"></a>
-### Power (2 experiments, 2 CK entries each)
+### Power (2 experiments, with 2 CK entries each)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=performance \
@@ -55,8 +55,7 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --power=yes --power_server_ip=192.168.0.3 --power_server_port=4949
 ```
 <details>
-Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario required under the Edge category.
-
+Specifying <tt>--group.edge --mode=performance</tt> runs the benchmark in the Performance mode with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario required under the Edge category.
 Power consumption gets measured as per the [MLPerf Power rules](https://github.com/krai/inference_policies/blob/krai-power-v2.0/power_measurement.adoc).
 </details>
 
@@ -69,7 +68,7 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --target_qps=9696 --target_latency=1
 ```
 <details>
-Specifying <tt>--group.edge --compliance,=</tt> runs the given Compliance tests for the benchmark with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.
+Specifying <tt>--group.edge --compliance,=</tt> runs the given Compliance tests required for the Closed division with the given <tt>--target_qps</tt> for the Offline scenario and <tt>--target_latency</tt> for the Single Stream scenario required under the Edge category.
 </details>
  
 ## Details
