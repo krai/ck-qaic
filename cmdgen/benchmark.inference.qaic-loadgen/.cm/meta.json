@@ -290,13 +290,12 @@
           "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_default_config>>>"
+          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>"
         ],
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "g292_default_config": "-DG292_CONFA",
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953",
         "recommended_input_select": "0"
@@ -404,6 +403,7 @@
     "docker_mode": "--privileged ",
     "docker_user": "--user=krai:kraig ",
     "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
+    "g292_config": "-DG292_CONFA",
     "hyphenated_model_name": "<<<model_name>>>",
     "ipmitool_mc_info_cmd_part": "sudo ipmitool mc info > <<<logs_dir>>>",
     "ipmitool_fru_print_cmd_part": "sudo ipmitool fru print > <<<logs_dir>>>",
