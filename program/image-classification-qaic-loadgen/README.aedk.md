@@ -9,7 +9,7 @@ python3 -m pip install ck==2.6.1
 ## AEDK @ 20W TDP
 
 <a name="aedk_20w_all-in-one"></a>
-### All-in-one
+### All-in-one, no power (12 experiments)
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.closed --group.edge \
@@ -26,12 +26,14 @@ Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the follow
 
 <a name="aedk_20w_accuracy"></a>
 ### Accuracy
-
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge \
 --mode=accuracy --dataset_size=50000 --target_qps=9696 
 ```
+<details>
+Specifying <tt>--group.edge --mode=accuracy</tt> runs the benchmark in the Accuracy mode with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios required under the Edge category.
+</details>
 
 <a name="aedk_20w_performance"></a>
 ### Performance
