@@ -10,18 +10,18 @@ python3 -m pip install ck==2.6.1
 
 <a name="aedk_20w_all-in-one"></a>
 ### All-in-one
-
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.closed --group.edge \
 --dataset_size=50000 --target_qps=9696 --target_latency=1
 ```
-
 <details>
 Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the following modes and scenarios required for the Closed division under the Edge category:
-- Accuracy with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios.
-- Performance with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.
-- Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.
+<ul>
+<li>Accuracy with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios.</li>
+<li>Performance with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.</li>
+<li>Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.</li>
+</ul>
 </details>
 
 <a name="aedk_20w_accuracy"></a>
