@@ -1,5 +1,10 @@
 # Qualcomm Cloud AI - MLPerf Inference - Image Classification
 
+**NB:** The `--group.*` commands are only supported with CK &leq; v1.17.0 or &geq; v2.6.0 e.g.:
+```
+python3 -m pip install ck==2.6.1
+```
+
 <a name="aedk_20w"></a>
 ## AEDK @ 20W TDP
 
@@ -13,15 +18,10 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 ```
 
 <details>
-Specifying `--group.closed --group.edge` runs the benchmark in the following modes and scenarios required for the Closed division under the Edge category:
-- Accuracy with the given `--dataset_size` for the Single Stream and Offline scenarios.
-- Performance with the given `--target_latency` for the Single Stream scenario and `--target_qps` for the Offline scenario.
-- Compliance tests (TEST01, TEST04-A/B, TEST05) with the given `--target_latency` for the Single Stream scenario and `--target_qps` for the Offline scenario.
-
-**NB:** This mode is supported only with CK &leq; v1.17.0 or &geq; v2.6.0:
-<pre>
-python3 -m pip install ck==2.6.1
-</pre>
+Specifying <tt>--group.closed --group.edge</tt> runs the benchmark in the following modes and scenarios required for the Closed division under the Edge category:
+- Accuracy with the given <tt>--dataset_size</tt> for the Single Stream and Offline scenarios.
+- Performance with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.
+- Compliance tests (TEST01, TEST04-A/B, TEST05) with the given <tt>--target_latency</tt> for the Single Stream scenario and <tt>--target_qps</tt> for the Offline scenario.
 </details>
 
 <a name="aedk_20w_accuracy"></a>
