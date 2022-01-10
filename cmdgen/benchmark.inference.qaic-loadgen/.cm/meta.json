@@ -430,7 +430,7 @@
     },
     "ipmitool_all": {
       "yes": {
-        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_cmd_def2>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_cmd_def2>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
       }
     },
     "pre_ipmitool_set_fan_raw": {
