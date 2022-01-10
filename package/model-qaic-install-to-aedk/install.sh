@@ -106,7 +106,7 @@ if [ -z ${source_path} ]; then
   exit 1;
 fi
 
-ck_detect="ck detect soft:model.qaic --full_path=\"${dest_path}/network.elf\" --extra_tags=\"${my_tags}\" ${env}"
+ck_detect="ck detect soft:model.qaic --full_path=\"${dest_path}/programqpc.bin\" --extra_tags=\"${my_tags}\" ${env}"
 echo ${ck_detect}
 
 for i in $(seq 1 ${#ips[@]}); do
