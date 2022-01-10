@@ -298,7 +298,9 @@
         "g292_default_config": "-DG292_CONFA",
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953",
-        "recommended_input_select": "0"
+        "recommended_input_select": "0",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -312,7 +314,9 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ]
+        ],
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
@@ -329,7 +333,9 @@
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
-        "recommended_input_select": "0"
+        "recommended_input_select": "0",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -346,7 +352,9 @@
         ],
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
-        "recommended_input_select": "0"
+        "recommended_input_select": "0",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       }
     },
     "target_latency": {
@@ -422,17 +430,17 @@
     },
     "ipmitool_all": {
       "yes": {
-        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_cmd_def2>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_cmd_def2>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
       }
     },
     "pre_ipmitool_set_fan_raw": {
       "yes":{
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
       }
     },
     "post_ipmitool_set_fan_raw": {
       "yes":{
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
       }
     }
   },
