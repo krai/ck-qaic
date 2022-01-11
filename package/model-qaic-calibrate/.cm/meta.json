@@ -46,19 +46,19 @@
         ],
         "mlperf": [
           {
-            "_COCO_CAL": "calibrate_ssd_resnet34_no_nms_mlperf"
+            "_COCO_CAL": "calibrate_mlperf"
           }
         ],
-	"for.ssd_resnet34.onnx.preprocessed": [
+	     "for.ssd_resnet34.onnx.preprocessed": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
-	],
-	"for.ssd_mobilenet.onnx.preprocessed": [
+	     ],
+	     "for.ssd_mobilenet.onnx.preprocessed": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_mobilenet_no_nms_mlperf"
           }
-	]
+	     ]
       }
     },
     "imagenet-cal": {
@@ -239,6 +239,7 @@
         "package_name": "Profile for QAIC model (MLPerf SSD-ResNet34 No NMS)"
       },
       "extra_env": {
+        "_COCO_CAL": "calibrate_mlperf",
         "CK_CALIBRATE_COCO": "yes",
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
