@@ -46,7 +46,7 @@
         ],
         "mlperf": [
           {
-            "_COCO_CAL": "calibrate_ssd_resnet34_mlperf"
+            "_COCO_CAL": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
         ],
 	"for.ssd_resnet34.onnx.preprocessed": [
