@@ -160,7 +160,7 @@ Program::Program() {
   if (num_setup_threads > 512)
     num_setup_threads = 512;
 #else
-  num_setup_threads = 2;
+  num_setup_threads = settings->qaic_activation_count;
 #endif
 
   // std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
