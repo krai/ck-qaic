@@ -179,7 +179,7 @@
         ],
         "record_tags_inner": "<<<record_tags,>>>,power.workload",
         "record_uoa": "<<<record_uoa_parts->>>-power.workload",
-        "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\";_cmd=<<<?escape_char>>>\"$(printf <<<?escape_char>>><<<?escape_char>>>\"%s<<<?escape_char>>>\\n<<<?escape_char>>><<<?escape_char>>>\" <<<?escape_char>>><<<?escape_char>>>\"$_cmd<<<?escape_char>>><<<?escape_char>>>\" | sed <<<?escape_char>>><<<?escape_char>>>\"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/<<<?escape_char>>><<<?escape_char>>>\" )<<<?escape_char>>>\"; <<<power_command_args >>> ; fi<<<?double_quote>>>"
+        "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>>if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa_parts->>>-power.client<<<?escape_char>>>`<<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=<<<?escape_char>>>\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)<<<?escape_char>>>\";_cmd=<<<?escape_char>>>\"$(printf <<<?escape_char>>><<<?escape_char>>>\"%s<<<?escape_char>>>\\n<<<?escape_char>>><<<?escape_char>>>\" <<<?escape_char>>><<<?escape_char>>>\"$_cmd<<<?escape_char>>><<<?escape_char>>>\" | sed <<<?escape_char>>><<<?escape_char>>>\"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/<<<?escape_char>>><<<?escape_char>>>\" )<<<?escape_char>>>\"; <<<power_command_args >>> ; cp -r <<<logs_dir>>>*.log <<<docker_experiment_dir_default>>>/<<<record_uoa>>>; fi<<<?double_quote>>>"
       }
     },
     "power_mode": {
@@ -208,7 +208,7 @@
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
         "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": "",
         "record_tags": "target_qps.<<<offline_target_qps>>>",
@@ -300,7 +300,7 @@
         "power_server_port": "4953",
         "recommended_input_select": "0",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -316,7 +316,7 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
@@ -335,7 +335,7 @@
         "power_server_port": "4956",
         "recommended_input_select": "0",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -354,7 +354,7 @@
         "power_server_port": "4959",
         "recommended_input_select": "0",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       }
     },
     "target_latency": {
@@ -406,10 +406,18 @@
     "watch_sensors": {
       "yes": {
         "watch_sensors_cmd": "<<<watch_sensors_cmd_def>>>"
+      },
+      "###": {
+        "watch_sensors_sleep": "###",
+        "watch_sensors_cmd": "<<<watch_sensors_cmd_def>>>"
       }
     },
     "watch_ipmitool_get_sys_power": {
       "yes": {
+        "watch_ipmitool_get_sys_power_cmd": "<<<watch_ipmitool_get_sys_power_cmd_def>>>"
+      },
+      "###": {
+        "watch_ipmitool_get_sys_power_sleep": "###",
         "watch_ipmitool_get_sys_power_cmd": "<<<watch_ipmitool_get_sys_power_cmd_def>>>"
       }
     },
@@ -430,17 +438,19 @@
     },
     "ipmitool_all": {
       "yes": {
-        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
       }
     },
     "pre_ipmitool_set_fan_raw": {
-      "yes":{
+      "###":{
+        "pre_fan_raw": "###",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
       }
     },
     "post_ipmitool_set_fan_raw": {
-      "yes":{
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
+      "###":{
+        "post_fan_raw": "###",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
       }
     }
   },
@@ -479,7 +489,6 @@
     "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",
     "post_ipmitool_sdr_elist_full_cmd_def": "echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<post_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>post.config; ",
     "post_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'sleep 5' >> <<<logs_dir>>>post.config; <<<post_ipmitool_sdr_elist_full_cmd_def>>>",
-    "post_ipmitool_set_fan_raw_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF  > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'sleep 5' >> <<<logs_dir>>>post.config;",
     "pre_ipmitool_mc_info_log": "pre.ipmitool_mc_info.log",
     "pre_ipmitool_fru_print_log": "pre.ipmitool_fru_print.log",
     "pre_ipmitool_sdr_elist_full_log": "pre.ipmitool_sdr_elist_full.log",
@@ -523,7 +532,7 @@
     "watch_ipmitool_get_sys_power_log": "watch.ipmitool_get_sys_power.log",
     "watch_sensors_cmd_def": "<<<watch_cmd_begin>>> <<<watch_sensor_cmd_part>>><<<watch_sensor_log>>> <<<watch_cmd_separator>>><<<watch_sensor_log>>><<<separator>>><<<watch_sleep>>><<<watch_sensors_sleep>>><<<separator>>><<<watch_cmd_end>>>",
     "watch_ipmitool_get_sys_power_cmd_def": "<<<watch_cmd_begin>>><<<watch_ipmitool_get_sys_power_cmd_part>>><<<watch_ipmitool_get_sys_power_log>>> <<<watch_cmd_separator>>><<<watch_ipmitool_get_sys_power_log>>><<<separator>>><<<watch_sleep>>><<<watch_ipmitool_get_sys_power_sleep>>><<<separator>>><<<watch_cmd_end>>>",
-    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else rm -f /opt/qti-aic/logs/*; <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>><<<?watch_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?check_param_container_end>>> fi<<<?double_quote>>>",
+    "wrapped_ck_benchmark_program": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else rm -f /opt/qti-aic/logs/*; <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>><<<?watch_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; cp -r <<<logs_dir>>>*.log <<<docker_experiment_dir_default>>>/<<<record_uoa>>>; <<<?check_param_container_end>>> fi<<<?double_quote>>>",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
   "groups": {

@@ -9,6 +9,6 @@ if [ -e $cmdfile ]; then
     eval $cmd
   done < $cmdfile
 fi
-if [ -e $cmdfile ]; then
+if [ -e $cmdfile_watch ]; then
   cat $cmdfile_watch | xargs kill
 fi
