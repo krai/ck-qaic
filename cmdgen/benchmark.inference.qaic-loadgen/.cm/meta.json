@@ -256,6 +256,9 @@
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ],
+        "ck_env": [
+          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>"
+        ],
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
@@ -267,9 +270,13 @@
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
         ],
+        "ck_env": [
+          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>"
+        ],
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_threads_per_queue": "8",
+        "zero_copy": "disable"
       },
       "aedk_25w": {
         "all_device_ids": "0",
