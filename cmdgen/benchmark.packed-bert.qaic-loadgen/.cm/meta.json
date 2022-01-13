@@ -6,32 +6,32 @@
   "build_map": {
     "sut": {
       "aedk_15w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "aedk_20w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "aedk_25w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "g292_z43_q16": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q1": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q5": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q8": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       }
     },
     "scenario": {
@@ -56,6 +56,7 @@
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
+        "recommended_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed"
       },
       "bert-99": {
@@ -69,6 +70,7 @@
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
+        "recommended_activation_count": "<<<recommended_mixed_activation_count>>>",
         "division": "closed"
       }
     }
@@ -90,6 +92,7 @@
     "queue_length": "8",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
+    "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
