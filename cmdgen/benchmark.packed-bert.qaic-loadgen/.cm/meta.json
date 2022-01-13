@@ -6,8 +6,8 @@
   "build_map": {
     "sut": {
       "aedk_15w": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4"
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
       },
       "aedk_20w": {
         "recommended_mixed_activation_count": "8",
