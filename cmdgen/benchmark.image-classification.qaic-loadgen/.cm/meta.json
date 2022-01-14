@@ -80,9 +80,6 @@
         ],
         "deps": "--dep_add_tags.images=preprocessed,using-opencv,for.resnet50.quantized,full",
         "division": "closed",
-        "model_tags": [
-          "###"
-        ],
         "recommended_accuracy_buffer_size": "5000",
         "recommended_performance_buffer_size": "1024",
         "workload": "###",

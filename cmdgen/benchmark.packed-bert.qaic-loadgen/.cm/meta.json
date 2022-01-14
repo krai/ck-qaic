@@ -47,9 +47,6 @@
     },
     "model": {
       "bert-99.9": {
-        "model_tags": [
-          "bert-99.9"
-        ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
@@ -59,10 +56,6 @@
         "division": "closed"
       },
       "bert-99": {
-        "model_tags": [
-          "bert-99",
-          "quantization.calibration"
-        ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],

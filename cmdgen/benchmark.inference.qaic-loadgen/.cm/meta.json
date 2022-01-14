@@ -42,9 +42,7 @@
       "<<<inference_engine_version>>>",
       "<<<inference_engine_backend>>>",
       "<<<model_readable>>>",
-      "<<<scenario>>>",
-      "<<<mode>>><<<mode_extension>>>",
-      "buffer_size.<<<buffer_size>>>"
+      "<<<mode>>><<<mode_extension>>>"
     ],
     "shell_preamble": []
   },
@@ -83,12 +81,13 @@
       "###": {
         "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=### --env.CK_LOADGEN_MODE=PerformanceOnly",
         "mode": "performance",
-        "mode_extension": "-compliance.###",
+        "mode_extension": "<<<?compliance_extension>>>-compliance.###",
         "output_file": "mlperf_log_summary.txt",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
         "record_tags": "compliance.###"
+
       }
     },
     "container": {
@@ -144,7 +143,11 @@
         "mode_extension": "<<<performance_mode_extension>>>",
         "output_file": "mlperf_log_summary.txt",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
-        "recommended_verbosity": "0"
+        "recommended_verbosity": "0",
+        "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>>"
       }
     },
     "model_extra_tags": {
@@ -203,25 +206,25 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=MultiStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "multistream",
-        "performance_mode_extension": "-target_latency.<<<target_latency>>>"
+        "performance_mode_extension": "-target_latency.<<<target_latency>>>",
+        "compliance_extension":"-target_latency.<<<target_latency>>>"
       },
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline --env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline <<<?perf_offline_ck_env>>>",
         "input_select": "<<<recommended_input_select>>>",
-        "performance_mode_extension": "",
-        "record_tags": "target_qps.<<<offline_target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<offline_target_qps>>>"
+        "performance_mode_extension": "<<<?perf_offline_ext>>>",
+        "compliance_extension": "-target_qps.<<<offline_target_qps>>>"
       },
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE --env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
         "input_select": "0",
-        "performance_mode_extension": "",
-        "record_tags": "target_qps.<<<server_target_qps>>>",
-        "record_uoa_parts": "target_qps.<<<server_target_qps>>>"
+        "model_suffix": "server",
+        "performance_mode_extension": "<<<?perf_server_ext>>>",
+        "compliance_extension": "target_qps.<<<server_target_qps>>>"
       },
       "singlestream": {
         "activation_count": "1",
@@ -232,7 +235,8 @@
         "model_suffix": "singlestream",
         "performance_mode_extension": "-target_latency.<<<target_latency>>>",
         "queue_length": "1",
-        "threads_per_queue": "1"
+        "threads_per_queue": "1",
+        "compliance_extension": "-target_latency.<<<target_latency>>>"
       }
     },
     "sdk": {
@@ -412,6 +416,9 @@
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "model_suffix": "offline",
+    "perf_offline_ck_env":"",
+    "perf_offline_record_tags": "",
+    "perf_offline_record_uoa_parts": "",
     "post_ipmitool_mc_info_log": "post.ipmitool_mc_info.log",
     "post_ipmitool_sdr_elist_full_log": "post.ipmitool_sdr_elist_full.log",
     "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",

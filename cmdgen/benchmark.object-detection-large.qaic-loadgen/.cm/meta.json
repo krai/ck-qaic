@@ -71,9 +71,6 @@
         "division": "closed",
         "hyphenated_model_name": "ssd-resnet34",
         "model_name": "ssd-resnet34",
-        "model_tags": [
-          "###"
-        ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "64"
       }
