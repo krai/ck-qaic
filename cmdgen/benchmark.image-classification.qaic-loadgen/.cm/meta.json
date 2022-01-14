@@ -13,7 +13,8 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4"
+        "recommended_multistream_batch_size": "4",
+        "zero_copy": "disable"
       },
       "aedk_20w": {
         "recommended_activation_count": "2",
@@ -22,7 +23,8 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4"
+        "recommended_multistream_batch_size": "4",
+        "zero_copy": "disable"
       },
       "aedk_15w": {
         "recommended_activation_count": "1",
@@ -31,7 +33,35 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4"
+        "recommended_multistream_batch_size": "4",
+        "zero_copy": "disable"
+      },
+      "aedkg": {
+        "recommended_activation_count": "1",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "4",
+        "zero_copy": "disable"
+      },
+      "aedkh": {
+        "recommended_activation_count": "1",
+        "recommended_input_select": "1",
+        "recommended_threads_per_queue": "8",
+        "recommended_queue_length": "8",
+        "recommended_batch_size": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "4",
+        "zero_copy": "disable"
+      },
+      "pf003": {
+        "recommended_activation_count": "2",
+        "recommended_input_select": "0",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "6",
+        "recommended_batch_size": "8"
       },
       "g292_z43_q16": {
         "recommended_activation_count": "2",

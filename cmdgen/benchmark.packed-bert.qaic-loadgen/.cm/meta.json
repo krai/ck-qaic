@@ -17,6 +17,18 @@
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
       },
+      "aedkg": {
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
+      },
+      "aedkh": {
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
+      },
+      "pf003": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
+      },
       "g292_z43_q16": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
@@ -82,14 +94,14 @@
     "offline_override_batch_size": "<<<override_batch_size>>>",
     "override_batch_size": "1000",
     "program_name": "packed-bert-qaic-loadgen",
-    "queue_length": "4",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
     "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
+    "recommended_queue_length": "4",
+    "recommended_threads_per_queue": "4"
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
-    "threads_per_queue": "4",
     "zero_copy": "disable"
   }
 }

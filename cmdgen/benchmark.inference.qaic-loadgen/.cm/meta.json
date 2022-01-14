@@ -10,6 +10,7 @@
       "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
       "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>",
       "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
+      "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
       "--env.CK_VERBOSE=<<<verbosity>>>"
     ],
     "deps": [
@@ -256,48 +257,62 @@
       "aedk_15w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
+        "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ],
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>"
-        ],
-        "recommended_input_select": "1",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        ]
       },
       "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
+        "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
-        ],
-        "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>"
-        ],
-        "recommended_input_select": "1",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        ]
       },
       "aedk_25w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc,v8",
+        "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
+        ]
+      },
+      "aedkg": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ]
+      },
+      "aedkh": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ]
+      },
+      "pf003": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB"
         ],
-        "recommended_input_select": "1",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.147.109",
+        "power_server_port": "4953"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>"
@@ -307,14 +322,12 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.147.109",
-        "power_server_port": "4953",
-        "recommended_input_select": "0"
+        "power_server_port": "4953"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -328,7 +341,6 @@
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -338,14 +350,12 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.154.58",
-        "power_server_port": "4956",
-        "recommended_input_select": "0"
+        "power_server_port": "4956"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
-          "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
           "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
@@ -355,8 +365,7 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.154.58",
-        "power_server_port": "4959",
-        "recommended_input_select": "0"
+        "power_server_port": "4959"
       }
     },
     "target_latency": {
