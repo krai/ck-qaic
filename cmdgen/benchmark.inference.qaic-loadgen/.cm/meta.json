@@ -223,7 +223,6 @@
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
         "input_select": "0",
-        "model_suffix": "server",
         "performance_mode_extension": "<<<?perf_server_ext>>>",
         "compliance_extension": "target_qps.<<<server_target_qps>>>"
       },
