@@ -65,6 +65,9 @@
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
+        "model_tags": [
+          "###"
+        ],
         "recommended_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed"
       },
@@ -74,6 +77,10 @@
         ],
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
+        ],
+        "model_tags": [
+          "###",
+          "quantization.calibration"
         ],
         "recommended_activation_count": "<<<recommended_mixed_activation_count>>>",
         "division": "closed"

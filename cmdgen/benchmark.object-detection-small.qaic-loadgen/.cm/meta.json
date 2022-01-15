@@ -102,6 +102,9 @@
         "division": "closed",
         "hyphenated_model_name": "ssd-mobilenet",
         "model_name": "ssd-mobilenet",
+        "model_tags": [
+          "###"
+        ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "256"
       }

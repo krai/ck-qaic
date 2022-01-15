@@ -85,9 +85,9 @@
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
       }
-  },
-  "model": {
-    "ssd_resnet34": {
+    },
+    "model": {
+      "ssd_resnet34": {
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_R34",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
@@ -102,6 +102,9 @@
         "division": "closed",
         "hyphenated_model_name": "ssd-resnet34",
         "model_name": "ssd-resnet34",
+        "model_tags": [
+          "###"
+        ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "64"
       }
