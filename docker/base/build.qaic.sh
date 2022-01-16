@@ -34,6 +34,11 @@
 
 _DOCKER_OS=${DOCKER_OS:-centos7}
 
+if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
+  cd $(ck find ck-qaic:docker:base) && ./build.base.sh
+fi
+
+
 # Create a non-root user with a fixed group id and a fixed user id.
 #QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}

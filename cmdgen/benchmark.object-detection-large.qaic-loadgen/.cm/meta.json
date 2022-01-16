@@ -9,54 +9,85 @@
         "recommended_activation_count": "8",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "4",
+        "zero_copy": "disable"
       },
       "aedk_20w": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
-        "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "4",
+        "zero_copy": "disable"
       },
       "aedk_25w": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8"
+        "recommended_threads_per_queue": "8",
+        "zero_copy": "disable"
+      },
+      "aedkg": {
+        "recommended_activation_count": "8",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "4",
+        "zero_copy": "disable"
+      },
+      "aedkh": {
+        "recommended_activation_count": "8",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "1",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "4",
+        "zero_copy": "disable"
+      },
+      "pf003": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
       },
       "g292_z43_q16": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
       },
       "r282_z93_q1": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
       },
       "r282_z93_q5": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
       },
       "r282_z93_q8": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
         "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
       }
-  },
-  "model": {
-    "ssd_resnet34": {
+    },
+    "model": {
+      "ssd_resnet34": {
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_R34",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",

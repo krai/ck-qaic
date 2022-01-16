@@ -422,7 +422,7 @@
       "extra_env": {
         "_BATCH_SIZE": "4",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
       },
       "extra_tags": [
         "bs.4"
@@ -452,7 +452,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
       },
       "extra_tags": [
         "bs.1"
@@ -516,7 +516,7 @@
         "_BATCH_SIZE": "0",
         "_MODEL_TO_CONVERT": "compile_bert_99",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -execute-nodes-in-fp16=Mul,Div,Add,Softmax,Sub,Gather,Erf,LayerNormalization",
-        "_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma'",
+        "_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-form-axis-uniform-constants -aic-ddr-to-multicast -aic-userdma-producer-dma=0'",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-buffer-dealloc-delay=1'",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$"

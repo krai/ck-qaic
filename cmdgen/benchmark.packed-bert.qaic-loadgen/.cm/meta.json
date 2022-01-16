@@ -6,32 +6,44 @@
   "build_map": {
     "sut": {
       "aedk_15w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
       },
       "aedk_20w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "aedk_25w": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
+      },
+      "aedkg": {
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
+      },
+      "aedkh": {
+        "recommended_mixed_activation_count": "4",
+        "recommended_fp16_activation_count": "2"
+      },
+      "pf003": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "g292_z43_q16": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q1": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q5": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q8": {
-        "recommended_activation_count": "4",
-        "recommended_batch_size": "<<<override_batch_size>>>"
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
       }
     },
     "scenario": {
@@ -47,28 +59,30 @@
     },
     "model": {
       "bert-99.9": {
-        "model_tags": [
-          "bert-99.9"
-        ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
+        "model_tags": [
+          "###"
+        ],
+        "recommended_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed"
       },
       "bert-99": {
-        "model_tags": [
-          "bert-99",
-          "quantization.calibration"
-        ],
         "deps": [
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
         "ck_env": [
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
+        "model_tags": [
+          "###",
+          "quantization.calibration"
+        ],
+        "recommended_activation_count": "<<<recommended_mixed_activation_count>>>",
         "division": "closed"
       }
     }
@@ -87,13 +101,14 @@
     "offline_override_batch_size": "<<<override_batch_size>>>",
     "override_batch_size": "1000",
     "program_name": "packed-bert-qaic-loadgen",
-    "queue_length": "8",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
+    "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
+    "recommended_queue_length": "4",
+    "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
-    "threads_per_queue": "8",
     "zero_copy": "disable"
   }
 }
