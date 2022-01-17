@@ -137,7 +137,9 @@
         "mode_extension": "-dataset_size.<<<dataset_size>>>-<<<preprocessed_tag>>>",
         "output_file": "accuracy.txt",
         "recommended_buffer_size": "<<<recommended_accuracy_buffer_size>>>",
-        "recommended_verbosity": "1"
+        "recommended_verbosity": "1",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>>"
       },
       "performance": {
         "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
