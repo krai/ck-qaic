@@ -1,4 +1,5 @@
 chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
+usermod -aG qaic,root,wheel krai
 echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 export PYTHON_VERSION=3.8.12
 cd /usr/src \
