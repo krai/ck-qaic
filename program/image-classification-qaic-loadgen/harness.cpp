@@ -157,8 +157,8 @@ Program::Program() {
   num_setup_threads = settings->qaic_activation_count;
 #endif
 
-  if (num_setup_threads > 256)
-    num_setup_threads /= 2;
+  if (num_setup_threads > 252)
+    num_setup_threads = 252;
 
 //std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
