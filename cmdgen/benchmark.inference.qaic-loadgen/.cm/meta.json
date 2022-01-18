@@ -43,6 +43,7 @@
       "<<<inference_engine_version>>>",
       "<<<inference_engine_backend>>>",
       "<<<model>>>",
+      "<<<scenario>>>",
       "<<<mode>>><<<mode_extension>>>"
     ],
     "shell_preamble": []
