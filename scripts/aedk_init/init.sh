@@ -9,3 +9,4 @@ source ~/.bashrc
 export GIT_USER="krai"
 export GIT_EMAIL="info@krai.ai"
 git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
+curl https://sh.rustup.rs -sSf | sh

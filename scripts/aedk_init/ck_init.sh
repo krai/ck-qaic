@@ -1,9 +1,11 @@
-export CK_PYTHON=`which python3.8`
+echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bashrc
+echo 'export CK_PYTHON=`which python3.8`' >> $HOME/.bashrc
+source $HOME/.bashrc
 $CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
 $CK_PYTHON -m pip install ck==2.6.1
 $CK_PYTHON -m pip install --user --upgrade wheel
-echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bashrc
-source $HOME/.bashrc
+$CK_PYTHON -m pip install h5py
+$CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html
 ck version
 ck set kernel var.package_quiet_install=yes
 ck pull repo --url=https://github.com/krai/ck-qaic
