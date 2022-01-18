@@ -100,11 +100,20 @@ if(dict['ML_MODEL_MODEL_NAME'] == 'ssd-resnet34'):
     print('--ienv.',key,'=\"', val,'\"', sep='', end= ' ')"`
 source_path=`ck cat env --tags=${my_tags} | grep "MODEL_ROOT" | head -n 1 | cut -d"=" -f2`
 echo ${source_path}
-dest_path=${source_path}
+
+
 if [ -z ${source_path} ]; then
   echo "Invalid path";
   exit 1;
 fi
+
+if [ -z ${CK_DEST_PATH} ]; then
+  dest_path=${source_path}
+else
+  install_dir=`echo ${source_path} | awk -F'/' ' { print $(NF-1) } '` 
+  dest_path=${CK_DEST_PATH}/${install_dir}
+fi
+echo "Installing to ${dest_path}"
 
 ck_detect="ck detect soft:model.qaic --full_path=\"${dest_path}/programqpc.bin\" --extra_tags=\"${my_tags}\" ${env}"
 echo ${ck_detect}
