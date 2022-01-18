@@ -160,10 +160,12 @@ Program::Program() {
   if (num_setup_threads > 512)
     num_setup_threads = 512;
 #else
-  num_setup_threads = settings->qaic_activation_count;
+  num_setup_threads = settings->qaic_device_count * settings->qaic_activation_count 
+	  * settings->qaic_set_size;
+  if(num_setup_threads > 10) num_setup_threads = 10;
 #endif
 
-  // std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
+   std::cout << "No. of set up threads: "<< num_setup_threads<<"\n";
   // payloads = new Payload[num_setup_threads];
   for (int i = 0; i < num_setup_threads; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
