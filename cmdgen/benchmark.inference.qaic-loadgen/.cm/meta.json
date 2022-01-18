@@ -36,13 +36,13 @@
       "threads_per_queue.<<<threads_per_queue>>>"
     ],
     "record_uoa_parts": [
-      "mlperf",
+      "mlperf_v2.0",
       "<<<division>>>",
       "<<<sut>>>",
       "<<<inference_engine>>>",
       "<<<inference_engine_version>>>",
       "<<<inference_engine_backend>>>",
-      "<<<model_readable>>>",
+      "<<<model>>>",
       "<<<mode>>><<<mode_extension>>>"
     ],
     "shell_preamble": []
