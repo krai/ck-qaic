@@ -148,9 +148,9 @@
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0",
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
-        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>>",
+        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
-        "perf_server_ext": "-target_qps.<<<server_target_qps>>>"
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>"
       }
     },
     "model_extra_tags": {
@@ -463,7 +463,8 @@
       },
       "###":{
         "pre_fan_raw": "###",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "fan_raw_tag" : "-fan_raw.###"
       }
     },
     "post_ipmitool_set_fan_raw": {
