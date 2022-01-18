@@ -41,7 +41,7 @@
     "CK_ENV_LIB_MLPERF_LOADGEN_INCLUDE"
   ],
   "compiler_env": "CK_CXX",
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP17>>$ -std=c++17 -O3 -ffast-math  -Wall -Wno-sign-compare $<<CK_EXTRA_COMPILER_DEPS0>>$ $<<CK_EXTRA_COMPILER_DEPS1>>$  $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ -I/opt/qti-aic/dev/inc/ -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/ -I$<<CK_ENV_LIB_NMS_ABP_INCLUDE>>$",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP17>>$ -std=c++17 -O1 -march=native -mtune=native  -Wall -Wno-sign-compare $<<CK_EXTRA_COMPILER_DEPS0>>$ $<<CK_EXTRA_COMPILER_DEPS1>>$  $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ -I/opt/qti-aic/dev/inc/ -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/ -I$<<CK_ENV_LIB_NMS_ABP_INCLUDE>>$",
   "data_name": "object-detection-qaic-loadgen",
   "extra_ld_vars": "-L$<<CK_ENV_LIB_MLPERF_LOADGEN_LIB>>$ -L$<<CK_ENV_LIB_QAIC_API>>$/install/lib/ -L$<<CK_ENV_LIB_NMS_ABP>>$/lib -lmlperf_loadgen -ldl -lpthread -lprotobuf -lQAic -lnms_abp",
   "linker_add_lib_as_env": [

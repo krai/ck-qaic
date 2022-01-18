@@ -8,42 +8,42 @@
       "aedk_15w": {
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "aedk_20w": {
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "recommended_queue_length": "10",
         "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "aedk_25w": {
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "aedkg": {
-        "recommended_activation_count": "8",
+        "recommended_activation_count": "1",
         "recommended_batch_size": "4",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "aedkh": {
-        "recommended_activation_count": "8",
+        "recommended_activation_count": "1",
         "recommended_batch_size": "4",
-        "recommended_input_select": "1",
+        "recommended_input_select": "0",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "pf003": {
         "recommended_activation_count": "16",
