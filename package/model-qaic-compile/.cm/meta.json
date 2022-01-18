@@ -542,7 +542,7 @@
     "bert-99.aedk_20w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
     "bert-99.aedk_20w.singlestream": {
@@ -554,7 +554,7 @@
     "bert-99.aedk_15w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
     "bert-99.aedk_15w.singlestream": {
@@ -566,7 +566,7 @@
     "bert-99.pcie.14nsp.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
     "bert-99.pcie.14nsp.singlestream": {
