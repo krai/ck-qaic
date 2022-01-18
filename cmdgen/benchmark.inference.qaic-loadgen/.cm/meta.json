@@ -151,7 +151,10 @@
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
         "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
-        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>"
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>",
+	"record_tags_inner": "<<<power_record_tags_inner>>>",
+        "record_uoa": "<<<power_record_uoa>>>",
+	"wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
       }
     },
     "model_extra_tags": {
@@ -184,9 +187,9 @@
           "--tags=<<<record_tags,>>>,power.client",
           "program:mlperf-power-client"
         ],
-        "record_tags_inner": "<<<record_tags,>>>,power.workload",
-        "record_uoa": "<<<record_uoa_parts->>>-power.workload",
-        "wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi"
+        "power_record_tags_inner": "<<<record_tags,>>>,power.workload",
+        "power_record_uoa": "<<<record_uoa_parts->>>-power.workload",
+        "power_wrapped_ck_benchmark_program": "if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi"
       }
     },
     "power_mode": {
@@ -520,6 +523,9 @@
     "post_ipmitool_sdr_elist_full_log": "post.ipmitool_sdr_elist_full.log",
     "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",
     "post_ipmitool_sdr_elist_full_cmd_def": "echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<post_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>post.config; ",
+    "power_record_tags_inner": "<<<record_tags,>>>",
+    "power_record_uoa": "<<<record_uoa_parts->>>",
+    "power_wrapped_ck_benchmark_program": "<<<ck_benchmark_program>>>",
     "post_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'sleep 5' >> <<<logs_dir>>>post.config; <<<post_ipmitool_sdr_elist_full_cmd_def>>>",
     "pre_ipmitool_mc_info_log": "pre.ipmitool_mc_info.log",
     "pre_ipmitool_fru_print_log": "pre.ipmitool_fru_print.log",
