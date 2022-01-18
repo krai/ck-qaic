@@ -442,7 +442,7 @@
       "extra_env": {
         "_BATCH_SIZE": "4",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
       },
       "extra_tags": [
         "bs.4"

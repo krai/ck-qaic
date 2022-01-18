@@ -6,7 +6,7 @@
   "build_map": {
     "sut": {
       "aedk_15w": {
-        "recommended_activation_count": "8",
+        "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "1",
         "recommended_queue_length": "8",
