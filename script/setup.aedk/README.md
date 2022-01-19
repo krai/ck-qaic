@@ -96,7 +96,7 @@ echo "yes" | ./uninstall.sh
 <details><pre>
 &dollar; grep build_id /opt/qti-aic/versions/apps.xml -B1
                 &lsaquo;base_version&rsaquo;1.6&lsaquo;&sol;base_version&rsaquo;
-                &lsaquo;build_id&rsaquo;80lsaquo;&sol;build_id&rsaquo;
+                &lsaquo;build_id&rsaquo;80&lsaquo;&sol;build_id&rsaquo;
 </pre></details>
 
 ## Compile the models and copy to the device (repeat as needed)
