@@ -60,6 +60,9 @@ sudo chmod u+x ./2.run_as_krai.sh
 
 # On the host
 
+## Detect the ImageNet validation dataset
+**TODO**
+
 ## Copy the ImageNet validation dataset to `/home/krai`
 **TODO**
 
@@ -70,5 +73,5 @@ sudo chmod u+x ./2.run_as_krai.sh
 
 Example:
 ```
-IPS=aedk1 PORTS=3231 MODEL_EXTRA=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+IPS=aedk1 PORTS=3231 EXTRA_MODEL=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
