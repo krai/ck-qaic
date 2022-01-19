@@ -83,12 +83,11 @@ sudo chmod u+x ./2.run_as_krai.sh
 
 ## Uninstall/Install the Apps SDK (repeat as needed)
 
-Go to the director containing the Apps SDK archive e.g. `qaic-apps-1.6.80.zip`:
+Go to the directory containing the Apps SDK archive e.g. `qaic-apps-1.6.80.zip`:
 
 ```
 export SDK_VER=1.6.80
-rm -f qaic-apps-$SDK_VER
-unzip qaic-apps-$SDK_VER.zip
+unzip -o qaic-apps-$SDK_VER.zip
 cd qaic-apps-$SDK_VER
 echo "yes" | ./uninstall.sh
 ./install.sh
@@ -96,8 +95,8 @@ echo "yes" | ./uninstall.sh
 
 <details><pre>
 &dollar; grep build_id /opt/qti-aic/versions/apps.xml -B1
-                <base_version>1.6</base_version>
-                <build_id>80</build_id>
+                &lsaquo;base_version&rsaquo;1.6&lsaquo;&sol;base_version&rsaquo;
+                &lsaquo;build_id&rsaquo;80lsaquo;&sol;build_id&rsaquo;
 </pre></details>
 
 ## Compile the models and copy to the device (repeat as needed)
