@@ -1,14 +1,23 @@
-# Initial Setup of AEDK
-1. Under root user 
+# Set up Edge AI Development Kit (AEDK)
+
+## Run under the `root` user
+
+Connect to the device as `root`.
+
 ```
-./root_init.sh
+./1.run_as_root.sh
 ```
-2. Under krai user 
+
+## Run under the `krai` user
+
+Connect to the device as `krai`.
+
 ```
-./init.sh 
+./2.run_as_krai.sh
 ```
-``` 
-./ck_init.sh 
-```
-3. Copy and install Platform SDK
-4. Copy the imagenet dataset to $HOME of krai user
+
+## Install the Platform SDK
+**TODO**
+
+## Copy the ImageNet dataset to `/home/krai`
+**TODO**
