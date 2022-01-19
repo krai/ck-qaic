@@ -20,8 +20,8 @@ cd /usr/src \
 && ./configure --enable-optimizations && make -j8 altinstall \
 && rm -rf /usr/src/Python-${PYTHON_VERSION}*
 
-# Create group 'qaic'.
-groupadd qaic
+# Create group 'qaic' if it does not exist.
+groupadd -f qaic
 # Add user 'krai' to some groups.
 usermod -aG qaic,root,wheel krai
 # Do not ask user 'krai' for 'sudo' password.
