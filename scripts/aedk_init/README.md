@@ -1,11 +1,17 @@
 # Set up Edge AI Development Kit (AEDK)
 
-# Copy the scripts to the device
+## Pull the `ck-qaic` repository
+
+```
+ck pull repo --url=https://github.com/krai/ck-qaic
+```
+
+## Copy the scripts to the device
 
 Copy the scripts in this directory to a temporary directory on the device e.g.:
 
 ```
-scp *.sh root@aedk1:/tmp
+scp $(ck find repo:ck-qaic)/script/aedk_init/*.sh aedk1:/tmp
 ```
 
 ## Run under the `root` user
