@@ -1,8 +1,16 @@
 # Set up Edge AI Development Kit (AEDK)
 
+# Copy the scripts to the device
+
+Copy the scripts in this directory to a temporary directory on the device e.g.:
+
+```
+scp *.sh root@aedk1:/tmp
+```
+
 ## Run under the `root` user
 
-Connect to the device as `root`.
+Connect to the device as `root`. Go to the temporary directory and run:
 
 ```
 ./1.run_as_root.sh
@@ -10,9 +18,11 @@ Connect to the device as `root`.
 
 ## Run under the `krai` user
 
-Connect to the device as `krai`.
+Connect to the device as `krai`. Go to the temporary directory and run:
 
 ```
+sudo chown krai ./2.run_as_krai.sh
+sudo chmod u+x ./2.run_as_krai.sh
 ./2.run_as_krai.sh
 ```
 
