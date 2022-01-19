@@ -1,14 +1,39 @@
-# Initial Setup of AEDK
-1. Under root user 
+# Set up Edge AI Development Kit (AEDK)
+
+## Pull the `ck-qaic` repository
+
 ```
-./root_init.sh
+ck pull repo --url=https://github.com/krai/ck-qaic
 ```
-2. Under krai user 
+
+## Copy the scripts to the device
+
+Copy the scripts in this directory to a temporary directory on the device e.g.:
+
 ```
-./init.sh 
+scp $(ck find repo:ck-qaic)/script/aedk_init/*.sh aedk1:/tmp
 ```
-``` 
-./ck_init.sh 
+
+## Run under the `root` user
+
+Connect to the device as `root`. Go to the temporary directory and run:
+
 ```
-3. Copy and install Platform SDK
-4. Copy the imagenet dataset to $HOME of krai user
+./1.run_as_root.sh
+```
+
+## Run under the `krai` user
+
+Connect to the device as `krai`. Go to the temporary directory and run:
+
+```
+sudo chown krai ./2.run_as_krai.sh
+sudo chmod u+x ./2.run_as_krai.sh
+./2.run_as_krai.sh
+```
+
+## Install the Platform SDK
+**TODO**
+
+## Copy the ImageNet dataset to `/home/krai`
+**TODO**
