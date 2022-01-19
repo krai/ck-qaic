@@ -6,6 +6,7 @@ yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel
 yum install -y dnf 
 yum clean all
 # Install system-level packages via 'dnf'.
+dnf install -y libarchive cmake
 dnf install -y scl-utils
 dnf install -y gcc-toolset-11-gcc-c++
 
@@ -19,6 +20,8 @@ cd /usr/src \
 && ./configure --enable-optimizations && make -j8 altinstall \
 && rm -rf /usr/src/Python-${PYTHON_VERSION}*
 
+# Create group 'qaic'.
+groupadd qaic
 # Add user 'krai' to some groups.
 usermod -aG qaic,root,wheel krai
 # Do not ask user 'krai' for 'sudo' password.
