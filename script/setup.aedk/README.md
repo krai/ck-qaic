@@ -27,6 +27,27 @@ Copy the numbered scripts in this directory to a temporary directory on the devi
 scp $(ck find repo:ck-qaic)/script/setup.aedk/?.*.sh aedk1:/tmp
 ```
 
+## Obtain the ImageNet dataset
+
+Suppose the ImageNet validation dataset (50,000 images) is in an archive called
+`dataset-imagenet-ilsvrc2012-val.tar` (6.4G).
+
+<details><pre>
+&dollar; md5sum dataset-imagenet-ilsvrc2012-val.tar
+3f31a40f2bb902e28aa23aad0fc8e383  dataset-imagenet-ilsvrc2012-val.tar
+</pre></details>
+
+Extract it under e.g. `/data` or `$HOME`:
+```
+tar xvf dataset-imagenet-ilsvrc2012-val.tar -C /data
+```
+
+## Detect the ImageNet dataset (run once)
+```
+echo "full" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
+--full_path=/data/dataset-imagenet-ilsvrc2012-val/ILSVRC2012_val_00000001.JPEG
+```
+
 # On the device
 
 ## Run under the `root` user (run once)
@@ -60,12 +81,6 @@ sudo chmod u+x ./2.run_as_krai.sh
 
 # On the host
 
-## Detect the ImageNet validation dataset (run once)
-**TODO**
-
-## Copy the ImageNet validation dataset to `/home/krai` (run once)
-**TODO**
-
 ## Uninstall/Install the Apps SDK (repeat as needed)
 **TODO**
 
@@ -74,4 +89,10 @@ sudo chmod u+x ./2.run_as_krai.sh
 Example:
 ```
 IPS=aedk1 PORTS=3231 EXTRA_MODEL=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+```
+
+## Copy the ImageNet dataset to the device (run once)
+
+```
+scp dataset-imagenet-ilsvrc2012-val.tar aedk1:/home/krai
 ```
