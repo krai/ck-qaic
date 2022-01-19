@@ -13,23 +13,23 @@ Instructions below alternate between running "on the host" and "on the device".
 
 # On the host
 
-## Pull the `ck-qaic` repository
+## Pull the `ck-qaic` repository (run once)
 
 ```
 ck pull repo --url=https://github.com/krai/ck-qaic
 ```
 
-## Copy the scripts to the device
+## Copy the scripts to the device (run once)
 
-Copy the scripts in this directory to a temporary directory on the device e.g.:
+Copy the numbered scripts in this directory to a temporary directory on the device e.g.:
 
 ```
-scp $(ck find repo:ck-qaic)/script/setup.aedk/*.sh aedk1:/tmp
+scp $(ck find repo:ck-qaic)/script/setup.aedk/?.*.sh aedk1:/tmp
 ```
 
 # On the device
 
-## Run under the `root` user
+## Run under the `root` user (run once)
 
 Connect to the device as `root` e.g.:
 ```
@@ -41,7 +41,7 @@ Go to the temporary directory and run:
 ./1.run_as_root.sh
 ```
 
-## Run under the `krai` user
+## Run under the `krai` user (run once)
 
 Connect to the device as `krai` e.g.:
 ```
@@ -55,21 +55,21 @@ sudo chmod u+x ./2.run_as_krai.sh
 ./2.run_as_krai.sh
 ```
 
-## Install the Platform SDK
+## Uninstall/Install the Platform SDK (repeat as needed)
 **TODO**
 
 # On the host
 
-## Detect the ImageNet validation dataset
+## Detect the ImageNet validation dataset (run once)
 **TODO**
 
-## Copy the ImageNet validation dataset to `/home/krai`
+## Copy the ImageNet validation dataset to `/home/krai` (run once)
 **TODO**
 
-## Install the Apps SDK
+## Uninstall/Install the Apps SDK (repeat as needed)
 **TODO**
 
-## Compile the models and copy to the device
+## Compile the models and copy to the device (repeat as needed)
 
 Example:
 ```
