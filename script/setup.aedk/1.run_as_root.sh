@@ -2,8 +2,9 @@
 
 # Install system-level packages via 'yum'.
 yum upgrade -y
-yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel htop tmux
-yum install -y dnf 
+yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
+yum install -y epel-release htop tmux
+yum install -y dnf
 yum clean all
 # Install system-level packages via 'dnf'.
 dnf install -y libarchive cmake
