@@ -150,8 +150,11 @@ OS bits:              64
 OS ABI:               x86_64
 
 Platform init UOA:    qaic
-
-<b>[anton@dyson ~]&dollar;</b> cat $(ck find repo:local)/cfg/local-platform/.cm/meta.json
+</pre>
+```
+cat $(ck find repo:local)/cfg/local-platform/.cm/meta.json
+```
+<pre>
 {
   "platform_init_uoa": {
     "linux-64": "qaic"
