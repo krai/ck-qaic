@@ -14,7 +14,8 @@ curl https://sh.rustup.rs -sSf | sh
 
 # Install implicit Python dependencies.
 $CK_PYTHON -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
-$CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html
+$CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
+$CK_PYTHON -m pip install transformers==2.4.0 --user
 
 # Set up CK.
 $CK_PYTHON -m pip install ck==2.6.1
