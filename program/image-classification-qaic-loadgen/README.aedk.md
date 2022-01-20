@@ -42,7 +42,7 @@ time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 ```
 time ck gen cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.4.66 --model=resnet50 --group.edge --mode=accuracy \
---dataset_size=50000 --target_qps=9696 
+--dataset_size=50000
 ```
 <details>
 Specifying <tt>--group.edge --mode=accuracy</tt> runs the benchmark in the Accuracy mode with the given <tt>--dataset_size</tt> for the Offline and Single Stream scenarios required under the Edge category.
