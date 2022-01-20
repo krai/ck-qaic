@@ -60,49 +60,40 @@ make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
 <b>[anton@dyson ~]&dollar;</b> sudo yum install -y dnf
 </pre>
 
-
-#### Python 3.6 (default)
-
-<pre>
-<b>[anton@dyson ~]&dollar;</b> sudo dnf install -y python3 python3-pip python3-devel
-<b>[anton@dyson ~]&dollar;</b> python3 --version
-Python 3.6.8
-</pre>
-
-#### Python 3.7 (optional; required only for power measurements)
+#### Python 3.8
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> sudo su
-<b>[root@dyson anton]#</b> export PYTHON_VERSION=3.7.11
+<b>[root@dyson anton]#</b> export PYTHON_VERSION=3.8.12
 <b>[root@dyson anton]#</b> cd /usr/src \
 && wget https://www.python.org/ftp/python/&dollar;{PYTHON_VERSION}/Python-&dollar;{PYTHON_VERSION}.tgz \
 && tar xzf Python-&dollar;{PYTHON_VERSION}.tgz \
 && rm -f Python-&dollar;{PYTHON_VERSION}.tgz \
 && cd /usr/src/Python-&dollar;{PYTHON_VERSION} \
-&& ./configure --enable-optimizations --enable-shared --with-ssl && make -j 32 altinstall \
+&& ./configure --enable-optimizations --with-ssl && make -j 32 altinstall \
 && rm -rf /usr/src/Python-&dollar;{PYTHON_VERSION}*
 <b>[root@dyson ~]#</b> exit
 exit
-<b>[anton@dyson ~]&dollar;</b> python3.7 --version
-Python 3.7.11
+<b>[anton@dyson ~]&dollar;</b> python3.8 --version
+Python 3.8.12
 </pre>
 
-#### GCC 9
+#### GCC 11
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> sudo yum install -y centos-release-scl
 <b>[anton@dyson ~]&dollar;</b> sudo yum install -y scl-utils
-<b>[anton@dyson ~]&dollar;</b> sudo yum install -y devtoolset-9
-<b>[anton@dyson ~]&dollar;</b> echo "source scl_source enable devtoolset-9" >> ~/.bashrc
+<b>[anton@dyson ~]&dollar;</b> sudo yum install -y devtoolset-11
+<b>[anton@dyson ~]&dollar;</b> echo "source scl_source enable devtoolset-11" >> ~/.bashrc
 <b>[anton@dyson ~]&dollar;</b> source ~/.bashrc
 </pre>
 
 ##### `gcc`
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b> scl enable devtoolset-9 "gcc --version"
-gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2)
-Copyright (C) 2019 Free Software Foundation, Inc.
+<b>[anton@dyson ~]&dollar;</b> scl enable devtoolset-11 "gcc --version"
+gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1)
+Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 </pre>
@@ -110,9 +101,9 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##### `g++`
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b> scl enable devtoolset-9 "g++ --version"
-g++ (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2)
-Copyright (C) 2019 Free Software Foundation, Inc.
+<b>[anton@dyson ~]&dollar;</b> scl enable devtoolset-11 "g++ --version"
+g++ (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1)
+Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 </pre>
@@ -121,13 +112,13 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ## Install [Collective Knowledge](http://cknowledge.org/) (CK)
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b> export CK_PYTHON=`which python3`
+<b>[anton@dyson ~]&dollar;</b> export CK_PYTHON=`which python3.8`
 <b>[anton@dyson ~]&dollar;</b> &dollar;CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
-<b>[anton@dyson ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck==1.55.5
+<b>[anton@dyson ~]&dollar;</b> &dollar;CK_PYTHON -m pip install ck==2.6.1
 <b>[anton@dyson ~]&dollar;</b> echo 'export PATH=&dollar;HOME/.local/bin:&dollar;PATH' >> &dollar;HOME/.bashrc
 <b>[anton@dyson ~]&dollar;</b> source &dollar;HOME/.bashrc
 <b>[anton@dyson ~]&dollar;</b> ck version
-V1.55.5
+V2.6.1
 </pre>
 
 <a name="install_ck_repos"></a>
@@ -164,28 +155,7 @@ Platform init UOA:    qaic
 }
 </pre>
 
-### `aedk`: use AEDK settings
 
-<pre>
-<b>[anton@aedk3 ~]&dollar;</b> ck detect platform.os --platform_init_uoa=aedk
-
-OS CK UOA:            linux-64 (4258b5fe54828a50)
-
-OS name:              CentOS Linux 8 (Core)
-Short OS name:        Linux 4.19.81
-Long OS name:         Linux-4.19.81-aarch64-with-centos-8.0.1905-Core
-OS bits:              64
-OS ABI:               aarch64
-
-Platform init UOA:    aedk
-
-<b>[anton@aedk3 ~] ~]&dollar;</b> cat $(ck find repo:local)/cfg/local-platform/.cm/meta.json
-{
-  "platform_init_uoa": {
-    "linux-64": "aedk"
-  }
-}
-</pre>
 
 
 <a name="detect_python"></a>
@@ -193,14 +163,14 @@ Platform init UOA:    aedk
 
 **NB:** Please detect only one Python interpreter. Python 3.6, the default on CentOS 7, is <font color="#268BD0"><b>recommended</b></font>. While CK can normally detect available Python interpreters automatically, we are playing safe here by only detecting a particular one. Please only detect multiple Python interpreters, if you understand the consequences.
 
-### <font color="#268BD0">Python v3.6 (default)</font>
+### <font color="#268BD0">Python v3.8</font>
 
 <pre>
-<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.python --full_path=`which python3`
+<b>[anton@dyson ~]&dollar;</b> ck detect soft:compiler.python --full_path=`which python3.8`
 <b>[anton@dyson ~]&dollar;</b> ck show env --tags=compiler,python
 Env UID:         Target OS: Bits: Name:  Version: Tags:
 
-ce146fbbcd1a8fea   linux-64    64 python 3.6.8    64bits,compiler,host-os-linux-64,lang-python,python,target-os-linux-64,v3,v3.6,v3.6.8
+ce146fbbcd1a8fea   linux-64    64 python 3.8.12    64bits,compiler,host-os-linux-64,lang-python,python,target-os-linux-64,v3,v3.8,v3.8.12
 </pre>
 
 <a name="detect_gcc"></a>
@@ -215,28 +185,11 @@ ce146fbbcd1a8fea   linux-64    64 python 3.6.8    64bits,compiler,host-os-linux-
 <b>[anton@dyson ~]&dollar;</b> ck show env --tags=compiler,gcc
 Env UID:         Target OS: Bits: Name:          Version: Tags:
 
-2e27213b1488daf9   linux-64    64 GNU C compiler 9.3.1    64bits,compiler,gcc,host-os-linux-64,lang-c,lang-cpp,target-os-linux-64,v9,v9.3,v9.3.1
+2e27213b1488daf9   linux-64    64 GNU C compiler 11.2.1    64bits,compiler,gcc,host-os-linux-64,lang-c,lang-cpp,target-os-linux-64,v11,v11.2,v11.2.1
 </pre>
 
 <a name="install_cmake"></a>
-## Detect (system) CMake or install CMake from source
-
-<a name="install_cmake_detect"></a>
-### <font color="#268BD0"><b>Detect</b></font>
-
-Try detecting CMake on your system:
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck detect soft --tags=tool,cmake
-<b>[anton@dyson ~]&dollar;</b> ck show env --tags=cmake
-Env UID:         Target OS: Bits: Name: Version: Tags:
-
-4b6cb0f07e9fd005   linux-64    64 cmake 3.17.5   64bits,cmake,host-os-linux-64,target-os-linux-64,tool,v3,v3.17,v3.17.5
-</pre>
-
-<a name="install_cmake_install"></a>
-### Install
-
-If this fails, install CMake from source:
+## Install CMake from source
 
 <pre>
 <b>[anton@dyson ~]&dollar;</b> ck install package --tags=tool,cmake,from.source
@@ -350,56 +303,7 @@ If you have a copy of it e.g. under `/datasets/dataset-imagenet-ilsvrc2012-val/`
 </pre>
 
 
-### Compile and install the models to the 8 NSP AEDKs
 
-#### Offline
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_15w.offline
-
-<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=resnet50,resnet50.aedk_15w.offline \
---env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
-</pre>
-
-#### SingleStream
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_15w.singlestream
-
-<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=resnet50,resnet50.aedk_15w.singlestream \
---env.CK_AEDK_IPS="aedk1" --env.CK_AEDK_PORTS="3231" --env.CK_AEDK_USER=$USER
-</pre>
-
-### Compile and install the models to the 16 NSP AEDK
-
-#### Offline
-
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_20w.offline
-
-<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=resnet50,resnet50.aedk_20w.offline \
---env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
-</pre>
-
-#### SingleStream
-<pre>
-<b>[anton@dyson ~]&dollar;</b> ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_20w.singlestream
-
-<b>[anton@dyson ~]&dollar;</b> ck install package --tags=install-to-aedk \
---dep_add_tags.model-qaic=resnet50,resnet50.aedk_20w.singlestream \
---env.CK_AEDK_IPS="aedk3" --env.CK_AEDK_PORTS="3233" --env.CK_AEDK_USER=$USER
-</pre>
-
-<a name="benchmark"></a>
 # Benchmark
 
 - Offline: refer to [`README.offline.md`](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.offline.md).
