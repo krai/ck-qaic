@@ -162,7 +162,7 @@ Program::Program() {
 #else
   num_setup_threads = settings->qaic_device_count * settings->qaic_activation_count 
 	  * settings->qaic_set_size;
-  if(num_setup_threads > 10) num_setup_threads = 10;
+  if(num_setup_threads > 16) num_setup_threads = 16;
 #endif
 
    std::cout << "No. of set up threads: "<< num_setup_threads<<"\n";
