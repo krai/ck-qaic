@@ -89,17 +89,20 @@ scp dataset-imagenet-ilsvrc2012-val.tar aedk1:/home/krai
 # `[R]` Set up QAIC SDKs
 
 Obtain a pair of QAIC SDKs:
-- Apps SDK to be used on the host for compilation.
-- Platforms SDK to be used on the device for execution.
+- Apps SDK to be used on the host for compilation (e.g. `qaic-apps-1.6.80.zip`).
+- Platform SDK to be used on the device for execution (e.g. `qaic-platform-sdk-1.6.80.zip`).
 
-These steps are to be repeated for each new SDK version.
+These steps are to be repeated for each new SDK version (`SDK_VER` below).
 
 ## `[HSR]` Uninstall/Install the Apps SDK
-Go to the directory containing the Apps SDK archive e.g. `qaic-apps-1.6.80.zip`:
+
+Go to the directory containing your Apps SDK archive e.g. `/data/qaic`.
+
 ```
 export SDK_VER=1.6.80
 unzip -o qaic-apps-$SDK_VER.zip
 cd qaic-apps-$SDK_VER
+sudo su
 echo "yes" | ./uninstall.sh
 ./install.sh
 ```
@@ -110,9 +113,81 @@ echo "yes" | ./uninstall.sh
                 &lsaquo;build_id&rsaquo;80&lsaquo;&sol;build_id&rsaquo;
 </pre></details>
 
-## `[DSR]` Uninstall/Install the Platform SDK
-**TODO**
+## `[HR]` Copy the Platform SDK to the device
 
+Go to the directory containing your Platform SDK archive e.g. `/data/qaic`.
+
+```
+export SDK_VER=1.6.80
+scp qaic-platform-sdk-$SDK_VER.zip aedk1:/home/krai
+```
+
+## `[DSR]` Uninstall/Install the Platform SDK
+
+Go to the directory containing your Platform SDK archive e.g. `/home/krai`.
+
+```
+export SDK_VER=1.6.80
+unzip -o qaic-platform-sdk-$SDK_VER.zip
+cd qaic-platform-sdk-$SDK_VER/aarch64/centos
+sudo su
+echo "yes" | ./uninstall.sh
+./install.sh
+exit
+```
+
+```
+/opt/qti-aic/tools/qaic-util -q
+```
+<details><pre>
+LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
+LRT IMAGE_VARIANT: LRT.AIC.REL
+Number of devices: 1
+QID 0
+        Status:Ready
+        PCI Address:0002:01:00.0
+        PCI Info:Unassigned class [ff00] Qualcomm Device a100
+        HW Version:0.2.0.0
+        HW Serial:0x2b36e75d
+        FW Version:1.6.36
+        FW QC_IMAGE_VERSION:QSM.AIC.1.6.36
+        FW OEM_IMAGE_VERSION:
+        FW IMAGE_VARIANT:AIC100.REL
+        NSP Version:1.6.18
+        NSP QC_IMAGE_VERSION:NSP.AIC.1.6.18
+        NSP OEM_IMAGE_VERSION:
+        NSP IMAGE_VARIANT:aic100.nsp.prodQ
+        Compiler Version:0
+        Dram Total:8116 MB
+        Dram Free:8116 MB
+        Dram Fragmentation:0.00%
+        Vc Total:16
+        Vc Free:16
+        Nsp Total:8
+        Nsp Free:8
+        Peak Dram Bw:0.0
+        Peak Sram Bw:0.0
+        Peak PcieBw:0.0
+        MCID Total:3072
+        MCID Free:3072
+        Semaphore Total:32
+        Semaphore Free:32
+        Constants Loaded:0
+        Constants In-Use:0
+        Networks Loaded:0
+        Networks Active:0
+        NSP Frequency(Mhz):595
+        DDR Frequency(Mhz):2133
+        COMPNOC Frequency(Mhz):1450
+        MEMNOC Frequency(Mhz):1000
+        SYSNOC Frequency(Mhz):667
+        Metadata Version:0.10
+        NNC Command Protocol Version:8.1
+        SBL Image:SBL.AIC.1.6.21
+        PVS Image Version:24
+        NSP Defective PG Mask: 0xAAAA
+        Board serial:
+</pre></details>
 
 ## `[HR]` Compile the models and copy to the device
 
