@@ -21,8 +21,12 @@ cd /usr/src \
 && ./configure --enable-optimizations && make -j8 altinstall \
 && rm -rf /usr/src/Python-${PYTHON_VERSION}*
 
-# Create group 'qaic' if it does not exist.
+# Create group 'qaic'.
 groupadd -f qaic
+# Create group 'krai'.
+groupadd -f krai
+# Create user 'krai'.
+useradd -m -g krai -s /bin/bash krai
 # Add user 'krai' to some groups.
 usermod -aG qaic,root,wheel krai
 # Do not ask user 'krai' for 'sudo' password.
@@ -30,3 +34,8 @@ echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Fix permissions on the 'sudo' command.
 chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
+
+# Set the London timezone (for power measurements).
+rm /etc/localtime -f
+ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+date

@@ -134,10 +134,9 @@ sudo su
 echo "yes" | ./uninstall.sh
 ./install.sh
 exit
-```
-
-```
+cd ../../..
 /opt/qti-aic/tools/qaic-util -q
+```
 ```
 <details><pre>
 LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
