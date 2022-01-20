@@ -115,7 +115,7 @@
       "name": "MLPerf Inference source",
       "sort": 45,
       "no_tags": "for.aimet,nvidia-coco",
-      "tags": "mlperf,inference,source,r1.1"
+      "tags": "mlperf,inference,source"
     },
     "python": {
       "force_target_as_host": "yes",

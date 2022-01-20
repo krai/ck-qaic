@@ -119,6 +119,8 @@
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "program_name": "object-detection-qaic-loadgen",
+    "recommended_multistream_activation_count": "4",
+    "recommended_multistream_batch_size": "1",
     "task_name": "object-detection",
     "zero_copy": "enable"
   }

@@ -92,8 +92,8 @@
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "3",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4"
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_batch_size": "1"
       }   
     },
     "model": {

@@ -35,7 +35,8 @@
       },
       "r282_z93_q1": {
         "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4"
+        "recommended_fp16_activation_count": "4",
+        "recommended_multistream_activation_count": "4"
       },
       "r282_z93_q5": {
         "recommended_mixed_activation_count": "8",
@@ -48,7 +49,7 @@
     },
     "scenario": {
       "multistream": {
-        "batch_size": "<<<multistream_overrride_batch_size>>>"
+        "batch_size": "<<<multistream_override_batch_size>>>"
       },
       "offline": {
         "batch_size": "<<<offline_override_batch_size>>>"

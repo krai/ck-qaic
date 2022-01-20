@@ -641,8 +641,6 @@ void TestQAIC(Program *prg) {
   ts.scenario =
       (scenario_string == "SingleStream")  ? mlperf::TestScenario::SingleStream
       : (scenario_string == "MultiStream") ? mlperf::TestScenario::MultiStream
-      : (scenario_string == "MultiStreamFree")
-          ? mlperf::TestScenario::MultiStreamFree
       : (scenario_string == "Server")  ? mlperf::TestScenario::Server
       : (scenario_string == "Offline") ? mlperf::TestScenario::Offline
                                        : mlperf::TestScenario::SingleStream;
