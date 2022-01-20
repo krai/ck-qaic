@@ -34,7 +34,7 @@ $(ck find ck-qaic:docker:base)/build.ck.sh
 - `DOCKER_OS=centos7`.
 - `PYTHON_VER=3.8.12`.
 - `GCC_MAJOR_VER=11`.
-- `CK_VER=2.5.8`.
+- `CK_VER=2.6.1`.
 - `GROUP_ID=1500`.
 - `USER_ID=2000`.
 
@@ -43,7 +43,7 @@ $(ck find ck-qaic:docker:base)/build.ck.sh
 docker run --rm krai/ck.common.centos7
 ```
 <details><pre>
-V2.5.8
+V2.6.1
 </pre></details>
 
 ## Build an image for a given QAIC SDK

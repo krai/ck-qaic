@@ -449,7 +449,7 @@ The most important build arguments and their default values are provided below:
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)
-- `CK_VER=2.5.8` (MLCommons Collective Knowledge)
+- `CK_VER=2.6.1` (MLCommons Collective Knowledge)
 
 Typically, only `SDK_DIR` and `SDK_VER` need to be customized.
 
