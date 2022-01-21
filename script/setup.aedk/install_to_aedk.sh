@@ -31,4 +31,7 @@ do
   CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.singlestream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=krai --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
   echo $CMD
   eval $CMD
+  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.multistream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=krai --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
+  echo $CMD
+  eval $CMD
 done
