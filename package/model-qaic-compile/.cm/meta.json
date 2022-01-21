@@ -81,6 +81,11 @@
             "_BATCH_SIZE": "1"
           }
         ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
         "bs.4": [
           {
             "_BATCH_SIZE": "4"
@@ -114,6 +119,11 @@
         "bs.1": [
           {
             "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
           }
         ],
         "bs.4": [
@@ -298,12 +308,12 @@
     },
     "resnet50.pcie.16nsp.multistream": {
       "extra_env": {
-        "_BATCH_SIZE": "4",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       },
       "extra_tags": [
-        "bs.4"
+        "bs.1"
       ]
     },
     "resnet50.pcie.16nsp.singlestream": {
@@ -386,7 +396,7 @@
     "ssd_resnet34.pcie.16nsp.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
     "ssd_resnet34.pcie.16nsp.singlestream": {
@@ -490,12 +500,12 @@
     },
     "ssd_mobilenet.pcie.16nsp.multistream": {
       "extra_env": {
-        "_BATCH_SIZE": "4",
+        "_BATCH_SIZE": "2",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
       },
       "extra_tags": [
-        "bs.4"
+        "bs.2"
       ]
     },
     "ssd_mobilenet.pcie.16nsp.singlestream": {

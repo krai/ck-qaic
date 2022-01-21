@@ -265,7 +265,9 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ]
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
       },
       "aedk_20w": {
         "all_device_ids": "0",
@@ -273,7 +275,9 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
-        ]
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
       },
       "aedk_25w": {
         "all_device_ids": "0",
@@ -281,7 +285,9 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
-        ]
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
       },
       "aedkg": {
         "all_device_ids": "0",
@@ -313,6 +319,21 @@
         ],
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4953"
+      },
+      "pf002": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.147.109",
+        "power_server_port": "4952"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",

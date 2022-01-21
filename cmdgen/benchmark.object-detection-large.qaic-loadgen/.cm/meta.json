@@ -53,6 +53,14 @@
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
       },
+      "pf002": {
+        "recommended_activation_count": "16",
+        "recommended_batch_size": "1",
+        "recommended_input_select": "0",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "zero_copy": "enable"
+      },
       "g292_z43_q16": {
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
@@ -119,6 +127,8 @@
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "program_name": "object-detection-qaic-loadgen",
+    "recommended_multistream_activation_count": "4",
+    "recommended_multistream_batch_size": "1",
     "task_name": "object-detection",
     "zero_copy": "enable"
   }

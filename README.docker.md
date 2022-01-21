@@ -93,13 +93,14 @@ Note that the SDK version on the host does not have to match the SDK version in 
 
 ## Prerequisites
 
-We assume that the user has access to permanent file storage e.g. `/local/mount/workspace` (to be defined by the environment variable `$WORKSPACE`).
+We assume that the user has access to permanent file storage e.g. `/local/mount/workspace` or `/home/user` (to be defined by the environment variable `$WORKSPACE`).
+This storage should have at least 100G free.
 
 ### Locate the QAIC SDKs
 
 Place the Platform and Apps SDKs under `$WORKSPACE/sdks` e.g.:
 ```
-ls -la $CK_WORKSPACE/sdks/*1.6.66.zip
+ls -la $WORKSPACE/sdks/*1.6.66.zip
 ```
 <details><pre>
 -rw-r--r-- 1 alokhmot users  306516755 Dec 17 05:38 /local/mnt/workspace/sdks/qaic-apps-1.6.66.zip
@@ -449,7 +450,7 @@ The most important build arguments and their default values are provided below:
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)
-- `CK_VER=2.5.8` (MLCommons Collective Knowledge)
+- `CK_VER=2.6.1` (MLCommons Collective Knowledge)
 
 Typically, only `SDK_DIR` and `SDK_VER` need to be customized.
 
@@ -457,7 +458,7 @@ Typically, only `SDK_DIR` and `SDK_VER` need to be customized.
 
 #### Default PCV (~1 hour)
 ```
-SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.66 $(ck find repo:ck-qaic)/docker/build.sh bert
+SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.80 $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 
 ##### Check
@@ -479,13 +480,13 @@ The images tagged with `latest` are SDK-independent, and can be reused with newe
 
 #### Given PCV (~1 hour)
 ```
-SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.66 CK_QAIC_PCV=9985 $(ck find repo:ck-qaic)/docker/build.sh bert
+SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.80 CK_QAIC_PCV=9985 $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 Note that `CK_QAIC_PCV` cannot be specified together with `CK_QAIC_PERCENTILE_CALIBRATION=yes` (`no` by default).
 
 #### Best PCV (~2 hours)
 ```
-SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.66 CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find repo:ck-qaic)/docker/build.sh bert
+SDK_DIR=$WORKSPACE/sdks SDK_VER=1.6.80 CK_QAIC_PERCENTILE_CALIBRATION=yes $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
 Note that `CK_QAIC_PERCENTILE_CALIBRATION=yes` cannot be specified together with `CK_QAIC_PCV`.
 
@@ -512,7 +513,7 @@ Note the new auxiliary images tagged with `1.6.66_PC` and `1.6.66_DEBUG`, which 
 ## Launch a reusable Docker container
 
 ```
-export SDK_VER=1.6.66 && CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen \
+export SDK_VER=1.6.80 && CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen \
 --docker=container_only --out=none --sdk=$SDK_VER --model_name=bert --experiment_dir)
 ```
 #### Test
@@ -530,7 +531,7 @@ BERT is two-benchmarks-in-one: BERT-99.9 must reach at least 99.9% of the refere
 
 ### BERT-99.9
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99.9 --scenario=offline --mode=accuracy --dataset_size=10833 \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16
 ```
@@ -564,7 +565,7 @@ mlperf-closed-g292_z43_q16-qaic-v1.6.66-aic100-qaic-v1.6.66-aic100-bert-<b>bert-
 ### BERT-99
 
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --mode=accuracy --scenario=offline --dataset_size=10833 \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16
 ```
@@ -584,7 +585,7 @@ export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verb
 When measuring the performance under the Offline scenario, the target QPS (queries per second) parameter should be specified as close to the actual system performance as possible to achieve the required minimum duration of 10 minutes.
 
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --mode=performance --scenario=offline \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16 --target_qps=11111
 ```
@@ -644,7 +645,7 @@ No warnings encountered during test.
 Setting the target QPS parameter to about 1/10th of the actual system performance reduces the execution time to about 1 minute, which is handy for quick test runs.
 
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --mode=performance --scenario=offline \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16 --target_qps=1111
 ```
@@ -707,14 +708,14 @@ No warnings encountered during test.
 
 When measuring the performance under the Server scenario, the target QPS is expected to be within 95% of that for the Offline scenario e.g.:
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --mode=performance --scenario=server \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16 --target_qps=10555
 ```
 
 Unfortunately, for the Server scenario, reducing the target QPS also leads to decreasing the system load, so you cannot do that to reduce the number of queries for a test run. For that, use the `--query_count` parameter e.g.:
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --mode=performance --scenario=server \
 --sdk=$SDK_VER --container=$CONTAINER_ID --sut=g292_z43_q16 --target_qps=10555 --query_count=40320
 ```
@@ -779,7 +780,7 @@ No warnings encountered during test.
 ## Make a full submission run
 
 ```
-export SDK_VER=1.6.66 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+export SDK_VER=1.6.80 && ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --model=bert-99 --sut=g292_z43_q16 --group.datacenter --group.closed \
 --target_qps=11111 --server_target_qps=10777 --max_wait=10000 --override_batch_size=4096 \
 --sdk=$SDK_VER --container=$CONTAINER_ID

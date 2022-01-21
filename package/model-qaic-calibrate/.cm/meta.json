@@ -181,6 +181,11 @@
         "_BATCH_SIZE": "1"
       }
     },
+    "bs.2": {
+      "extra_env": {
+        "_BATCH_SIZE": "2"
+      }
+    },
     "bs.4": {
       "extra_env": {
         "_BATCH_SIZE": "4"
