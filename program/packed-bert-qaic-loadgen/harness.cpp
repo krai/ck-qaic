@@ -117,7 +117,7 @@ Program::Program() {
   scheduler = std::thread(QueueScheduler);
 
 #ifdef __amd64__
-  num_setup_threads = 1;
+  num_setup_threads = 8;
 #else
   num_setup_threads = 2;
 #endif
