@@ -16,10 +16,9 @@ done
 
 device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
 
-echo "Setting VC for all available QAIC devices."
-echo ""
-
 if [ -e $cmdfile_vc ]; then
+  echo "Setting VC for all available QAIC devices."
+  echo ""
   read freq < $cmdfile_vc;
   for device_id in $device_ids
   do
