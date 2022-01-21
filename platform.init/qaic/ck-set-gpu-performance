@@ -3,6 +3,7 @@
 #
 # Copyright (c) 2021 Krai Ltd.
 #
+cmdfile_vc=/opt/qti-aic/logs/vc.config
 
 for cmd in pre watch; do
   cmdfile=/opt/qti-aic/logs/${cmd}.config
@@ -13,10 +14,21 @@ for cmd in pre watch; do
     fi
 done
 
-echo "Setting ECC for all available QAIC devices."
+device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
+
+echo "Setting VC for all available QAIC devices."
 echo ""
 
-device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
+if [ -e $cmdfile_vc ]; then
+  read freq < $cmdfile_vc;
+  for device_id in $device_ids
+  do
+    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $freq
+  done
+fi
+
+echo "Setting ECC for all available QAIC devices."
+echo ""
 
 request="{ \
  \"request\": [ \
@@ -36,6 +48,6 @@ request="{ \
 for device_id in $device_ids
 do
     echo "${request/DEVICE_ID/$device_id}" > request.json
-    sudo /opt/qti-aic/tools/qaic-monitor-json -i request.json
+    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-monitor-json -i request.json
     rm request.json
 done

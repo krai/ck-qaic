@@ -4,6 +4,7 @@
 
 cmdfile=/opt/qti-aic/logs/post.config
 cmdfile_watch=/opt/qti-aic/logs/watch.procs
+cmdfile_vc=/opt/qti-aic/logs/vc.config
 if [ -e $cmdfile ]; then
   while read cmd; do
     eval $cmd
@@ -12,3 +13,8 @@ fi
 if [ -e $cmdfile_watch ]; then
   cat $cmdfile_watch | xargs kill
 fi
+
+if [ -e $cmdfile_vc ]; then
+  echo 1 | sudo tee /sys/bus/mhi/devices/*/soc_reset
+fi
+
