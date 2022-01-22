@@ -31,7 +31,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
+function exit_if_error() {
+    if [ "${?}" != "0" ]; then exit 1; fi
+}
 
 if [[ $# < 1 ]]; then
   echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet).";
@@ -51,11 +53,13 @@ fi
 
 if [[ "$(docker images -q krai/ck.common.${_BASE_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.ck.sh
+  exit_if_error
 fi
 
 echo "Creating image: krai/mlperf.${_DOCKER_OS}.${MODEL}"
 echo "docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} ."
 cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} .
+exit_if_error
 
 echo
 echo "Done."
