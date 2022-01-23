@@ -88,7 +88,10 @@
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
-        "record_tags": "compliance.###"
+        "record_tags": "compliance.###",
+        "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>"        
+
 
       }
     },
@@ -209,7 +212,7 @@
     "scenario": {
       "multistream": {
         "activation_count": "<<<recommended_multistream_activation_count>>>",
-        "batch_size": "<<<recommended_multistream_batch_size>>>",
+        "batch_size": "<<<multistream_override_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=MultiStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "multistream",
@@ -218,7 +221,7 @@
       },
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
+        "batch_size": "<<<offline_override_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline <<<?perf_offline_ck_env>>>",
         "input_select": "<<<recommended_input_select>>>",
         "performance_mode_extension": "<<<?perf_offline_ext>>>",
@@ -226,7 +229,7 @@
       },
       "server": {
         "activation_count": "<<<recommended_activation_count>>>",
-        "batch_size": "<<<recommended_batch_size>>>",
+        "batch_size": "<<<server_override_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
         "input_select": "0",
         "performance_mode_extension": "<<<?perf_server_ext>>>",
@@ -235,7 +238,7 @@
       "singlestream": {
         "activation_count": "1",
         "device_ids": "0",
-        "batch_size": "1",
+        "batch_size": "<<<singlestream_override_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
@@ -512,7 +515,13 @@
         "check_vc_value_begin": "<<<check_vc_value_begin_def>>>",
         "check_vc_value_end": "<<<check_vc_value_end_def>>>"
       }
-    }
+    },
+   "override_batch_size": {
+     "###": {
+       "multistream_override_batch_size": "###",
+       "singlestream_override_batch_size": "###"
+     }
+   }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
@@ -550,6 +559,10 @@
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "model_suffix": "offline",
+    "multistream_override_batch_size": "<<<recommended_multistream_batch_size>>>",
+    "override_batch_size": "",
+    "offline_override_batch_size": "<<<override_batch_size>>>",
+    "override_batch_size": "<<<recommended_batch_size>>>",
     "perf_offline_ck_env":"",
     "perf_offline_record_tags": "",
     "perf_offline_record_uoa_parts": "",
@@ -571,7 +584,6 @@
     "pre_ipmitool_sdr_elist_full_cmd_def": "echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<pre_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>pre.config; ",
     "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<pre_fan_raw>>> 0xFF  > <<<logs_dir>>><<<pre_ipmitool_raw_log>>>' >> <<<logs_dir>>>pre.config; echo 'sleep 5' >> <<<logs_dir>>>pre.config; <<<pre_ipmitool_sdr_elist_full_cmd_def>>>",
     "pre_ipmitool_set_fan_raw_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<pre_fan_raw>>> 0xFF  > <<<logs_dir>>><<<pre_ipmitool_raw_log>>>' >> <<<logs_dir>>>pre.config; echo 'sleep 5' >> <<<logs_dir>>>pre.config;",
-    "ipmitool_fan_raw_cmd":"",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
     "print_container_only": "&& CONTAINER=<<<container>>>",
@@ -585,6 +597,8 @@
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "separator": ";",
     "server_target_qps": "<<<target_qps>>>",
+    "server_override_batch_size": "<<<override_batch_size>>>",
+    "singlestream_override_batch_size": "1",
     "offline_target_qps": "<<<target_qps>>>",
     "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
     "shared_group_name": "qaic",
