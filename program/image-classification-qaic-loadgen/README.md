@@ -80,19 +80,8 @@ ck install package \
 --tags=model,qaic,resnet50,resnet50.aedk_20w.multistream
 ```
 
-Once models are compiled for AEDKs they can be installed on to the device(s) using [this](### Compile the models for 20w AEDKs (edge category)) script.
+Once models are compiled for AEDKs they can be installed on to the device(s) using [this](https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device) script.
 
-```
-ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_20w.offline
-ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_20w.singlestream
-ck install package \
---dep_add_tags.profile-resnet50=mlperf.option1 \
---tags=model,qaic,resnet50,resnet50.aedk_20w.multistream
-``` 
 
 ### Compile the models for edge category 16 NSP PCIe
 
