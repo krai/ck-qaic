@@ -7,32 +7,20 @@ Please refer to [Docker README](https://github.com/krai/ck-qaic/blob/main/docker
 
 Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server/R282-Z93-rev-100)) server with CentOS 7.9 and QAIC Platform SDK 1.6.80:
 
+Check the CENTOS Version to be 7.9 and Linux Kernel Version 5.4 or above
 ```
 rpm -q centos-release
 ```
-<pre>
-  centos-release-7-9.2009.1.el7.centos.x86_64
-</pre>
 
 ```
 uname -a
 ```
-<pre>
-  Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux
-</pre>
+Check the Platform SDK installed
 
 ```
 cat /opt/qti-aic/versions/platform.xml
 ```
-```
-<versions>
-        <ci_build>
-           <base_name>AIC</base_name>
-           <base_version>1.6</base_version>
-           <build_id>80</build_id>
-        </ci_build>
-        </versions>
-```
+
 
 <a name="install_system"></a>
 ## Install system-wide prerequisites
@@ -121,9 +109,6 @@ echo 'export PATH=&dollar;HOME/.local/bin:$PATH' >> $HOME/.bashrc
 source $HOME/.bashrc
 ck version
 ```
-<pre>
-V2.6.1
-</pre>
 
 <a name="install_ck_repos"></a>
 ## Install CK repositories
@@ -142,29 +127,6 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 ```
 ck detect platform.os --platform_init_uoa=qaic
 ```
-<pre>
-OS CK UOA:            linux-64 (4258b5fe54828a50)
-
-OS name:              CentOS Linux 7 (Core)
-Short OS name:        Linux 5.4.1
-Long OS name:         Linux-5.4.1-1.el7.elrepo.x86_64-x86_64-with-centos-7.9.2009-Core
-OS bits:              64
-OS ABI:               x86_64
-
-Platform init UOA:    qaic
-</pre>
-```
-cat $(ck find repo:local)/cfg/local-platform/.cm/meta.json
-```
-<pre>
-{
-  "platform_init_uoa": {
-    "linux-64": "qaic"
-  }
-}
-</pre>
-
-
 
 
 <a name="detect_python"></a>
