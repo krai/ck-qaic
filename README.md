@@ -4,6 +4,10 @@ This repository contains benchmark implementations and automated workflows for
 the [Qualcomm Cloud AI](https://www.qualcomm.com/products/cloud-artificial-intelligence)
 submissions to [MLPerf Inference](https://mlcommons.org/en/).
 
+You can follow the below README files for installing and running the MLCommons benchmarks
+1. [Using Docker](https://github.com/krai/ck-qaic/blob/main/README.docker.md)
+2. [Without Docker](https://github.com/krai/ck-qaic/blob/main/program/README.md)
+
 Unless explicitly stated otherwise, this software is released under the following license 
 ([SPDX-License-Identifier: BSD-3-Clause.](https://spdx.org/licenses/BSD-3-Clause.html)):
 
