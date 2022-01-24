@@ -11,7 +11,8 @@ Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server
 rpm -q centos-release
 ```
 <pre>
-centos-release-7-9.2009.1.el7.centos.x86_64</pre>
+  centos-release-7-9.2009.1.el7.centos.x86_64
+</pre>
 
 ```
 uname -a
