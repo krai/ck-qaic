@@ -73,9 +73,13 @@ ck install package --tags=profile,resnet50,mlperf.option1,bs.1
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.aedk_20w.offline
+```
+```
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.aedk_20w.singlestream
+```
+```
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.aedk_20w.multistream
