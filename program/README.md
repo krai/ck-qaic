@@ -18,12 +18,13 @@ rpm -q centos-release
 uname -a
 ```
 <pre>
-Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux</pre>
+  Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux
+</pre>
 
 ```
 cat /opt/qti-aic/versions/platform.xml
 ```
-<pre>
+```
 <versions>
         <ci_build>
            <base_name>AIC</base_name>
@@ -31,7 +32,7 @@ cat /opt/qti-aic/versions/platform.xml
            <build_id>80</build_id>
         </ci_build>
         </versions>
-</pre>
+```
 
 <a name="install_system"></a>
 ## Install system-wide prerequisites
