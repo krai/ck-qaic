@@ -53,7 +53,7 @@ echo "vdetected" | ck detect soft:compiler.glow.profile \
 ```
 
 
-### Calibrate on your own
+### Calibrate on your own (can take hours and is optional)
 
 **NB:** For more information, please see the [calibration README](https://github.com/krai/ck-qaic/blob/main/package/model-qaic-calibrate/README.md#ssd_resnet34).
 
