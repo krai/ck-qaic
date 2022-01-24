@@ -66,7 +66,8 @@ ck install package --tags=profile,resnet50,mlperf.option1,bs.8
 ck install package --tags=profile,resnet50,mlperf.option1,bs.1
 ```
 
-### Compile the models for 20w AEDKs (edge category)
+## Compile the models
+### Compilation for 20w AEDKs (edge category)
 
 ```
 ck install package \
@@ -83,7 +84,7 @@ ck install package \
 Once models are compiled for AEDKs they can be installed on to the device(s) using [this](https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device) script.
 
 
-### Compile the models for edge category 16 NSP PCIe
+### Compilation for edge category 16 NSP PCIe
 
 ```
 ck install package \
@@ -101,7 +102,7 @@ ck install package \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream
 ```
 
-### Compile the model for datacenter category 16 NSP PCIe
+### Compilation for datacenter category 16 NSP PCIe
 
 ```
 ck install package \
