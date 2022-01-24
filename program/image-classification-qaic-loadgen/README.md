@@ -2,6 +2,8 @@
 
 Please refer to [Docker README](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md) for a faster way to benchmark Image Classification on Qualcomm Cloud AI. The below instructions are meant only when docker environment is not used. 
 
+## Initial System Setup
+
 Complete the common benchmarking setup as detailed [here](https://github.com/krai/ck-qaic/blob/main/program/README.md)
 
 <a name="prepare_imagenet"></a>
