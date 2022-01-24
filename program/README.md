@@ -232,6 +232,10 @@ ck install package --tags=python-package,cython
 ck install package --tags=python-package,opencv-python-headless
 ```
 
+If you use large NFS folders in your $PATH you can avoid log waiting time when CK searches in them by setting the following kernel variable
+```
+ck set kernel var.soft_search_dirs="/fake_dir"
+```
 
 <a name="install_inference_repo"></a>
 ## Install the MLPerf Inference repo and build LoadGen
