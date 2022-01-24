@@ -245,6 +245,16 @@
         "bs.8"
       ]
     },
+    "resnet50.aedk_20w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "resnet50.aedk_20w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -263,6 +273,16 @@
       },
       "extra_tags": [
         "bs.8"
+      ]
+    },
+    "resnet50.aedk_15w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
       ]
     },
     "resnet50.aedk_15w.singlestream": {
@@ -286,11 +306,21 @@
         "bs.8"
       ]
     },
+    "resnet50.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "resnet50.pcie.14nsp.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14"
       },
       "extra_tags": [
         "bs.1"
@@ -357,6 +387,12 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
       }
     },
+    "ssd_resnet34.aedk_20w.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
     "ssd_resnet34.aedk_20w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -369,6 +405,12 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
       }
     },
+    "ssd_resnet34.aedk_15w.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
     "ssd_resnet34.aedk_15w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -379,6 +421,12 @@
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
     "ssd_resnet34.pcie.14nsp.singlestream": {
@@ -438,6 +486,16 @@
         "bs.4"
       ]
     },
+    "ssd_mobilenet.aedk_20w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
     "ssd_mobilenet.aedk_20w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -458,6 +516,16 @@
         "bs.4"
       ]
     },
+    "ssd_mobilenet.aedk_15w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
     "ssd_mobilenet.aedk_15w.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -476,6 +544,16 @@
       },
       "extra_tags": [
         "bs.4"
+      ]
+    },
+    "ssd_mobilenet.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=7"
+      },
+      "extra_tags": [
+        "bs.2"
       ]
     },
     "ssd_mobilenet.pcie.14nsp.singlestream": {
@@ -543,16 +621,16 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
-    "bert-99.aedk_25w.singlestream": {
-      "extra_env": {
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
-      }
-    },
     "bert-99.aedk_20w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+      }
+    },
+    "bert-99.aedk_20w.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
     "bert-99.aedk_20w.singlestream": {
@@ -567,6 +645,12 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
+    "bert-99.aedk_15w.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
     "bert-99.aedk_15w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -577,6 +661,12 @@
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+      }
+    },
+    "bert-99.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
     "bert-99.pcie.14nsp.singlestream": {
