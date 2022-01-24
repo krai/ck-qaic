@@ -7,14 +7,22 @@ Please refer to [Docker README](https://github.com/krai/ck-qaic/blob/main/docker
 
 Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server/R282-Z93-rev-100)) server with CentOS 7.9 and QAIC Platform SDK 1.6.80:
 
-<pre><b>[anton@dyson ~]&dollar;</b> rpm -q centos-release
+```
+rpm -q centos-release
+```
+<pre>
 centos-release-7-9.2009.1.el7.centos.x86_64</pre>
 
-<pre><b>[anton@dyson ~]&dollar;</b> uname -a
+```
+uname -a
+```
+<pre>
 Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux</pre>
 
-<pre><b>[anton@dyson ~]&dollar;</b> cat /opt/qti-aic/versions/platform.xml</pre>
 ```
+cat /opt/qti-aic/versions/platform.xml
+```
+<pre>
 <versions>
         <ci_build>
            <base_name>AIC</base_name>
@@ -22,7 +30,7 @@ Linux dyson.localdomain 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST
            <build_id>80</build_id>
         </ci_build>
         </versions>
-```
+</pre>
 
 <a name="install_system"></a>
 ## Install system-wide prerequisites
