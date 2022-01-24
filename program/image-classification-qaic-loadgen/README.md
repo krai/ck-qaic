@@ -89,9 +89,13 @@ Once models are compiled for AEDKs they can be installed on to the device(s) usi
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline
+```
+```
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream
+```
+```
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream
