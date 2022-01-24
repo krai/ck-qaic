@@ -49,7 +49,8 @@ ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape
 ```
 ck install package --dep_add_tags.imagenet-val=full \
 --tags=dataset,imagenet,calibration,mlperf.option1
-
+```
+```
 ck install package --dep_add_tags.dataset-source=mlperf.option1 \
 --tags=dataset,preprocessed,using-opencv,for.resnet50,layout.nhwc,first.500 \
 --extra_tags=calibration,mlperf.option1
