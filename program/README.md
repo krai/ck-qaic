@@ -245,3 +245,7 @@ ck install package --tags=mlperf,loadgen,static
 ```
 ck install package --tags=mlperf,power,source
 ```
+## Install and Run the Benchmarks
+1. [Image Classification](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
+2. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md)
+3. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md)
