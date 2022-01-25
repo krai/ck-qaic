@@ -3,7 +3,7 @@
 WORKSPACE=${WORKSPACE:-$HOME/MLC2.0}
 
 echo -n "\
-export CK_PYTHON=${CK_PYTHON:-$(which python3)}
+export CK_PYTHON=${CK_PYTHON:-$(which python3.8)}
 export CK_WORKSPACE=$WORKSPACE
 export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
 export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
