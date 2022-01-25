@@ -1,12 +1,12 @@
 ## Initialize the Docker Setup
 ### On Ubuntu-20.04
-`WORKSPACE=/local/mnt/workspace bash ubuntu-20.04.sh`
+`WORKSPACE=$HOME bash ubuntu-20.04.sh`
 
 ### On CentOS-7
-`WORKSPACE=/local/mnt/workspace bash centos7.sh`
+`WORKSPACE=$HOME bash centos7.sh`
 
 ### Initialize the CK Setup (common for all OS) 
-`WORKSPACE=/local/mnt/workspace bash ck_init.sh`
+`WORKSPACE=$HOME bash ck_init.sh`
 
 ## Create and Launch the Benchmark docker Containers
 

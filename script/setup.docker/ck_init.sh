@@ -14,7 +14,7 @@ source $HOME/.bashrc
 
 sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
 
-$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.0 --user --upgrade
+$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.1 --user --upgrade
 ck pull repo --url=https://github.com/krai/ck-qaic
 
 ck add repo:$CK_EXPERIMENT_REPO --quiet
