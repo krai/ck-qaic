@@ -33,4 +33,4 @@ sudo systemctl enable docker
 sudo systemctl start docker
 docker system info
 
-sudo usermod -aG qaic,docker,sudo $USER
+sudo usermod -aG docker $USER
