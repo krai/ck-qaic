@@ -105,7 +105,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 export CK_PYTHON=`which python3.8`
 $CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
 $CK_PYTHON -m pip install ck==2.6.1
-echo 'export PATH=&dollar;HOME/.local/bin:$PATH' >> $HOME/.bashrc
+echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bashrc
 source $HOME/.bashrc
 ck version
 ```
