@@ -115,5 +115,21 @@
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
     "zero_copy": "disable"
+  },
+  "groups": {
+    "closed": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      },
+      {
+        "compliance": "TEST01"
+      },
+      {
+        "compliance": "TEST05"
+      }
+    ]
   }
 }
