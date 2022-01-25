@@ -10,7 +10,7 @@ sudo apt install -y \
   acl
 sudo apt clean all
 sudo apt install docker-ce
-docker --version
+sudo docker --version
 
 export WORKSPACE=$WORKSPACE
 export WORKSPACE_DOCKER=$WORKSPACE/docker
@@ -22,6 +22,6 @@ echo -e "{\n\t\"data-root\": \"$WORKSPACE_DOCKER\"\n}" | sudo tee -a $DOCKER_DAE
 cat $DOCKER_DAEMON_JSON
 
 sudo service docker start
-docker system info
+sudo docker system info
 
 sudo usermod -aG qaic,docker,sudo $USER
