@@ -31,6 +31,6 @@ cat /etc/systemd/system/docker.service.d/override.conf
 
 sudo systemctl enable docker
 sudo systemctl start docker
-docker system info
+sudo docker system info
 
 sudo usermod -aG docker $USER
