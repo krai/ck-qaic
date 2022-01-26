@@ -92,9 +92,7 @@
         "recommended_verbosity": "0",
         "record_tags": "compliance.###",
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
-        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>"        
-
-
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>"
       }
     },
     "container": {
@@ -157,9 +155,9 @@
         "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
         "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>",
-	"record_tags_inner": "<<<power_record_tags_inner>>>",
+	     "record_tags_inner": "<<<power_record_tags_inner>>>",
         "record_uoa": "<<<power_record_uoa>>>",
-	"wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
+	     "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
       }
     },
     "model_extra_tags": {
@@ -213,9 +211,16 @@
     },
     "multistream_query_count": {
       "###": {
-        "ck_env_multistream": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
-        "record_tags_multistream": "query_count.###",
-        "record_uoa_parts_multistream": "query_count.###"
+        "ck_env_multistream": [
+          " --env.CK_LOADGEN_MAX_QUERY_COUNT=###",
+          " --env.CK_LOADGEN_MIN_QUERY_COUNT=###"
+        ],
+        "record_tags_multistream": [
+          "query_count.###"
+        ],
+        "record_uoa_parts_multistream": [
+          "query_count.###"
+        ]
       }
     },
     "server_query_count": {
@@ -265,7 +270,10 @@
         "activation_count": "1",
         "device_ids": "0",
         "batch_size": "1",
-        "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
+        "ck_env": [
+          "--env.CK_LOADGEN_SCENARIO=SingleStream",
+          "<<<ck_env_singlestream>>>"
+        ],
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
         "performance_mode_extension": "-target_latency.<<<singlestream_target_latency>>>",
@@ -433,10 +441,20 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
       }
     },
-    "target_latency": {
+    "singlestream_target_latency": {
       "###": {
-        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=###",
-        "record_tags": "target_latency.###"
+        "ck_env_singlestream": "--env.CK_LOADGEN_TARGET_LATENCY=###",
+        "record_tags_singlestream": "target_latency.###"
+      }
+    },
+    "multistream_target_latency": {
+      "###": {
+        "ck_env_multistream": [
+          "--env.CK_LOADGEN_TARGET_LATENCY=###"
+        ],
+        "record_tags_multistream": [
+          "target_latency.###"
+        ]
       }
     },
     "target_latency_file": {
@@ -557,6 +575,7 @@
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_env_multistream": "",
+    "ck_env_singlestream": "",
     "ck_env_server": "",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
