@@ -218,8 +218,8 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=MultiStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "multistream",
-        "performance_mode_extension": "-target_latency.<<<target_latency>>>",
-        "compliance_extension":"-target_latency.<<<target_latency>>>"
+        "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
+        "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
       },
       "offline": {
         "activation_count": "<<<recommended_activation_count>>>",
@@ -244,10 +244,10 @@
         "ck_env": "--env.CK_LOADGEN_SCENARIO=SingleStream",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
-        "performance_mode_extension": "-target_latency.<<<target_latency>>>",
+        "performance_mode_extension": "-target_latency.<<<singlestream_target_latency>>>",
         "queue_length": "1",
         "threads_per_queue": "1",
-        "compliance_extension": "-target_latency.<<<target_latency>>>"
+        "compliance_extension": "-target_latency.<<<singlestream_target_latency>>>"
       }
     },
     "sdk": {
@@ -555,6 +555,8 @@
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "model_suffix": "offline",
+    "multistream_target_latency": "<<<target_latency>>>",
+    "offline_target_qps": "<<<target_qps>>>",
     "perf_offline_ck_env":"",
     "perf_offline_record_tags": "",
     "perf_offline_record_uoa_parts": "",
@@ -589,10 +591,10 @@
     "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
     "separator": ";",
     "server_target_qps": "<<<target_qps>>>",
-    "offline_target_qps": "<<<target_qps>>>",
     "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
     "shared_group_name": "qaic",
     "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
+    "singlestream_target_latency": "<<<target_latency>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
