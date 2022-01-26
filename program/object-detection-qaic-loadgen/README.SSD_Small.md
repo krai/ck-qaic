@@ -53,8 +53,7 @@ ck install package --tags=dataset,coco,calibration,mlperf
 ```
 
 ```
-ck install package --ask \
---tags=dataset,coco.2017,calibration,for.ssd_mobilenet.onnx.preprocessed
+ck install package --ask --tags=dataset,coco.2017,calibration,for.ssd_mobilenet.onnx.preprocessed
 ```
 ```
 ck install package --tags=profile,ssd_mobilenet,bs.1
@@ -73,44 +72,35 @@ ck install package --tags=profile,ssd_mobilenet,bs.4
 
 ### Compilation for 20w AEDKs (edge category)
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.offline
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.offline
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.singlestream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.singlestream
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.multistream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_20w.multistream
 ```
 ### Compilation for 15w AEDKs (edge category)
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.offline
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.offline
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.singlestream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.singlestream
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.multistream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.aedk_15w.multistream
 ```
 Once models are compiled for AEDKs they can be installed on to the device(s) using [this](https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device) script.
 
 ### Compilation for edge category 16 NSP PCIe
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
 ```
 ```
-ck install package \
---tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
+ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
 ```
 
 
