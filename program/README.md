@@ -202,6 +202,7 @@ ck install package --tags=python-package,numpy
 ck install package --tags=python-package,absl
 ck install package --tags=python-package,cython
 ck install package --tags=python-package,opencv-python-headless
+ck install package --tags=lib,python-package,onnx --force_version=1.8.1
 ```
 
 If you use large NFS folders in your $PATH you can avoid log waiting time when CK searches in them by setting the following kernel variable
