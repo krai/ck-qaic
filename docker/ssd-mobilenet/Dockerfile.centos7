@@ -96,16 +96,13 @@ RUN ck compile program:object-detection-qaic-loadgen --quiet
 # Remove NMS.
 # Generate calibration profiles.
 RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
+RUN ck install package --tags=profile,ssd_mobilenet,bs.2 --quiet
 RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "$CK_QAIC_PCV" != '' ]]; then ck install package \
-  --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline,quantization.calibration \
-  --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream,quantization.calibration \
-  --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  else ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline; \
-  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream; fi
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.

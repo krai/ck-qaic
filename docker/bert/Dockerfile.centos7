@@ -83,15 +83,20 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # # Uncomment if using precalibrated profile; comment out otherwise.
 RUN if [[ "$CK_DETECT_PROFILE" == "yes" ]]; then echo "vdetected" |  ck detect soft:compiler.glow.profile \
  --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
- --extra_tags=detected,profile,qaic,bert-packed,mixed,pcv.${CK_QAIC_PCV:-9980}; fi
+ --extra_tags=detected,profile,qaic,bert-packed,mixed; fi
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package \
   --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --quiet \
   --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
   --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
-  --extra_tags=pcv.$CK_QAIC_PCV --quiet;  else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; fi
+  --extra_tags=pcv.$CK_QAIC_PCV --quiet;  ck install package \
+  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
+  --extra_tags=pcv.$CK_QAIC_PCV --quiet; \
+  else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet
+  fi
 RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
 #-----------------------------------------------------------------------------#

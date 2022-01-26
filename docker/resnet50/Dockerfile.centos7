@@ -93,10 +93,12 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 # Calibrate the workload for bs.1 and bs.8
 RUN ck install package --tags=profile,resnet50,bs.1 --quiet
 RUN ck install package --tags=profile,resnet50,bs.8 --quiet
+RUN ck install package --tags=profile,resnet50,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
 RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline --quiet
 RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 3. Compile the Image Classification program.
