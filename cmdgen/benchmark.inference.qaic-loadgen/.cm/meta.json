@@ -218,6 +218,13 @@
         "record_uoa_parts_multistream": "query_count.###"
       }
     },
+    "server_query_count": {
+      "###": {
+        "ck_env_server": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
+        "record_tags_server": "query_count.###",
+        "record_uoa_parts_server": "query_count.###"
+      }
+    },
     "scenario": {
       "multistream": {
         "activation_count": "<<<recommended_multistream_activation_count>>>",
@@ -243,6 +250,9 @@
         "activation_count": "<<<recommended_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
+        "ck_env": "<<<ck_env_server>>>",
+        "record_tags": "<<<record_tags_server>>>",
+        "record_uoa_parts": "<<<record_uoa_parts_server>>>",
         "input_select": "0",
         "performance_mode_extension": "<<<?perf_server_ext>>>",
         "compliance_extension": "-target_qps.<<<server_target_qps>>>"
@@ -379,7 +389,7 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-	"power_server_ip": "10.222.154.58",
+	     "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
@@ -543,6 +553,7 @@
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_env_multistream": "",
+    "ck_env_server": "",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
     "device_ids": "<<<all_device_ids>>>",
@@ -596,8 +607,10 @@
     "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_tags_multistream": "",
+    "record_tags_server": "",
     "record_uoa": "<<<record_uoa_parts->>>",
     "record_uoa_parts_multistream": "",
+    "record_uoa_parts_server": "",
     "repetitions": "1",
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
