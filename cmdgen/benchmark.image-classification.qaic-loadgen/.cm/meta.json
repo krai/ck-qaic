@@ -12,8 +12,8 @@
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4",
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_batch_size": "1",
         "zero_copy": "disable"
       },
       "aedk_20w": {
@@ -22,8 +22,8 @@
         "recommended_threads_per_queue": "8",
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4",
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_batch_size": "1",
         "zero_copy": "disable"
       },
       "aedk_15w": {
@@ -33,7 +33,7 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4",
+        "recommended_multistream_batch_size": "1",
         "zero_copy": "disable"
       },
       "aedkg": {
@@ -43,7 +43,7 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4",
+        "recommended_multistream_batch_size": "1",
         "zero_copy": "disable"
       },
       "aedkh": {
@@ -53,7 +53,7 @@
         "recommended_queue_length": "8",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4",
+        "recommended_multistream_batch_size": "1",
         "zero_copy": "disable"
       },
       "pf003": {
@@ -90,8 +90,8 @@
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "3",
         "recommended_batch_size": "8",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "4"
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_batch_size": "1"
       },
       "r282_z93_q1": {
         "recommended_activation_count": "2",
