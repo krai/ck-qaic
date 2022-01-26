@@ -71,7 +71,9 @@
       "###": {
         "model_tags": [
           "pcv.\"$(echo ###)\""
-        ]
+        ],
+        "record_tags": "pcv.###",
+        "record_uoa_parts": "pcv.###"
       }
     },
     "compile": {

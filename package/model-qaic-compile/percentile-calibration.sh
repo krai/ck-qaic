@@ -50,7 +50,7 @@ function get_accuracy_metric() {
     elif [[ "$bmodel" == "resnet50" ]]; then echo "Accuracy"; 
   fi
 }
-if [[ $# < 2 ]]; then echo "Model base name (one among [bert-99, ssd_resnet34, ssd_mobilenet, resnet50]) and Model unique name for compilation (for e.g., ssd_resnet34.pcie.16nsp) required!"; exit 1; fi
+if [[ $# < 2 ]]; then echo "Model base name (one among [bert-99, ssd_resnet34, ssd_mobilenet, resnet50]) and Model unique name for compilation (for e.g., bert-99.pcie.16nsp.offline) required!"; exit 1; fi
 max=0
 maxi=0
 bmodel=$1
@@ -62,7 +62,7 @@ if [[ $cprogram == "" ]]; then
   exit -1;
 fi
 accuracy_metric=$(get_accuracy_metric $bmodel)
-for i in {80..99..1}
+for i in {70..99..1}
 do
   pcv="99"$i
   install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv --quiet >/dev/null 2>&1"
@@ -73,10 +73,10 @@ do
   echo $ck_run_cmd
   eval $ck_run_cmd
   exit_if_error
-  ck_clean_package_cmd="yes | ck clean env --tags=compiled,$model,quantization.calibration,pcv.$pcv >/dev/null 2>&1"
+  ck_clean_package_cmd="ck clean env --tags=compiled,$model,quantization.calibration,pcv.$pcv --force >/dev/null 2>&1"
   echo $ck_clean_package_cmd
   eval $ck_clean_package_cmd
-  accuracy=`grep -w $accuracy_metric $(ck find experiment:*$model*$pcv*offline*accuracy*)/*0001.json | cut -d ':' -f2 | cut -d ' ' -f2`
+  accuracy=`grep -w $accuracy_metric $(ck find experiment:*$bmodel*offline*accuracy*$pcv*)/*0001.json | cut -d ':' -f2 | cut -d ' ' -f2 | cut -d ',' -f1`
   #yes | ck rm experiment:*$model*$pcv*offline*accuracy* >/dev/null 2>&1
   #echo $pcv":"$f1
   #echo $pcv":"$f1 >>out
