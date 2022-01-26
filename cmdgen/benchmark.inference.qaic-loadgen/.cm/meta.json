@@ -675,6 +675,9 @@
         "scenario": "singlestream"
       },
       {
+        "scenario": "multistream"
+      },
+      {
         "scenario": "offline"
       }
     ],
