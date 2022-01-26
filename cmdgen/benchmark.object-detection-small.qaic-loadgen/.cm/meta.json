@@ -9,6 +9,8 @@
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "zero_copy": "enable"
@@ -17,6 +19,8 @@
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "1",
         "recommended_queue_length": "10",
         "recommended_threads_per_queue": "8",
         "zero_copy": "enable"
@@ -25,6 +29,8 @@
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "zero_copy": "enable"
@@ -33,6 +39,8 @@
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "zero_copy": "enable"
@@ -41,6 +49,8 @@
         "recommended_activation_count": "1",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "1",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "zero_copy": "enable"
@@ -74,7 +84,7 @@
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
         "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "1",
+        "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "zero_copy": "enable"
@@ -83,6 +93,8 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "4",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
@@ -113,7 +125,8 @@
         "hyphenated_model_name": "ssd-mobilenet",
         "model_name": "ssd-mobilenet",
         "model_tags": [
-          "###"
+          "###",
+	  "bs.<<<batch_size>>>"
         ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "256"

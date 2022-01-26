@@ -122,7 +122,8 @@
         "workload": "###",
         "model_name": "resnet50",
         "model_tags": [
-          "###"
+          "###",
+	  "bs.<<<batch_size>>>"
         ]
       }
     }

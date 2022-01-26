@@ -9,6 +9,7 @@
         "recommended_activation_count": "8",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "4",
         "zero_copy": "disable"
@@ -17,6 +18,7 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "4",
         "zero_copy": "disable"
@@ -25,6 +27,7 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8",
         "zero_copy": "disable"
@@ -33,6 +36,7 @@
         "recommended_activation_count": "8",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "4",
         "zero_copy": "disable"
@@ -41,6 +45,7 @@
         "recommended_activation_count": "8",
         "recommended_batch_size": "1",
         "recommended_input_select": "1",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "4",
         "zero_copy": "disable"
@@ -73,6 +78,7 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
@@ -81,6 +87,7 @@
         "recommended_activation_count": "16",
         "recommended_batch_size": "1",
         "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
@@ -111,7 +118,8 @@
         "hyphenated_model_name": "ssd-resnet34",
         "model_name": "ssd-resnet34",
         "model_tags": [
-          "###"
+          "###",
+	  "bs.<<<batch_size>>>"
         ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "64"
