@@ -95,7 +95,7 @@ RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck inst
   --extra_tags=pcv.$CK_QAIC_PCV --quiet; \
   else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; \
   fi
 RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
