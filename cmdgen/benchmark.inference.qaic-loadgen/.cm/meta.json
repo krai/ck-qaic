@@ -211,11 +211,21 @@
         "record_uoa_parts": "query_count.###"
       }
     },
+    "multistream_query_count": {
+      "###": {
+        "ck_env_multistream": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
+        "record_tags_multistream": "query_count.###",
+        "record_uoa_parts_multistream": "query_count.###"
+      }
+    },
     "scenario": {
       "multistream": {
         "activation_count": "<<<recommended_multistream_activation_count>>>",
         "batch_size": "<<<recommended_multistream_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=MultiStream",
+        "ck_env": "<<<ck_env_multistream>>>",
+        "record_tags": "<<<record_tags_multistream>>>",
+        "record_uoa_parts": "<<<record_uoa_parts_multistream>>>",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "multistream",
         "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
@@ -532,6 +542,7 @@
     "check_vc_value_end_def": "fi;",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
+    "ck_env_multistream": "",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
     "device_ids": "<<<all_device_ids>>>",
@@ -584,7 +595,9 @@
     "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
+    "record_tags_multistream": "",
     "record_uoa": "<<<record_uoa_parts->>>",
+    "record_uoa_parts_multistream": "",
     "repetitions": "1",
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
