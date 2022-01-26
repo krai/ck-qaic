@@ -79,7 +79,7 @@ RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
 #-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration --quiet
+RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration,mlperf --quiet
 RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 --tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
 
