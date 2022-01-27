@@ -154,13 +154,8 @@
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
         "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
-<<<<<<< Updated upstream
-        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>",
-	     "record_tags_inner": "<<<power_record_tags_inner>>>",
-=======
         "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
 	"record_tags_inner": "<<<power_record_tags_inner>>>",
->>>>>>> Stashed changes
         "record_uoa": "<<<power_record_uoa>>>",
 	     "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
       }
@@ -546,7 +541,7 @@
         "pre_fan_raw": "<<<?fan_raw_default>>>",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
         "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
-        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
         "fan_raw_tag" : "-fan_raw.<<<?fan_raw_default>>>"
       },
       "###":{
