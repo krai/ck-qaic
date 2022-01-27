@@ -92,6 +92,7 @@
         "recommended_verbosity": "0",
         "record_tags": "compliance.###",
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+	"perf_multistream_ck_env": "<<<?ck_env_multistream>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>"
       }
     },
