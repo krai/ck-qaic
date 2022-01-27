@@ -106,9 +106,63 @@ ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.mult
 
 # Benchmark
 
-***Todo 
+## Edge Category
+### R282_Z93_Q1
 
+#### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
+--mode=accuracy --scenario=offline 
+```
+#### Full Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
+--group.edge --group.closed --offline_target_qps=19360 --target_latency=3.9
+```
 
+### R282_Z93_Q5 
+#### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
+--mode=accuracy --scenario=offline
+```
+#### Full Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
+--group.edge --group.closed --offline_target_qps=97510 --target_latency=3.9
+```
+
+### AEDK_15W
+#### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=aedk_15w --sdk=1.6.80 --model=ssd_mobilenet \
+--mode=accuracy --scenario=offline 
+```
+#### Full Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=aedk_15w --sdk=1.6.80 --model=ssd_mobilenet \
+--group.edge --group.closed --offline_target_qps=3440 --target_latency=1.9
+```
+
+### AEDK_20W
+#### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=aedk_20w --sdk=1.6.80 --model=ssd_mobilenet \
+--mode=accuracy --scenario=offline
+```
+#### Full Run
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=aedk_20w --sdk=1.6.80 --model=ssd_mobilenet \
+--group.edge --group.closed --offline_target_qps=4090 --target_latency=2.0
+```
 
 <a name="info"></a>
 # Further info
