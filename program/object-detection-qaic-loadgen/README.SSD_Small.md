@@ -119,7 +119,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=19360 --target_latency=3.9
+--group.edge --group.closed --offline_target_qps=19360 \ --singlestream_target_latency=3.9 --multistream_target_latency=31.2
 ```
 
 ### R282_Z93_Q5 
@@ -133,7 +133,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=97510 --target_latency=3.9
+--group.edge --group.closed --offline_target_qps=97510 \ --singlestream_target_latency=3.9 --multistream_target_latency=31.2
 ```
 
 ### AEDK_15W
@@ -147,7 +147,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 --sut=aedk_15w --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=3440 --target_latency=1.9
+--group.edge --group.closed --offline_target_qps=3440 \ --singlestream_target_latency=1.9 --multistream_target_latency=15.2
 ```
 
 ### AEDK_20W
@@ -161,7 +161,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=4090 --target_latency=2.0
+--group.edge --group.closed --offline_target_qps=4090 \ --singlestream_target_latency=2 --multistream_target_latency=16
 ```
 
 <a name="info"></a>

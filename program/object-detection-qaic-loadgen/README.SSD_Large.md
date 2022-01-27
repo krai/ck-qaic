@@ -130,7 +130,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=435 --target_latency=40
+--group.edge --group.closed --offline_target_qps=435 \ --singlestream_target_latency=40 --multistream_target_latency=320
 ```
 
 ### R282_Z93_Q5 
@@ -144,7 +144,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=2175 --target_latency=40
+--group.edge --group.closed --offline_target_qps=2175 \ --singlestream_target_latency=40 --multistream_target_latency=320
 ```
 
 ### AEDK_15W
@@ -158,7 +158,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=aedk_15w --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=120 --target_latency=27
+--group.edge --group.closed --offline_target_qps=120 \ --singlestream_target_latency=27 --multistream_target_latency=216
 ```
 
 ### AEDK_20W
@@ -172,7 +172,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=180 --target_latency=28
+--group.edge --group.closed --offline_target_qps=180 \ --singlestream_target_latency=28 --multistream_target_latency=224
 ```
 
 ## Datacenter Category
@@ -187,7 +187,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=r282_z93_q8 --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=3470 --server_target_qps=3380
+--group.edge --group.closed --offline_target_qps=3470 \ --server_target_qps=3380
 ```
 
 ### G292_Z43_Q16
@@ -201,7 +201,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 --sut=g292_z43_q16 --sdk=1.6.80 --model=ssd_resnet34 \
---group.edge --group.closed --offline_target_qps=6960 --server_target_qps=6870
+--group.edge --group.closed --offline_target_qps=6960 \ --server_target_qps=6870
 ```
 
 <a name="info"></a>
