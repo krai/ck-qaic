@@ -153,11 +153,13 @@
         "recommended_verbosity": "0",
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
         "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
-        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>> <<<?ck_env_server>>>",
+        "perf_multistream_ck_env": "<<<?ck_env_multistream>>>",
+        "perf_singlestream_ck_env": "<<<?ck_env_singlestream>>>",
         "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
 	"record_tags_inner": "<<<power_record_tags_inner>>>",
         "record_uoa": "<<<power_record_uoa>>>",
-	     "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
+	"wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
       }
     },
     "model_extra_tags": {
@@ -215,12 +217,8 @@
           " --env.CK_LOADGEN_MAX_QUERY_COUNT=###",
           " --env.CK_LOADGEN_MIN_QUERY_COUNT=###"
         ],
-        "record_tags_multistream": [
-          "query_count.###"
-        ],
-        "record_uoa_parts_multistream": [
-          "query_count.###"
-        ]
+        "record_tags_multistream": "query_count.###",
+        "record_uoa_parts_multistream": "query_count.###"
       }
     },
     "server_query_count": {
@@ -236,10 +234,8 @@
         "batch_size": "<<<recommended_multistream_batch_size>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=MultiStream",
-          "<<<ck_env_multistream>>>"
+          "<<<?perf_multistream_ck_env>>>"
         ],
-        "record_tags": "<<<record_tags_multistream>>>",
-        "record_uoa_parts": "<<<record_uoa_parts_multistream>>>",
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "multistream",
         "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
@@ -258,10 +254,8 @@
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
-          "<<<ck_env_server>>>"
+          "<<<?perf_server_ck_env>>>"
         ],
-        "record_tags": "<<<record_tags_server>>>",
-        "record_uoa_parts": "<<<record_uoa_parts_server>>>",
         "input_select": "0",
         "performance_mode_extension": "<<<?perf_server_ext>>>",
         "compliance_extension": "-target_qps.<<<server_target_qps>>>"
@@ -272,7 +266,7 @@
         "batch_size": "1",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=SingleStream",
-          "<<<ck_env_singlestream>>>"
+          "<<<?perf_singlestream_ck_env>>>"
         ],
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
@@ -602,9 +596,6 @@
     "check_vc_value_end_def": "fi;",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
-    "ck_env_multistream": "",
-    "ck_env_singlestream": "",
-    "ck_env_server": "",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
     "device_ids": "<<<all_device_ids>>>",
@@ -630,9 +621,6 @@
     "model_suffix": "offline",
     "multistream_target_latency": "<<<target_latency>>>",
     "offline_target_qps": "<<<target_qps>>>",
-    "perf_offline_ck_env":"",
-    "perf_offline_record_tags": "",
-    "perf_offline_record_uoa_parts": "",
     "post_ipmitool_mc_info_log": "post.ipmitool_mc_info.log",
     "post_ipmitool_sdr_elist_full_log": "post.ipmitool_sdr_elist_full.log",
     "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",
@@ -657,11 +645,7 @@
     "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
     "record_tags_inner": "<<<record_tags,>>>",
-    "record_tags_multistream": "",
-    "record_tags_server": "",
     "record_uoa": "<<<record_uoa_parts->>>",
-    "record_uoa_parts_multistream": "",
-    "record_uoa_parts_server": "",
     "repetitions": "1",
     "replace_existing": "",
     "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
