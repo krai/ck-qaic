@@ -85,7 +85,7 @@
       "###": {
         "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=### --env.CK_LOADGEN_MODE=PerformanceOnly",
         "mode": "performance",
-        "mode_extension": "<<<?compliance_extension>>>-compliance.###",
+        "mode_extension": "<<<?compliance_extension>>>-compliance.###<<<?fan_raw_tag>>><<<?vc_tag>>>",
         "output_file": "mlperf_log_summary.txt",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_repetitions": "1",
@@ -152,10 +152,15 @@
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0",
         "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
-        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>>",
+        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
         "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+<<<<<<< Updated upstream
         "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>>",
 	     "record_tags_inner": "<<<power_record_tags_inner>>>",
+=======
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+	"record_tags_inner": "<<<power_record_tags_inner>>>",
+>>>>>>> Stashed changes
         "record_uoa": "<<<power_record_uoa>>>",
 	     "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>"
       }
@@ -355,7 +360,8 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.147.109",
-        "power_server_port": "4952"
+        "power_server_port": "4952",
+        "fan_raw_default": "200"
       },
       "pf002": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -370,7 +376,8 @@
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.147.117",
-        "power_server_port": "4955"
+        "power_server_port": "4955",
+        "fan_raw_default": "200"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -387,7 +394,8 @@
         "power_server_ip": "10.222.147.109",
         "power_server_port": "4952",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "150"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -404,7 +412,8 @@
 	     "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default":"100"
       },
       "r282_z93_q5": {
         "all_device_ids": "0,1,2,3,4",
@@ -421,7 +430,8 @@
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -438,7 +448,8 @@
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
       }
     },
     "singlestream_target_latency": {
@@ -532,32 +543,53 @@
     },
     "pre_ipmitool_set_fan_raw": {
       "yes": {
-        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_begin_def>>>",
-        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>"
+        "pre_fan_raw": "<<<?fan_raw_default>>>",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>>",
+        "fan_raw_tag" : "-fan_raw.<<<?fan_raw_default>>>"
       },
       "###":{
         "pre_fan_raw": "###",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
         "fan_raw_tag" : "-fan_raw.###"
       }
     },
     "post_ipmitool_set_fan_raw": {
       "yes": {
-        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_begin_def>>>",
+        "post_fan_raw": "<<<?fan_raw_default>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
         "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>"
       },
       "###":{
         "post_fan_raw": "###",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>"
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>"
       }
     },
     "vc": {
+      "yes": {
+        "vc_value_input":"<<<vc_value_default>>>",
+        "vc_value":"$(printf \"0x%.2x\" <<<vc_value_input>>>)",
+        "vc_cmd": "<<<vc_cmd_def>>>",
+        "check_vc_value_begin": "<<<check_vc_value_begin_def>>>",
+        "check_vc_value_end": "<<<check_vc_value_end_def>>>",
+        "record_tags": "vc.<<<vc_value_default>>>",
+        "vc_tag": "-vc.<<<vc_value_default>>>"
+        
+      },
       "###": {
         "vc_value_input": "###",
         "vc_value": "$(printf \"0x%.2x\" ###)",
         "vc_cmd": "<<<vc_cmd_def>>>",
         "check_vc_value_begin": "<<<check_vc_value_begin_def>>>",
-        "check_vc_value_end": "<<<check_vc_value_end_def>>>"
+        "check_vc_value_end": "<<<check_vc_value_end_def>>>",
+        "record_tags": "vc.###",
+        "vc_tag": "-vc.###"
       }
    }
   },
@@ -568,9 +600,10 @@
     "check_experiment_dir": "",
     "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model>>> ]]; then echo -e 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model>>>.'; else",
     "check_param_container_end_def": "fi;",
-    "check_ipmitool_set_fan_raw_begin_def": " if [ <<<?escape_char>>>\"<<<?pre_ipmitool_set_fan_raw>>><<<?escape_char>>>\" == <<<?escape_char>>>\"yes<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<?post_ipmitool_set_fan_raw>>><<<?escape_char>>>\" == <<<?escape_char>>>\"yes<<<?escape_char>>>\" ]; then echo 'Error: pre_ipmitool_set_fan_raw and/or post_ipmitool_set_fan_raw are not set values.'; else",
+    "check_ipmitool_set_fan_raw_value_begin_def": " if [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?pre_ipmitool_set_fan_raw>>><<<?escape_char>>>\"(^|) ]] || [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?post_ipmitool_set_fan_raw>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: Value used for pre_ipmitool_set_fan_raw or post_ipmitool_set_fan_raw are not supported. Supported values: 0 50 75 100 125 150 200'; else",
+    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w aedkg aedkh<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_ipmitool_set_fan_raw and/or post_ipmitool_set_fan_raw.'; else",
     "check_ipmitool_set_fan_raw_end_def": "fi;",
-    "check_vc_value_begin_def": " if [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"17<<<?escape_char>>>\" ]; then echo 'Error: incorrect vc value. VC must be between 1 and 17.'; else",
+    "check_vc_value_begin_def": " if [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"17<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<mode>>><<<?escape_char>>>\" == <<<?escape_char>>>\"accuracy<<<?escape_char>>>\" ]; then echo 'Error: incorrect vc value or mode. VC must be between 1 and 17. VC parameter cannot be used for accuracy mode.'; else",
     "check_vc_value_end_def": "fi;",
     "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
@@ -595,7 +628,7 @@
     "ipmitool_mc_info_cmd_part": "sudo ipmitool mc info > <<<logs_dir>>>",
     "ipmitool_fru_print_cmd_part": "sudo ipmitool fru print > <<<logs_dir>>>",
     "ipmitool_sdr_elist_full_cmd_part": "sudo ipmitool sdr elist full > <<<logs_dir>>>",
-    "ipmitool_set_fan_raw_part": "ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1",
+    "ipmitool_set_fan_raw_part": "sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1",
     "logs_dir": "/opt/qti-aic/logs/",
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",

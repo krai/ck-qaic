@@ -120,6 +120,7 @@
         "recommended_accuracy_buffer_size": "5000",
         "recommended_performance_buffer_size": "1024",
         "workload": "###",
+        "vc_value_default": "16",
         "model_name": "resnet50",
         "model_tags": [
           "###",

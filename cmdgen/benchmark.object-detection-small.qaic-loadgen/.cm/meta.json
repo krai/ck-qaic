@@ -123,6 +123,7 @@
         ],
         "division": "closed",
         "hyphenated_model_name": "ssd-mobilenet",
+        "vc_value_default": "17",
         "model_name": "ssd-mobilenet",
         "model_tags": [
           "###",

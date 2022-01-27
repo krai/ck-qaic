@@ -116,6 +116,7 @@
         ],
         "division": "closed",
         "hyphenated_model_name": "ssd-resnet34",
+        "vc_value_default": "17",
         "model_name": "ssd-resnet34",
         "model_tags": [
           "###",
