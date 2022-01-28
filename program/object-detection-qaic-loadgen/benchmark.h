@@ -459,7 +459,7 @@ private:
 class IinputConverter {
 public:
   virtual ~IinputConverter() {}
-  virtual void convert(ImageData *source, void *target) = 0;
+  virtual void convert(const ImageData *source, void *target) = 0;
 };
 
 //----------------------------------------------------------------------
