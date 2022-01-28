@@ -15,6 +15,8 @@ if [ -z ${EXTRA_MODEL} ]; then
   exit -1
 fi
 
+$_USER=${USER:-krai}
+
 models=(resnet50 ssd_mobilenet ssd_resnet34 bert-99)
 for model in ${models[@]} 
 do
@@ -25,13 +27,13 @@ do
   else
     EXTRA_SUFFIX=""
   fi
-  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.offline${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=krai --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
+  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.offline${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=${_USER} --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
   echo $CMD
   eval $CMD
-  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.singlestream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=krai --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
+  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.singlestream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=${_USER} --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
   echo $CMD
   eval $CMD
-  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.multistream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=krai --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
+  CMD="ck install package --tags=install-to-aedk --dep_add_tags.model-qaic=$model,$model.${EXTRA_MODEL}.multistream${EXTRA_SUFFIX} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' --env.CK_AEDK_USER=${_USER} --env.CK_DEST_PATH=/home/krai/CK-TOOLS"
   echo $CMD
   eval $CMD
 done
