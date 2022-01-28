@@ -470,7 +470,7 @@ public:
   }
 
 
-  void convert(ImageData *source, void *target) {
+  void convert(const ImageData * __restrict__ source, void * __restrict__ target) {
     size_t size = source -> size();
     uint8_t *src = source -> data();
 #if defined(__amd64__) && defined(ENABLE_ZEN2)
