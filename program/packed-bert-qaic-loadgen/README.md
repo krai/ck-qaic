@@ -30,17 +30,86 @@ ck install package --tags=lib,python-package,transformers --force_version=2.4.0
 ck install package --tags=lib,python-package,tensorflow
 ```
 
+<a name="prepare_squad_download"></a>
 ##  Download the SQuAD v1.1 dataset
 
 ```
 ck install package --tags=dataset,squad,raw,width.384
-ck install package --tags=dataset,calibration,squad,pickle,width.384
 ```
 
-##  Prepare the BERT workload
+<a name="prepare_workload_calibrate"></a>
+## Calibrate the model
+
+### Use precalibrated profiles
+
+```
+echo "vdetected" |  ck detect soft:compiler.glow.profile \
+--full_path=$(ck find repo:ck-qaic)/profile/bert/profile.yaml \
+--extra_tags=detected,profile,qaic,bert-packed,mixed
+```
+
+### Calibrate on your own
+
+```
+ck install package --tags=dataset,calibration,squad,pickle,width.384
+ck install package --tags=profile,qaic,bert-packed
+```
+
+<a name="prepare_bert_workload"></a>
+##  Prepare the workload
 
 ```
 ck install package --tags=model,mlperf,qaic,bert-packed
+```
+
+<a name="prepare_workload_compile"></a>
+## Compile the workload
+
+```
+ck compile program:packed-bert-qaic-loadgen
+```
+
+### Compilation for 20w AEDKs (edge category)
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,quantization.calibration
+
+```
+
+### Compilation for 15w AEDKs (edge category)
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration
+```
+
+### Compilation for edge category 16 NSP PCIe
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration
+```
+
+### Compilation of BERT 99.9% for datacenter category 16 NSP PCIe
+
+```
+ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline
 ```
 
 
