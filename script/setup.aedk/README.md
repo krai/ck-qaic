@@ -190,7 +190,7 @@ QID 0
 
 ## `[HR]` Compile the models and copy to the device
 
-**Copy your SSH key so that you avoid giving password ** 
+**Copy your SSH key so that you avoid giving password** 
 
 Example:
 ```
