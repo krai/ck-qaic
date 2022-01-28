@@ -198,5 +198,5 @@ ssh-copy-id krai@aedk1
 
 Example:
 ```
-IPS=aedk1 PORTS=3231 USER=krai EXTRA_MODEL=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+IPS=aedk1 PORTS=3231 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
