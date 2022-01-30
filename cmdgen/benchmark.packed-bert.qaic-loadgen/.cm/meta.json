@@ -83,7 +83,8 @@
           "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
         ],
         "ck_env": [
-          "--env.ML_MODEL_MODEL_NAME=bert"
+          "--env.ML_MODEL_MODEL_NAME=bert",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "model_tags": [
           "###",
@@ -119,7 +120,7 @@
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering",
-    "zero_copy": "disable"
+    "zero_copy": "enable"
   },
   "groups": {
     "closed": [
