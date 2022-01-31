@@ -30,6 +30,7 @@ ck install package --tags=lib,python-package,transformers --force_version=2.4.0
 ck install package --tags=lib,python-package,tensorflow
 ```
 
+<a name="prepare_squad_download"></a>
 ##  Download the SQuAD v1.1 dataset
 
 ```
@@ -37,10 +38,71 @@ ck install package --tags=dataset,squad,raw,width.384
 ck install package --tags=dataset,calibration,squad,pickle,width.384
 ```
 
-##  Prepare the BERT workload
+<a name="prepare_install_model"></a>
+##  Install the model
 
 ```
 ck install package --tags=model,mlperf,qaic,bert-packed
+```
+
+<a name="prepare_compile_loadgen"></a>
+## Compile packed-bert-qaic-loadgen
+
+```
+ck compile program:packed-bert-qaic-loadgen
+```
+
+<a name="prepare_calibrate_model"></a>
+## Calibrate the model
+
+```
+ck install package --tags=profile,qaic,bert-packed
+```
+
+<a name="prepare_compile_workload"></a>
+## Compile the workload
+
+### Compilation for 20w AEDKs (edge category)
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,quantization.calibration
+
+```
+
+### Compilation for 15w AEDKs (edge category)
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration
+```
+
+### Compilation for edge category 16 NSP PCIe
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration
+```
+
+### Compilation of BERT 99.9% for datacenter category 16 NSP PCIe
+
+```
+ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline
 ```
 
 
