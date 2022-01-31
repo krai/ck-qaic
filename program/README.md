@@ -226,3 +226,6 @@ ck install package --tags=mlperf,power,source
 1. [Image Classification](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
 2. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md)
 3. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md)
+
+## Copy the models to AEDKs
+Once all the models are installed you can copy them in one go to any AEDK device by using (https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device)[these] instructions
