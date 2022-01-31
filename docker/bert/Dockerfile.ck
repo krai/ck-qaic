@@ -57,7 +57,7 @@ RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
 # Step 1. Install explicit Python dependencies.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=python-package,onnx --quiet \
- && ck install package --tags=lib,python-package,pytorch  --quiet \
+ && ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet \
  && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
  && ck install package --tags=lib,python-package,tensorflow --quiet
 
