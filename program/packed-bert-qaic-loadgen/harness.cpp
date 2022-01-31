@@ -210,6 +210,7 @@ void Program::EnqueueShim(int id) {
     if(payloads[id] != nullptr) {
       Payload* p = Program::payloads[id];
 
+    //std::this_thread::sleep_for(std::chrono::microseconds(1000));
       // set the inputs
       if (settings->input_select == 0) {
         for(int i=0 ; i<settings->input_count ; ++i) {
@@ -265,9 +266,10 @@ void Program::QueueScheduler() {
     if(settings->verbosity_server)
       std::cout << "<" << sback - sfront << ">";
     mtx_queue.unlock();
+    unsigned round = 0;
 
     while (!terminate) {
-
+            if(activation + 1 == activation_count) round = (round +1)%(num_setup_threads/activation_count);
       activation = (activation + 1) % activation_count;
 
       Payload *p = ring_buf[activation]->getPayload();
@@ -283,14 +285,14 @@ void Program::QueueScheduler() {
       // add the input samples to the payload
       p->samples = qs;
 
-      while(Program::payloads[round_robin] != nullptr){
+      while(Program::payloads[round*activation_count +activation] != nullptr){
         std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       }
 
-      Program::payloads[round_robin] = p;
+      Program::payloads[round*activation_count +activation] = p;
 
       //std::cout << " " << round_robin;
-      round_robin = (round_robin+1)%num_setup_threads;
+      //round_robin = (round_robin+1)%num_setup_threads;
 
       break;
     }
@@ -362,7 +364,7 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-Payload* Program::payloads[8] = {nullptr ,nullptr ,nullptr ,nullptr, nullptr, nullptr, nullptr, nullptr};
+std::atomic<Payload *> Program::payloads[256] = { nullptr };
 
 int Program::num_setup_threads = 0;
 
