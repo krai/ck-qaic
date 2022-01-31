@@ -16,13 +16,15 @@ done
 
 device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
 
-if [ -n $VC_VAL ]; then
+if [ -n "$VC_VAL" ]; then
   echo "Setting VC for all available QAIC devices."
   echo ""
   for device_id in $device_ids
   do
-    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $VC_VAL
+    LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $VC_VAL
   done
+else
+  echo "Not Setting Custom VC for QAIC devices."
 fi
 
 echo "Setting ECC for all available QAIC devices."
@@ -46,6 +48,6 @@ request="{ \
 for device_id in $device_ids
 do
     echo "${request/DEVICE_ID/$device_id}" > request.json
-    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-monitor-json -i request.json
+    LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-monitor-json -i request.json
     rm request.json
 done
