@@ -77,7 +77,7 @@ if [[ ${num_ports} != ${num_ips} ]]; then
 fi
 
 # User (the same by default).
-user=${CK_AEDK_USER:$USER}
+user=${CK_AEDK_USER:-$USER}
 
 echo
 
