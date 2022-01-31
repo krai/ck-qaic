@@ -398,7 +398,7 @@ class InCopy : public IinputConverter {
 public:
   InCopy(const BenchmarkSettings *s) {}
 
-  inline void convert(const ImageData *source, void *target) {
+  inline void convert(const ImageData * __restrict__ source, void * __restrict__ target) {
 
 #if defined(__amd64__) && defined(ENABLE_ZEN2)
     const __m256i *src =  reinterpret_cast<const __m256i*>(source->data());

@@ -48,9 +48,9 @@
         "version": "0.3"
       }
     },
-    "b1.6.61": {
+    "b1.6.71": {
       "extra_env": {
-        "_VERSION": "b1.6.61"
+        "_VERSION": "b1.6.71"
       },
       "extra_tags": [
         "v0.2",

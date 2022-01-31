@@ -190,7 +190,14 @@ QID 0
 
 ## `[HR]` Compile the models and copy to the device
 
+**Copy your SSH key so that you avoid giving password** 
+
 Example:
 ```
-IPS=aedk1 PORTS=3231 EXTRA_MODEL=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+ssh-copy-id krai@aedk1
+```
+
+Example:
+```
+IPS=aedk1 PORTS=3231 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
