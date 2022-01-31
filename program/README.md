@@ -228,4 +228,4 @@ ck install package --tags=mlperf,power,source
 3. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md)
 
 ## Copy the models to AEDKs
-Once all the models are installed you can copy them in one go to any AEDK device by using (https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device)[these] instructions
+Once all the models are installed you can copy them in one go to any AEDK device by using [https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device](these) instructions
