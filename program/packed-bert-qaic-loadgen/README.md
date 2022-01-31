@@ -25,7 +25,7 @@ ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 
 ```
 ck install package --tags=python-package,onnx
-ck install package --tags=lib,python-package,pytorch
+ck install package --tags=lib,python-package,pytorch --force_version=1.8.1
 ck install package --tags=lib,python-package,transformers --force_version=2.4.0
 ck install package --tags=lib,python-package,tensorflow
 ```
@@ -35,39 +35,32 @@ ck install package --tags=lib,python-package,tensorflow
 
 ```
 ck install package --tags=dataset,squad,raw,width.384
-```
-
-<a name="prepare_workload_calibrate"></a>
-## Calibrate the model
-
-### Use precalibrated profiles
-
-```
-echo "vdetected" |  ck detect soft:compiler.glow.profile \
---full_path=$(ck find repo:ck-qaic)/profile/bert/profile.yaml \
---extra_tags=detected,profile,qaic,bert-packed,mixed
-```
-
-### Calibrate on your own
-
-```
 ck install package --tags=dataset,calibration,squad,pickle,width.384
-ck install package --tags=profile,qaic,bert-packed
 ```
 
-<a name="prepare_bert_workload"></a>
-##  Prepare the workload
+<a name="prepare_install_model"></a>
+##  Install the model
 
 ```
 ck install package --tags=model,mlperf,qaic,bert-packed
 ```
 
-<a name="prepare_workload_compile"></a>
-## Compile the workload
+<a name="prepare_compile_loadgen"></a>
+## Compile packed-bert-qaic-loadgen
 
 ```
 ck compile program:packed-bert-qaic-loadgen
 ```
+
+<a name="prepare_calibrate_model"></a>
+## Calibrate the model
+
+```
+ck install package --tags=profile,qaic,bert-packed
+```
+
+<a name="prepare_compile_workload"></a>
+## Compile the workload
 
 ### Compilation for 20w AEDKs (edge category)
 
