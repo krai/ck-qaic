@@ -193,6 +193,9 @@ QID 0
 **Copy your SSH key so that you avoid giving password** 
 
 Example:
+If you do not have a SSH identitity
+```ssh-keygen -t rsa```
+
 ```
 ssh-copy-id krai@aedk1
 ```
