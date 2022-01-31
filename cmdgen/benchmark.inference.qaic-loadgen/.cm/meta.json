@@ -661,7 +661,7 @@
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
     "verbosity": "<<<recommended_verbosity>>>",
-    "vc_cmd_def": "echo '<<<vc_value>>>' >> <<<logs_dir>>>vc.config;",
+    "vc_cmd_def": "export VC_VAL=<<<vc_value>>>;",
     "watch_sensors_sleep": "1",
     "watch_ipmitool_get_sys_power_sleep": "10",
     "watch_cmd_begin":"echo <<<?escape_char>>><<<?double_quote>>>nohup sh -c 'echo \\\\$\\\\$ >> <<<logs_dir>>>watch.procs; while [ true ]; do ",

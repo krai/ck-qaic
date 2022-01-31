@@ -16,13 +16,12 @@ done
 
 device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
 
-if [ -e $cmdfile_vc ]; then
+if [ -n $VC_VAL ]; then
   echo "Setting VC for all available QAIC devices."
   echo ""
-  read freq < $cmdfile_vc;
   for device_id in $device_ids
   do
-    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $freq
+    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $VC_VAL
   done
 fi
 
