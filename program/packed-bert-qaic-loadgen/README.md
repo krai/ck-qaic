@@ -62,41 +62,47 @@ ck install package --tags=profile,qaic,bert-packed
 <a name="prepare_compile_workload"></a>
 ## Compile the workload
 
+### Finding the best PCV Value
+The accuracy of the Bert-99 model depends on the Percetile Calibration Value used for compilation. The following script (can take more than an hour) can tell you the best PCV value on a given host system
+```
+$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh bert-99 bert-99.pcie.16nsp.offline 1.6.80
+```
+The above found best PCV value can be exported to `$PCV` variable
 ### Compilation for 20w AEDKs (edge category)
 
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.offline,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.multistream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 
 ```
 
 ### Compilation for 15w AEDKs (edge category)
 
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.multistream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 
 ### Compilation for edge category 16 NSP PCIe
 
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 
 ### Compilation of BERT 99.9% for datacenter category 16 NSP PCIe
