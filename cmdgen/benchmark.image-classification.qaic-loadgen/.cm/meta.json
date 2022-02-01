@@ -24,7 +24,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "4",
         "recommended_multistream_batch_size": "1",
-        "zero_copy": "disable"
+        "zero_copy": "enable"
       },
       "aedk_15w": {
         "recommended_activation_count": "1",
