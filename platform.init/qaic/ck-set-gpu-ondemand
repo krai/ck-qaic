@@ -13,7 +13,6 @@ if [ -e $cmdfile_watch ]; then
   cat $cmdfile_watch | xargs kill
 fi
 
-if [ -n "$VC_VAL" ]; then
+if [ -n "$VC_VAL_RESET" ]; then
   echo 1 | sudo tee /sys/bus/mhi/devices/*/soc_reset
 fi
-
