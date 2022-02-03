@@ -85,8 +85,8 @@
         "recommended_input_select": "0",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
-        "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
       },
       "r282_z93_q5": {
@@ -95,7 +95,7 @@
         "recommended_input_select": "0",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
-        "recommended_queue_length": "4",
+        "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2",
         "zero_copy": "enable"
       },
