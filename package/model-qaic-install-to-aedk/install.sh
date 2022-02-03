@@ -126,7 +126,7 @@ for i in $(seq 1 ${#ips[@]}); do
   ssh -n -f ${user}@${ip} -p ${port} mkdir -p ${dest_path}
   rsync -avz -e "ssh -p ${port}" ${source_path}/ ${user}@${ip}:${dest_path}/
   ssh -n -f ${user}@${ip} -p ${port} \
-  "bash -c ' \
+  "bash -c ' PATH=\$PATH:\$HOME/.local/bin; \
   exists=\`ck search env --tags=\"${my_tags}\"\`;
   if [ ! -z \${exists} ]; then
     echo \"Already registered \${exists}\";
