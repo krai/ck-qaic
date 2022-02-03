@@ -6,7 +6,7 @@
     "accelerator_interconnect_topology": "",
     "accelerator_memory_capacity": "16 GB",
     "accelerator_memory_configuration": "LPDDR4x",
-    "accelerator_model_name": "QUALCOMM Cloud AI 100 PCIe HHHL",
+    "accelerator_model_name": "QUALCOMM Cloud AI 100 PCIe/HHHL Pro",
     "accelerator_on-chip_memories": "144 MB",
     "accelerators_per_node": "1",
     "cooling": "air",
