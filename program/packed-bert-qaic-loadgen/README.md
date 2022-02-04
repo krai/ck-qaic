@@ -112,11 +112,38 @@ ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline
 ```
 
 
-# Benchmark
+# Benchmarking
 
-- Offline: refer to [`README.offline.md`](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.offline.md).
-- Server: refer to [`README.server.md`](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.server.md).
-- Single Stream: refer to [`README.singlestream.md`](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.singlestream.md).
+## Bert-99
+
+### Datacenter Category
+#### R282_Z93_Q8
+##### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+--sut=r282_z93_q8 --sdk=1.6.80 --model=bert-99 \
+--mode=accuracy --scenario=offline
+```
+##### Full Run
+```
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+--sut=r282_z93_q8 --sdk=1.6.80 --model=bert-99 \
+--group.datacenter --group.closed --offline_target_qps=5000 --server_target_qps=4900
+```
+
+#### G292_Z43_Q16
+##### Quick Accuracy Run
+```
+ck run cmdgen:benchmark.packed-bert --verbose \
+--sut=g292_z43_q16 --sdk=1.6.80 --model=bert-99 \
+--mode=accuracy --scenario=offline 
+```
+##### Full Run
+```
+ck run cmdgen:benchmark.packed-bert --verbose \
+--sut=g292_z43_q16 --sdk=1.6.80 --model=bert-99 \
+--group.datacenter --group.closed --offline_target_qps=10600 --server_target_qps=10300
+```
 
 ## Info
 
