@@ -14,6 +14,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "1",
+	"recommended_num_setup_threads": "2",
         "zero_copy": "enable"
       },
       "aedk_20w": {
@@ -24,6 +25,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "1",
+	"recommended_num_setup_threads": "2",
         "zero_copy": "enable"
       },
       "aedk_15w": {
@@ -34,6 +36,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "1",
+	"recommended_num_setup_threads": "2",
         "zero_copy": "enable"
       },
       "aedkg": {
@@ -44,6 +47,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "1",
+	"recommended_num_setup_threads": "2",
         "zero_copy": "enable"
       },
       "aedkh": {
@@ -54,6 +58,7 @@
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "1",
+	"recommended_num_setup_threads": "2",
         "zero_copy": "enable"
       },
       "pf003": {
@@ -61,6 +66,7 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "9",
+	"recommended_num_setup_threads": "252",
         "recommended_batch_size": "8"
       },
       "pf002": {
@@ -68,6 +74,7 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "9",
+	"recommended_num_setup_threads": "252",
         "recommended_batch_size": "8"
       },
       "g292_z43_q16": {
@@ -75,6 +82,7 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "8",
+	"recommended_num_setup_threads": "192",
         "recommended_batch_size": "8"
       },
       "r282_z93_q8": {
@@ -82,6 +90,7 @@
         "recommended_input_select": "0",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "3",
+	"recommended_num_setup_threads": "128",
         "recommended_batch_size": "8"
       },
       "r282_z93_q5": {
@@ -91,6 +100,7 @@
         "recommended_queue_length": "3",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
+	"recommended_num_setup_threads": "40",
         "recommended_multistream_batch_size": "1"
       },
       "r282_z93_q1": {
@@ -100,6 +110,7 @@
         "recommended_queue_length": "3",
         "recommended_batch_size": "8",
         "recommended_multistream_activation_count": "2",
+	"recommended_num_setup_threads": "8",
         "recommended_multistream_batch_size": "1"
       }   
     },

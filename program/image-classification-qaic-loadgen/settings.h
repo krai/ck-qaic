@@ -205,7 +205,7 @@ public:
 
   const int input_select = alter_str_i(getenv("CK_ENV_QAIC_INPUT_SELECT"), 0);
   
-  //const int num_setup_threads = alter_str_i(getenv("CK_ENV_NUM_SETUP_THREADS"), 2);
+  const int num_setup_threads = alter_str_i(getenv("CK_ENV_NUM_SETUP_THREADS"), 2);
 
   BenchmarkSettings() {
 

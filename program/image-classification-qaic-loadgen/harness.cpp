@@ -150,15 +150,7 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
-#ifdef __amd64__
-    num_setup_threads = settings->qaic_device_count *  
-      settings->qaic_activation_count *  settings->qaic_set_size;
-#else
-  num_setup_threads = settings->qaic_activation_count;
-#endif
-
-  if (num_setup_threads > 252)
-    num_setup_threads = 252;
+  num_setup_threads = settings->num_setup_threads; 
 
 //std::cout <<num_setup_threads<<" "<<processor_count<<"\n";
   //payloads = new Payload[num_setup_threads];
