@@ -74,9 +74,6 @@ The above found best PCV value can be exported to `$PCV` variable
 ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
-```
-```
 ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 
 ```
@@ -87,9 +84,6 @@ ck install package --tags=model,compiled,bert-99,bert-99.aedk_20w.singlestream,q
 ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
-ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
-```
-```
 ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 
@@ -97,9 +91,6 @@ ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,q
 
 ```
 ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
-```
-```
-ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 ```
 ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
