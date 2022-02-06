@@ -50,34 +50,53 @@ function get_accuracy_metric() {
     elif [[ "$bmodel" == "resnet50" ]]; then echo "Accuracy"; 
   fi
 }
+if [[ $PC_START == "" ]]; then
+  PC_START=70;
+fi
+if [[ $PC_END == "" ]]; then
+  PC_END=97;
+fi
+if [[ $PC_INC == "" ]]; then
+  PC_INC=1;
+fi
+
 if [[ $# < 2 ]]; then echo "Model base name (one among [bert-99, ssd_resnet34, ssd_mobilenet, resnet50]) and Model unique name for compilation (for e.g., bert-99.pcie.16nsp.offline) required!"; exit 1; fi
 max=0
 maxi=0
 bmodel=$1
 model=$2
-if [ "$#" == 3 ]; then sdk=$3; else sdk=1.5.9; fi
+scenario=$3
+
+if [[ $scenario == "" ]]; then
+  scenario="offline"
+fi
+
+if [ "$#" == 4 ]; then sdk=$4; else sdk=1.6.80; fi
+
 cprogram=$(get_cmdgen_program_name $bmodel)
+
 if [[ $cprogram == "" ]]; then
   echo "Program for $bmodel not found";
   exit -1;
 fi
+
 accuracy_metric=$(get_accuracy_metric $bmodel)
-for i in {70..99..1}
+for (( i=${PC_START}; i<=${PC_END}; i+=${PC_INC} )) 
 do
   pcv="99"$i
   install_cmd="ck install package --tags=compiled,$bmodel,$model,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$pcv --extra_tags=pcv.$pcv --quiet >/dev/null 2>&1"
   echo $install_cmd
   eval $install_cmd
   exit_if_error
-  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$bmodel --target_qps=1 --mode=accuracy --scenario=offline  --replace_existing --calibration_value=$pcv"
+  ck_run_cmd="ck run cmdgen:$cprogram --verbose --sut=r282_z93_q1 --sdk=$sdk --model=$bmodel --mode=accuracy --scenario=$scenario  --replace_existing --calibration_value=$pcv"
   echo $ck_run_cmd
   eval $ck_run_cmd
   exit_if_error
   ck_clean_package_cmd="ck clean env --tags=compiled,$model,quantization.calibration,pcv.$pcv --force >/dev/null 2>&1"
   echo $ck_clean_package_cmd
   eval $ck_clean_package_cmd
-  accuracy=`grep -w $accuracy_metric $(ck find experiment:*$bmodel*offline*accuracy*$pcv*)/*0001.json | cut -d ':' -f2 | cut -d ' ' -f2 | cut -d ',' -f1`
-  #yes | ck rm experiment:*$model*$pcv*offline*accuracy* >/dev/null 2>&1
+  accuracy=`grep -w $accuracy_metric $(ck find experiment:*$bmodel*$scenario*accuracy*$pcv*)/*0001.json | cut -d ':' -f2 | cut -d ' ' -f2 | cut -d ',' -f1`
+  ck rm experiment:*$bmodel*$scenario*accuracy*$pcv* --force >/dev/null 2>&1
   #echo $pcv":"$f1
   #echo $pcv":"$f1 >>out
   if [[ $accuracy > $max ]]; then
