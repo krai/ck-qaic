@@ -167,11 +167,7 @@ private:
   std::thread scheduler;
 
   static int num_setup_threads;
-<<<<<<< HEAD
-  static Payload* payloads[8];
-=======
   static std::atomic<Payload*> payloads[256];
->>>>>>> 572dcf7... unify harness.cpp for bert with vision benchmarks
 };
 
 class SystemUnderTestQAIC : public mlperf::SystemUnderTest {
