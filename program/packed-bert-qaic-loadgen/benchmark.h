@@ -62,6 +62,7 @@
 #include "settings.h"
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
+#include "affinity.h"
 
 #include "query_sample_library.h"
 

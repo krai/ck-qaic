@@ -116,11 +116,9 @@ Program::Program() {
   // Kick off the scheduler
   scheduler = std::thread(QueueScheduler);
 
-#ifdef __amd64__
-  num_setup_threads = 8;
-#else
-  num_setup_threads = 2;
-#endif
+  // num_setup_threads = settings->num_setup_threads;
+  num_setup_threads =
+      settings->qaic_device_count * settings->qaic_activation_count;
 
   //payloads = new Payload[num_setup_threads];
   for(int i=0 ; i<num_setup_threads ; ++i) {
@@ -131,7 +129,10 @@ Program::Program() {
     // only CPU i as set.
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    CPU_SET(i*4, &cpuset);
+    int card_num = i % settings->qaic_device_count;
+    int coreid =
+        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 2;
+    CPU_SET(coreid, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
 
@@ -244,8 +245,6 @@ void Program::QueueScheduler() {
 
   // current activation index
   int activation = -1;
-
-  int round_robin = 0;
 
   std::vector<SizedSample> qs;
 

@@ -183,7 +183,6 @@ public:
   int max_wait_tmp = max_wait_rel*(qaic_batch_size * 1000000) / target_qps;
   const int max_wait = alter_str_i(getenv("CK_ENV_QAIC_MAX_WAIT_ABS"), max_wait_tmp);
 
-
   // choice of hardware
   std::string qaic_hw_ids_str =
       alter_str(getenv("CK_ENV_QAIC_DEVICE_IDS"), std::string("0"));
@@ -191,6 +190,8 @@ public:
   int qaic_device_count;
 
   const int input_select = alter_str_i(getenv("CK_ENV_QAIC_INPUT_SELECT"), 0);
+  const int num_setup_threads =
+      alter_str_i(getenv("CK_ENV_NUM_SETUP_THREADS"), 2);
 
   BenchmarkSettings() {
 
