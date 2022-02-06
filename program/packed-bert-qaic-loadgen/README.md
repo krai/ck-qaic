@@ -63,11 +63,14 @@ ck install package --tags=profile,qaic,bert-packed
 ## Compile the workload
 
 ### Finding the best PCV Value
-The accuracy of the Bert-99 model depends on the Percetile Calibration Value used for compilation. The following script (can take more than an hour) can tell you the best PCV value on a given host system
+The accuracy of the Bert-99 model depends on the Percetile Calibration Value used for compilation. The following script (can take more than an hour) can tell you the best PCV value on a given host system for a given model binary
 ```
-PC_START=80 PC_END=90 $(ck find package:model-qaic-compile)/percentile-calibration.sh bert-99 bert-99.pcie.16nsp.offline
+PC_START=80 PC_END=90 $(ck find package:model-qaic-compile)/percentile-calibration.sh bert-99 bert-99.pcie.16nsp.offline offline
 ```
-The above found best PCV value can be exported to `$PCV` variable
+```
+PC_START=80 PC_END=90 $(ck find package:model-qaic-compile)/percentile-calibration.sh bert-99 bert-99.pcie.16nsp.singlestream singlestream
+```
+The above found best PCV value can be exported to `$PCV` variable for both offline and singlestream
 ### Compilation for 20w AEDKs (edge category)
 
 ```
