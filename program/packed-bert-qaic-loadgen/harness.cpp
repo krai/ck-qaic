@@ -120,6 +120,8 @@ Program::Program() {
   num_setup_threads =
       settings->qaic_device_count * settings->qaic_activation_count;
 
+  std::cout << "No. of setup threads: " << num_setup_threads << std::endl;
+
   //payloads = new Payload[num_setup_threads];
   for(int i=0 ; i<num_setup_threads ; ++i) {
     std::thread t(&Program::EnqueueShim, this, i);
@@ -227,10 +229,6 @@ void Program::EnqueueShim(int id) {
       if (status != QS_SUCCESS)
         throw "Failed to invoke qaic";
 
-      //PostResults(NULL,
-      //            QAIC_EVENT_DEVICE_COMPLETE,
-      //            p);
-
       Program::payloads[id] = nullptr;
     }
     std::this_thread::sleep_for(std::chrono::nanoseconds(10));
@@ -273,7 +271,7 @@ void Program::QueueScheduler() {
 
       Payload *p = ring_buf[activation]->getPayload();
 
-      std::this_thread::sleep_for(std::chrono::microseconds(1));
+      std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
       // if no hardware slots available then increment the activation
       // count and then continue
