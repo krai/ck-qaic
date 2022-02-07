@@ -75,6 +75,7 @@
           "###"
         ],
         "recommended_activation_count": "<<<recommended_fp16_activation_count>>>",
+        "recommended_queue_length": "1",
         "division": "closed",
         "vc_value_default": "12",
         "zero_copy": "disable"
@@ -118,7 +119,7 @@
     "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
     "recommended_num_setup_threads": "2",
-    "recommended_queue_length": "1",
+    "recommended_queue_length": "4",
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
     "task_name": "bert-question-answering"
