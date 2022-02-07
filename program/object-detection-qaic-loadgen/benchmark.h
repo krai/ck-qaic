@@ -250,16 +250,21 @@ public:
     _out_batch.resize(dev_cnt);
 
 
+    nms_results.resize(dev_cnt);
+    reformatted_results.resize(dev_cnt);
 
-
-
-    nms_results.resize(settings->qaic_device_count);
-    reformatted_results.resize(settings->qaic_device_count);
-
-    for (int dev_idx = 0; dev_idx < settings->qaic_device_count; ++dev_idx) {
-      //std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
-      //t.join();
-      initResultsBuffer(dev_idx);
+    for (int dev_idx = 0; dev_idx < dev_cnt; ++dev_idx) {
+      std::thread t(&Benchmark::initResultsBuffer, this, dev_idx);
+      unsigned coreid = AFFINITY_CARD(dev_idx);
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(coreid, &cpuset);
+#ifdef R282
+      if(dev_idx < 4 || _settings->qaic_device_count > 5)
+#endif
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+      t.join();
+      //initResultsBuffer(dev_idx);
     }
     
 
@@ -314,7 +319,6 @@ public:
     for (int dev_idx = 0; dev_idx < _settings->qaic_device_count; ++dev_idx) {
       std::thread t(&Benchmark::load_images_locally, this, dev_idx);
       unsigned coreid = AFFINITY_CARD(dev_idx);
-
       cpu_set_t cpuset;
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
