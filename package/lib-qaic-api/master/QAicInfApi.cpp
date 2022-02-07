@@ -487,6 +487,8 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   for (uint32_t i = 0; i < modelBasePaths_.size(); i++) {
 
     QData ioDescQData;
+    ioDescQData.data = nullptr;
+    ioDescQData.size = 0;
     aicapi::IoDesc ioDescProto;
     status = qaicProgramGetIoDescriptor(programs_[i], &ioDescQData);
     if (ioDescQData.data == nullptr) {
