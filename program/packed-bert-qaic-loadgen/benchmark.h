@@ -173,26 +173,16 @@ public:
   get_random_inputs(const std::vector<SizedSample> &samples,
                     int dev_idx, int act_idx, int set_idx, int buf_idx) = 0;
 
-  virtual void *get_input_ptr(int input_idx, int buf_idx) = 0;
+  virtual void *get_input_ptr(int dev_idx, int input_idx, int buf_idx) = 0;
 
-  virtual int get_sequence_length(int index) = 0;
+  virtual int get_sequence_length(int dev_idx, int index) = 0;
 };
 
 template <typename TInConverter, typename TOutConverter,
           typename TInputDataType, typename TOutputDataType>
 class Benchmark : public IBenchmark {
 public:
-  Benchmark(
-      const BenchmarkSettings *settings,
-      std::vector<std::vector<std::vector<std::vector<void *>>>> &in_ptrs,
-      std::vector<std::vector<std::vector<std::vector<void *>>>> &out_ptrs)
-      : _settings(settings) {
-    _in_ptrs = in_ptrs;
-    _out_ptrs = out_ptrs;
-    _in_converter.reset(new TInConverter(settings));
-    _out_converter.reset(new TOutConverter(settings));
-
-
+  void load_inputs_locally(int d) {
     // load the input_ids
     {
       std::ifstream file(_settings->input_ids, std::ios::in | std::ios::binary);
@@ -202,8 +192,8 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _input_ids.resize(size / (sizeof(uint64_t)));
-      file.read(reinterpret_cast<char *>(&_input_ids[0]), size);
+      _input_ids[d].resize(size / (sizeof(uint64_t)));
+      file.read(reinterpret_cast<char *>(&_input_ids[d][0]), size);
       file.close();
     }
 
@@ -216,8 +206,8 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _input_mask.resize(size / (sizeof(uint64_t)));
-      file.read(reinterpret_cast<char *>(&_input_mask[0]), size);
+      _input_mask[d].resize(size / (sizeof(uint64_t)));
+      file.read(reinterpret_cast<char *>(&_input_mask[d][0]), size);
       file.close();
     }
 
@@ -231,18 +221,47 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _segment_ids.resize(size / (sizeof(uint64_t)));
-      file.read(reinterpret_cast<char *>(&_segment_ids[0]), size);
+      _segment_ids[d].resize(size / (sizeof(uint64_t)));
+      file.read(reinterpret_cast<char *>(&_segment_ids[d][0]), size);
       file.close();
     }
   }
+  Benchmark(
+      const BenchmarkSettings *settings,
+      std::vector<std::vector<std::vector<std::vector<void *>>>> &in_ptrs,
+      std::vector<std::vector<std::vector<std::vector<void *>>>> &out_ptrs)
+      : _settings(settings) {
+    _in_ptrs = in_ptrs;
+    _out_ptrs = out_ptrs;
+    _in_converter.reset(new TInConverter(settings));
+    _out_converter.reset(new TOutConverter(settings));
+    int dev_cnt = settings -> qaic_device_count;
+    _input_ids.resize(dev_cnt);
+    _input_mask.resize(dev_cnt);
+    _segment_ids.resize(dev_cnt);
+    for(int d = 0; d < dev_cnt; d++) {
+      std::thread t(&Benchmark::load_inputs_locally, this, d);
+      unsigned coreid = AFFINITY_CARD(d);
 
-  virtual int get_sequence_length(int index) {
+      cpu_set_t cpuset;
+      CPU_ZERO(&cpuset);
+      CPU_SET(coreid, &cpuset);
+#ifdef R282
+      if(dev_idx < 4 || _settings->qaic_device_count > 5)
+#endif
+      pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+
+      t.join();
+    }
+
+  }
+
+  virtual int get_sequence_length(int dev_idx, int index) {
 
     int seq_len = 0;
 
     for(int i=0 ; i<_settings->max_seq_length ; ++i)
-      seq_len += _input_mask[index*_settings->max_seq_length+i];
+      seq_len += _input_mask[dev_idx][index*_settings->max_seq_length+i];
 
     return seq_len;
   }
@@ -287,7 +306,7 @@ public:
 	for(int m = 0; m < seq_len; m++) {
           ptr[offset + m] =
               (TInputDataType) *
-              ((uint64_t *)get_input_ptr(samples[i].first.index, buf_idx) + m);
+              ((uint64_t *)get_input_ptr(dev_idx, samples[i].first.index, buf_idx) + m);
         }
    //     memcpy(ptr+offset, get_input_ptr(samples[i].first.index, buf_idx), seq_len*sizeof(TInputDataType));
         offset += seq_len;
@@ -295,14 +314,14 @@ public:
     }
   }
 
-  virtual void *get_input_ptr(int input_idx, int buf_idx) {
+  virtual void *get_input_ptr(int dev_idx, int input_idx, int buf_idx) {
 
     if( buf_idx == 0 )
-      return &_input_ids[input_idx*_settings->max_seq_length];
+      return &_input_ids[dev_idx][input_idx*_settings->max_seq_length];
     if( buf_idx == 1 )
-      return &_input_mask[input_idx*_settings->max_seq_length];
+      return &_input_mask[dev_idx][input_idx*_settings->max_seq_length];
     if( buf_idx == 2 )
-      return &_segment_ids[input_idx*_settings->max_seq_length];
+      return &_segment_ids[dev_idx][input_idx*_settings->max_seq_length];
     else
       throw "Invalid input pointer index.";
   }
@@ -347,9 +366,9 @@ private:
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
 
-  std::vector<int64_t> _input_ids;
-  std::vector<int64_t> _input_mask;
-  std::vector<int64_t> _segment_ids;
+  std::vector<std::vector<int64_t>> _input_ids;
+  std::vector<std::vector<int64_t>> _input_mask;
+  std::vector<std::vector<int64_t>> _segment_ids;
 };
 
 //----------------------------------------------------------------------

@@ -85,11 +85,11 @@ Program::Program() {
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
 #ifdef R282
-    if(d == 4) OFFSET = 1;
+    if(d == 4) OFFSET = 4;
 #endif
     unsigned coreid = OFFSET+ AFFINITY_CARD(d);
     CPU_SET(coreid, &cpuset);
-    CPU_SET(coreid + 1, &cpuset);
+   // CPU_SET(coreid + 1, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
     t.join();
   }
@@ -137,6 +137,7 @@ Program::Program() {
   // num_setup_threads = settings->num_setup_threads;
   num_setup_threads =
       settings->qaic_device_count * settings->qaic_activation_count;
+//  num_setup_threads = 256;
 
   std::cout << "No. of setup threads: " << num_setup_threads << std::endl;
 
@@ -151,7 +152,7 @@ Program::Program() {
     CPU_ZERO(&cpuset);
     int card_num = i % settings->qaic_device_count;
     int coreid =
-        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 2;
+        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 1;
     CPU_SET(coreid, &cpuset);
     pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 #endif
@@ -208,7 +209,7 @@ void Program::Inference(std::vector<mlperf::QuerySample> samples) {
   std::vector<SizedSample> sized_samples;
 
   for(int i=0 ; i<samples.size() ; ++i) {
-      sized_samples.push_back(SizedSample(samples[i], benchmark->get_sequence_length(samples[i].index)));
+      sized_samples.push_back(SizedSample(samples[i], benchmark->get_sequence_length(0,samples[i].index)));
   }
 
   std::vector<std::vector<SizedSample>> packed_samples;
@@ -218,7 +219,7 @@ void Program::Inference(std::vector<mlperf::QuerySample> samples) {
   for(int x=0 ; x<packed_samples.size() ; ++x) {
 
     while (sback >= sfront + samples_queue_len)
-      std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+      std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
     samples_queue[sback % samples_queue_len] = packed_samples[x];
     ++sback;
