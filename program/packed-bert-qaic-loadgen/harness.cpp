@@ -54,11 +54,7 @@ using namespace qaic_api;
 using namespace std;
 using namespace CK;
 
-Program::Program() {
-
-  settings = new BenchmarkSettings();
-
-  for (int d = 0; d < settings->qaic_device_count; ++d) {
+void Program::InitDevices(int d) {
 
     std::cout << "Creating device " << d << std::endl;
     runners.push_back(new QAicInfApi());
@@ -72,11 +68,31 @@ Program::Program() {
 
     if (status != QS_SUCCESS)
       throw "Failed to invoke qaic";
-  }
 
+}
+
+Program::Program() {
+
+  settings = new BenchmarkSettings();
   // device, activation, set, buffer no
   std::vector<std::vector<std::vector<std::vector<void *>>>> in(settings->qaic_device_count);
   std::vector<std::vector<std::vector<std::vector<void *>>>> out(settings->qaic_device_count);
+
+  int OFFSET = 0;
+  for (int d = 0; d < settings->qaic_device_count; ++d) {
+    std::thread t(&Program::InitDevices, this, d);
+
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+#ifdef R282
+    if(d == 4) OFFSET = 1;
+#endif
+    unsigned coreid = OFFSET+ AFFINITY_CARD(d);
+    CPU_SET(coreid, &cpuset);
+    CPU_SET(coreid + 1, &cpuset);
+    pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
+    t.join();
+  }
 
   // get references to all the buffers devices->activations->set
   for (int d = 0; d < settings->qaic_device_count; ++d) {
@@ -202,7 +218,7 @@ void Program::Inference(std::vector<mlperf::QuerySample> samples) {
   for(int x=0 ; x<packed_samples.size() ; ++x) {
 
     while (sback >= sfront + samples_queue_len)
-      std::this_thread::sleep_for(std::chrono::microseconds(1));
+      std::this_thread::sleep_for(std::chrono::nanoseconds(100));
 
     samples_queue[sback % samples_queue_len] = packed_samples[x];
     ++sback;
@@ -254,7 +270,6 @@ void Program::QueueScheduler() {
     if (sfront == sback) {
       // No samples then continue
       mtx_queue.unlock();
-      std::this_thread::sleep_for(std::chrono::nanoseconds(10));
       continue;
     }
 
@@ -363,7 +378,7 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-std::atomic<Payload *> Program::payloads[256] = { nullptr };
+std::atomic<Payload *> Program::payloads[288] = { nullptr };
 
 int Program::num_setup_threads = 0;
 
@@ -415,7 +430,6 @@ void SystemUnderTestQAIC::ServerModeScheduler() {
       prev = now;
     }
     mtx_samples_queue.unlock();
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
   }
 }
 

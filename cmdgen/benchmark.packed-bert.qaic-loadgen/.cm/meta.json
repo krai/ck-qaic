@@ -92,7 +92,7 @@
           "quantization.calibration"
         ],
         "recommended_activation_count": "<<<recommended_mixed_activation_count>>>",
-        "recommended_queue_length": "1",
+        "recommended_queue_length": "2",
         "division": "closed",
         "vc_value_default": "16",
         "zero_copy": "enable"
