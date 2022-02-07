@@ -265,7 +265,7 @@ void Program::QueueScheduler() {
     if (sfront == sback) {
       // No samples then continue
       mtx_queue.unlock();
-      std::this_thread::sleep_for(std::chrono::nanoseconds(5));
+     // std::this_thread::sleep_for(std::chrono::nanoseconds(5));
       continue;
     }
 
@@ -380,7 +380,7 @@ bool Program::terminate = false;
 std::atomic<int> Program::sfront;
 std::atomic<int> Program::sback;
 
-std::atomic <Payload*> Program::payloads[256];
+std::atomic <Payload*> Program::payloads[288];
 
 int Program::num_setup_threads = 0;
 
