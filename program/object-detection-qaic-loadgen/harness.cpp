@@ -88,7 +88,7 @@ Program::Program() {
     unsigned coreid = AFFINITY_CARD(d);
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    for (int j = 0; j < 7; j++)
+    for (int j = 0; j < 8; j++)
       CPU_SET(coreid + j, &cpuset);
 #ifdef R282
     if (d < 4 || settings->qaic_device_count > 5)
@@ -178,7 +178,7 @@ Program::Program() {
     CPU_ZERO(&cpuset);
     int card_num = i % settings->qaic_device_count;
     int coreid =
-        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 8;
+        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 1;
     CPU_SET(coreid, &cpuset);
 #ifdef R282
     if (card_num < 4 || settings->qaic_device_count > 5)
@@ -284,7 +284,6 @@ void Program::QueueScheduler() {
     if (sfront == sback) {
       // No samples then continue
       mtx_queue.unlock();
-      std::this_thread::sleep_for(std::chrono::nanoseconds(5));
       continue;
     }
 
