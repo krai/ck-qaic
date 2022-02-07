@@ -540,7 +540,7 @@
         "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
       }
     },
-    "pre_ipmitool_set_fan_raw": {
+    "pre_fan": {
       "yes": {
         "pre_fan_raw": "<<<?fan_raw_default>>>",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
@@ -556,7 +556,7 @@
         "fan_raw_tag" : "-fan_raw.###"
       }
     },
-    "post_ipmitool_set_fan_raw": {
+    "post_fan": {
       "yes": {
         "post_fan_raw": "<<<?fan_raw_default>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
@@ -598,8 +598,8 @@
     "check_experiment_dir": "",
     "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model>>> ]]; then echo -e 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model>>>.'; else",
     "check_param_container_end_def": "fi;",
-    "check_ipmitool_set_fan_raw_value_begin_def": " if [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?pre_ipmitool_set_fan_raw>>><<<?escape_char>>>\"(^|) ]] || [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?post_ipmitool_set_fan_raw>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: Value used for pre_ipmitool_set_fan_raw or post_ipmitool_set_fan_raw are not supported. Supported values: 0 50 75 100 125 150 200'; else",
-    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w aedkg aedkh<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_ipmitool_set_fan_raw and/or post_ipmitool_set_fan_raw.'; else",
+    "check_ipmitool_set_fan_raw_value_begin_def": " if [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\"(^|) ]] || [[ ! <<<?escape_char>>>\"0 50 75 100 125 150 200<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<?post_fan>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: Value used for pre_fan or post_fan are not supported. Supported values: 0 50 75 100 125 150 200'; else",
+    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w aedkg aedkh<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_fan and/or post_fan.'; else",
     "check_ipmitool_set_fan_raw_end_def": "fi;",
     "check_vc_value_begin_def": " if [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"17<<<?escape_char>>>\" ] ; then echo 'Error: incorrect vc value. VC must be between 1 and 17.'; else",
     "check_vc_value_end_def": "fi;",
