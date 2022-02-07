@@ -451,6 +451,7 @@ The most important build arguments and their default values are provided below:
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)
 - `CK_VER=2.6.1` (MLCommons Collective Knowledge)
+- `DEBUG_BUILD=no` (DEBUG_BUILD=yes builds a larger image with support for model compilation)
 
 Typically, only `SDK_DIR` and `SDK_VER` need to be customized.
 
