@@ -179,7 +179,7 @@ public:
 };
 
 template <typename TInConverter, typename TOutConverter,
-          typename TInputDataType>
+          typename TInputDataType, typename TOutputDataType>
 class Benchmark : public IBenchmark {
 public:
   Benchmark(
@@ -202,7 +202,7 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _input_ids.resize(size / (2*sizeof(TInputDataType)));
+      _input_ids.resize(size / (sizeof(uint64_t)));
       file.read(reinterpret_cast<char *>(&_input_ids[0]), size);
       file.close();
     }
@@ -216,7 +216,7 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _input_mask.resize(size / (sizeof(TInputDataType)*2));
+      _input_mask.resize(size / (sizeof(uint64_t)));
       file.read(reinterpret_cast<char *>(&_input_mask[0]), size);
       file.close();
     }
@@ -231,7 +231,7 @@ public:
       file.seekg (0, std::ios::end);
       int size = file.tellg();
       file.seekg (0, std::ios::beg);
-      _segment_ids.resize(size / (2*sizeof(TInputDataType)));
+      _segment_ids.resize(size / (sizeof(uint64_t)));
       file.read(reinterpret_cast<char *>(&_segment_ids[0]), size);
       file.close();
     }
@@ -266,9 +266,9 @@ public:
         ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx][buf_idx]);
 
     if(buf_idx == 1) {
-      memset((uint8_t*)ptr, 0, 8*sizeof(uint32_t));
+      memset((uint8_t *)ptr, 0, 8 * sizeof(TInputDataType));
       for (int i = 0; i < samples.size(); ++i) {
-        ((uint32_t*)ptr)[i] = samples[i].second;
+        ((TInputDataType *)ptr)[i] = samples[i].second;
       }
     } else if(buf_idx == 3) {
       int offset = 0;
@@ -285,8 +285,10 @@ public:
       for (int i = 0; i < samples.size(); ++i) {
         int seq_len = samples[i].second;
 	for(int m = 0; m < seq_len; m++) {
-		ptr[offset+m] = (uint32_t) *((uint64_t *)get_input_ptr(samples[i].first.index, buf_idx) + m);  
-	}
+          ptr[offset + m] =
+              (TInputDataType) *
+              ((uint64_t *)get_input_ptr(samples[i].first.index, buf_idx) + m);
+        }
    //     memcpy(ptr+offset, get_input_ptr(samples[i].first.index, buf_idx), seq_len*sizeof(TInputDataType));
         offset += seq_len;
       }
@@ -312,8 +314,10 @@ public:
     for (int i = 0; i < samples.size(); ++i) {
       int seq_len = samples[i].second;
       results[i].resize(_settings->max_seq_length*2,-10000.0f);
-      uint8_t* b0 = ((uint8_t *)_out_ptrs[dev_idx][act_idx][set_idx][0]) + offset;
-      uint8_t* b1 = ((uint8_t *)_out_ptrs[dev_idx][act_idx][set_idx][1]) + offset;
+      TOutputDataType *b0 =
+          ((TOutputDataType *)_out_ptrs[dev_idx][act_idx][set_idx][0]) + offset;
+      TOutputDataType *b1 =
+          ((TOutputDataType *)_out_ptrs[dev_idx][act_idx][set_idx][1]) + offset;
       for(int j=0 ; j<seq_len ; ++j) {
         results[i][j*2] =     *(b0 + j);
         results[i][(j*2)+1] = *(b1 + j);
