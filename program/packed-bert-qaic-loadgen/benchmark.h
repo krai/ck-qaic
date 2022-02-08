@@ -247,7 +247,7 @@ public:
       CPU_ZERO(&cpuset);
       CPU_SET(coreid, &cpuset);
 #ifdef R282
-      if(dev_idx < 4 || _settings->qaic_device_count > 5)
+      if(d < 4 || _settings->qaic_device_count > 5)
 #endif
       pthread_setaffinity_np(t.native_handle(), sizeof(cpu_set_t), &cpuset);
 
