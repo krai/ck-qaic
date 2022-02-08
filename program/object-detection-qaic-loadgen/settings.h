@@ -143,7 +143,6 @@ class BenchmarkSettings {
 public:
   BenchmarkSettings() {
 
-    std::cout << "MAX WAIT = " << max_wait << std::endl;
 
     try {
 #ifdef MODEL_R34

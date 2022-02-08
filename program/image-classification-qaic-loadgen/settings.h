@@ -209,7 +209,7 @@ public:
 
   BenchmarkSettings() {
 
-    std::cout << "MAX WAIT = " << max_wait << std::endl;
+    //std::cout << "MAX WAIT = " << max_wait << std::endl;
 
     if (given_channel_means_str) {
       std::stringstream ss(given_channel_means_str);

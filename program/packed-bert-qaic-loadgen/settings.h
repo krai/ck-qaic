@@ -195,7 +195,7 @@ public:
 
   BenchmarkSettings() {
 
-    std::cout << "MAX WAIT: " << max_wait << std::endl;
+    //std::cout << "MAX WAIT: " << max_wait << std::endl;
 
     std::stringstream ss_ids(qaic_hw_ids_str);
     while (ss_ids.good()) {
