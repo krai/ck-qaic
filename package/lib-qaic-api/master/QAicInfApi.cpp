@@ -345,7 +345,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   QStatus status = QS_SUCCESS;
 
   callback_ = callback;
-  std::cout << "callback - " << (void*)callback_ << std::endl;
+  //std::cout << "callback - " << (void*)callback_ << std::endl;
 
   dev_ = qid;
 
