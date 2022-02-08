@@ -110,8 +110,8 @@ ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline
 
 ## Bert-99
 
-## Edge Category
-### R282_Z93_Q1
+### Edge Category
+#### R282_Z93_Q1
 ##### Quick Accuracy Run
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -122,10 +122,10 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 \
---group.edge --group.closed --offline_target_qps=670 --singlestream_target_latency=11 --multistream_target_latency=88
+--group.edge --group.closed --offline_target_qps=670 --singlestream_target_latency=11
 ```
 
-### R282_Z93_Q5 
+#### R282_Z93_Q5 
 ##### Quick Accuracy Run
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -136,10 +136,10 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=r282_z93_q5 --sdk=1.6.80 --model=bert-99 \
---group.edge --group.closed --offline_target_qps=3280 --singlestream_target_latency=11 --multistream_target_latency=88
+--group.edge --group.closed --offline_target_qps=3280 --singlestream_target_latency=11
 ```
 
-### AEDK_15W
+#### AEDK_15W
 ##### Quick Accuracy Run
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -150,10 +150,10 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=aedk_15w --sdk=1.6.80 --model=bert-99 \
---group.edge --group.closed --offline_target_qps=100 --singlestream_target_latency=1 --multistream_target_latency=8
+--group.edge --group.closed --offline_target_qps=100 --singlestream_target_latency=1
 ```
 
-### AEDK_20W
+#### AEDK_20W
 ##### Quick Accuracy Run
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
@@ -164,7 +164,7 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 --sut=aedk_20w --sdk=1.6.80 --model=bert-99 \
---group.edge --group.closed --offline_target_qps=100 --singlestream_target_latency=1 --multistream_target_latency=8
+--group.edge --group.closed --offline_target_qps=100 --singlestream_target_latency=1
 ```
 
 ### Datacenter Category
