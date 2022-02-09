@@ -24,7 +24,7 @@ ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 **NB:** These dependencies are _explicit_, i.e. CK will try to satisfy them automatically. On a machine with multiple versions of Python, things can get messy, so we are playing safe here.
 
 ```
-ck install package --tags=python-package,onnx
+ck install package --tags=python-package,onnx --force_version=1.8.1
 ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet
 ck install package --tags=lib,python-package,transformers --force_version=2.4.0
 ck install package --tags=lib,python-package,tensorflow
