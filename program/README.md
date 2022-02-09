@@ -198,10 +198,10 @@ $CK_PYTHON -m pip install --user --upgrade wheel
 **NB:** These dependencies are _explicit_, i.e. CK will try to satisfy them automatically. On a machine with multiple versions of Python, things can get messy, so we are playing safe here.
 
 ```
-ck install package --tags=python-package,numpy
-ck install package --tags=python-package,absl
-ck install package --tags=python-package,cython
-ck install package --tags=python-package,opencv-python-headless
+ck install package --tags=python-package,numpy --quiet
+ck install package --tags=python-package,absl --quiet
+ck install package --tags=python-package,cython --quiet
+ck install package --tags=python-package,opencv-python-headless --quiet
 ck install package --tags=lib,python-package,onnx --force_version=1.8.1
 ```
 
@@ -214,13 +214,13 @@ ck set kernel var.soft_search_dirs="/fake_dir"
 ## Install the MLPerf Inference repo and build LoadGen
 
 ```
-ck install package --tags=mlperf,inference,source
-ck install package --tags=mlperf,loadgen,static
+ck install package --tags=mlperf,inference,source --quiet
+ck install package --tags=mlperf,loadgen,static --quiet
 ```
 
 **For power runs**
 ```
-ck install package --tags=mlperf,power,source
+ck install package --tags=mlperf,power,source --quiet
 ```
 ## Install and Run the Benchmarks
 1. [Image Classification](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
