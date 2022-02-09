@@ -278,6 +278,24 @@ public:
   }
 
 
+  void apply_mask(uint8_t *ptr, int seq_len, int offset) {
+
+    // add the y offset
+    ptr += offset * _settings->max_seq_length;
+
+    // create the mask for the first line
+    for(int i=offset ; i<seq_len+offset ; ++i)
+      ptr[i] = 1;
+
+    // replicate in the y direction
+    for(int i=1 ; i<seq_len ; ++i) {
+      uint8_t* src = ptr + offset;
+      uint8_t* dst = src + _settings->max_seq_length*i;
+      memcpy(dst, src, seq_len);
+    }
+  }
+
+
   void get_random_inputs(const std::vector<SizedSample> &samples,
                          int dev_idx, int act_idx, int set_idx, int buf_idx) override {
 
@@ -285,9 +303,15 @@ public:
         ((TInputDataType *)_in_ptrs[dev_idx][act_idx][set_idx][buf_idx]);
 
     if(buf_idx == 1) {
-      memset((uint8_t *)ptr, 0, 8 * sizeof(TInputDataType));
+      /*memset((uint8_t *)ptr, 0, 8 * sizeof(TInputDataType));
       for (int i = 0; i < samples.size(); ++i) {
-        ((TInputDataType *)ptr)[i] = samples[i].second;
+        ((TInputDataType *)ptr)[i] = samples[i].second;*/
+      int offset = 0;
+      memset((uint8_t*)ptr, 0, _settings->max_seq_length*_settings->max_seq_length*sizeof(uint8_t));
+      for (int i = 0; i < samples.size(); ++i) {
+        int seq_len = samples[i].second;
+        apply_mask((uint8_t*)ptr, seq_len, offset);
+        offset += seq_len;
       }
     } else if(buf_idx == 3) {
       int offset = 0;
