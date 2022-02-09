@@ -27,22 +27,22 @@ ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
 ck install package --tags=python-package,onnx --force_version=1.8.1
 ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet
 ck install package --tags=lib,python-package,transformers --force_version=2.4.0
-ck install package --tags=lib,python-package,tensorflow
+ck install package --tags=lib,python-package,tensorflow --quiet
 ```
 
 <a name="prepare_squad_download"></a>
 ##  Download the SQuAD v1.1 dataset
 
 ```
-ck install package --tags=dataset,squad,raw,width.384
-ck install package --tags=dataset,calibration,squad,pickle,width.384
+ck install package --tags=dataset,squad,raw,width.384 --quiet
+ck install package --tags=dataset,calibration,squad,pickle,width.384 --quiet
 ```
 
 <a name="prepare_install_model"></a>
 ##  Install the model
 
 ```
-ck install package --tags=model,mlperf,qaic,bert-packed
+ck install package --tags=model,mlperf,qaic,bert-packed --quiet
 ```
 
 <a name="prepare_compile_loadgen"></a>
@@ -56,7 +56,7 @@ ck compile program:packed-bert-qaic-loadgen
 ## Calibrate the model
 
 ```
-ck install package --tags=profile,qaic,bert-packed
+ck install package --tags=profile,qaic,bert-packed --quiet
 ```
 
 <a name="prepare_compile_workload"></a>
