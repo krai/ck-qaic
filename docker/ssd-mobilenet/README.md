@@ -52,7 +52,7 @@ CONTAINER_ID=`ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --dock
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 --sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_mobilenet \
---mode=offline --scenario=offline --target_qps=19500 \
+--mode=accuracy --scenario=offline --target_qps=19500 \
 --container=$CONTAINER_ID
 ```
 
