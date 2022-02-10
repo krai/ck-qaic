@@ -7,105 +7,99 @@
     "sut": {
       "aedk_15w": {
         "recommended_activation_count": "1",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "8"
       },
       "aedk_20w": {
         "recommended_activation_count": "1",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "10",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "8"
       },
       "aedk_25w": {
         "recommended_activation_count": "1",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "8"
       },
       "aedkg": {
         "recommended_activation_count": "1",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "8"
       },
       "aedkh": {
         "recommended_activation_count": "1",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
-        "recommended_threads_per_queue": "8",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "8"
+      },
+      "pf003e": {
+        "recommended_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "12"
       },
       "pf003": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "3"
       },
       "pf002": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "3"
       },
       "g292_z43_q16": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q2": {
+        "recommended_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
       },
       "r282_z93_q1": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q5e": {
+        "recommended_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2",
-        "zero_copy": "enable"
+        "vc_value_default": "17"
       },
       "r282_z93_q5": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
-        "recommended_threads_per_queue": "2",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8e": {
+        "recommended_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "17"
       },
       "r282_z93_q8": {
         "recommended_activation_count": "16",
-        "recommended_batch_size": "4",
-        "recommended_input_select": "0",
         "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "zero_copy": "enable"
+        "recommended_threads_per_queue": "3"
       }
     },
     "model": {
@@ -123,11 +117,10 @@
         ],
         "division": "closed",
         "hyphenated_model_name": "ssd-mobilenet",
-        "vc_value_default": "17",
         "model_name": "ssd-mobilenet",
         "model_tags": [
           "###",
-	  "bs.<<<batch_size>>>"
+          "bs.<<<batch_size>>>"
         ],
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "256"
@@ -143,7 +136,10 @@
     "preprocessed_using": "opencv",
     "program_name": "object-detection-qaic-loadgen",
     "recommended_num_setup_threads": "2",
+    "recommended_batch_size": "4",
+    "recommended_input_select": "0",
     "task_name": "object-detection",
+    "vc_value_default": "17",
     "zero_copy": "enable"
   }
 }
