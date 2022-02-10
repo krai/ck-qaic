@@ -137,6 +137,7 @@
     "multistream_override_batch_size": "<<<override_batch_size>>>",
     "offline_override_batch_size": "<<<override_batch_size>>>",
     "override_batch_size": "1000",
+    "preprocessed_using": "tensorflow",
     "program_name": "packed-bert-qaic-loadgen",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
