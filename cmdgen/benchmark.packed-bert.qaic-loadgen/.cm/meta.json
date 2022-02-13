@@ -74,6 +74,28 @@
       "r282_z93_q8": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
+      },
+      "dc_r282_z93_q5e": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6"
+      },
+      "dc_r282_z93_q5": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
+      },
+      "edge_r282_z93_q8e": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4",
+        "recommended_multistream_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6"
+      },
+      "edge_r282_z93_q8": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_multistream_activation_count": "4",
+        "recommended_fp16_activation_count": "4"
       }
     },
     "scenario": {
