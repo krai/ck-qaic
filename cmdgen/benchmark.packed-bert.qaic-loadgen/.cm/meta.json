@@ -168,6 +168,7 @@
     "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
     "recommended_num_setup_threads": "2",
+    "recommended_multistream_num_setup_threads": "2",
     "recommended_queue_length": "4",
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",

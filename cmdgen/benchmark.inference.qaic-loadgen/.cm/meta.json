@@ -242,6 +242,7 @@
       "multistream": {
         "activation_count": "<<<recommended_multistream_activation_count>>>",
         "batch_size": "<<<recommended_multistream_batch_size>>>",
+        "num_setup_threads": "<<<recommended_multistream_num_setup_threads>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=MultiStream",
           "<<<?perf_multistream_ck_env>>>"

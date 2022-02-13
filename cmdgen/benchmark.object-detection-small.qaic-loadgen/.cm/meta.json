@@ -162,6 +162,7 @@
     "preprocessed_using": "opencv",
     "program_name": "object-detection-qaic-loadgen",
     "recommended_num_setup_threads": "2",
+    "recommended_multistream_num_setup_threads": "2",
     "recommended_batch_size": "4",
     "recommended_input_select": "0",
     "task_name": "object-detection",
