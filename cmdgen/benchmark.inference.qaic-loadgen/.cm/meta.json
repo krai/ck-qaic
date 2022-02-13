@@ -281,6 +281,7 @@
         ],
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "singlestream",
+        "num_setup_threads": "1",
         "performance_mode_extension": "-target_latency.<<<singlestream_target_latency>>>",
         "queue_length": "1",
         "threads_per_queue": "1",
