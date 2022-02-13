@@ -248,7 +248,7 @@
           "<<<?perf_multistream_ck_env>>>"
         ],
         "input_select": "<<<recommended_input_select>>>",
-        "model_suffix": "multistream",
+        "model_suffix": "<<<multistream_model_suffix>>>",
         "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
         "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
       },
@@ -576,6 +576,7 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
+        "multistream_model_suffix": "singlestream",
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
@@ -594,6 +595,7 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
+        "multistream_model_suffix": "singlestream",
         "power_server_ip": "10.222.154.58",
         "power_server_port": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
@@ -793,6 +795,7 @@
     "max_wait": "50000",
     "model_readable": "<<<model_tags->>>",
     "model_suffix": "offline",
+    "multistream_model_suffix": "multistream",
     "multistream_target_latency": "<<<target_latency>>>",
     "offline_target_qps": "<<<target_qps>>>",
     "post_ipmitool_mc_info_log": "post.ipmitool_mc_info.log",
