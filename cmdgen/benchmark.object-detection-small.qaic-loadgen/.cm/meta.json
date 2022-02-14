@@ -115,16 +115,16 @@
       "edge_r282_z93_q8e": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "2",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "1",
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
       "edge_r282_z93_q8": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
-        "recommended_multistream_activation_count": "2",
-        "recommended_multistream_batch_size": "2",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "1",
         "recommended_threads_per_queue": "3"
       }
     },
