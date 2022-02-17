@@ -163,7 +163,7 @@
     "program_name": "packed-bert-qaic-loadgen",
     "recommended_input_select": "0",
     "recommended_accuracy_buffer_size": "10833",
-    "recommended_mixed_vc_value": "16",
+    "recommended_mixed_vc_value": "17",
     "recommended_fp16_vc_value": "12",
     "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
