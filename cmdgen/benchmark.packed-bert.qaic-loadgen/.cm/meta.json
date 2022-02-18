@@ -39,6 +39,12 @@
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
       },
+      "g292_z43_q16e": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6"
+      },
       "g292_z43_q16": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
