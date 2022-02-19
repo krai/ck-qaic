@@ -146,6 +146,14 @@
         "recommended_accuracy_buffer_size": "500",
         "recommended_performance_buffer_size": "64"
       }
+    },
+    "compliance": {
+      "TEST04-A" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      },
+      "TEST04-B" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      }
     }
   },
   "defaults": {

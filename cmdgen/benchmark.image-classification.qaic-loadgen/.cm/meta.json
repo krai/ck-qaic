@@ -180,6 +180,14 @@
           "bs.<<<batch_size>>>"
         ]
       }
+    },
+    "compliance": {
+      "TEST04-A" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      },
+      "TEST04-B" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      }
     }
   },
   "defaults": {
