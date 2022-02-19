@@ -183,10 +183,10 @@
     },
     "compliance": {
       "TEST04-A" : {
-        "buffer_size": "20000"
+        "buffer_size": "1024"
       },
       "TEST04-B" : {
-        "buffer_size": "20000"
+        "buffer_size": "1024"
       }
     }
   },
