@@ -99,6 +99,12 @@
         "vc_cmd_def_2": "<<<vc_cmd_def>>>",
         "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
         "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>"
+      },
+      "TEST04-A" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      },
+      "TEST04-B" : {
+        "buffer_size": "<<<recommended_accuracy_buffer_size>>>"
       }
     },
     "container": {
