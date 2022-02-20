@@ -277,6 +277,7 @@
         "activation_count": "<<<recommended_multistream_activation_count>>>",
         "batch_size": "<<<recommended_multistream_batch_size>>>",
         "num_setup_threads": "<<<recommended_multistream_num_setup_threads>>>",
+        "queue_length": "<<<recommended_multistream_queue_length>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=MultiStream",
           "<<<?perf_multistream_ck_env>>>"
@@ -878,6 +879,7 @@
     "print_container_only": "&& CONTAINER=<<<container>>>",
     "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
+    "recommended_multistream_queue_length": "<<<recommended_queue_length>>>"
     "recommended_compliance_buffer_size": "<<<recommended_performance_buffer_size>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
