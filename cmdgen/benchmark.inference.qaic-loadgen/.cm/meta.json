@@ -105,7 +105,7 @@
         "mode": "performance",
         "mode_extension": "<<<?compliance_extension>>>-compliance.TEST04-A<<<?fan_raw_tag>>><<<?vc_tag>>>",
         "output_file": "mlperf_log_summary.txt",
-        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
+        "buffer_size": "<<<recommended_compliance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
         "record_tags": "compliance.TEST04-A",
@@ -122,7 +122,7 @@
         "mode": "performance",
         "mode_extension": "<<<?compliance_extension>>>-compliance.TEST04-B<<<?fan_raw_tag>>><<<?vc_tag>>>",
         "output_file": "mlperf_log_summary.txt",
-        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
+        "buffer_size": "<<<recommended_compliance_buffer_size>>>",
         "recommended_repetitions": "1",
         "recommended_verbosity": "0",
         "record_tags": "compliance.TEST04-B",
@@ -284,6 +284,7 @@
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "<<<multistream_model_suffix>>>",
         "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
+        "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
         "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
       },
       "offline": {
@@ -319,6 +320,7 @@
         "performance_mode_extension": "-target_latency.<<<singlestream_target_latency>>>",
         "queue_length": "1",
         "threads_per_queue": "1",
+        "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
         "compliance_extension": "-target_latency.<<<singlestream_target_latency>>>"
       }
     },
@@ -876,6 +878,7 @@
     "print_container_only": "&& CONTAINER=<<<container>>>",
     "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
     "queue_length": "<<<recommended_queue_length>>>",
+    "recommended_compliance_buffer_size": "<<<recommended_performance_buffer_size>>>",
     "record_tags_inner": "<<<record_tags,>>>",
     "record_uoa": "<<<record_uoa_parts->>>",
     "repetitions": "1",
