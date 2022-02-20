@@ -183,10 +183,10 @@
     },
     "compliance": {
       "TEST04-A" : {
-        "recommended_stream_buffer_size": "20000"
+        "recommended_stream_buffer_size": "1024"
       },
       "TEST04-B" : {
-        "recommended_stream_buffer_size": "20000"
+        "recommended_stream_buffer_size": "1024"
       }
     }
   },
