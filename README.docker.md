@@ -385,7 +385,7 @@ export CK_WORKSPACE=$WORKSPACE
 export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
 export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
 export CK_EXPERIMENT_REPO=mlperf_v2.0.$(hostname).$USER
-export CK_EXPERIMENT_DIR=$WORKSPACE/$USER/CK-REPOS/$CK_EXPERIMENT_REPO/experiment
+export CK_EXPERIMENT_DIR=$WORKSPACE/$USER/CK-REPOS/mlperf_v2.0.$(hostname).$USER/experiment
 export PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -397,7 +397,7 @@ sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
 
 ### Set up Collective Knowledge
 ```
-$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.0 --user --upgrade
+$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.1 --user --upgrade
 ck pull repo --url=https://github.com/krai/ck-qaic
 ```
 
@@ -406,7 +406,7 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 ck add repo:$CK_EXPERIMENT_REPO --quiet
 ck add $CK_EXPERIMENT_REPO:experiment:dummy --common_func
 ck rm  $CK_EXPERIMENT_REPO:experiment:dummy --force
-chgrp -R qaic $CK_EXPERIMENT_DIR
+sudo chgrp -R qaic $CK_EXPERIMENT_DIR
 chmod -R g+ws $CK_EXPERIMENT_DIR
 setfacl -R -d -m group:qaic:rwx $CK_EXPERIMENT_DIR
 ```
