@@ -23,7 +23,7 @@ Out-of-the-box.
 <b>[anton@aedk3 ~]&dollar;</b> sudo reboot
 </pre>
 
-### Check 20W TDP
+### Check 25W TDP
 
 <pre>
 <b>[anton@aedk3 ~]&dollar;</b> cat /sys/class/hwmon/hwmon*/power1_max
