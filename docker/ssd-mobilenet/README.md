@@ -15,7 +15,7 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 
 ### Build parameters
 
-- `SDK_VER=1.5.6`
+- `SDK_VER=1.6.80`
 - `DOCKER_OS=centos7`
 - `CK_QAIC_CHECKOUT=4eb006cd7af97ee281f073a5e17f790255143ed7`
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
@@ -39,19 +39,19 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 ## Load the container
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none \
---sdk=1.5.6 --model_name=ssd-mobilenet`
+--sdk=1.6.80 --model_name=ssd-mobilenet`
 ```
 To see experiments outside of container (--experiment_dir):
 
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none \
---sdk=1.5.6 --model_name=ssd-mobilenet --experiment_dir`
+--sdk=1.6.80 --model_name=ssd-mobilenet --experiment_dir`
 ```
 
 ## Quick Accuracy Check
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_mobilenet \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
 --mode=accuracy --scenario=offline --target_qps=19500 \
 --container=$CONTAINER_ID
 ```
@@ -62,7 +62,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_mobilenet \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
 --group.edge --group.closed --target_qps=19500 --target_latency=1 \
 --container=$CONTAINER_ID
 ```
@@ -71,7 +71,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_mobilenet \
+--sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
 --group.edge --group.closed --target_qps=97500 --target_latency=1 \
 --container=$CONTAINER_ID --power
 ```
@@ -82,7 +82,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.6 --model=ssd-mobilenet --mode=accuracy \
+--sut=r282_z93_q5 --sdk=1.6.80 --model=ssd-mobilenet --mode=accuracy \
 --scenario=offline --target_qps=97500 --docker --experiment_dir
 ```
 
@@ -101,6 +101,6 @@ When `--docker=container_only` or `--docker` are set the following optional para
 
 `<model_name>` - `ssd-mobilenet`      
 
-`<sdk>` - for example, `1.5.6`
+`<sdk>` - for example, `1.6.80`
 
 `--shared_group_name` - `qaic` by default

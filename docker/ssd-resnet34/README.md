@@ -15,7 +15,7 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
 
 ### Docker Build parameters
 
-- `SDK_VER=1.5.6`
+- `SDK_VER=1.6.80`
 - `DOCKER_OS=centos7`
 - `CK_QAIC_CHECKOUT=4eb006cd7af97ee281f073a5e17f790255143ed7`
 - `CK_QAIC_PERCENTILE_CALIBRATION=no`
@@ -40,19 +40,19 @@ $(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
 ## Load the container
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none \ 
---sdk=1.5.6 --model_name=ssd-resnet34`
+--sdk=1.6.80 --model_name=ssd-resnet34`
 ```
 To see experiments outside of container (--experiment_dir):
 
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none \ 
---sdk=1.5.6 --model_name=ssd-resnet34 --experiment_dir`
+--sdk=1.6.80 --model_name=ssd-resnet34 --experiment_dir`
 ```
 
 ## Quick Accuracy Check
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 \
 --mode=accuracy --scenario=offline --target_qps=425 --container=$CONTAINER_ID
 ```
 
@@ -62,7 +62,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.5.6 --model=ssd_resnet34 \
+--sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 \
 --group.edge --group.closed --target_qps=22222 --target_latency=1.5 \
 --container=$CONTAINER_ID
 ```
@@ -71,7 +71,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.6 -model=ssd_resnet34 \
+--sut=r282_z93_q5 --sdk=1.6.80 -model=ssd_resnet34 \
 --group.edge --group.closed --target_qps=111111 --target_latency=1.5 \
 --container=$CONTAINER_ID --power
 ```
@@ -80,7 +80,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=r282_z93_q8 --sdk=1.5.6 --model=ssd_resnet34 \
+--sut=r282_z93_q8 --sdk=1.6.80 --model=ssd_resnet34 \
 --group.datacenter --group.closed --target_qps=166666 --server_target_qps=145000 \
 --container=$CONTAINER_ID --power
 ```
@@ -89,7 +89,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=g292_z43_q16 --sdk=1.5.6 --model=ssd_resnet34 \
+--sut=g292_z43_q16 --sdk=1.6.80 --model=ssd_resnet34 \
 --group.datacenter --group.closed --target_qps=333333 --server_target_qps=310000 \
 --container=$CONTAINER_ID --power
 ```
@@ -100,7 +100,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.5.6 --model=ssd_resnet34 --mode=accuracy \
+--sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_resnet34 --mode=accuracy \
 --scenario=offline --target_qps=111112 --docker --experiment_dir
 ```
 When `--docker=container_only` or `--docker` is set the following optional parameters can be used:
@@ -118,7 +118,7 @@ When `--docker=container_only` or `--docker` is set the following optional param
 
 `<model_name>` - `ssd-resnet34`      
 
-`<sdk>` - for example, `1.5.6`
+`<sdk>` - for example, `1.6.80`
 
 `--shared_group_name` - `qaic` by default
 

@@ -36,7 +36,7 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-#FROM qran-centos7:1.5.6
+#FROM qran-centos7:1.6.80
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE

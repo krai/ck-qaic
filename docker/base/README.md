@@ -55,7 +55,7 @@ SDK_VER=1.6.66 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)
 ### Parameters
 - `DOCKER_OS=centos7`.
 - `SDK_DIR=/local/mnt/workspace/sdks/`.
-- `SDK_VER=1.5.6`.
+- `SDK_VER=1.6.80`.
 - `PLATFORM_SDK`.
 - `APPS_SDK`.
 

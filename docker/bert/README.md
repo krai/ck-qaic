@@ -53,7 +53,7 @@ $(ck find repo:ck-qaic)/docker/build_ck.sh bert
 
 ```
 CONTAINER_ID=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none \
---sdk=1.5.9 --model_name=bert --experiment_dir`
+--sdk=1.6.80 --model_name=bert --experiment_dir`
 ```
 To see experiments outside of container (--experiment_dir)
 
@@ -99,7 +99,7 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
 
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
---sut=r282_z93_q8 --sdk=1.5.9 --model=bert-99.9 \
+--sut=r282_z93_q8 --sdk=1.6.80 --model=bert-99.9 \
 --group.edge --group.closed --offline_override_batch_size=4096 --server_override_batch_size=1024 \
 --offline_target_qps=2700 --server_target_qps=2250 --max_wait=50000 \
 --container=$CONTAINER_ID
