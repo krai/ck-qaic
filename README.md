@@ -2,19 +2,19 @@
 
 This repository contains benchmark implementations and automated workflows for
 the [Qualcomm Cloud AI](https://www.qualcomm.com/products/cloud-artificial-intelligence)
-submissions to [MLPerf Inference](https://mlcommons.org/en/).
+submissions to [MLPerf Inference](https://mlcommons.org/en/groups/inference/).
 
-You can follow the below README files for installing and running the MLCommons benchmarks
-1. [Using Docker (for PCIe)](https://github.com/krai/ck-qaic/blob/main/script/setup.docker/README.md)
-2. [Without Docker (for AEDKs)](https://github.com/krai/ck-qaic/blob/main/program/README.md)
+Follow the links below to install and run the benchmarks:
+1. [With Docker](docker/README.md) (for Datacenter systems equipped with PCIe cards).
+2. [Without Docker](program/README.md) (e.g. for Edge appliances equipped with DM.2 cards).
 
-Unless explicitly stated otherwise, this software is released under the following license 
+Unless explicitly stated otherwise, this software is released under the following license
 ([SPDX-License-Identifier: BSD-3-Clause.](https://spdx.org/licenses/BSD-3-Clause.html)):
 
 <pre>
-Copyright (c) 2014-2019 cTuning foundation.
-Copyright (c) 2019-2020 dividiti Limited.
 Copyright (c) 2021-2022 Krai Ltd.
+Copyright (c) 2019-2020 dividiti Limited.
+Copyright (c) 2014-2019 cTuning foundation.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
