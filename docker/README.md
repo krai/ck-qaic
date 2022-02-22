@@ -84,8 +84,8 @@ echo $SHELL
 /opt/qti-aic/tools/qaic-version-util
 ```
 <details><pre>
-platform:AIC.<b>1.6.63</b>
-apps:AIC.<b>1.6.63</b>
+platform:AIC.<b>1.6.80</b>
+apps:AIC.<b>1.6.80</b>
 factory:not found
 </pre></details>
 
@@ -100,12 +100,12 @@ This storage should have at least 100G free.
 
 Place the Platform and Apps SDKs under `$WORKSPACE/sdks` e.g.:
 ```
-ls -la $WORKSPACE/sdks/*1.6.66.zip
+ls -la $WORKSPACE/sdks/*1.6.80.zip
 ```
 <details><pre>
--rw-r--r-- 1 alokhmot users  306516755 Dec 17 05:38 /local/mnt/workspace/sdks/qaic-apps-1.6.66.zip
--rw-r--r-- 1 alokhmot users 1424395295 Dec 17 05:44 /local/mnt/workspace/sdks/qaic-platform-sdk-aarch64-1.6.66.zip
--rw-r--r-- 1 alokhmot users 1403362233 Dec 17 05:47 /local/mnt/workspace/sdks/qaic-platform-sdk-x86_64-1.6.66.zip
+-rw-r--r-- 1 alokhmot users  306516755 Dec 17 05:38 /local/mnt/workspace/sdks/qaic-apps-1.6.80.zip
+-rw-r--r-- 1 alokhmot users 1424395295 Dec 17 05:44 /local/mnt/workspace/sdks/qaic-platform-sdk-aarch64-1.6.80.zip
+-rw-r--r-- 1 alokhmot users 1403362233 Dec 17 05:47 /local/mnt/workspace/sdks/qaic-platform-sdk-x86_64-1.6.80.zip
 </pre></details>
 
 ### [Optional] Locate the ImageNet dataset
@@ -443,14 +443,14 @@ For more details, see benchmark-specific instructions:
 
 The most important build arguments and their default values are provided below:
 
-- `SDK_VER=1.5.6` (as used for MLPerf Inference v1.1)
+- `SDK_VER=1.6.80`
 - `SDK_DIR=/local/mnt/workspace/sdks`
 - `DOCKER_OS=centos7` (only CentOS 7 is supported)
 - `PYTHON_VER=3.8.12` (Python interpreter)
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)
-- `CK_VER=2.6.1` (MLCommons Collective Knowledge)
+- `CK_VER=2.6.1` ([MLCommons Collective Knowledge](https://github.com/mlcommons/ck))
 - `DEBUG_BUILD=no` (DEBUG_BUILD=yes builds a larger image with support for model compilation)
 
 Typically, only `SDK_DIR` and `SDK_VER` need to be customized.
@@ -468,14 +468,14 @@ docker image prune && docker image ls | head -n 6
 ```
 <details><pre>
 REPOSITORY                          TAG            IMAGE ID       CREATED          SIZE
-krai/mlperf.bert.centos7            1.6.66         5b6603e9533a   2 minutes ago    6.14GB
+krai/mlperf.bert.centos7            1.6.80         5b6603e9533a   2 minutes ago    6.14GB
 krai/ck.bert.centos7                latest         dc63f7469ed0   16 minutes ago   11GB
 krai/ck.common.centos7              latest         1df24def6e4b   33 minutes ago   2.43GB
 krai/centos7                        latest         b136531dce5d   37 minutes ago   1GB
-krai/qaic.centos7                   1.6.66         6fff1756e9f4   45 minutes ago   2.22GB
+krai/qaic.centos7                   1.6.80         6fff1756e9f4   45 minutes ago   2.22GB
 </pre>
 
-The images tagged with `1.6.66` are SDK-dependent, and need to be rebuilt with newer SDKs.
+The images tagged with `1.6.80` are SDK-dependent, and need to be rebuilt with newer SDKs.
 The images tagged with `latest` are SDK-independent, and can be reused with newer SDKs.
 </details>
 
@@ -497,17 +497,17 @@ docker image prune && docker image ls | head -n 9
 ```
 <details><pre>
 REPOSITORY                          TAG            IMAGE ID       CREATED             SIZE
-krai/mlperf.bert.centos7            1.6.66         074289ee7fac   4 minutes ago       6.36GB
-krai/mlperf.bert.centos7            1.6.66_PC      c4bc6ea9f83d   6 minutes ago       14.2GB
-krai/mlperf.bert.centos7            1.6.66_DEBUG   f5ea6d335c9f   About an hour ago   13.6GB
+krai/mlperf.bert.centos7            1.6.80         074289ee7fac   4 minutes ago       6.36GB
+krai/mlperf.bert.centos7            1.6.80_PC      c4bc6ea9f83d   6 minutes ago       14.2GB
+krai/mlperf.bert.centos7            1.6.80_DEBUG   f5ea6d335c9f   About an hour ago   13.6GB
 <none>                              <none>         5b6603e9533a   3 hours ago         6.14GB
 krai/ck.bert.centos7                latest         dc63f7469ed0   3 hours ago         11GB
 krai/ck.common.centos7              latest         1df24def6e4b   3 hours ago         2.43GB
 krai/centos7                        latest         b136531dce5d   3 hours ago         1GB
-krai/qaic.centos7                   1.6.66         6fff1756e9f4   4 hours ago         2.22GB
+krai/qaic.centos7                   1.6.80         6fff1756e9f4   4 hours ago         2.22GB
 </pre>
 
-Note the new auxiliary images tagged with `1.6.66_PC` and `1.6.66_DEBUG`, which can be removed. The image with id `5b6603e9533a` is the previously built (and now untagged) `krai/mlperf.bert.centos7:1.6.66 with the default PCV.
+Note the new auxiliary images tagged with `1.6.80_PC` and `1.6.80_DEBUG`, which can be removed. The image with id `5b6603e9533a` is the previously built (and now untagged) `krai/mlperf.bert.centos7:1.6.80 with the default PCV.
 </details>
 
 
@@ -523,7 +523,7 @@ docker container ps
 ```
 <details><pre>
 CONTAINER ID   IMAGE                             COMMAND               CREATED         STATUS         PORTS     NAMES
-d859c6f4dfd6   krai/mlperf.bert.centos7:1.6.66   "/bin/bash -c bash"   7 seconds ago   Up 6 seconds             gracious_goldstine
+d859c6f4dfd6   krai/mlperf.bert.centos7:1.6.80   "/bin/bash -c bash"   7 seconds ago   Up 6 seconds             gracious_goldstine
 </pre></details>
 
 ## Measure accuracy
@@ -560,7 +560,7 @@ sys     0m0.124s
 ck list $CK_EXPERIMENT_REPO:experiment:*
 ```
 <details><pre>
-mlperf-closed-g292_z43_q16-qaic-v1.6.66-aic100-qaic-v1.6.66-aic100-bert-<b>bert-99.9-offline-accuracy-dataset_size.10833</b>
+mlperf-closed-g292_z43_q16-qaic-v1.6.80-aic100-qaic-v1.6.80-aic100-bert-<b>bert-99.9-offline-accuracy-dataset_size.10833</b>
 <pre></details>
 
 ### BERT-99
