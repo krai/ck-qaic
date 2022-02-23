@@ -102,67 +102,8 @@ ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.sing
 ```
 ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
 ```
-
-
-# Benchmark
-
-## Edge Category
-### R282_Z93_Q1
-
-#### Quick Accuracy Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
---mode=accuracy --scenario=offline 
-```
-#### Full Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=19360 \ --singlestream_target_latency=3.9 --multistream_target_latency=31.2
-```
-
-### R282_Z93_Q5 
-#### Quick Accuracy Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
---mode=accuracy --scenario=offline
-```
-#### Full Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=r282_z93_q5 --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=97510 \ --singlestream_target_latency=3.9 --multistream_target_latency=31.2
-```
-
-### AEDK_15W
-#### Quick Accuracy Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=aedk_15w --sdk=1.6.80 --model=ssd_mobilenet \
---mode=accuracy --scenario=offline 
-```
-#### Full Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=aedk_15w --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=3440 \ --singlestream_target_latency=1.9 --multistream_target_latency=15.2
-```
-
-### AEDK_20W
-#### Quick Accuracy Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.6.80 --model=ssd_mobilenet \
---mode=accuracy --scenario=offline
-```
-#### Full Run
-```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
---sut=aedk_20w --sdk=1.6.80 --model=ssd_mobilenet \
---group.edge --group.closed --offline_target_qps=4090 \ --singlestream_target_latency=2 --multistream_target_latency=16
-```
+## Benchmarking
+For benchmarking for different System Under Tests, please see [here](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.SSD_Large.benchmarking.md)
 
 <a name="info"></a>
 # Further info
