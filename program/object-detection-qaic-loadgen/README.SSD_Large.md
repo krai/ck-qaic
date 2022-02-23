@@ -7,7 +7,6 @@ Please refer to [Docker README](https://github.com/krai/ck-qaic/blob/main/docker
 Complete the common benchmarking setup as detailed [here](https://github.com/krai/ck-qaic/blob/main/program/README.md)
 
 
-
 <a name="prepare_coco"></a>
 ## Prepare the COCO 2017 validation dataset (5,000 images)
 
@@ -116,7 +115,7 @@ ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offlin
 ```
 
 
-### Benchmarking
+## Benchmarking
 For benchmarking for different System Under Tests, please see [here](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.SSD_Large.benchmarking.md)
 
 <a name="info"></a>
