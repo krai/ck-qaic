@@ -24,7 +24,7 @@
         "recommended_threads_per_queue": "2"
       },
       "aedkg": {
-        "recommended_activation_count": "8",
+        "recommended_activation_count": "9",
         "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
