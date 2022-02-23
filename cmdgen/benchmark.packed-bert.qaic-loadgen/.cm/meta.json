@@ -74,7 +74,7 @@
       "r282_z93_q8e": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4",
-        "recommended_mixed_vc_value": "10",
+        "recommended_mixed_vc_value": "11",
         "recommended_fp16_vc_value": "6"
       },
       "r282_z93_q8": {
