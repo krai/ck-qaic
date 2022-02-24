@@ -5,8 +5,8 @@ the [Qualcomm Cloud AI](https://www.qualcomm.com/products/cloud-artificial-intel
 submissions to [MLPerf Inference](https://mlcommons.org/en/groups/inference/).
 
 Follow the links below to install and run the benchmarks:
-1. [With Docker](docker/README.md) (for Datacenter systems equipped with PCIe cards).
-2. [Without Docker](program/README.md) (e.g. for Edge appliances equipped with DM.2 cards).
+1. [With Docker](docker/README.md) (for Datacenter and Edge servers equipped with PCIe cards).
+2. [Without Docker](program/README.md) (for Edge appliances equipped with DM.2/DM.2e cards).
 
 Unless explicitly stated otherwise, this software is released under the following license
 ([SPDX-License-Identifier: BSD-3-Clause.](https://spdx.org/licenses/BSD-3-Clause.html)):
