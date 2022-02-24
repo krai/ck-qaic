@@ -6,11 +6,11 @@
 #### SMU Common Options
 ##### Determinism Control: Manual
 ##### Determinism Slider: Power
-##### cTDP: Auto
+##### cTDP Control: Auto
+##### ABBDIS: Auto
 ##### DF Cstates: Auto
 
 ### DF Common Options
-
 #### Scrubber
 ##### DRAM scrub time: Disabled
 ##### Poisson scrubber control: Disabled
@@ -22,18 +22,17 @@
 
 ### CPU Common Options
 #### Performance
-##### SMT Control: Disable
-#### Global C-state Control: Enabled
+##### SMT Control: Enable
+#### Global C-state Control: Disabled
 
 # Management Firmware Settings
 
 Out-of-the-box.
 
-# Power Management Settings
 
-## Fan Settings (6750 RPM)
+# Fan Settings (16000 RPM)
 
 <pre>
-<b>&dollar;</b> sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>75</b> 0xFF
+<b>&dollar;</b>sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>250</b> 0xFF
  0a 3c 00
 </pre>
