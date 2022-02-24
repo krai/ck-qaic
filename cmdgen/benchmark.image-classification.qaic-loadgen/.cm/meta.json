@@ -75,8 +75,8 @@
       "g292_z43_q16e": {
         "recommended_activation_count": "2",
         "recommended_threads_per_queue": "2",
-        "recommended_queue_length": "8",
-        "recommended_num_setup_threads": "256",
+        "recommended_queue_length": "6",
+        "recommended_num_setup_threads": "192",
         "vc_value_default": "11"
       },
       "g292_z43_q16": {
