@@ -1,0 +1,100 @@
+#!/bin/bash
+
+_category="edge"
+DOCKER=${DOCKER:-'no'}
+WORKLOADS=${WORKLOADS:-"resnet50,ssd_mobilenet,ssd_resnet34,bert"}
+
+. run_common.sh
+
+RUN_CMD_COMMON_SUFFIX="${RUN_CMD_COMMON_SUFFIX} $POWER_YES $CMD_QUOTE"
+
+# ResNet50.
+SINGLESTREAM_TARGET_LATENCY=$(getLatency "${RESNET50_SINGLESTREAM_TARGET_LATENCY}")
+MULTISTREAM_TARGET_LATENCY=$(getLatency "${RESNET50_MULTISTREAM_TARGET_LATENCY}")
+OFFLINE_TARGET_QPS=$(getQPS "${RESNET50_OFFLINE_TARGET_QPS}")
+MULTISTREAM_QUERY_COUNT=$(getQueryCount "${MULTISTREAM_TARGET_LATENCY}")
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_RESNET50 $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_RESNET50"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=resnet50 \
+${_RUN_TYPES} \
+--singlestream_target_latency=$SINGLESTREAM_TARGET_LATENCY \
+--multistream_target_latency=$MULTISTREAM_TARGET_LATENCY \
+--multistream_query_count=$MULTISTREAM_QUERY_COUNT \
+--target_qps=$OFFLINE_TARGET_QPS \
+${RUN_CMD_SUFFIX}"
+enabled resnet50 && RUN "$CMD"
+
+# SSD-MobileNet-v1.
+SINGLESTREAM_TARGET_LATENCY=$(getLatency "${SSD_MOBILENET_SINGLESTREAM_TARGET_LATENCY}")
+MULTISTREAM_TARGET_LATENCY=$(getLatency "${SSD_MOBILENET_MULTISTREAM_TARGET_LATENCY}")
+OFFLINE_TARGET_QPS=$(getQPS "${SSD_MOBILENET_OFFLINE_TARGET_QPS}")
+MULTISTREAM_QUERY_COUNT=$(getQueryCount "${MULTISTREAM_TARGET_LATENCY}")
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_SSD_MOBILENET $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_SSD_MOBILENET"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=ssd_mobilenet \
+${_RUN_TYPES} \
+--singlestream_target_latency=$SINGLESTREAM_TARGET_LATENCY \
+--multistream_target_latency=$MULTISTREAM_TARGET_LATENCY \
+--multistream_query_count=$MULTISTREAM_QUERY_COUNT \
+--target_qps=$OFFLINE_TARGET_QPS \
+${RUN_CMD_SUFFIX}"
+enabled ssd_mobilenet && RUN "$CMD"
+
+# SSD-ResNet34.
+SINGLESTREAM_TARGET_LATENCY=$(getLatency "${SSD_RESNET34_SINGLESTREAM_TARGET_LATENCY}")
+MULTISTREAM_TARGET_LATENCY=$(getLatency "${SSD_RESNET34_MULTISTREAM_TARGET_LATENCY}")
+OFFLINE_TARGET_QPS=$(getQPS "${SSD_RESNET34_OFFLINE_TARGET_QPS}")
+MULTISTREAM_QUERY_COUNT=$(getQueryCount "${MULTISTREAM_TARGET_LATENCY}")
+
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_SSD_RESNET34 $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_SSD_RESNET34"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=ssd_resnet34 \
+${_RUN_TYPES} \
+--singlestream_target_latency=$SINGLESTREAM_TARGET_LATENCY \
+--multistream_target_latency=$MULTISTREAM_TARGET_LATENCY \
+--multistream_query_count=$MULTISTREAM_QUERY_COUNT \
+--target_qps=$OFFLINE_TARGET_QPS \
+${RUN_CMD_SUFFIX}"
+enabled ssd_resnet34 && RUN "$CMD"
+
+# BERT-99% (mixed precision).
+SINGLESTREAM_TARGET_LATENCY=$(getLatency "${BERT99_SINGLESTREAM_TARGET_LATENCY}")
+MULTISTREAM_TARGET_LATENCY=$(getLatency "${BERT99_MULTISTREAM_TARGET_LATENCY}")
+OFFLINE_TARGET_QPS=$(getQPS "${BERT99_OFFLINE_TARGET_QPS}")
+OFFLINE_OVERRIDE_BATCH_SIZE=${BERT99_OFFLINE_OVERRIDE_BATCH_SIZE:-4096}
+MULTISTREAM_OVERRIDE_BATCH_SIZE=${BERT99_MULTISTREAM_OVERRIDE_BATCH_SIZE:-8}
+MULTISTREAM_QUERY_COUNT=$(getQueryCount "${MULTISTREAM_TARGET_LATENCY}")
+
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_BERT $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_BERT"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=bert-99 \
+${_RUN_TYPES} \
+--singlestream_target_latency=$SINGLESTREAM_TARGET_LATENCY \
+--multistream_target_latency=$MULTISTREAM_TARGET_LATENCY \
+--multistream_query_count=$MULTISTREAM_QUERY_COUNT \
+--target_qps=$OFFLINE_TARGET_QPS \
+--offline_override_batch_size=$OFFLINE_OVERRIDE_BATCH_SIZE \
+--multistream_override_batch_size=$MULTISTREAM_OVERRIDE_BATCH_SIZE \
+${RUN_CMD_SUFFIX}"
+enabled bert && RUN "$CMD"
+
+. run_end.sh
+
+echo
+echo "Done."
