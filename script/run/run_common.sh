@@ -85,6 +85,8 @@ _docker=${DOCKER:-no}
 
 _offline_only=${OFFLINE_ONLY:-no}
 _server_only=${SERVER_ONLY:-no}
+_singlestream_only=${SINGLESTREAM_ONLY:-no}
+_multistream_only=${MULTISTREAM_ONLY:-no}
 
 _power=${POWER:-no}
 
@@ -113,9 +115,13 @@ if [[ $_power == 'yes' ]]; then
 fi
 
 if [[ ${_offline_only} == 'yes' ]]; then
-  _RUN_TYPES="--mode=performance --scenario=offline"
+  _RUN_TYPES="--group.${_division} --scenario=offline"
 elif [[ ${_server_only} == 'yes' ]]; then
-  _RUN_TYPES="--mode=performance --scenario=server"
+  _RUN_TYPES="--group.${_division} --scenario=server"
+elif [[ ${_singlestream_only} == 'yes' ]]; then
+  _RUN_TYPES="--group.${_division} --scenario=singlestream"
+elif [[ ${_multistream_only} == 'yes' ]]; then
+  _RUN_TYPES="--group.${_division} --scenario=multistream"
 else
   _RUN_TYPES="--group.${_category} --group.${_division}"
 fi
