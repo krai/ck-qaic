@@ -18,7 +18,7 @@
         "win": "yes"
       },
       "sort": 115,
-      "tags": "lib,protobuf-host,v3.11.4"
+      "tags": "lib,protobuf-host,for.qaic"
     }
   },
   "end_full_path": {
