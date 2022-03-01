@@ -45,13 +45,6 @@ ck install package --tags=dataset,calibration,squad,pickle,width.384 --quiet
 ck install package --tags=model,mlperf,qaic,bert-packed --quiet
 ```
 
-<a name="prepare_compile_loadgen"></a>
-## Compile packed-bert-qaic-loadgen
-
-```
-ck compile program:packed-bert-qaic-loadgen
-```
-
 <a name="prepare_calibrate_model"></a>
 ## Calibrate the model
 
