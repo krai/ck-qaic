@@ -195,6 +195,12 @@ QID 0
 
 ## `[HR]` Compile the models and copy to the device
 
+### Do the CK benchmark setup on the host
+1. Common Benchmark setup: Follow the instructions from [https://github.com/krai/ck-qaic/blob/main/program/README.md] (here)
+2. Image Classfication Benchmark setup: Follow the instructions from [https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md] (here)
+3. Object Detection Benchmark setup: Follow the instructions from [https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md] (here)
+4. Bert Benchmark setup: Follow the instructions from [https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md] (here)
+
 **Copy your SSH key so that you avoid giving password** 
 
 Example:
