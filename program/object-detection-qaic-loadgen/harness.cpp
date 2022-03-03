@@ -178,7 +178,7 @@ Program::Program() {
     CPU_ZERO(&cpuset);
     int card_num = i % settings->qaic_device_count;
     int coreid =
-        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 2;
+        AFFINITY_CARD(card_num) + (i / settings->qaic_device_count) % 1;
     CPU_SET(coreid, &cpuset);
 #ifdef R282
     if (card_num < 4 || settings->qaic_device_count > 5)
