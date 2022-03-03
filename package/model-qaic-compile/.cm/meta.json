@@ -216,7 +216,7 @@
         "_COMPILER_ARGS_OFFLINE": "-sdp-cluster-sizes=4,4",
         "_14NSP_COMPILER_ARGS_OFFLINE": "-compiler-args='-aic-version -aic-single-device-partitioning=partitioner -aic-cluster-sizes=4,4,4,2 -aic-max-outchannel-split=1,1,4,2 -aic-enable-spill-fill-allocator=0 -aic-spill-large-buffers=0'",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -aic-enable-spill-fill-allocator=1 -aic-spill-large-buffers=1'",
-        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -aic-num-cores=8 -batchsize=8 -mos=1,4 -ols=4",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1,4 -ols=4",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$  -mos=4 -ols=1"
       },
       "extra_tags": [
@@ -371,7 +371,7 @@
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -node-precision-info=[NODE_PRECISION_FILE] -compile-only",
         "_COMPILER_ARGS_OFFLINE": "-aic-enable-depth-first",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -aic-buffer-dealloc-delay=1'",
-        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -aic-num-cores=1 -batchsize=1",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
       },
       "extra_tags": [
@@ -467,7 +467,7 @@
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only", 
         "_COMPILER_ARGS_OFFLINE": "-allocator-dealloc-delay=2 -size-split-granularity=1048 -vtcm-working-set-limit-ratio=0.75",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -aic-buffer-dealloc-delay=1'",
-        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -aic-num-cores=1 -batchsize=4 -mos=1 -ols=2",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=2",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
       },
       "extra_tags": [
@@ -606,7 +606,7 @@
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Split,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only",
         "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -multicast-weights -quantization-precision-bias=Int32 -quantization-calibration=Percentile -percentile-calibration-value=99.999",
         "_COMPILER_ARGS_SINGLESTREAM": "-compiler-args='-aic-version -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -aic-buffer-dealloc-delay=1'",
-        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -aic-num-cores=2",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$"
       },
       "extra_tags": [
