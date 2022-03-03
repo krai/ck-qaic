@@ -209,8 +209,8 @@ Example:
 ```
 ssh-copy-id krai@aedk1
 ```
-
-Example:
+### Copy the models to device
+Example, for "aedk_15w" devices
 ```
-IPS=aedk1 PORTS=3231 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+IPS=aedkx PORTS=22 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
