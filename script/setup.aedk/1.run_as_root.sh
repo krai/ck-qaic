@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Update the Repo URLs
+cd /etc/yum.repos.d/
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+cd
+
 # Install system-level packages via 'yum'.
 yum upgrade -y
 yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel

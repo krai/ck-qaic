@@ -44,6 +44,11 @@ Go to the temporary directory and run:
 ./1.run_as_root.sh
 ```
 
+If there is not enough space on the root partition and we want krai user to use a different partition say /data for benchmark data (can be more than 50GB), you can do
+```
+usermod -d /data/krai krai
+```
+
 ## `[D1]` Run under the `krai` user
 
 Connect to the device as `krai` e.g.:
@@ -190,6 +195,12 @@ QID 0
 
 ## `[HR]` Compile the models and copy to the device
 
+### Do the CK benchmark setup on the host
+1. Common Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/README.md)
+2. Image Classfication Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
+3. Object Detection Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md)
+4. Bert Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md)
+
 **Copy your SSH key so that you avoid giving password** 
 
 Example:
@@ -198,8 +209,8 @@ Example:
 ```
 ssh-copy-id krai@aedk1
 ```
-
-Example:
+### Copy the models to device
+Example, for "aedk_15w" devices
 ```
-IPS=aedk1 PORTS=3231 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+IPS=aedkx PORTS=22 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
