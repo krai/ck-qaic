@@ -101,15 +101,14 @@ These steps are to be repeated for each new SDK version (`SDK_VER` below).
 
 ## `[HSR]` Uninstall/Install the Apps SDK
 
-Go to the directory containing your Apps SDK archive e.g. `/data/qaic`.
+Provide arguments for the the path to directory containing your Apps SDK archive `SDK_DIR` and the SDK version `SDK_VER` or the full path to the SDK archive `APPS_SDK`
+Default: 
+`SDK_DIR=/local/mnt/workspace/sdks` 
+`SDK_VER=1.6.80` 
+`APPS_SDK=$SDK_DIR/qaic-apps-$SDK_VER.zip`
 
 ```
-export SDK_VER=1.6.80
-unzip -o qaic-apps-$SDK_VER.zip
-cd qaic-apps-$SDK_VER
-sudo su
-echo "yes" | ./uninstall.sh
-./install.sh
+SDK_DIR=/local/mnt/workspace/sdks SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_sdk_apps.sh
 ```
 
 <details><pre>
@@ -129,18 +128,14 @@ scp qaic-platform-sdk-$SDK_VER.zip aedk1:/home/krai
 
 ## `[DSR]` Uninstall/Install the Platform SDK
 
-Go to the directory containing your Platform SDK archive e.g. `/home/krai`.
+Provide arguments for the the path to directory containing your Platform SDK archive `SDK_DIR` and the SDK version `SDK_VER` or the full path to the SDK archive `PLATFORM_SDK`
+Default:
+`SDK_DIR=/home/krai` 
+`SDK_VER=1.6.80`
+`PLATFORM_SDK=$SDK_DIR/qaic-platform-sdk-$SDK_VER.zip`
 
 ```
-export SDK_VER=1.6.80
-unzip -o qaic-platform-sdk-$SDK_VER.zip
-cd qaic-platform-sdk-$SDK_VER/aarch64/centos
-sudo su
-echo "yes" | ./uninstall.sh
-./install.sh
-exit
-cd ../../..
-/opt/qti-aic/tools/qaic-util -q
+SDK_DIR=/home/krai SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_sdk_platform.sh
 ```
 
 <details><pre>
