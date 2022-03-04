@@ -34,8 +34,7 @@ cat /opt/qti-aic/versions/platform.xml
 
 ``` 
 sudo yum upgrade -y
-sudo yum install -y
-make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
+sudo yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
 sudo yum clean all
 ```
 
