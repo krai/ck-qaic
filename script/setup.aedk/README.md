@@ -193,24 +193,33 @@ QID 0
         Board serial:
 </pre></details>
 
-## `[HR]` Compile the models and copy to the device
+## `[HR]` Compile the benchmarks on the host and copy to the device
 
-### Do the CK benchmark setup on the host
-1. Common Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/README.md)
-2. Image Classfication Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
-3. Object Detection Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md)
-4. Bert Benchmark setup: Follow the instructions from [here](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md)
+### Common benchmark setup
 
-**Copy your SSH key so that you avoid giving password** 
+Follow the instructions [here](https://github.com/krai/ck-qaic/blob/main/program/README.md).
 
-Example:
-(If you do not have a SSH identitity create one using ```ssh-keygen -t rsa```)
+### Individual benchmark setup
+
+1. [Image Classfication](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md) (ResNet50)
+1. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md) (SSD-MobileNet, SSD-ResNet34)
+1. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md) (BERT-99)
+
+### Copy the benchmarks to the device
+
+**Hint:** To avoid entering the device password every time, generate an SSH key on the host:
+
+```
+ssh-keygen -t rsa
+```
+
+and install it on the device e.g.:
 
 ```
 ssh-copy-id krai@aedk1
 ```
-### Copy the models to device
-Example, for "aedk_15w" devices
+
+Compile and install the benchmarks e.g. to a `aedk_15w` device:
 ```
-IPS=aedkx PORTS=22 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+SUT=aedk_15w USER=krai IPS=aedk1 PORTS=22 $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
