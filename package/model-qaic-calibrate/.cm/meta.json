@@ -230,7 +230,7 @@
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-profiling-threads=8 -compiler-args='-cpu-memory=8000000'",
+        "_COMPILER_PARAMS": "-output-node-name=ArgMax -profiling-threads=8 -compiler-args='-cpu-memory=8000000'",
         "_MODEL_TO_CONVERT": "calibrate_resnet50_tf",
         "_OUTPUT_NODE_NAME": "-output-node-name=ArgMax"
       },
