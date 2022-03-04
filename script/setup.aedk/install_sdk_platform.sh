@@ -22,8 +22,8 @@ else
 fi
 
 if [[ $(cat /proc/device-tree/model | tr -d '\0') == *HDK ]]; then
-echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.aarch64.rpm
-cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.aarch64.rpm rpm/
+  echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.aarch64.rpm
+  cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.aarch64.rpm rpm/
 fi
 echo "yes" | sudo ./uninstall.sh
 sudo ./install.sh
