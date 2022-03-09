@@ -44,7 +44,10 @@ Go to the temporary directory and run:
 ./1.run_as_root.sh
 ```
 
-If there is not enough space on the root partition and we want krai user to use a different partition say /data for benchmark data (can be more than 50GB), you can do
+**NB:** The full installation can take more than 50G. If the space on the root
+partition is limited and you wish to use a different partition, say, `/data`,
+change the `krai` user's home directory as follows:
+
 ```
 usermod -d /data/krai krai
 ```
