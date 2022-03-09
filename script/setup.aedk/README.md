@@ -101,15 +101,14 @@ These steps are to be repeated for each new SDK version (`SDK_VER` below).
 
 ## `[HSR]` Uninstall/Install the Apps SDK
 
-Provide arguments for the the path to directory containing your Apps SDK archive `SDK_DIR` and the SDK version `SDK_VER` or the full path to the SDK archive `APPS_SDK`
-Default: 
-`SDK_DIR=/local/mnt/workspace/sdks` 
-`SDK_VER=1.6.80` 
-`APPS_SDK=$SDK_DIR/qaic-apps-$SDK_VER.zip`
+Specify `SDK_DIR`, the path to a directory with one or more Apps SDK archives, and `SDK_VER`, the Apps SDK version.
+The full path to the Apps SDK archive is formed as follows: `APPS_SDK=$SDK_DIR/qaic-apps-$SDK_VER.zip`.
 
 ```
-SDK_DIR=/local/mnt/workspace/sdks SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_sdk_apps.sh
+SDK_DIR=/local/mnt/workspace/sdks SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_apps_sdk.sh
 ```
+
+Alternatively, specify `APPS_SDK`, the full path to the Apps SDK archive.
 
 <details><pre>
 &dollar; grep build_id /opt/qti-aic/versions/apps.xml -B1
@@ -119,7 +118,8 @@ SDK_DIR=/local/mnt/workspace/sdks SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.
 
 ## `[HR]` Copy the Platform SDK to the device
 
-Go to the directory containing your Platform SDK archive e.g. `/data/qaic`.
+Go to the directory containing your Platform SDK archive e.g. `/local/mnt/workspace/sdks`
+and copy it to the device e.g. `aedk1`:
 
 ```
 export SDK_VER=1.6.80
@@ -128,15 +128,14 @@ scp qaic-platform-sdk-$SDK_VER.zip aedk1:/home/krai
 
 ## `[DSR]` Uninstall/Install the Platform SDK
 
-Provide arguments for the the path to directory containing your Platform SDK archive `SDK_DIR` and the SDK version `SDK_VER` or the full path to the SDK archive `PLATFORM_SDK`
-Default:
-`SDK_DIR=/home/krai` 
-`SDK_VER=1.6.80`
-`PLATFORM_SDK=$SDK_DIR/qaic-platform-sdk-$SDK_VER.zip`
+Specify `SDK_DIR`, the path to a directory with one or more Platform SDK archives, and `SDK_VER`, the Platform SDK version.
+The full path to the Platform SDK archive is formed as follows: `PLATFORM_SDK=$SDK_DIR/qaic-platform-sdk-$SDK_VER.zip`.
 
 ```
-SDK_DIR=/home/krai SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_sdk_platform.sh
+SDK_DIR=/home/krai SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
 ```
+
+Alternatively, specify `PLATFORM_SDK`, the full path to the Platform SDK archive.
 
 <details><pre>
 LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
