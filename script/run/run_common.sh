@@ -65,17 +65,17 @@ else
 fi
 }
 
-if [[ $SDK_VER == '' ]]; then
-  echo 'SDK_VER unset'
+if [[ ${SDK_VER} == '' ]]; then
+  echo 'ERROR: SDK_VER must be set!'
   exit -1
 fi
 
-if [[ $SUT == '' ]]; then
-  echo 'SUT unset'
+if [[ ${SUT} == '' ]]; then
+  echo 'ERROR: SUT must be set!'
   exit -1
 fi
 
-DEFS_DIR=${DEFS_DIR:-defs}
+_defs_dir=${DEFS_DIR:-'./defs'}
 
 _reposuffix=${REPOSUFFIX:-''}
 
@@ -102,7 +102,7 @@ if [[ ${_reposuffix} != '' ]]; then
   _reposuffix=${_reposuffix}"_";
 fi
 
-if [[ $SHORT_RUN == 'yes' ]]; then
+if [[ ${SHORT_RUN} == 'yes' ]]; then
   QPS_DIV=${QPS_DIV:-5}
   LATENCY_MUL=${LATENCY_MUL:-5}
 else
@@ -110,7 +110,7 @@ else
   LATENCY_MUL=${LATENCY_MUL:-1}
 fi
 
-if [[ $_power == 'yes' ]]; then
+if [[ ${_power} == 'yes' ]]; then
   POWER_YES='--power=yes'
 fi
 
@@ -126,15 +126,15 @@ else
   _RUN_TYPES="--group.${_category} --group.${_division}"
 fi
 
-if [[ $UPDATE_CK_QAIC == "yes" ]]; then
+if [[ ${UPDATE_CK_QAIC} == 'yes' ]]; then
   ck pull repo:ck-qaic
 fi
 
-if [[ $QUICK_RUN == 'yes' ]]; then
+if [[ ${QUICK_RUN} == 'yes' ]]; then
   echo "Running a quick test with default parameters ..."
 else
   echo "Running a full test with '$SUT' parameters ..."
-  . ${DEFS_DIR}/def_${SUT}.sh
+  . ${_defs_dir}/def_${SUT}.sh
 fi
 echo ""
 

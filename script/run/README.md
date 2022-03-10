@@ -54,13 +54,13 @@ SDK_VER=1.6.80 SUT=aedkg ./run_edge.sh
 
 ## Arguments
 
-### `DEFS_DIR`
-
-Default: `defs`. The directory where SUT specific performance values including TARGET QPS, TARGET LATENCY etc. are defined.
-
 ### `SDK_VER`
 
 The SDK version. Must be set.
+
+### `DEFS_DIR`
+
+Default: `DEFS_DIR=./defs`. A directory containing SUT-specific files `def_<SUT>.sh`, defining values such as `<WORKLOAD>_<SCENARIO>_TARGET_QPS` and  `<WORKLOAD>_<SCENARIO>_TARGET_LATENCY`.
 
 ### `WORKLOADS`
 
