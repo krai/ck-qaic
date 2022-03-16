@@ -29,9 +29,7 @@
 
 Out-of-the-box.
 
-# Power Management Settings
-
-## Fan Settings (6750 RPM)
+# Fan Settings (6,750 RPM)
 
 <pre>
 <b>&dollar;</b> sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>75</b> 0xFF
