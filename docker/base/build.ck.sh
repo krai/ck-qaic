@@ -41,7 +41,7 @@ fi
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.8.12}
+_PYTHON_VER=${PYTHON_VER:-3.8.13}
 # Use CK >= 2.5.9.
 _CK_VER=${CK_VER:-2.6.1}
 # Create a non-root user with a fixed group id and a fixed user id.

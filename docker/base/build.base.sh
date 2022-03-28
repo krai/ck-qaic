@@ -37,7 +37,7 @@ _DOCKER_OS=${DOCKER_OS:-centos7}
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.8.12}
+_PYTHON_VER=${PYTHON_VER:-3.8.13}
 # Use the Austin time zone by default.
 _TIMEZONE=${TIMEZONE:-"US/Central"}
 
