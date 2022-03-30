@@ -143,28 +143,24 @@ sudo dnf install python3 python3-pip python3-devel
 ```
 sudo yum remove -y docker docker-common
 sudo yum-config-manager -y --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum list docker-ce --showduplicates | sort -r | head -12
+yum list docker-ce --showduplicates | grep @docker-ce-stable
 ```
 <details><pre>
-docker-ce.x86_64            3:20.10.9-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.8-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.7-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.6-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.5-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.4-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.3-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.2-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.12-3.el7                   docker-ce-stable 
-docker-ce.x86_64            3:20.10.11-3.el7                   docker-ce-stable 
-docker-ce.x86_64            3:20.10.11-3.el7                   @docker-ce-stable
-docker-ce.x86_64            3:20.10.10-3.el7                   docker-ce-stable 
+docker-ce.x86_64            3:20.10.14-3.el7                   @docker-ce-stable
 </pre></details>
 
 ```
-sudo yum install -y docker-ce-20.10.12-3.el7
+sudo yum install -y docker-ce-20.10.14-3.el7
 ```
 <details><pre>
-Docker version 20.10.11, build dea9396
+...
+Installed:
+  docker-ce.x86_64 3:20.10.14-3.el7
+
+Dependency Installed:
+  docker-ce-rootless-extras.x86_64 0:20.10.14-3.el7
+
+Complete!
 </pre></details>
 
 #### [Optional] Change the Docker storage location
