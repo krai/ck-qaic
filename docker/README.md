@@ -93,7 +93,7 @@ Note that the SDK version on the host does not have to match the SDK version in 
 
 ## Prerequisites
 
-We assume that the user has access to permanent file storage e.g. `/local/mount/workspace` or `/home/user` (to be defined by the environment variable `$WORKSPACE`).
+We assume that the user has access to permanent file storage e.g. `/local/mnt/workspace` or `/home/user` (to be defined by the environment variable `$WORKSPACE`).
 This storage should have at least 100G free.
 
 ### Locate the QAIC SDKs
