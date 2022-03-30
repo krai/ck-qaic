@@ -1,7 +1,10 @@
 # ImageNet Docker image
 
 ```
-> $(ck find ck-qaic:docker:imagenet)/build.sh
+$(ck find ck-qaic:docker:imagenet)/build.sh
+```
+
+<details><pre>
 Sending build context to Docker daemon  6.745GB
 Step 1/2 : FROM centos:7
  ---> 8652b9f0cb4c
@@ -14,12 +17,15 @@ real    1m49.201s
 user    0m18.557s
 sys     0m8.360s
 
-Done.
+Done.</pre></details>
 
-> docker image ls imagenet
+```
+docker image ls imagenet
+```
+<details><pre>
 REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
 imagenet     latest    d085ffcf869d   About a minute ago   6.91GB
-```
+</pre></details>
 
 ## Parameters
 
