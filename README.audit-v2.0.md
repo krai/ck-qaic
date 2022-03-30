@@ -16,7 +16,7 @@ cd /usr/src \
 && tar xzf Python-${PYTHON_VERSION}.tgz \
 && rm -f Python-${PYTHON_VERSION}.tgz \
 && cd /usr/src/Python-${PYTHON_VERSION} \
-&& ./configure --enable-optimizations --enable-shared --with-ssl && make -j 32 altinstall \
+&& ./configure --enable-optimizations --with-ssl && make -j 32 altinstall \
 && rm -rf /usr/src/Python-${PYTHON_VERSION}*
 ```
 
@@ -24,9 +24,9 @@ cd /usr/src \
 python3.8 --version
 ```
 
-<details>
+<details><pre>
 Python 3.8.13
-</details>
+</pre></details>
 
 ## Account setup
 
