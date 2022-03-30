@@ -133,10 +133,18 @@ imagenet     latest    8b50031cf317   About a minute ago   6.91GB
 
 ### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
 
-#### SDK-independent [DONE]
+#### SDK-independent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
 ```
+
+```
+docker image ls krai/*resnet50*
+```
+<details><pre>
+REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
+krai/ck.resnet50.centos7   latest    11ee9bfb3c50   9 minutes ago   13.5GB
+</pre></details>
 
 #### SDK-dependent [TODO]
 ```
