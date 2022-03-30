@@ -49,7 +49,7 @@ V2.6.1
 ## Build an image for a given QAIC SDK
 
 ```
-SDK_VER=1.6.66 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/build.qaic.sh
+SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/build.qaic.sh
 ```
 
 ### Parameters
@@ -61,7 +61,7 @@ SDK_VER=1.6.66 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)
 
 ### Test
 ```
-export SDK_VER=1.6.71 && docker run --privileged --rm krai/qaic.centos7:${SDK_VER}
+export SDK_VER=1.6.80 && docker run --privileged --rm krai/qaic.centos7:${SDK_VER}
 ```
 <details><pre>
         Status:Ready
