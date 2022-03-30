@@ -96,7 +96,9 @@ Python 3.8.13
 
 **TODO**
 
-### [ImageNet](https://github.com/krai/ck-qaic/blob/main/docker/imagenet/README.md)
+### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
+
+#### [ImageNet](https://github.com/krai/ck-qaic/blob/main/docker/imagenet/README.md) [DONE]
 
 ```
 DATASETS_DIR=/local/mnt/workspace/datasets $(ck find ck-qaic:docker:imagenet)/build.sh
@@ -131,9 +133,7 @@ EPOSITORY   TAG       IMAGE ID       CREATED              SIZE
 imagenet     latest    8b50031cf317   About a minute ago   6.91GB
 </pre></details>
 
-### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
-
-#### SDK-independent
+#### SDK-independent [DONE]
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
 ```
