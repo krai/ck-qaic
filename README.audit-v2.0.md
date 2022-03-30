@@ -133,7 +133,15 @@ imagenet     latest    8b50031cf317   About a minute ago   6.91GB
 
 ### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
 
-**TODO**
+#### SDK-independent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
+```
+
+#### SDK-dependent [TODO]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh resnet50
+```
 
 ### [SSD-ResNet34](https://github.com/krai/ck-qaic/blob/main/docker/ssd-resnet34/README.md)
 
