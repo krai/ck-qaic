@@ -40,7 +40,7 @@
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT=v2.0
 FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
@@ -59,7 +59,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM preamble AS builder
 # Use the full (50000 images) or reduced (500 images) ImageNet validation dataset.
 ARG IMAGENET=full
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT=v2.0
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}

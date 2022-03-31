@@ -37,7 +37,7 @@
 #
 ###############################################################################
 FROM krai/ck.common.centos7 AS preamble
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT=v2.0
 
 ###############################################################################
 # BUILDER STAGE
@@ -47,7 +47,7 @@ ARG CK_QAIC_CHECKOUT=main
 #
 ###############################################################################
 FROM preamble AS builder
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT=v2.0
 
 # Update CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
