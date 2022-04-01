@@ -844,11 +844,16 @@ Sensor ID              : SYS_FAN2 (0xa3)
 Value | Speed, RPM
 -|-
 0     | 3,000
+25    | 4,200
 50    | 5,550
 75    | 6,750
 100   | 8,100
-125   | 9,300
+125   | 9,450
 150   | 10,800
+200   | 13,350
+250   | 15,900
+
+For example, to set the fan speed to 8,100 RPM, use <b>100</b>:
 
 <pre>
 sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>100</b> 0xFF
