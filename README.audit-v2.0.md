@@ -339,8 +339,6 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --doc
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet --mode=accuracy --scenario=offline --target_qps=19500 --container=$CONTAINER_ID
 ```
 
-
-
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
 
 **TODO**
