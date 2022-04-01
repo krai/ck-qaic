@@ -28,7 +28,9 @@ Linux dyson 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64
 /opt/qti-aic/tools/qaic-version-util
 ```
 <details><pre>
-5
+platform:AIC.1.6.80
+apps:AIC.1.6.80
+factory:not found
 </pre></details>
 
 ## [Prerequisites](https://github.com/krai/ck-qaic/tree/main/docker#prerequisites)
@@ -86,9 +88,88 @@ python3.8 --version
 Python 3.8.13
 </pre></details>
 
+
 ## [User setup](https://github.com/krai/ck-qaic/blob/main/docker/README.md#user-setup)
 
-**TODO**
+### Add the user to the required groups
+```
+sudo usermod -aG qaic,docker,wheel $USER
+```
+
+### Set up the user environment
+
+Customize the workspace:
+```
+export WORKSPACE=/local/mnt/workspace
+```
+
+Add environment variables to `~/.bashrc`:
+
+```
+echo -n "\
+export CK_PYTHON=${CK_PYTHON:-$(which python3)}
+export CK_WORKSPACE=$WORKSPACE
+export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
+export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
+export CK_EXPERIMENT_REPO=mlperf_v2.0.$(hostname).$USER
+export CK_EXPERIMENT_DIR=$WORKSPACE/$USER/CK-REPOS/mlperf_v2.0.$(hostname).$USER/experiment
+export PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
+```
+
+Init it:
+
+```
+source ~/.bashrc
+```
+### Create a user directory in the workspace
+```
+sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
+```
+
+### Set up Collective Knowledge
+```
+$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.1 --user --upgrade
+```
+```
+ck version
+```
+<pre><details>
+V2.6.1
+</pre></details>
+
+Pull the required CK repo
+```
+ck pull repo --url=https://github.com/krai/ck-qaic
+```
+### Set up an experiment directory in the workspace
+```
+ck add repo:$CK_EXPERIMENT_REPO --quiet
+ck add $CK_EXPERIMENT_REPO:experiment:dummy --common_func
+ck rm  $CK_EXPERIMENT_REPO:experiment:dummy --force
+sudo chgrp -R qaic $CK_EXPERIMENT_DIR
+chmod -R g+ws $CK_EXPERIMENT_DIR
+setfacl -R -d -m group:qaic:rwx $CK_EXPERIMENT_DIR
+```
+
+#### Test
+```
+touch $CK_EXPERIMENT_DIR/TEST && ls -Rla $CK_EXPERIMENT_DIR && rm $CK_EXPERIMENT_DIR/TEST
+```
+<details><pre>
+
+/local/mnt/workspace/auditor/CK-REPOS/mlperf_v2.0.dyson.auditor/experiment:
+total 24
+drwxrwsr-x+ 3 auditor qaic    4096 Mar 31 12:35 .
+drwxrwxr-x. 4 auditor auditor 4096 Mar 31 12:34 ..
+drwxrwsr-x+ 2 auditor qaic    4096 Mar 31 12:34 .cm
+-rw-rw-r--+ 1 auditor qaic       0 Mar 31 12:35 TEST
+
+/local/mnt/workspace/auditor/CK-REPOS/mlperf_v2.0.dyson.auditor/experiment/.cm:
+total 16
+drwxrwsr-x+ 2 auditor qaic 4096 Mar 31 12:34 .
+drwxrwsr-x+ 3 auditor qaic 4096 Mar 31 12:35 ..
+</pre></details>
+
 
 ## [Build Docker images](https://github.com/krai/ck-qaic/blob/main/docker/README.md#build-a-docker-image)
 
@@ -98,7 +179,7 @@ Python 3.8.13
 
 ### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
 
-#### [ImageNet](https://github.com/krai/ck-qaic/blob/main/docker/imagenet/README.md) [DONE]
+#### [ImageNet](https://github.com/krai/ck-qaic/blob/main/docker/imagenet/README.md)
 
 ```
 DATASETS_DIR=/local/mnt/workspace/datasets $(ck find ck-qaic:docker:imagenet)/build.sh
@@ -146,18 +227,119 @@ REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
 krai/ck.resnet50.centos7   latest    11ee9bfb3c50   9 minutes ago   13.5GB
 </pre></details>
 
-#### SDK-dependent [TODO]
+#### SDK-dependent [DONE]
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh resnet50
+```
+```
+docker image ls krai/*resnet50*
+```
+<details><pre>
+[auditor@dyson ck-qaic]$ docker image ls krai/*resnet50*
+REPOSITORY                          TAG       IMAGE ID       CREATED          SIZE
+krai/mlperf.resnet50.full.centos7   1.6.80    a33de9c692e9   59 minutes ago   12.3GB
+krai/ck.resnet50.centos7            latest    6a9471f3a2ed   2 hours ago      13.5GB
+</pre></details>
+
+#### Load the Container
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=resnet50)
+```
+To see experiments outside of container (--experiment_dir):
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=resnet50 --experiment_dir)
+```
+
+#### Quick Accuracy Check
+```
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=resnet50 --mode=accuracy --scenario=offline --target_qps=22222 --container=$CONTAINER_ID
 ```
 
 ### [SSD-ResNet34](https://github.com/krai/ck-qaic/blob/main/docker/ssd-resnet34/README.md)
 
-**TODO**
+#### SDK-independent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh ssd-resnet34
+```
+
+```
+docker image ls krai/*ssd-resnet34*
+```
+<details><pre>
+REPOSITORY                     TAG       IMAGE ID       CREATED         SIZE
+krai/ck.ssd-resnet34.centos7   latest    bebaeb96fa93   5 minutes ago   27.5GB
+</pre></details>
+
+#### SDK-dependent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
+```
+```
+docker image ls krai/*ssd-resnet34*
+```
+<details><pre>
+REPOSITORY                         TAG       IMAGE ID       CREATED          SIZE
+krai/mlperf.ssd-resnet34.centos7   1.6.80    4e31315c9cd2   2 minutes ago    25.2GB
+krai/ck.ssd-resnet34.centos7       latest    bebaeb96fa93   26 minutes ago   27.5GB
+</pre></details>
+
+#### Load the Container
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-resnet34)
+```
+To see experiments outside of container (--experiment_dir):
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-resnet34 --experiment_dir)
+```
+
+#### Quick Accuracy Check
+```
+ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 --mode=accuracy --scenario=offline --target_qps=425 --container=$CONTAINER_ID
+```
 
 ### [SSD-MobileNet](https://github.com/krai/ck-qaic/blob/main/docker/ssd-mobilenet/README.md)
 
-**TODO**
+#### SDK-independent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh ssd-mobilenet
+```
+
+```
+docker image ls krai/*ssd-mobilenet*
+```
+<details><pre>
+REPOSITORY                      TAG       IMAGE ID       CREATED       SIZE
+krai/ck.ssd-mobilenet.centos7   latest    fdd48e3378de   2 hours ago   8.9GB
+</pre></details>
+
+#### SDK-dependent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
+```
+```
+docker image ls krai/*ssd-mobilenet*
+```
+<details><pre>
+REPOSITORY                          TAG       IMAGE ID       CREATED         SIZE
+krai/mlperf.ssd-mobilenet.centos7   1.6.80    9db636a770c1   6 minutes ago   6.35GB
+krai/ck.ssd-mobilenet.centos7       latest    fdd48e3378de   2 hours ago     8.9GB
+</pre></details>
+
+#### Load the Container
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-mobilenet)
+```
+To see experiments outside of container (--experiment_dir):
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-mobilenet --experiment_dir)
+```
+
+#### Quick Accuracy Check
+```
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet --mode=accuracy --scenario=offline --target_qps=19500 --container=$CONTAINER_ID
+```
+
+
 
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
 
