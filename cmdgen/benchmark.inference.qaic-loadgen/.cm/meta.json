@@ -370,7 +370,7 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedkg": {
+      "gloria": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
@@ -380,7 +380,7 @@
         "power_server_ip": "10.222.147.117",
         "power_server_port": "4956"
       },
-      "aedkh": {
+      "haishen": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
@@ -388,7 +388,7 @@
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ]
       },
-      "pf003": {
+      "g292_z43_q18": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -406,7 +406,7 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "200"
       },
-      "pf003e": {
+      "g292_z43_q18e": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -516,7 +516,7 @@
       },
       "r282_z93_q2": {
         "all_device_ids": "0,1",
-        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_benchmark_prefix": "numactl --interleave=all",
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
@@ -586,7 +586,7 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75"
       },
-      "dc_r282_z93_q5": {
+      "r282_z93_q5_dc": {
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -604,7 +604,7 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
       },
-      "dc_r282_z93_q5e": {
+      "r282_z93_q5e_dc": {
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -658,7 +658,7 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75"
       },
-      "edge_r282_z93_q8": {
+      "r282_z93_q8_edge": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -677,7 +677,7 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
       },
-      "edge_r282_z93_q8e": {
+      "r282_z93_q8e_edge": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
         "ck_env": [
@@ -863,7 +863,7 @@
     "check_param_container_end_def": "fi;",
     "check_ipmitool_set_pre_fan_raw_value_begin_def": " if [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" != <<<?escape_char>>>\"yes<<<?escape_char>>>\" ] && ( [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"250<<<?escape_char>>>\" ] ) ; then echo 'Error: Value used for pre_fan is not supported. Supported values from 1 to 250.'; else",
     "check_ipmitool_set_post_fan_raw_value_begin_def": " if [ <<<?escape_char>>>\"<<<post_fan>>><<<?escape_char>>>\" != <<<?escape_char>>>\"yes<<<?escape_char>>>\" ] && ( [ <<<?escape_char>>>\"<<<?post_fan>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<?post_fan>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"250<<<?escape_char>>>\" ] ) ; then echo 'Error: Value used for post_fan is not supported. Supported values from 1 to 250.'; else",
-    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w aedkg aedkh<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_fan and/or post_fan.'; else",
+    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w gloria haishen<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_fan and/or post_fan.'; else",
     "check_ipmitool_set_fan_raw_end_def": "fi;",
     "check_vc_value_begin_def": " if [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"17<<<?escape_char>>>\" ] ; then echo 'Error: incorrect vc value. VC must be between 1 and 17.'; else",
     "check_vc_value_end_def": "fi;",

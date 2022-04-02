@@ -26,27 +26,27 @@
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
-      "aedkg": {
+      "gloria": {
         "recommended_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
-      "aedkh": {
+      "haishen": {
         "recommended_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
-      "pf003e": {
+      "g292_z43_q18e": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
-      "pf003": {
+      "g292_z43_q18": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
@@ -121,18 +121,18 @@
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
-      "dc_r282_z93_q5e": {
+      "r282_z93_q5e_dc": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2",
         "vc_value_default": "12"
       },
-      "dc_r282_z93_q5": {
+      "r282_z93_q5_dc": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2"
       },
-      "edge_r282_z93_q8e": {
+      "r282_z93_q8e_edge": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_multistream_activation_count": "1",
@@ -140,7 +140,7 @@
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
-      "edge_r282_z93_q8": {
+      "r282_z93_q8_edge": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_multistream_activation_count": "1",
