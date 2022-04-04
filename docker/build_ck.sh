@@ -42,7 +42,7 @@ fi
 
 MODEL=$1
 
-echo "Building the MLCommons (QAIC independent) Docker image for '${MODEL}'";
+echo "Building CK (QAIC-independent) image for '${MODEL}' ...";
 
 _BASE_OS=${BASE_OS:-centos7}
 _DOCKER_OS=${DOCKER_OS:-centos7}
@@ -56,9 +56,17 @@ if [[ "$(docker images -q krai/ck.common.${_BASE_OS} 2> /dev/null)" == "" ]]; th
   exit_if_error
 fi
 
-echo "Creating image: krai/mlperf.${_DOCKER_OS}.${MODEL}"
-echo "docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} ."
-cd $(ck find ck-qaic:docker:${MODEL}) && docker build ${_NO_CACHE} -f Dockerfile.ck -t krai/ck.${MODEL}.${_DOCKER_OS} .
+echo "Image: 'krai/mlperf.${_DOCKER_OS}.${MODEL}'"
+read -d '' CMD <<END_OF_CMD
+cd $(ck find ck-qaic:docker:${MODEL}) && \
+docker build ${_NO_CACHE} \
+-t krai/ck.${MODEL}.${_DOCKER_OS} \
+-f Dockerfile.ck  .
+END_OF_CMD
+echo "Command: ${CMD}"
+if [ -z "${DRY_RUN}" ]; then
+  eval ${CMD}
+fi
 exit_if_error
 
 echo

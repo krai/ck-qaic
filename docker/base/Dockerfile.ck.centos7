@@ -75,6 +75,8 @@ FROM preamble AS builder
 ARG GCC_MAJOR_VER
 ARG PYTHON_VER
 
+ARG CK_QAIC_CHECKOUT
+
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
  'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)" >> /home/krai/.bashrc;\
@@ -100,6 +102,7 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
+RUN cd $(ck find repo:ck-qaic) && git checkout --track origin/${CK_QAIC_CHECKOUT}
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \

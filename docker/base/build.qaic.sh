@@ -82,7 +82,7 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-echo "Creating image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
+echo "Image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
@@ -91,8 +91,10 @@ time docker build ${_NO_CACHE} \
 -f Dockerfile.qaic.${_DOCKER_OS} \
 -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 END_OF_CMD
-echo ${CMD}
-eval ${CMD}
+echo "Command: '${CMD}'"
+if [ -z "${DRY_RUN}" ]; then
+  eval ${CMD}
+fi
 
 echo
 echo "Done."

@@ -44,6 +44,8 @@ _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 _PYTHON_VER=${PYTHON_VER:-3.8.13}
 # Use CK >= 2.5.9.
 _CK_VER=${CK_VER:-2.6.1}
+# Which branch of repo:ck-qaic to use (main by default).
+_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 # Create a non-root user with a fixed group id and a fixed user id.
 #QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
@@ -54,20 +56,23 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-echo "Creating image: 'krai/ck.common.${_DOCKER_OS}'"
+echo "Image: 'krai/ck.common.${_DOCKER_OS}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
 --build-arg CK_VER=${_CK_VER} \
+--build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 -f Dockerfile.ck.${_DOCKER_OS} \
 -t krai/ck.common.${_DOCKER_OS} .
 END_OF_CMD
-echo ${CMD}
-eval ${CMD}
+echo "Command: ${CMD}"
+if [ -z "${DRY_RUN}" ]; then
+  eval ${CMD}
+fi
 
 echo
 echo "Done."

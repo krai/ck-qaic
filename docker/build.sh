@@ -43,7 +43,7 @@ function exit_if_error() {
 
 MODEL=$1
 
-echo "Building the Docker image for '${MODEL}' ..."
+echo "Building image for '${MODEL}' ..."
 
 _BASE_OS=${BASE_OS:-centos7}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
@@ -96,13 +96,13 @@ if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then
 fi
 
 if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
-  echo "Building base docker image for SDK ${_SDK_VER}";
+  echo "Building base SDK image for v${_SDK_VER} ...";
   cd $(ck find ck-qaic:docker:base) && SDK_VER=${_SDK_VER} ./build.qaic.sh
   exit_if_error
 fi
 
 if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
-  echo "Building base CK image for ${MODEL}";
+  echo "Building base CK image for '${MODEL}' ...";
   cd $(ck find ck-qaic:docker:base) && IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
   exit_if_error
 fi
