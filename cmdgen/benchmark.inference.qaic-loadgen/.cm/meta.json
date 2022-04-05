@@ -846,6 +846,11 @@
         "record_tags": "vc.###",
         "vc_tag": "-vc.###"
       }
+   },
+   "timestamp": {
+      "yes": {
+        "record_uoa_parts":"$(date +'%Y%m%dT%H%M%S' -u)"
+      }
    }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
