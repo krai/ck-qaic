@@ -6,61 +6,88 @@ Run all experiments for a system-under-test.
 
 ### Q18
 ```
-SDK_VER=1.6.80 POWER=yes SUT=pf003 DOCKER=yes ./run_datacenter.sh
+SUT=g292_z43_q18 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_datacenter.sh
 ```
+
+### Q18e
 ```
-SDK_VER=1.6.80 POWER=yes SUT=pf002 DOCKER=yes ./run_datacenter.sh
+SUT=g292_z43_q18e SDK_VER=1.6.80 POWER=yes DOCKER=yes ./run_datacenter.sh
 ```
 
 ### Q16
 ```
-SDK_VER=1.6.80 SUT=g292_z43_q16 DOCKER=yes ./run_datacenter.sh
+SUT=g292_z43_q16 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_datacenter.sh
+```
+
+### Q16e
+```
+SUT=g292_z43_q16e SDK_VER=1.6.80 POWER=yes DOCKER=yes ./run_datacenter.sh
 ```
 
 ### Q8
 ```
-SDK_VER=1.6.80 POWER=yes SUT=r282_z93_q8 DOCKER=yes ./run_datacenter.sh
+SUT=r282_z93_q8 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_datacenter.sh
+```
+
+### Q8e
+```
+SUT=r282_z93_q8e SDK_VER=1.6.80 POWER=yes DOCKER=yes ./run_datacenter.sh
 ```
 
 ### Q5
 ```
-SDK_VER=1.6.80 POWER=yes SUT=r282_z93_q5 DOCKER=yes ./run_edge.sh
+SUT=r282_z93_q5 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
+```
+
+### Q5e
+```
+SSUT=r282_z93_q5e DK_VER=1.6.80 POWER=yes DOCKER=yes ./run_edge.sh
+```
+
+### Q2
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
 ```
 
 ### Q1
 ```
-SDK_VER=1.6.80 SUT=r282_z93_q1 DOCKER=yes ./run_edge.sh
+SUT=r282_z93_q1 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
 ```
 
 ### AEDK @ 15W TDP
 ```
-SDK_VER=1.6.80 POWER=yes SUT=aedk_15w ./run_edge.sh
+SUT=aedk_15w SDK_VER=1.6.80 POWER=yes ./run_edge.sh
 ```
 
 ### AEDK @ 20W TDP
 ```
-SDK_VER=1.6.80 POWER=yes SUT=aedk_20w ./run_edge.sh
+SUT=aedk_20w SDK_VER=1.6.80 POWER=yes ./run_edge.sh
+```
+
+### AEDK @ 25W TDP
+```
+SUT=aedk_25w SDK_VER=1.6.80 POWER=yes ./run_edge.sh
 ```
 
 ### Haishen
 ```
-SDK_VER=1.6.80 SUT=aedkh ./run_edge.sh
+SUT=haishen SDK_VER=1.6.80 ./run_edge.sh
 ```
 
 ### Gloria
 ```
-SDK_VER=1.6.80 SUT=aedkg ./run_edge.sh
+SUT=gloria SDK_VER=1.6.80 ./run_edge.sh
 ```
 
 ## Arguments
 
-### `DEFS_DIR`
-
-Default: `defs`. The directory where SUT specific performance values including TARGET QPS, TARGET LATENCY etc. are defined.
-
 ### `SDK_VER`
 
 The SDK version. Must be set.
+
+### `DEFS_DIR`
+
+Default: `DEFS_DIR=./defs`. A directory containing SUT-specific files `def_<SUT>.sh`, defining values such as `<WORKLOAD>_<SCENARIO>_TARGET_QPS` and  `<WORKLOAD>_<SCENARIO>_TARGET_LATENCY`.
 
 ### `WORKLOADS`
 

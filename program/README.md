@@ -1,26 +1,26 @@
-# Qualcomm Cloud AI - MLPerf Inference benchmarking (not using docker) 
+# Qualcomm Cloud AI - MLPerf Inference benchmarking (without Docker) 
     
-Please refer to [Docker README](https://github.com/krai/ck-qaic/blob/main/docker/README.md) for instructions to follow while using docker
+Please refer to this [README](https://github.com/krai/ck-qaic/blob/main/docker/README.md) for instructions with Docker (for Datacenter and Edge servers).
 
 <a name="installation"></a>
 # Installation
 
-Tested on a ([Gigabyte R282-Z93](https://www.gigabyte.com/Enterprise/Rack-Server/R282-Z93-rev-100)) server with CentOS 7.9 and QAIC Platform SDK 1.6.80:
+## Prerequisites
 
-Check the CENTOS Version to be 7.9 and Linux Kernel Version 5.4 or above
+Check the CentOS release to be 7 or 8:
 ```
 rpm -q centos-release
 ```
 
+Check the Linux kernel version to be 5.4+:
 ```
 uname -a
 ```
-Check the Platform SDK installed
 
+Check the Platform SDK is installed:
 ```
 cat /opt/qti-aic/versions/platform.xml
 ```
-
 
 <a name="install_system"></a>
 ## Install system-wide prerequisites
@@ -34,8 +34,7 @@ cat /opt/qti-aic/versions/platform.xml
 
 ``` 
 sudo yum upgrade -y
-sudo yum install -y
-make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
+sudo yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
 sudo yum clean all
 ```
 
@@ -60,9 +59,9 @@ cd /usr/src \
 exit
 python3.8 --version
 ```
-<pre>
+<details><pre>
 Python 3.8.12
-</pre>
+</pre></details>
 
 #### GCC 11
 
@@ -79,30 +78,30 @@ source ~/.bashrc
 ```
 scl enable devtoolset-11 "gcc --version"
 ```
-<pre>
+<details><pre>
 gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1)
 Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-</pre>
+</pre></details>
 
 ##### `g++`
 
 ```
 scl enable devtoolset-11 "g++ --version"
 ```
-<pre>
+<details><pre>
 g++ (GCC) 11.2.1 20210728 (Red Hat 11.2.1-1)
 Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-</pre>
+</pre></details>
 
 <a name="install_ck"></a>
 ## Install [Collective Knowledge](http://cknowledge.org/) (CK)
 
 ```
-export CK_PYTHON=`which python3.8`
+export CK_PYTHON=$(which python3.8)
 $CK_PYTHON -m pip install --ignore-installed pip setuptools testresources --user --upgrade
 $CK_PYTHON -m pip install ck==2.6.1
 echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bashrc
@@ -123,11 +122,9 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 
 ### Use QAIC settings (ECC on)
 
-
 ```
 ck detect platform.os --platform_init_uoa=qaic
 ```
-
 
 <a name="detect_python"></a>
 ## Detect Python
@@ -140,46 +137,42 @@ ck detect platform.os --platform_init_uoa=qaic
 ck detect soft:compiler.python --full_path=`which python3.8`
 ck show env --tags=compiler,python
 ```
-<pre>
+
+<details><pre>
 Env UID:         Target OS: Bits: Name:  Version: Tags:
 
 ce146fbbcd1a8fea   linux-64    64 python 3.8.12    64bits,compiler,host-os-linux-64,lang-python,python,target-os-linux-64,v3,v3.8,v3.8.12
-</pre>
+</pre></details>
 
 <a name="detect_gcc"></a>
 ## Detect (system) GCC
 
 **NB:** CK can normally detect compilers automatically, but we are playing safe here.
 
-``` 
-which gcc
 ```
-<pre>
-/opt/rh/devtoolset-11/root/usr/bin/gcc
-</pre>
-```
-ck detect soft:compiler.gcc --full_path=`which gcc`
-```
-```
+ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck show env --tags=compiler,gcc
 ```
-<pre>
+
+<details><pre>
 Env UID:         Target OS: Bits: Name:          Version: Tags:
 
 2e27213b1488daf9   linux-64    64 GNU C compiler 11.2.1    64bits,compiler,gcc,host-os-linux-64,lang-c,lang-cpp,target-os-linux-64,v11,v11.2,v11.2.1
-</pre>
+</pre></details>
 
 <a name="install_cmake"></a>
 ## Install CMake from source
 
 ```
-ck install package --tags=tool,cmake,from.source
+ck install package --tags=tool,cmake,from.source --quiet
 ck show env --tags=tool,cmake,from.source
 ```
+
+<details><pre>
 Env UID:         Target OS: Bits: Name: Version: Tags:
 
 9784ba222cddacb6   linux-64    64 cmake 3.20.5   64bits,cmake,compiled,compiled-by-gcc,compiled-by-gcc-9.3.0,from.source,host-os-linux-64,source,target-os-linux-64,tool,v3,v3.20,v3.20.5
-</pre>
+</pre></details>
 
 <a name="install_python_deps"></a>
 ## Install Python dependencies (in userspace)
@@ -189,7 +182,7 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 **NB:** These dependencies are _implicit_, i.e. CK will not try to satisfy them. If they are not installed, however, the workflow will fail.
 
 ```
-export CK_PYTHON=`which python3.8`
+export CK_PYTHON=$(which python3.8)
 $CK_PYTHON -m pip install --user --upgrade wheel
 ```
 
@@ -205,7 +198,7 @@ ck install package --tags=python-package,opencv-python-headless --quiet
 ck install package --tags=lib,python-package,onnx --force_version=1.8.1
 ```
 
-If you use large NFS folders in your $PATH you can avoid log waiting time when CK searches in them by setting the following kernel variable
+**NB:** If you have large NFS folders in your $PATH, you can set the following kernel variable to avoid long waiting times when CK searches in them: 
 ```
 ck set kernel var.soft_search_dirs="/fake_dir"
 ```
@@ -216,12 +209,9 @@ ck set kernel var.soft_search_dirs="/fake_dir"
 ```
 ck install package --tags=mlperf,inference,source --quiet
 ck install package --tags=mlperf,loadgen,static --quiet
-```
-
-**For power runs**
-```
 ck install package --tags=mlperf,power,source --quiet
 ```
+
 ## Install and Run the Benchmarks
 1. [Image Classification](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md)
 2. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md)

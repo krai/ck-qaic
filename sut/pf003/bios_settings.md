@@ -29,10 +29,9 @@
 
 Out-of-the-box.
 
-
-# Fan Settings (16000 RPM)
+# Fan Settings (16,000 RPM)
 
 <pre>
-<b>&dollar;</b>sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>250</b> 0xFF
+<b>&dollar;</b> sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>250</b> 0xFF
  0a 3c 00
 </pre>

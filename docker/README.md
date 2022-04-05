@@ -93,7 +93,7 @@ Note that the SDK version on the host does not have to match the SDK version in 
 
 ## Prerequisites
 
-We assume that the user has access to permanent file storage e.g. `/local/mount/workspace` or `/home/user` (to be defined by the environment variable `$WORKSPACE`).
+We assume that the user has access to permanent file storage e.g. `/local/mnt/workspace` or `/home/user` (to be defined by the environment variable `$WORKSPACE`).
 This storage should have at least 100G free.
 
 ### Locate the QAIC SDKs
@@ -143,28 +143,24 @@ sudo dnf install python3 python3-pip python3-devel
 ```
 sudo yum remove -y docker docker-common
 sudo yum-config-manager -y --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum list docker-ce --showduplicates | sort -r | head -12
+yum list docker-ce --showduplicates | grep @docker-ce-stable
 ```
 <details><pre>
-docker-ce.x86_64            3:20.10.9-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.8-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.7-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.6-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.5-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.4-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.3-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.2-3.el7                    docker-ce-stable 
-docker-ce.x86_64            3:20.10.12-3.el7                   docker-ce-stable 
-docker-ce.x86_64            3:20.10.11-3.el7                   docker-ce-stable 
-docker-ce.x86_64            3:20.10.11-3.el7                   @docker-ce-stable
-docker-ce.x86_64            3:20.10.10-3.el7                   docker-ce-stable 
+docker-ce.x86_64            3:20.10.14-3.el7                   @docker-ce-stable
 </pre></details>
 
 ```
-sudo yum install -y docker-ce-20.10.12-3.el7
+sudo yum install -y docker-ce-20.10.14-3.el7
 ```
 <details><pre>
-Docker version 20.10.11, build dea9396
+...
+Installed:
+  docker-ce.x86_64 3:20.10.14-3.el7
+
+Dependency Installed:
+  docker-ce-rootless-extras.x86_64 0:20.10.14-3.el7
+
+Complete!
 </pre></details>
 
 #### [Optional] Change the Docker storage location
@@ -446,7 +442,7 @@ The most important build arguments and their default values are provided below:
 - `SDK_VER=1.6.80`
 - `SDK_DIR=/local/mnt/workspace/sdks`
 - `DOCKER_OS=centos7` (only CentOS 7 is supported)
-- `PYTHON_VER=3.8.12` (Python interpreter)
+- `PYTHON_VER=3.8.13` (Python interpreter)
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)
@@ -848,11 +844,16 @@ Sensor ID              : SYS_FAN2 (0xa3)
 Value | Speed, RPM
 -|-
 0     | 3,000
+25    | 4,200
 50    | 5,550
 75    | 6,750
 100   | 8,100
-125   | 9,300
+125   | 9,450
 150   | 10,800
+200   | 13,350
+250   | 15,900
+
+For example, to set the fan speed to 8,100 RPM, use <b>100</b>:
 
 <pre>
 sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1 <b>100</b> 0xFF

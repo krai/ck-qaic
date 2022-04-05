@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021 Krai Ltd.
+# Copyright (c) 2021-2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -42,7 +42,7 @@
 ARG BASE_IMAGE
 ARG SDK_VER
 FROM $BASE_IMAGE:$SDK_VER AS preamble
-ARG CK_QAIC_CHECKOUT=docker-update
+ARG CK_QAIC_CHECKOUT=main
 ARG DEBUG_BUILD=no
 
 # Use the Bash shell.
@@ -61,7 +61,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 ###############################################################################
 FROM krai/ck.ssd-resnet34.centos7 AS builder
 ARG CK_QAIC_PCV=9980
-ARG CK_QAIC_CHECKOUT=docker-update
+ARG CK_QAIC_CHECKOUT=main
 ARG DEBUG_BUILD=no
 
 

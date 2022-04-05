@@ -44,6 +44,14 @@ Go to the temporary directory and run:
 ./1.run_as_root.sh
 ```
 
+**NB:** The full installation can take more than 50G. If the space on the root
+partition is limited and you wish to use a different partition, say, `/data`,
+change the `krai` user's home directory as follows:
+
+```
+usermod -d /data/krai krai
+```
+
 ## `[D1]` Run under the `krai` user
 
 Connect to the device as `krai` e.g.:
@@ -96,16 +104,14 @@ These steps are to be repeated for each new SDK version (`SDK_VER` below).
 
 ## `[HSR]` Uninstall/Install the Apps SDK
 
-Go to the directory containing your Apps SDK archive e.g. `/data/qaic`.
+Specify `SDK_DIR`, the path to a directory with one or more Apps SDK archives, and `SDK_VER`, the Apps SDK version.
+The full path to the Apps SDK archive is formed as follows: `APPS_SDK=$SDK_DIR/qaic-apps-$SDK_VER.zip`.
 
 ```
-export SDK_VER=1.6.80
-unzip -o qaic-apps-$SDK_VER.zip
-cd qaic-apps-$SDK_VER
-sudo su
-echo "yes" | ./uninstall.sh
-./install.sh
+SDK_DIR=/local/mnt/workspace/sdks SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_apps_sdk.sh
 ```
+
+Alternatively, specify `APPS_SDK`, the full path to the Apps SDK archive.
 
 <details><pre>
 &dollar; grep build_id /opt/qti-aic/versions/apps.xml -B1
@@ -115,7 +121,8 @@ echo "yes" | ./uninstall.sh
 
 ## `[HR]` Copy the Platform SDK to the device
 
-Go to the directory containing your Platform SDK archive e.g. `/data/qaic`.
+Go to the directory containing your Platform SDK archive e.g. `/local/mnt/workspace/sdks`
+and copy it to the device e.g. `aedk1`:
 
 ```
 export SDK_VER=1.6.80
@@ -124,19 +131,14 @@ scp qaic-platform-sdk-$SDK_VER.zip aedk1:/home/krai
 
 ## `[DSR]` Uninstall/Install the Platform SDK
 
-Go to the directory containing your Platform SDK archive e.g. `/home/krai`.
+Specify `SDK_DIR`, the path to a directory with one or more Platform SDK archives, and `SDK_VER`, the Platform SDK version.
+The full path to the Platform SDK archive is formed as follows: `PLATFORM_SDK=$SDK_DIR/qaic-platform-sdk-$SDK_VER.zip`.
 
 ```
-export SDK_VER=1.6.80
-unzip -o qaic-platform-sdk-$SDK_VER.zip
-cd qaic-platform-sdk-$SDK_VER/aarch64/centos
-sudo su
-echo "yes" | ./uninstall.sh
-./install.sh
-exit
-cd ../../..
-/opt/qti-aic/tools/qaic-util -q
+SDK_DIR=/home/krai SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
 ```
+
+Alternatively, specify `PLATFORM_SDK`, the full path to the Platform SDK archive.
 
 <details><pre>
 LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
@@ -188,18 +190,33 @@ QID 0
         Board serial:
 </pre></details>
 
-## `[HR]` Compile the models and copy to the device
+## `[HR]` Compile the benchmarks on the host and copy to the device
 
-**Copy your SSH key so that you avoid giving password** 
+### Common benchmark setup
 
-Example:
-(If you do not have a SSH identitity create one using ```ssh-keygen -t rsa```)
+Follow the instructions [here](https://github.com/krai/ck-qaic/blob/main/program/README.md).
+
+### Individual benchmark setup
+
+1. [Image Classfication](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md) (ResNet50)
+1. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md) (SSD-MobileNet, SSD-ResNet34)
+1. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md) (BERT-99)
+
+### Copy the benchmarks to the device
+
+**Hint:** To avoid entering the device password every time, generate an SSH key on the host:
+
+```
+ssh-keygen -t rsa
+```
+
+and install it on the device e.g.:
 
 ```
 ssh-copy-id krai@aedk1
 ```
 
-Example:
+Compile and install the benchmarks e.g. to a `aedk_15w` device:
 ```
-IPS=aedk1 PORTS=3231 USER=krai SUT=aedk_15w $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+SUT=aedk_15w USER=krai IPS=aedk1 PORTS=22 $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
