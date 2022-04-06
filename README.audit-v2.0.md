@@ -117,10 +117,10 @@ export PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
 ```
 
 Init it:
-
 ```
 source ~/.bashrc
 ```
+
 ### Create a user directory in the workspace
 ```
 sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
@@ -130,17 +130,19 @@ sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
 ```
 $CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==2.6.1 --user --upgrade
 ```
+
 ```
 ck version
 ```
-<pre><details>
+<details><pre>
 V2.6.1
 </pre></details>
 
-Pull the required CK repo
+Pull the `ck-qaic` repository (and, recursively, its dependent repositories):
 ```
 ck pull repo --url=https://github.com/krai/ck-qaic
 ```
+
 ### Set up an experiment directory in the workspace
 ```
 ck add repo:$CK_EXPERIMENT_REPO --quiet

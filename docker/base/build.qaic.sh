@@ -38,7 +38,6 @@ if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
 fi
 
-
 # Create a non-root user with a fixed group id and a fixed user id.
 #QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
@@ -65,7 +64,7 @@ if [[ ! -f "${_PLATFORM_SDK}" ]]; then
 fi
 echo "Using Platform SDK: ${_PLATFORM_SDK}"
 
-TMP_DIR=$(pwd)/tmp
+TMP_DIR=$(ck find ck-qaic:docker:base)/tmp
 echo ${TMP_DIR}
 if [ ! -d "${TMP_DIR}" ]; then
   mkdir -p "${TMP_DIR}"
@@ -83,7 +82,7 @@ if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-echo "Creating image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
+echo "Image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
@@ -92,8 +91,10 @@ time docker build ${_NO_CACHE} \
 -f Dockerfile.qaic.${_DOCKER_OS} \
 -t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
 END_OF_CMD
-echo ${CMD}
-eval ${CMD}
+echo "Command: '${CMD}'"
+if [ -z "${DRY_RUN}" ]; then
+  eval ${CMD}
+fi
 
 echo
 echo "Done."
