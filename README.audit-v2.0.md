@@ -175,7 +175,12 @@ drwxrwsr-x+ 3 auditor qaic 4096 Mar 31 12:35 ..
 
 ### [Base](https://github.com/krai/ck-qaic/blob/main/docker/base/README.md)
 
-**TODO**
+### Build an SDK-independent base OS image
+
+```
+```
+
+
 
 ### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
 
@@ -341,7 +346,39 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282
 
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
 
-**TODO**
+#### SDK-dependent [DONE]
+```
+CK_QAIC_CHECKOUT=v2.0 CK_QAIC_PCV=9983 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qaic)/docker/build.sh bert
+```
+```
+docker image ls krai/*bert*
+```
+
+<details><pre>
+REPOSITORY                 TAG       IMAGE ID       CREATED          SIZE
+krai/mlperf.bert.centos7   1.6.80    550bbbcf9f91   10 minutes ago   7GB
+krai/ck.bert.centos7       latest    a89ab03b895b   45 minutes ago   13.1GB
+</pre></details>
+
+#### SDK-independent
+
+This image is independent of SDK and is automatically created by the Docker build of the main image
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh bert
+```
+
+#### Load the Container
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=bert)
+```
+To see experiments outside of container (--experiment_dir):
+```
+CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=bert --experiment_dir)
+```
+#### Quick Accuracy Check
+```
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --target_qps=650 --container=$CONTAINER_ID
+```
 
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2)
 
