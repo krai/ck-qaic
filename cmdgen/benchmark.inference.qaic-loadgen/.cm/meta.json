@@ -187,7 +187,7 @@
       },
       "performance": {
         "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
-        "mode_extension": "<<<performance_mode_extension>>>",
+        "mode_extension": "<<<performance_mode_extension>>><<<?timestamp_value>>>",
         "output_file": "mlperf_log_summary.txt",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0",
@@ -202,7 +202,8 @@
 	"wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>",
         "vc_cmd_def_2": "<<<vc_cmd_def>>>",
         "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
-        "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>"
+        "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>",
+        "notes_file": "echo 'device_ids=<<<device_ids>>>' >> <<<docker_experiment_dir_default>>>/<<<record_uoa>>>/NOTES.txt;"
       }
     },
     "model_extra_tags": {
@@ -237,7 +238,7 @@
         ],
         "power_record_tags_inner": "<<<record_tags,>>>,power.workload",
         "power_record_uoa": "<<<record_uoa_parts->>>-power.workload",
-        "power_wrapped_ck_benchmark_program": "<<<?check_ipmitool_set_fan_raw_begin>>>  <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else rm -f /opt/qti-aic/logs/*;  <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>>   ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>>",
+        "power_wrapped_ck_benchmark_program": "<<<?check_ipmitool_set_fan_raw_begin>>>  <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else rm -f /opt/qti-aic/logs/*;  <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>>   ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi; <<<?notes_file>>> <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>>",
 	"sleep_before_ck_benchmark_sec": "90"
       }
     },
@@ -849,7 +850,7 @@
    },
    "timestamp": {
       "yes": {
-        "record_uoa_parts":"$(date +'%Y%m%dT%H%M%S' -u)"
+        "timestamp_value": "-$(date +'%Y%m%dT%H%M%S' -u)"
       }
    }
   },
@@ -952,7 +953,7 @@
     "watch_ipmitool_get_sys_power_log": "watch.ipmitool_get_sys_power.log",
     "watch_sensors_cmd_def": "<<<watch_cmd_begin>>> <<<watch_sensor_cmd_part>>><<<watch_sensor_log>>> <<<watch_cmd_separator>>><<<watch_sensor_log>>><<<separator>>><<<watch_sleep>>><<<watch_sensors_sleep>>><<<separator>>><<<watch_cmd_end>>>",
     "watch_ipmitool_get_sys_power_cmd_def": "<<<watch_cmd_begin>>><<<watch_ipmitool_get_sys_power_cmd_part>>><<<watch_ipmitool_get_sys_power_log>>> <<<watch_cmd_separator>>><<<watch_ipmitool_get_sys_power_log>>><<<separator>>><<<watch_sleep>>><<<watch_ipmitool_get_sys_power_sleep>>><<<separator>>><<<watch_cmd_end>>>",
-    "wrapped_ck_benchmark_program_common": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> <<<?check_ipmitool_set_fan_raw_begin>>> <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else rm -f /opt/qti-aic/logs/*;  <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; cp -r <<<logs_dir>>>*.log <<<docker_experiment_dir_default>>>/<<<record_uoa>>> 2>/dev/null; <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>> <<<?check_param_container_end>>> fi<<<?double_quote>>>",
+    "wrapped_ck_benchmark_program_common": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> <<<?check_ipmitool_set_fan_raw_begin>>> <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else rm -f /opt/qti-aic/logs/*;  <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; cp -r <<<logs_dir>>>*.log <<<docker_experiment_dir_default>>>/<<<record_uoa>>> 2>/dev/null; <<<?notes_file>>> <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>> <<<?check_param_container_end>>> fi<<<?double_quote>>>",
     "wrapped_ck_benchmark_program": "<<<wrapped_ck_benchmark_program_common>>>",
     "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>"
   },
