@@ -1,13 +1,17 @@
-# Qualcomm Cloud AI - MLPerf Inference v2.0 audit
+# Qualcomm Cloud AI - MLPerf Inference v2.0 audit - GIGABYTE R282-Z93-Q2
 
-## R282-Z93-Q2 results
+The [submitted](https://github.com/mlcommons/inference_results_v2.0/tree/master/closed/GIGABYTE/results/r282_z93_q2-qaic-v1.6.80-aic100) results were obtained on two cards (Q2) of a R282-Z93 server with five cards (Q5). The reproduced results were obtained on a similar server. The main difference between the servers was the amount of RAM: 512G (64G x8) vs 128 (32G x4).
 
-| Workload      | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
-| ------------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
-| ResNet50      |                  |                     |                       |                          |                      |                         |
-| SSD-ResNet34  |                  |                     |                       |                          |                      |                         |
-| SSD-MobileNet |                  |                     |                       |                          |                      |                         |
-| BERT-99       |                  |                     |                       |                          | N/A                  | N/A                     |
+| Workload      | Results    | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
+| ------------- | ---------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
+| ResNet50      | Submitted  |                  |                     |                       |                          |                      |                         |
+| ResNet50      | Reproduced |                  |                     |                       |                          |                      |                         |
+| SSD-ResNet34  | Submitted  |                  |                     |                       |                          |                      |                         |
+| SSD-ResNet34  | Reproduced |                  |                     |                       |                          |                      |                         |
+| SSD-MobileNet | Submitted  |                  |                     |                       |                          |                      |                         |
+| SSD-MobileNet | Reproduced |                  |                     |                       |                          |                      |                         |
+| BERT-99       | Submitted  |                  |                     |                       |                          | N/A                  | N/A                     |
+| BERT-99       | Reproduced |                  |                     |                       |                          | N/A                  | N/A                     |
 
 # Audit instructions
 
