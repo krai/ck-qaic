@@ -29,7 +29,7 @@
     "operating_system": "CentOS 7 (Linux kernel: 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux)",
     "other_software_stack": "Collective Knowledge v2.6.1",
     "status": "available",
-    "submitter": "Qualcomm",
+    "submitter": "Gigabyte",
     "sw_notes": "",
     "system_name": "Gigabyte G292-Z43 16x QAIC100",
     "system_type": "datacenter"

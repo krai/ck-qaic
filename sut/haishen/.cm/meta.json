@@ -29,7 +29,7 @@
     "operating_system": "CentOS Linux release 8.0.1905 (kernel: 4.19.81 #1 SMP PREEMPT Tue May 11 08:23:20 UTC 2021 aarch64 aarch64 aarch64 GNU/Linux)",
     "other_software_stack": "Collective Knowledge v2.6.1",
     "status": "available",
-    "submitter": "Qualcomm",
+    "submitter": "Alibaba",
     "sw_notes": "",
     "system_name": "Alibaba Cloud Sinian Platform (Haishen)",
     "system_type": "edge"
