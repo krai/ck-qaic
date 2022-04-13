@@ -51,17 +51,6 @@
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
-      "pf002e": {
-        "recommended_activation_count": "16",
-        "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3",
-        "vc_value_default": "12"
-      },
-      "pf002": {
-        "recommended_activation_count": "16",
-        "recommended_queue_length": "3",
-        "recommended_threads_per_queue": "3"
-      },
       "g292_z43_q16e": {
         "recommended_activation_count": "16",
         "recommended_queue_length": "3",
