@@ -17,31 +17,21 @@
         "recommended_mixed_activation_count": "8",
         "recommended_multistream_activation_count": "4"
       },
-      "aedkg": {
+      "gloria": {
         "recommended_mixed_activation_count": "4",
         "recommended_multistream_activation_count": "2"
       },
-      "aedkh": {
+      "haishen": {
         "recommended_mixed_activation_count": "4",
         "recommended_multistream_activation_count": "2"
       },
-      "pf003e": {
+      "g292_z43_q18e": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
-      "pf003": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4"
-      },
-      "pf002e": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_mixed_vc_value": "10",
-        "recommended_fp16_vc_value": "6"
-      },
-      "pf002": {
+      "g292_z43_q18": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
       },
@@ -94,24 +84,24 @@
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
       },
-      "dc_r282_z93_q5e": {
+      "r282_z93_q5e_dc": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
-      "dc_r282_z93_q5": {
+      "r282_z93_q5_dc": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4"
       },
-      "edge_r282_z93_q8e": {
+      "r282_z93_q8e_edge": {
         "recommended_mixed_activation_count": "8",
         "recommended_fp16_activation_count": "4",
         "recommended_multistream_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
-      "edge_r282_z93_q8": {
+      "r282_z93_q8_edge": {
         "recommended_mixed_activation_count": "8",
         "recommended_multistream_activation_count": "4",
         "recommended_fp16_activation_count": "4"

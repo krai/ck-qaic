@@ -27,11 +27,11 @@
     "hw_notes": "With 75W Accelerator TDP constraints",
     "number_of_nodes": "1",
     "operating_system": "CentOS 7 (Linux kernel: 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux)",
-    "other_software_stack": "Collective Knowledge v2.6.1",
+    "other_software_stack": "Docker v20.10.12; Python v3.8.12; GCC v11.2.1; Collective Knowledge v2.6.1",
     "status": "available",
     "submitter": "Qualcomm",
     "sw_notes": "",
-    "system_name": "Gigabyte R282-Z93 5x QAIC100",
+    "system_name": "Gigabyte R282-Z93 (5x QAIC100)",
     "system_type": "edge"
   }
 }
