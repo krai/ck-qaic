@@ -4,13 +4,13 @@ The [submitted](https://github.com/mlcommons/inference_results_v2.0/tree/master/
 
 | Workload      | Results    | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
 | ------------- | ---------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
-| ResNet50      | Submitted  |                  |                     |                       |                          |                      |                         |
+| ResNet50      | Submitted  |   75.956               |   46,361.40                  |    75.956                   |    0.34                      |    75.956                  |    0.64                     |
 | ResNet50      | Reproduced |                  |                     |                       |                          |                      |                         |
-| SSD-ResNet34  | Submitted  |                  |                     |                       |                          |                      |                         |
+| SSD-ResNet34  | Submitted  |    19.831              |     885.04                |   19.831                    |    8.73                      |    19.831                  |    28.03                     |
 | SSD-ResNet34  | Reproduced |                  |                     |                       |                          |                      |                         |
-| SSD-MobileNet | Submitted  |                  |                     |                       |                          |                      |                         |
+| SSD-MobileNet | Submitted  |   23.160               |    38,630.30                 |   23.160                    |    0.68                      |   23.160                   |    1.52                     |
 | SSD-MobileNet | Reproduced |                  |                     |                       |                          |                      |                         |
-| BERT-99       | Submitted  |                  |                     |                       |                          | N/A                  | N/A                     |
+| BERT-99       | Submitted  |    90.363              |    1,437.71                 |   90.332                    |    10.25                      | N/A                  | N/A                     |
 | BERT-99       | Reproduced |                  |                     |                       |                          | N/A                  | N/A                     |
 
 # Audit instructions
@@ -95,11 +95,6 @@ Python 3.8.13
 
 ## [User setup](https://github.com/krai/ck-qaic/blob/main/docker/README.md#user-setup)
 
-### Add the user to the required groups
-```
-sudo usermod -aG qaic,docker,wheel $USER
-```
-
 ### Set up the user environment
 
 Customize the workspace:
@@ -117,6 +112,7 @@ export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
 export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
 export CK_EXPERIMENT_REPO=mlperf_v2.0.$(hostname).$USER
 export CK_EXPERIMENT_DIR=$WORKSPACE/$USER/CK-REPOS/mlperf_v2.0.$(hostname).$USER/experiment
+export RESOURCES_DIR=/data/mlperf-inference-submissions/resources
 export PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
 ```
 
@@ -180,12 +176,73 @@ drwxrwsr-x+ 3 auditor qaic 4096 Mar 31 12:35 ..
 ## [Build Docker images](https://github.com/krai/ck-qaic/blob/main/docker/README.md#build-a-docker-image)
 
 ### [Base](https://github.com/krai/ck-qaic/blob/main/docker/base/README.md)
-
+**TO VALIDATE**
 ### Build an SDK-independent base OS image
 
+To build a base OS image including Python and GCC:
+
 ```
+$(ck find ck-qaic:docker:base)/build.base.sh
 ```
 
+#### Parameters
+- `DOCKER_OS=centos7` (only CentOS 7 is currently supported).
+- `PYTHON_VER=3.8.13`.
+- `GCC_MAJOR_VER=11`.
+- `TIMEZONE=US/Central` (Austin).
+
+#### Test
+```
+docker run --rm krai/base.centos7
+```
+<details><pre>
+centos-release-7-9.2009.1.el7.centos.x86_64
+</pre></details>
+
+### Build an SDK-independent common CK image
+
+To build a base image for CK packages common to all supported MLPerf Inference benchmarks:
+
+```
+$(ck find ck-qaic:docker:base)/build.ck.sh
+```
+
+#### Parameters
+- `DOCKER_OS=centos7`.
+- `PYTHON_VER=3.8.13`.
+- `GCC_MAJOR_VER=11`.
+- `CK_VER=2.6.1`.
+- `GROUP_ID=1500`.
+- `USER_ID=2000`.
+
+#### Test
+```
+docker run --rm krai/ck.common.centos7
+```
+<details><pre>
+V2.6.1
+</pre></details>
+
+### Build an image for a given QAIC SDK
+
+```
+SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/build.qaic.sh
+```
+
+#### Parameters
+- `DOCKER_OS=centos7`.
+- `SDK_DIR=/local/mnt/workspace/sdks/`.
+- `SDK_VER=1.6.80`.
+- `PLATFORM_SDK`.
+- `APPS_SDK`.
+
+#### Test
+```
+export SDK_VER=1.6.80 && docker run --privileged --rm krai/qaic.centos7:${SDK_VER}
+```
+<details><pre>
+        Status:Ready
+</pre></details>
 
 
 ### [ResNet50](https://github.com/krai/ck-qaic/blob/main/docker/resnet50/README.md)
@@ -389,3 +446,64 @@ ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --s
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2)
 
 **TODO**
+
+## Create compliant MLPerf Inference submissions from CK experiments
+
+### List all the experiments
+
+```
+ck list mlperf_v2.0.dyson.auditor:experiment:*
+```
+<details><pre>
+
+</pre></details>
+
+**To remove any of the above experiments**
+```
+ck rm experiment:<experiment_folder_name>
+```
+### Clone this repository
+
+```
+mkdir -p /data/mlperf-inference-submissions
+mkdir -p /data/mlperf-inference-submissions/resources
+mkdir -p /data/mlperf-inference-submissions/scripts
+git clone git@github.com:krai/mlperf-inference /data/mlperf-inference-submissions/scripts/krai-mlperf-inference
+```
+
+### Install resources via CK
+```
+ck detect soft:compiler.python --full_path=$(which python3.8)
+ck install package --tags=mlperf,inference,r2.0
+ck install package --tags=squad,original
+ck install package --tags=dataset,tokenization,vocab
+ck install package --tags=lib,python-package,absl
+ck install package --tags=lib,python-package,transformers --force_version=2.4.0
+ck install package --tags=dataset,squad,tokenized,raw
+python3.8 -m pip install pandas tabulate pycocotools qlalchemy mysqlclient --user
+```
+
+### Make the resources available for other users (optional)
+```
+cp $(ck locate env --tags=mlperf,inference,source,r2.0)/inference $RESOURCES_DIR/
+cp $(ck locate env --tags=squad,original)/dev-v1.1.json $RESOURCES_DIR/
+cp $(ck locate env --tags=vocab,tokenization)/vocab.txt $RESOURCES_DIR/
+cp $(ck locate env --tags=lib,python-package,absl) $RESOURCES_DIR/
+cp $(ck locate env --tags=lib,python-package,transformers) $RESOURCES_DIR/
+cp $(ck locate env --tags=dataset,squad,tokenized)/bert_tokenized_squad_v1_1.pickle $RESOURCES_DIR/
+cp $(ck locate env --tags=aux)/val.txt $RESOURCES_DIR/
+cp $(ck locate env --tags=coco,val) $RESOURCES_DIR/
+
+```
+### Run the Submission Generation Script
+
+Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
+
+**NB:** The examples can be run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
+
+```
+MLPERF_DIV=open CK_REPO=mlperf_v2.0.dyson.auditor SUBMITTER=GIGABYTE ./run.sh
+```
+<details><pre>
+
+</pre></details>
