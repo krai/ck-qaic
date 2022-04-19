@@ -112,7 +112,7 @@ export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
 export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
 export CK_EXPERIMENT_REPO=mlperf_v2.0.$(hostname).$USER
 export CK_EXPERIMENT_DIR=$WORKSPACE/$USER/CK-REPOS/mlperf_v2.0.$(hostname).$USER/experiment
-export RESOURCES_DIR=/data/mlperf-inference-submissions/resources
+export RESOURCES_DIR=/local/mnt/workspace/resources
 export PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
 ```
 
@@ -465,10 +465,9 @@ ck rm experiment:<experiment_folder_name>
 ### Clone this repository
 
 ```
-mkdir -p /data/mlperf-inference-submissions
-mkdir -p /data/mlperf-inference-submissions/resources
-mkdir -p /data/mlperf-inference-submissions/scripts
-git clone git@github.com:krai/mlperf-inference /data/mlperf-inference-submissions/scripts/krai-mlperf-inference
+mkdir -p /local/mnt/workspace/mlperf-inference-submissions
+mkdir -p /local/mnt/workspace/mlperf-inference-submissions/scripts
+git clone git@github.com:krai/mlperf-inference /local/mnt/workspace/mlperf-inference-submissions/scripts/krai-mlperf-inference
 ```
 
 ### Install resources via CK
@@ -485,21 +484,17 @@ python3.8 -m pip install pandas tabulate pycocotools qlalchemy mysqlclient --use
 
 ### Make the resources available for other users (optional)
 ```
-cp $(ck locate env --tags=mlperf,inference,source,r2.0)/inference $RESOURCES_DIR/
+cp -r $(ck locate env --tags=mlperf,inference,source,r2.0)/inference $RESOURCES_DIR/
 cp $(ck locate env --tags=squad,original)/dev-v1.1.json $RESOURCES_DIR/
 cp $(ck locate env --tags=vocab,tokenization)/vocab.txt $RESOURCES_DIR/
-cp $(ck locate env --tags=lib,python-package,absl) $RESOURCES_DIR/
-cp $(ck locate env --tags=lib,python-package,transformers) $RESOURCES_DIR/
 cp $(ck locate env --tags=dataset,squad,tokenized)/bert_tokenized_squad_v1_1.pickle $RESOURCES_DIR/
 cp $(ck locate env --tags=aux)/val.txt $RESOURCES_DIR/
-cp $(ck locate env --tags=coco,val) $RESOURCES_DIR/
+cp -r $(ck locate env --tags=coco,val) $RESOURCES_DIR/
 
 ```
 ### Run the Submission Generation Script
 
 Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
-
-**NB:** The examples can be run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
 
 ```
 MLPERF_DIV=open CK_REPO=mlperf_v2.0.dyson.auditor SUBMITTER=GIGABYTE ./run.sh
