@@ -472,12 +472,14 @@ ck list mlperf_v2.0.dyson.auditor:experiment:*
 ```
 ck rm experiment:<experiment_folder_name>
 ```
+
 ### Clone this repository
 
 ```
-mkdir -p /local/mnt/workspace/mlperf-inference-submissions
-mkdir -p /local/mnt/workspace/mlperf-inference-submissions/scripts
-git clone git@github.com:krai/mlperf-inference /local/mnt/workspace/mlperf-inference-submissions/scripts/krai-mlperf-inference
+export SUBMISSIONS_DIR=/local/mnt/workspace/mlperf-inference-submissions
+mkdir -p $SUBMISSIONS_DIR
+mkdir -p $SUBMISSIONS_DIR/scripts
+git clone git@github.com:krai/mlperf-inference $SUBMISSIONS_DIR/scripts/krai-mlperf-inference
 ```
 
 ### Install resources via CK
@@ -495,8 +497,10 @@ ck install package --tags=lib,python-package,transformers --force_version=2.4.0
 
 ### Make the resources available for other users (optional)
 ```
-export RESOURCES_DIR=/local/mnt/workspace/resources
-cp -r $(ck locate env --tags=mlperf,inference,source,r2.0)/inference $RESOURCES_DIR/
+export SUBMISSIONS_DIR=/local/mnt/workspace/mlperf-inference-submissions
+export RESOURCES_DIR=$SUBMISSIONS_DIR/resources
+mkdir -p $RESOURCES_DIR
+cp -r $(ck locate env --tags=mlperf,inference,source,r2.0) $RESOURCES_DIR/
 cp -r $(ck locate env --tags=coco,val) $RESOURCES_DIR/
 cp $(ck locate env --tags=aux)/val.txt $RESOURCES_DIR/
 cp $(ck locate env --tags=vocab,tokenization)/vocab.txt $RESOURCES_DIR/
