@@ -453,7 +453,7 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=contain
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --target_qps=650 --container=$CONTAINER_ID
 ```
 
-## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2)
+## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests)
 
 **TODO**
 
@@ -524,8 +524,13 @@ python3.8 -m pip install sqlalchemy mysqlclient --user
 Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
 
 ```
-MLPERF_DIV=open CK_REPO=mlperf_v2.0.dyson.auditor SUBMITTER=GIGABYTE ./run.sh
+RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources SUBMITTER=GIGABYTE ./run.sh
 ```
 <details><pre>
 
 </pre></details>
+
+
+## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
+
+**TODO**
