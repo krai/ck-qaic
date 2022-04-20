@@ -92,6 +92,16 @@ python3.8 --version
 Python 3.8.13
 </pre></details>
 
+### Install Git v2.x (should already be installed)
+
+Follow steps [here](https://www.endpointdev.com/blog/2021/12/installing-git-2-on-centos-7/).
+
+```
+git --version
+```
+<details><pre>
+git version 2.34.1
+</pre></details>
 
 ## [User setup](https://github.com/krai/ck-qaic/blob/main/docker/README.md#user-setup)
 
