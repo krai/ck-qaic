@@ -474,24 +474,37 @@ git clone git@github.com:krai/mlperf-inference /local/mnt/workspace/mlperf-infer
 ```
 ck detect soft:compiler.python --full_path=$(which python3.8)
 ck install package --tags=mlperf,inference,r2.0
-ck install package --tags=squad,original
+ck install package --tags=dataset,coco,val,2017
+ck install package --tags=dataset,imagenet,aux,from.berkeley
 ck install package --tags=dataset,tokenization,vocab
+ck install package --tags=dataset,squad,original
+ck install package --tags=dataset,squad,tokenized,pickle
 ck install package --tags=lib,python-package,absl
 ck install package --tags=lib,python-package,transformers --force_version=2.4.0
-ck install package --tags=dataset,squad,tokenized,raw
-python3.8 -m pip install pandas tabulate pycocotools qlalchemy mysqlclient --user
 ```
 
 ### Make the resources available for other users (optional)
 ```
+export RESOURCES_DIR=/local/mnt/workspace/resources
 cp -r $(ck locate env --tags=mlperf,inference,source,r2.0)/inference $RESOURCES_DIR/
-cp $(ck locate env --tags=squad,original)/dev-v1.1.json $RESOURCES_DIR/
-cp $(ck locate env --tags=vocab,tokenization)/vocab.txt $RESOURCES_DIR/
-cp $(ck locate env --tags=dataset,squad,tokenized)/bert_tokenized_squad_v1_1.pickle $RESOURCES_DIR/
-cp $(ck locate env --tags=aux)/val.txt $RESOURCES_DIR/
 cp -r $(ck locate env --tags=coco,val) $RESOURCES_DIR/
-
+cp $(ck locate env --tags=aux)/val.txt $RESOURCES_DIR/
+cp $(ck locate env --tags=vocab,tokenization)/vocab.txt $RESOURCES_DIR/
+cp $(ck locate env --tags=squad,original)/dev-v1.1.json $RESOURCES_DIR/
+cp $(ck locate env --tags=squad,tokenized,pickle)/bert_tokenized_squad_v1_1.pickle $RESOURCES_DIR/
 ```
+
+### Install implicit dependences
+```
+python3.8 -m pip install pandas tabulate pycocotools --user
+```
+
+#### Optional (SQL)
+```
+sudo yum install mariadb-devel
+python3.8 -m pip install sqlalchemy mysqlclient --user
+```
+
 ### Run the Submission Generation Script
 
 Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
