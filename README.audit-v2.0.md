@@ -116,7 +116,7 @@ Add environment variables to `~/.bashrc`:
 
 ```
 echo -n "\
-export CK_PYTHON=${CK_PYTHON:-$(which python3)}
+export CK_PYTHON=${CK_PYTHON:-$(which python3.8)}
 export CK_WORKSPACE=$WORKSPACE
 export CK_TOOLS=$WORKSPACE/$USER/CK-TOOLS
 export CK_REPOS=$WORKSPACE/$USER/CK-REPOS
@@ -292,7 +292,7 @@ EPOSITORY   TAG       IMAGE ID       CREATED              SIZE
 imagenet     latest    8b50031cf317   About a minute ago   6.91GB
 </pre></details>
 
-#### SDK-independent [DONE]
+#### SDK-independent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
 ```
@@ -305,7 +305,7 @@ REPOSITORY                 TAG       IMAGE ID       CREATED         SIZE
 krai/ck.resnet50.centos7   latest    11ee9bfb3c50   9 minutes ago   13.5GB
 </pre></details>
 
-#### SDK-dependent [DONE]
+#### SDK-dependent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh resnet50
 ```
@@ -321,10 +321,6 @@ krai/ck.resnet50.centos7            latest    6a9471f3a2ed   2 hours ago      13
 
 #### Load the Container
 ```
-CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=resnet50)
-```
-To see experiments outside of container (--experiment_dir):
-```
 CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=resnet50 --experiment_dir)
 ```
 
@@ -335,7 +331,7 @@ ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose --sut=r282_z
 
 ### [SSD-ResNet34](https://github.com/krai/ck-qaic/blob/main/docker/ssd-resnet34/README.md)
 
-#### SDK-independent [DONE]
+#### SDK-independent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh ssd-resnet34
 ```
@@ -348,7 +344,7 @@ REPOSITORY                     TAG       IMAGE ID       CREATED         SIZE
 krai/ck.ssd-resnet34.centos7   latest    bebaeb96fa93   5 minutes ago   27.5GB
 </pre></details>
 
-#### SDK-dependent [DONE]
+#### SDK-dependent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh ssd-resnet34
 ```
@@ -362,10 +358,7 @@ krai/ck.ssd-resnet34.centos7       latest    bebaeb96fa93   26 minutes ago   27.
 </pre></details>
 
 #### Load the Container
-```
-CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-resnet34)
-```
-To see experiments outside of container (--experiment_dir):
+
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-resnet34 --experiment_dir)
 ```
@@ -377,7 +370,7 @@ ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose --sut=r282
 
 ### [SSD-MobileNet](https://github.com/krai/ck-qaic/blob/main/docker/ssd-mobilenet/README.md)
 
-#### SDK-independent [DONE]
+#### SDK-independent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh ssd-mobilenet
 ```
@@ -390,7 +383,7 @@ REPOSITORY                      TAG       IMAGE ID       CREATED       SIZE
 krai/ck.ssd-mobilenet.centos7   latest    fdd48e3378de   2 hours ago   8.9GB
 </pre></details>
 
-#### SDK-dependent [DONE]
+#### SDK-dependent
 ```
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build.sh ssd-mobilenet
 ```
@@ -405,10 +398,6 @@ krai/ck.ssd-mobilenet.centos7       latest    fdd48e3378de   2 hours ago     8.9
 
 #### Load the Container
 ```
-CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-mobilenet)
-```
-To see experiments outside of container (--experiment_dir):
-```
 CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-mobilenet --experiment_dir)
 ```
 
@@ -419,7 +408,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282
 
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
 
-#### SDK-dependent [DONE]
+#### SDK-dependent
 ```
 CK_QAIC_CHECKOUT=v2.0 CK_QAIC_PCV=9983 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
@@ -441,10 +430,7 @@ CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh bert
 ```
 
 #### Load the Container
-```
-CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=bert)
-```
-To see experiments outside of container (--experiment_dir):
+
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=bert --experiment_dir)
 ```
@@ -453,9 +439,11 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=contain
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --target_qps=650 --container=$CONTAINER_ID
 ```
 
-## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests)
+## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests: DIVISION=open)
 
-**TODO**
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 DIVISION=open DOCKER=yes ./run_edge.sh
+```
 
 ## Create compliant MLPerf Inference submissions from CK experiments
 
@@ -523,14 +511,16 @@ python3.8 -m pip install sqlalchemy mysqlclient --user
 
 Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
 
+
 ```
-RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources SUBMITTER=GIGABYTE ./run.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
 ```
 <details><pre>
 
 </pre></details>
 
-
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
 
-**TODO**
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 DOCKER=yes ./run_edge.sh
+```
