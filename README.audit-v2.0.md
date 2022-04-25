@@ -325,7 +325,7 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docke
 
 #### Run a quick accuracy test
 ```
-ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=resnet50 --mode=accuracy --scenario=offline --target_qps=22222 --container=$CONTAINER_ID
+ck run cmdgen:benchmark.image-classification.qaic-loadgen --sut=r282_z93_q1 --sdk=1.6.80 --model=resnet50 --mode=accuracy --scenario=offline --container=$CONTAINER_ID
 ```
 
 ### [SSD-ResNet34](https://github.com/krai/ck-qaic/blob/main/docker/ssd-resnet34/README.md)
@@ -364,7 +364,7 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --doc
 
 #### Run a quick accuracy test
 ```
-ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 --mode=accuracy --scenario=offline --target_qps=425 --container=$CONTAINER_ID
+ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 --mode=accuracy --scenario=offline --container=$CONTAINER_ID
 ```
 
 ### [SSD-MobileNet](https://github.com/krai/ck-qaic/blob/main/docker/ssd-mobilenet/README.md)
@@ -402,7 +402,7 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --doc
 
 #### Run a quick accuracy test
 ```
-ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet --mode=accuracy --scenario=offline --target_qps=19500 --container=$CONTAINER_ID
+ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet --mode=accuracy --scenario=offline --container=$CONTAINER_ID
 ```
 
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
@@ -436,7 +436,7 @@ CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=contain
 
 #### Run a quick accuracy test
 ```
-ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --target_qps=650 --container=$CONTAINER_ID
+ck run cmdgen:benchmark.packed-bert.qaic-loadgen --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --container=$CONTAINER_ID
 ```
 
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests: `DIVISION=open`)
