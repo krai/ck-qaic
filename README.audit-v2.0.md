@@ -185,6 +185,10 @@ drwxrwsr-x+ 3 auditor qaic 4096 Mar 31 12:35 ..
 
 ## [Build Docker images](https://github.com/krai/ck-qaic/blob/main/docker/README.md#build-a-docker-image)
 
+We provide all build commands for completeness.
+However, all images can be built using by specifying _SDK-dependent_ commands only.
+SDK-independent images will be built automatically.
+
 ### Build [base](https://github.com/krai/ck-qaic/blob/main/docker/base/README.md) images
 
 #### SDK-independent base
@@ -407,6 +411,11 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --sut=r282_z93_q1 --
 
 ### [BERT-99](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
 
+#### SDK-independent
+```
+CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh bert
+```
+
 #### SDK-dependent
 ```
 CK_QAIC_CHECKOUT=v2.0 CK_QAIC_PCV=9983 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qaic)/docker/build.sh bert
@@ -422,12 +431,6 @@ krai/mlperf.bert.centos7   1.6.80    550bbbcf9f91   10 minutes ago   7GB
 krai/ck.bert.centos7       latest    a89ab03b895b   45 minutes ago   13.1GB
 </pre></details>
 
-#### SDK-independent
-
-This image is independent of SDK and is automatically created by the Docker build of the main image
-```
-CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh bert
-```
 
 #### Create a container
 ```
