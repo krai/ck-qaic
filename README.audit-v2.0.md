@@ -5,13 +5,13 @@ The [submitted](https://github.com/mlcommons/inference_results_v2.0/tree/master/
 | Workload      | Results    | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
 | ------------- | ---------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
 | ResNet50      | Submitted  |   75.956               |   46,361.40                  |    75.956                   |    0.34                      |    75.956                  |    0.64                     |
-| ResNet50      | Reproduced |                  |                     |                       |                          |                      |                         |
+| ResNet50      | Reproduced |    75.956              |    45,537.80                 |     75.956                  |    0.33                      |                      |    0.59                     |    0.59
 | SSD-ResNet34  | Submitted  |    19.831              |     885.04                |   19.831                    |    8.73                      |    19.831                  |    28.03                     |
-| SSD-ResNet34  | Reproduced |                  |                     |                       |                          |                      |                         |
+| SSD-ResNet34  | Reproduced |    19.831              |     881.31                |     19.831                  |     7.06                     |    19.831                  |    25.01                     |
 | SSD-MobileNet | Submitted  |   23.160               |    38,630.30                 |   23.160                    |    0.68                      |   23.160                   |    1.52                     |
-| SSD-MobileNet | Reproduced |                  |                     |                       |                          |                      |                         |
+| SSD-MobileNet | Reproduced |    23.160              |     38,434.9                |     23.160                  |     0.54                     |     23.160                 |    1.09                     |
 | BERT-99       | Submitted  |    90.363              |    1,437.71                 |   90.332                    |    10.25                      | N/A                  | N/A                     |
-| BERT-99       | Reproduced |                  |                     |                       |                          | N/A                  | N/A                     |
+| BERT-99       | Reproduced |    90.360              |    1,415.18                 |    90.332                   |     10.04                     | N/A                  | N/A                     |
 
 # Audit instructions
 
@@ -513,11 +513,27 @@ Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by
 
 
 ```
-SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE ./run.sh
 ```
 <details><pre>
 
 </pre></details>
+
+To use resources only from user's CK directories:
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE RESOURCES_DIR=no ./run.sh
+```
+
+To run on a custom experiment repository and specified `RESOURCES_DIR`:
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE CK_REPO=mlperf_v2.0-closed-r282_z93_q8-qaic-v1.6.80 RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
+```
+
+To run a quick check:
+```
+SUT=r282_z93_q2 SDK_VER=1.6.80 PRECHECK=yes SKIP_CHECK=yes RESOURCES_DIR=dummy_dir SUBMITTER=GIGABYTE ./run.sh
+```
+
 
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
 
