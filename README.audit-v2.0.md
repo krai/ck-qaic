@@ -4,14 +4,14 @@ The [submitted](https://github.com/mlcommons/inference_results_v2.0/tree/master/
 
 | Workload      | Results    | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
 | ------------- | ---------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
-| ResNet50      | Submitted  |   75.956               |   46,361.40                  |    75.956                   |    0.34                      |    75.956                  |    0.64                     |
-| ResNet50      | Reproduced |    75.956              |    45,537.80                 |     75.956                  |    0.33                      |                      |    0.59                     |    0.59
-| SSD-ResNet34  | Submitted  |    19.831              |     885.04                |   19.831                    |    8.73                      |    19.831                  |    28.03                     |
-| SSD-ResNet34  | Reproduced |    19.831              |     881.31                |     19.831                  |     7.06                     |    19.831                  |    25.01                     |
-| SSD-MobileNet | Submitted  |   23.160               |    38,630.30                 |   23.160                    |    0.68                      |   23.160                   |    1.52                     |
-| SSD-MobileNet | Reproduced |    23.160              |     38,434.9                |     23.160                  |     0.54                     |     23.160                 |    1.09                     |
-| BERT-99       | Submitted  |    90.363              |    1,437.71                 |   90.332                    |    10.25                      | N/A                  | N/A                     |
-| BERT-99       | Reproduced |    90.360              |    1,415.18                 |    90.332                   |     10.04                     | N/A                  | N/A                     |
+| ResNet50      | Submitted  |   75.956         |  46,361.40          |   75.956              |    0.34                  |  75.956              |  0.64                   |
+| ResNet50      | Reproduced |    75.956        |  45,537.80          |   75.956              |    0.33                  |                      |  0.59                   |
+| SSD-ResNet34  | Submitted  |    19.831        |     885.04          |   19.831              |    8.73                  |  19.831              | 28.03                   |
+| SSD-ResNet34  | Reproduced |    19.831        |     881.31          |   19.831              |    7.06                  |  19.831              | 25.01                   |
+| SSD-MobileNet | Submitted  |   23.160         |  38,630.30          |   23.160              |    0.68                  |  23.160              |  1.52                   |
+| SSD-MobileNet | Reproduced |    23.160        |  38,434.90          |   23.160              |    0.54                  |  23.160              |  1.09                   |
+| BERT-99       | Submitted  |    90.363        |   1,437.71          |   90.332              |   10.25                  |  N/A                 |  N/A                    |
+| BERT-99       | Reproduced |    90.360        |   1,415.18          |   90.332              |   10.04                  |  N/A                 |  N/A                    |
 
 # Audit instructions
 
@@ -159,7 +159,7 @@ ck add repo:$CK_EXPERIMENT_REPO --quiet
 ck add $CK_EXPERIMENT_REPO:experiment:dummy --common_func
 ck rm  $CK_EXPERIMENT_REPO:experiment:dummy --force
 sudo chgrp -R qaic $CK_EXPERIMENT_DIR
-chmod -R g+ws $CK_EXPERIMENT_DIR
+sudo chmod -R g+ws $CK_EXPERIMENT_DIR
 setfacl -R -d -m group:qaic:rwx $CK_EXPERIMENT_DIR
 ```
 
@@ -185,23 +185,22 @@ drwxrwsr-x+ 3 auditor qaic 4096 Mar 31 12:35 ..
 
 ## [Build Docker images](https://github.com/krai/ck-qaic/blob/main/docker/README.md#build-a-docker-image)
 
-### [Base](https://github.com/krai/ck-qaic/blob/main/docker/base/README.md)
-**TO VALIDATE**
-### Build an SDK-independent base OS image
+### Build [base](https://github.com/krai/ck-qaic/blob/main/docker/base/README.md) images
+
+#### SDK-independent base
 
 To build a base OS image including Python and GCC:
-
 ```
 $(ck find ck-qaic:docker:base)/build.base.sh
 ```
 
-#### Parameters
+##### Parameters
 - `DOCKER_OS=centos7` (only CentOS 7 is currently supported).
 - `PYTHON_VER=3.8.13`.
 - `GCC_MAJOR_VER=11`.
 - `TIMEZONE=US/Central` (Austin).
 
-#### Test
+##### Test
 ```
 docker run --rm krai/base.centos7
 ```
@@ -209,7 +208,7 @@ docker run --rm krai/base.centos7
 centos-release-7-9.2009.1.el7.centos.x86_64
 </pre></details>
 
-### Build an SDK-independent common CK image
+#### SDK-independent common
 
 To build a base image for CK packages common to all supported MLPerf Inference benchmarks:
 
@@ -217,7 +216,7 @@ To build a base image for CK packages common to all supported MLPerf Inference b
 $(ck find ck-qaic:docker:base)/build.ck.sh
 ```
 
-#### Parameters
+##### Parameters
 - `DOCKER_OS=centos7`.
 - `PYTHON_VER=3.8.13`.
 - `GCC_MAJOR_VER=11`.
@@ -225,7 +224,7 @@ $(ck find ck-qaic:docker:base)/build.ck.sh
 - `GROUP_ID=1500`.
 - `USER_ID=2000`.
 
-#### Test
+##### Test
 ```
 docker run --rm krai/ck.common.centos7
 ```
@@ -233,20 +232,20 @@ docker run --rm krai/ck.common.centos7
 V2.6.1
 </pre></details>
 
-### Build an image for a given QAIC SDK
+#### SDK-dependent base
 
 ```
 SDK_VER=1.6.80 SDK_DIR=/local/mnt/workspace/sdks/ $(ck find ck-qaic:docker:base)/build.qaic.sh
 ```
 
-#### Parameters
+##### Parameters
 - `DOCKER_OS=centos7`.
 - `SDK_DIR=/local/mnt/workspace/sdks/`.
 - `SDK_VER=1.6.80`.
 - `PLATFORM_SDK`.
 - `APPS_SDK`.
 
-#### Test
+##### Test
 ```
 export SDK_VER=1.6.80 && docker run --privileged --rm krai/qaic.centos7:${SDK_VER}
 ```
@@ -319,12 +318,12 @@ krai/mlperf.resnet50.full.centos7   1.6.80    a33de9c692e9   59 minutes ago   12
 krai/ck.resnet50.centos7            latest    6a9471f3a2ed   2 hours ago      13.5GB
 </pre></details>
 
-#### Load the Container
+#### Create a container
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=resnet50 --experiment_dir)
 ```
 
-#### Quick Accuracy Check
+#### Run a quick accuracy test
 ```
 ck run cmdgen:benchmark.image-classification.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=resnet50 --mode=accuracy --scenario=offline --target_qps=22222 --container=$CONTAINER_ID
 ```
@@ -357,13 +356,13 @@ krai/mlperf.ssd-resnet34.centos7   1.6.80    4e31315c9cd2   2 minutes ago    25.
 krai/ck.ssd-resnet34.centos7       latest    bebaeb96fa93   26 minutes ago   27.5GB
 </pre></details>
 
-#### Load the Container
+#### Create a container
 
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-resnet34 --experiment_dir)
 ```
 
-#### Quick Accuracy Check
+#### Run a quick accuracy test
 ```
 ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_resnet34 --mode=accuracy --scenario=offline --target_qps=425 --container=$CONTAINER_ID
 ```
@@ -396,12 +395,12 @@ krai/mlperf.ssd-mobilenet.centos7   1.6.80    9db636a770c1   6 minutes ago   6.3
 krai/ck.ssd-mobilenet.centos7       latest    fdd48e3378de   2 hours ago     8.9GB
 </pre></details>
 
-#### Load the Container
+#### Create a container
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=ssd-mobilenet --experiment_dir)
 ```
 
-#### Quick Accuracy Check
+#### Run a quick accuracy test
 ```
 ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=ssd_mobilenet --mode=accuracy --scenario=offline --target_qps=19500 --container=$CONTAINER_ID
 ```
@@ -412,6 +411,7 @@ ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --verbose --sut=r282
 ```
 CK_QAIC_CHECKOUT=v2.0 CK_QAIC_PCV=9983 SDK_DIR=/local/mnt/workspace/mlcommons/sdks $(ck find repo:ck-qaic)/docker/build.sh bert
 ```
+
 ```
 docker image ls krai/*bert*
 ```
@@ -429,17 +429,17 @@ This image is independent of SDK and is automatically created by the Docker buil
 CK_QAIC_CHECKOUT=v2.0 $(ck find repo:ck-qaic)/docker/build_ck.sh bert
 ```
 
-#### Load the Container
-
+#### Create a container
 ```
 CONTAINER_ID=$(ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=1.6.80 --model_name=bert --experiment_dir)
 ```
-#### Quick Accuracy Check
+
+#### Run a quick accuracy test
 ```
 ck run cmdgen:benchmark.packed-bert.qaic-loadgen --verbose --sut=r282_z93_q1 --sdk=1.6.80 --model=bert-99 --mode=accuracy --scenario=offline --target_qps=650 --container=$CONTAINER_ID
 ```
 
-## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests: DIVISION=open)
+## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (without compliance tests: `DIVISION=open`)
 
 ```
 SUT=r282_z93_q2 SDK_VER=1.6.80 DIVISION=open DOCKER=yes ./run_edge.sh
@@ -461,7 +461,7 @@ ck list mlperf_v2.0.dyson.auditor:experiment:*
 ck rm experiment:<experiment_folder_name>
 ```
 
-### Clone this repository
+### Get Krai's scripts
 
 ```
 export SUBMISSIONS_DIR=/local/mnt/workspace/mlperf-inference-submissions
@@ -509,22 +509,20 @@ python3.8 -m pip install sqlalchemy mysqlclient --user
 
 ### Run the Submission Generation Script
 
-Run from the `dump-repo-to-submission` directory (`./run.sh`) or from outside by providing the path to the script.
-
-
+Run from the `dump-repo-to-submission` directory:
 ```
+cd /local/mnt/workspace/mlperf-inference-submissions/scripts/krai-mlperf-inference/dump-repo-to-submission
 SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE ./run.sh
 ```
-<details><pre>
+(or from outside by providing the absolute path to the script.)
 
-</pre></details>
 
-To use resources only from user's CK directories:
+To use resources only from the user CK directories:
 ```
 SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE RESOURCES_DIR=no ./run.sh
 ```
 
-To run on a custom experiment repository and specified `RESOURCES_DIR`:
+To run on a custom experiment repository using a specified `RESOURCES_DIR`:
 ```
 SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE CK_REPO=mlperf_v2.0-closed-r282_z93_q8-qaic-v1.6.80 RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
 ```
@@ -533,7 +531,6 @@ To run a quick check:
 ```
 SUT=r282_z93_q2 SDK_VER=1.6.80 PRECHECK=yes SKIP_CHECK=yes RESOURCES_DIR=dummy_dir SUBMITTER=GIGABYTE ./run.sh
 ```
-
 
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
 
