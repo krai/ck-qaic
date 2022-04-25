@@ -48,9 +48,9 @@ FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
 #
 ###############################################################################
 FROM krai/ck.bert.centos7 AS builder
-ARG CK_QAIC_CHECKOUT=main
 ARG CK_QAIC_PCV
-ARG DEBUG_BUILD=no
+ARG CK_QAIC_CHECKOUT
+ARG DEBUG_BUILD
 
 #-----------------------------------------------------------------------------#
 # Step 1. Copy the QAIC SDKs (needed for compilation).
@@ -63,8 +63,7 @@ ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}
 #-----------------------------------------------------------------------------#
 USER krai:kraig
 WORKDIR /home/krai
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
- && ck pull all
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 #-----------------------------------------------------------------------------#
@@ -73,35 +72,39 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 RUN ck detect platform.os --platform_init_uoa=qaic
 
 #-----------------------------------------------------------------------------#
-# Step 4. Compile packed-bert-qaic-loadgen.
+# Step 4. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
 RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
+#-----------------------------------------------------------------------------#
+# Step 5. Prepare the BERT workload for 16-NSP server cards.
+#-----------------------------------------------------------------------------#
 # Uncomment if not using precalibrated profile; comment out otherwise.
 #RUN ck install package --tags=profile,qaic,bert-packed --quiet
-
 # Uncomment if using precalibrated profile; comment out otherwise.
 ADD bert /home/krai/CK_REPOS/ck-qaic/profile/bert
-RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
+RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
  --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
- --extra_tags=detected,profile,qaic,bert-packed,mixed;
+ --extra_tags=detected,profile,qaic,bert-packed,mixed
 
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then ck install package \
-  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --quiet \
-  --extra_tags=pcv.$CK_QAIC_PCV; ck install package \
-  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
-  --extra_tags=pcv.$CK_QAIC_PCV --quiet;  ck install package \
-  --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV \
-  --extra_tags=pcv.$CK_QAIC_PCV --quiet; \
-  else ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration --quiet; \
+# Compile the bert-99 workload (separately for each scenario).
+RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration      --quiet \
+     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet \
+     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet \
+     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+else \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration      --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet; \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; \
-  fi
+fi
+# Compile the bert-99.9 workload.
 RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 5. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+# Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
 RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \

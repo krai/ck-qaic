@@ -31,6 +31,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+
 function exit_if_error() {
     if [ "${?}" != "0" ]; then exit 1; fi
 }
@@ -39,13 +40,12 @@ if [[ $# < 1 ]]; then
   echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet).";
   exit 1;
 fi
-
 MODEL=$1
-
-echo "Building CK (QAIC-independent) image for '${MODEL}' ...";
+echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
 _BASE_OS=${BASE_OS:-centos7}
 _DOCKER_OS=${DOCKER_OS:-centos7}
+_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
@@ -60,6 +60,7 @@ echo "Image: 'krai/mlperf.${_DOCKER_OS}.${MODEL}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 docker build ${_NO_CACHE} \
+--build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 -t krai/ck.${MODEL}.${_DOCKER_OS} \
 -f Dockerfile.ck  .
 END_OF_CMD

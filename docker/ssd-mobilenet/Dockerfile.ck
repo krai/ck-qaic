@@ -37,9 +37,9 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
+# NB: Setting FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
@@ -56,16 +56,15 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM preamble AS builder
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 
 # Pull CK repositories.
-RUN ls && cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 
-# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+# Install implicit Python dependencies.
 RUN source /home/krai/.bashrc \
- && ${CK_PYTHON} -m pip install --user onnx-simplifier \
- && ${CK_PYTHON} -m pip install --user pybind11
+ && ${CK_PYTHON} -m pip install --user pybind11 onnx-simplifier
+
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
 
@@ -77,15 +76,25 @@ RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
+# Step 2. INTENTIONALLY LEFT BLANK.
+#-----------------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------------#
 # Step 3. Download the dataset.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration,mlperf --quiet
-RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
---tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
+RUN ck install package --tags=dataset,coco.2017,val --quiet
+
+#-----------------------------------------------------------------------------#
+# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
+# The steps below are SSD-MobileNet-v1 specific.
+#-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
 # Step 4. Preprocess the dataset for quantized SSD-MobileNet.
 #-----------------------------------------------------------------------------#
+RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration,mlperf --quiet
+RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
+--tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
 
 #-----------------------------------------------------------------------------#
 # Step 5. Prepare the SSD-MobileNet workload.
@@ -93,6 +102,9 @@ RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 # Remove NMS.
 RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
 
+#-----------------------------------------------------------------------------#
+# Step 6. Clean up.
+#-----------------------------------------------------------------------------#
 RUN rm -rf $(ck locate env --tags=dataset,coco.2017,original,train)/*  \
   $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
   touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; 
@@ -107,5 +119,5 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local /home/krai/.local
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local   /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc

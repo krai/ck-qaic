@@ -43,7 +43,7 @@ ARG BASE_IMAGE
 ARG SDK_VER
 FROM $BASE_IMAGE:$SDK_VER AS preamble
 
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -60,8 +60,8 @@ ENTRYPOINT ["/bin/bash", "-c"]
 ###############################################################################
 FROM krai/ck.resnet50.centos7 AS builder
 ARG CK_QAIC_PCV
-ARG DEBUG_BUILD=no
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
+ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
 
@@ -70,8 +70,7 @@ ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
 ENV PATH "/usr/local/bin:${PATH}"
 
 # Pull CK repositories.
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 # Set platform scripts (ensuring that ECC is on).
@@ -106,7 +105,7 @@ RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistrea
 RUN ck compile program:image-classification-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+# Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
 RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \

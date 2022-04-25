@@ -42,8 +42,8 @@
 ARG BASE_IMAGE
 ARG SDK_VER
 FROM $BASE_IMAGE:$SDK_VER AS preamble
-
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
+ARG DEBUG_BUILD
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -59,23 +59,19 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM krai/ck.ssd-mobilenet.centos7 AS builder
-ARG DEBUG_BUILD=no
 ARG CK_QAIC_PCV
-COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
+ARG CK_QAIC_CHECKOUT
+ARG DEBUG_BUILD
 
+COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
 
-ENV PATH "/usr/local/bin:${PATH}"
-
-
 # Pull CK repositories.
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
-
 
 #-----------------------------------------------------------------------------#
 # Step 2. Build the MLPerf LoadGen API.
@@ -83,17 +79,22 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
+# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
+# The steps below are SSD-MobileNet specific.
+#-----------------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------------#
 # Step 5. Prepare the SSD-MobileNet workload.
 #-----------------------------------------------------------------------------#
 # Use a precalibrated profile.
 #ADD ssd-mobilenet/ /home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/
-#RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
+#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
 #--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.4/profile.yaml \
 #--extra_tags=detected,ssd_mobilenet,bs.4
-#RUN echo "vdetected" |  ck detect soft:compiler.glow.profile \
+#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
 #--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
 #--extra_tags=detected,ssd_mobilenet,bs.1
-# Remove NMS.
+
 # Generate calibration profiles.
 RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
 RUN ck install package --tags=profile,ssd_mobilenet,bs.2 --quiet
@@ -107,7 +108,9 @@ RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then ck clean env --tags=dataset,coco.2017,train --force && rm -rf \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then \
+ck clean env --tags=dataset,coco.2017,train --force \
+&& rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -121,7 +124,7 @@ $(ck locate env --tags=python-package,torch)/* \
 $(ck locate env --tags=profile,bs.1)/*.raw \
 $(ck locate env --tags=profile,bs.4)/*.raw \
 $(ck locate env --tags=preprocessed,calibration)/* \
-$(ck locate env --tags=python-package,onnx,for.qaic)/*;  fi
+$(ck locate env --tags=python-package,onnx,for.qaic)/*; fi
 
 ###############################################################################
 # FINAL STAGE
@@ -133,8 +136,8 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local /home/krai/.local
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+COPY --from=builder /home/krai/.local   /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

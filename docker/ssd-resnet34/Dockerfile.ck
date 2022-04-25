@@ -39,7 +39,7 @@
 #FROM qran-centos7:1.6.80
 # NB: Setting FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 FROM krai/ck.common.centos7 AS preamble
 
 # Use the Bash shell.
@@ -56,12 +56,14 @@ ENTRYPOINT ["/bin/bash", "-c"]
 #
 ###############################################################################
 FROM preamble AS builder
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 
 # Pull CK repositories.
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
-RUN ck pull all
-RUN source /home/krai/.bashrc && ${CK_PYTHON} -m pip install --user pybind11
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
+
+# Install implicit Python dependencies.
+RUN source /home/krai/.bashrc \
+ && ${CK_PYTHON} -m pip install --user pybind11
 
 #-----------------------------------------------------------------------------#
 # Step 1. Install explicit Python dependencies.
@@ -86,6 +88,9 @@ RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 --tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
 --extra_tags=validation --quiet
 
+#-----------------------------------------------------------------------------#
+# Step 5. Prepare the SSD-ResNet34 workload.
+#-----------------------------------------------------------------------------#
 RUN ck install package --tags=model,onnx,ssd-resnet34,no-nms --quiet
 
 ###############################################################################
@@ -98,6 +103,5 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local /home/krai/.local
-COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
-
+COPY --from=builder /home/krai/.local   /home/krai/.local
+COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc

@@ -90,11 +90,7 @@ RUN ck install package --tags=model,mlperf,qaic,bert-packed
 FROM preamble AS final
 
 COPY --from=builder /home/krai/CK       /home/krai/CK
-RUN true
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
-RUN true
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-RUN true
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
-RUN true
 COPY --from=builder /home/krai/.local   /home/krai/.local
