@@ -5,7 +5,7 @@ The [submitted](https://github.com/mlcommons/inference_results_v2.0/tree/master/
 | Workload      | Results    | Offline Accuracy | Offline Performance | SingleStream Accuracy | SingleStream Performance | MultiStream Accuracy | MultiStream Performance |
 | ------------- | ---------- | ---------------- | ------------------- | --------------------- | ------------------------ | -------------------- | ----------------------- |
 | ResNet50      | Submitted  |   75.956         |  46,361.40          |   75.956              |    0.34                  |  75.956              |  0.64                   |
-| ResNet50      | Reproduced |    75.956        |  45,537.80          |   75.956              |    0.33                  |                      |  0.59                   |
+| ResNet50      | Reproduced |    75.956        |  45,537.80          |   75.956              |    0.33                  |  75.956              |  0.59                   |
 | SSD-ResNet34  | Submitted  |    19.831        |     885.04          |   19.831              |    8.73                  |  19.831              | 28.03                   |
 | SSD-ResNet34  | Reproduced |    19.831        |     881.31          |   19.831              |    7.06                  |  19.831              | 25.01                   |
 | SSD-MobileNet | Submitted  |   23.160         |  38,630.30          |   23.160              |    0.68                  |  23.160              |  1.52                   |
@@ -515,19 +515,19 @@ python3.8 -m pip install sqlalchemy mysqlclient --user
 Run from the `dump-repo-to-submission` directory:
 ```
 cd /local/mnt/workspace/mlperf-inference-submissions/scripts/krai-mlperf-inference/dump-repo-to-submission
-SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE ./run.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE PRECHECK=yes ./run.sh
 ```
 (or from outside by providing the absolute path to the script.)
 
 
 To use resources only from the user CK directories:
 ```
-SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE RESOURCES_DIR=no ./run.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE PRECHECK=yes RESOURCES_DIR=no ./run.sh
 ```
 
-To run on a custom experiment repository using a specified `RESOURCES_DIR`:
+To run on a custom experiment repository `CK_REPO` using a specified resources directory `RESOURCES_DIR`:
 ```
-SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE CK_REPO=mlperf_v2.0-closed-r282_z93_q8-qaic-v1.6.80 RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 SUBMITTER=GIGABYTE PRECHECK=yes CK_REPO=mlperf_v2.0-closed-r282_z93_q8-qaic-v1.6.80 RESOURCES_DIR=/local/mnt/workspace/mlperf-inference-submissions/resources ./run.sh
 ```
 
 To run a quick check:
