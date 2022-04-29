@@ -8,13 +8,14 @@ if [[ ${_docker} == 'yes' ]]; then
 fi
 
 ZIP_EXPERIMENT=${ZIP_EXPERIMENT:-'no'}
+ZIP_FILE=${ZIP_FILE:-'mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip'}
 if [[ $ZIP_EXPERIMENT == 'yes' ]]; then
   mkdir -p $HOME/krai_experiment_results/$SDK_VER
   cd $HOME/krai_experiment_results/$SDK_VER
-  rm -f mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip
-  ck zip $CK_EXPERIMENT_REPO:experiment:*"closed-${SUT}-"*${SDK_VER}* --archive_name=mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip
+  rm -f $ZIP_FILE
+  ck zip $CK_EXPERIMENT_REPO:experiment:*"closed-${SUT}-"*${SDK_VER}* --archive_name=$ZIP_FILE
   if [[ $RCLONE_COPY == "yes" ]]; then
-    rclone copy $CK_EXPERIMENT_REPO'_'${_reposuffix}$SDK_VER.zip rclone:experiments/$SDK_VER/
+    rclone copy $ZIP_FILE rclone:experiments/$SDK_VER/
   fi
   cd -
 fi
