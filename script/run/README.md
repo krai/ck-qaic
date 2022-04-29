@@ -124,3 +124,11 @@ Default: `DIVISION=open`. If `DIVISION=closed`, run all applicable compliance te
 ### `OFFLINE_ONLY`
 
 Default: `OFFLINE_ONLY=no`. If `OFFLINE_ONLY`, run only the offline scenario in performance mode.
+
+### `ZIP_EXPERIMENT`
+
+If `ZIP_EXPERIMENT=yes`, after the run, create zip archive of the experiment repository in the `$HOME/krai_experiment_results/$SDK_VER` directory. Default: `ZIP_EXPERIMENT=no`.
+
+### `ZIP_FILE`
+
+Give custom name to the zip archive of the experiment repository. Default: `ZIP_FILE=mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip`.
