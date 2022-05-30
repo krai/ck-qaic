@@ -26,7 +26,7 @@
     "CK_ENV_LIB_MLPERF_LOADGEN_INCLUDE"
   ],
   "compiler_env": "CK_CXX",
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -O3 $<<CK_EXTRA_COMPILER_DEPS1>>$ $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ $<<CK_EXTRA_COMPILER_DEPS4>>$ -Wall -Wno-sign-compare -Wno-psabi -I/opt/qti-aic/dev/inc/ -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -O3 $<<CK_EXTRA_COMPILER_DEPS1>>$ $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ $<<CK_EXTRA_COMPILER_DEPS4>>$ -Wall -Wno-sign-compare -Wno-psabi -I/opt/qti-aic/dev/inc/ -I/opt/qti-aic/dev/inc/qaic-api-common -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/",
   "data_name": "image-classification-qaic-loadgen",
   "extra_ld_vars": "$<<CK_EXTRA_LIB_LOG>>$ -L$<<CK_ENV_LIB_MLPERF_LOADGEN_LIB>>$ -L$<<CK_ENV_LIB_QAIC_API>>$/install/lib/ -lmlperf_loadgen -ldl -lpthread -lprotobuf -lQAic",
   "linker_add_lib_as_env": [
