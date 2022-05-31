@@ -80,12 +80,12 @@ RUN ck compile program:packed-bert-qaic-loadgen --quiet
 # Step 5. Prepare the BERT workload for 16-NSP server cards.
 #-----------------------------------------------------------------------------#
 # Uncomment if not using precalibrated profile; comment out otherwise.
-#RUN ck install package --tags=profile,qaic,bert-packed --quiet
-# Uncomment if using precalibrated profile; comment out otherwise.
-ADD bert /home/krai/CK_REPOS/ck-qaic/profile/bert
-RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
- --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
- --extra_tags=detected,profile,qaic,bert-packed,mixed
+RUN ck install package --tags=profile,qaic,bert-packed --quiet
+# # Uncomment if using precalibrated profile; comment out otherwise.
+# ADD bert /home/krai/CK_REPOS/ck-qaic/profile/bert
+# RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
+# --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
+# --extra_tags=detected,profile,qaic,bert-packed,mixed
 
 # Compile the bert-99 workload (separately for each scenario).
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
