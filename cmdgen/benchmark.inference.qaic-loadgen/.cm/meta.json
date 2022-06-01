@@ -188,7 +188,6 @@
       "performance": {
         "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
         "mode_extension": "<<<performance_mode_extension>>><<<?timestamp_value>>>",
-	"mode_extension2": "<<<performance_mode_extension>>>\\$timestamp_value",
         "output_file": "mlperf_log_summary.txt",
         "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
         "recommended_verbosity": "0",
@@ -198,13 +197,13 @@
         "perf_multistream_ck_env": "<<<?ck_env_multistream>>>",
         "perf_singlestream_ck_env": "<<<?ck_env_singlestream>>>",
         "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
-	"record_tags_inner": "<<<power_record_tags_inner>>>",
+        "record_tags_inner": "<<<power_record_tags_inner>>>",
         "record_uoa": "<<<power_record_uoa>>>",
-	"wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>",
+        "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>",
         "vc_cmd_def_2": "<<<vc_cmd_def>>>",
         "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
         "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>",
-	"notes_file": "<<<notes_file_def>>>"
+        "notes_file": "<<<notes_file_def>>>"
       }
     },
     "model_extra_tags": {
@@ -815,7 +814,7 @@
    },
    "timestamp": {
       "yes": {
-	"timestamp_value":"\\$timestamp_val",
+	"timestamp_value":"${timestamp_val}",
 	"timestamp_value_cmd": "<<<timestamp_value_def>>>"
       }
    }
@@ -905,7 +904,7 @@
     "singlestream_target_latency": "<<<target_latency>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
-    "timestamp_value_def": "timestamp_val=-$(date +'%Y%m%dT%H%M%S' -u);",
+    "timestamp_value_def": "export timestamp_val=-$(date +'%Y%m%dT%H%M%S' -u);",
     "verbosity": "<<<recommended_verbosity>>>",
     "vc_cmd_def": "export VC_VAL=<<<vc_value>>>;",
     "vc_cmd_def_2": "",
