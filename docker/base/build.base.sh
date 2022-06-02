@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 #
 # Copyright (c) 2021-2022 Krai Ltd.
@@ -36,8 +36,10 @@ _DOCKER_OS=${DOCKER_OS:-centos7}
 
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
+# Use OpenSSL >= 1.1.1 (for pip).
+_SSL_VER=${SSL_VER:-1.1.1o}
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.8.13}
+_PYTHON_VER=${PYTHON_VER:-3.10.4}
 # Use the Austin time zone by default.
 _TIMEZONE=${TIMEZONE:-"US/Central"}
 
@@ -50,7 +52,11 @@ read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
+--build-arg SSL_VER=${_SSL_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
+--build-arg PYTHON_MAJOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f1) \
+--build-arg PYTHON_MINOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f2) \
+--build-arg PYTHON_PATCH_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f3) \
 --build-arg TIMEZONE=${_TIMEZONE} \
 -f Dockerfile.base.${_DOCKER_OS} \
 -t krai/base.${_DOCKER_OS} .

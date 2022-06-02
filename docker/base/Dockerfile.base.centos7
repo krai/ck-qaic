@@ -35,7 +35,11 @@ FROM centos:7.9.2009
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
 ARG GCC_MAJOR_VER
+ARG SSL_VER
 ARG PYTHON_VER
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
 ARG TIMEZONE
 
 # Use the Bash shell.
@@ -64,14 +68,24 @@ RUN sudo systemctl enable ipmi.service
 RUN yum install -y centos-release-scl \
  && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
 
+# Install OpenSSL >= 1.1.1.
+RUN mkdir -p /tmp && cd /tmp \
+ && wget https://www.openssl.org/source/openssl-${SSL_VER}.tar.gz \
+ && tar xzf openssl-${SSL_VER}.tar.gz \
+ && cd openssl-${SSL_VER} \
+ && scl enable devtoolset-${GCC_MAJOR_VER} \
+    "./config --prefix=/usr/share/openssl-${SSL_VER} && make -j 1 depend && make -j 10 && make install_sw" \
+ && rm -rf /tmp/openssl-${SSL_VER}*
+
 # Install Python >= 3.7.
 RUN mkdir -p /tmp && cd /tmp \
  && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
  && tar xzf Python-${PYTHON_VER}.tgz \
- && rm Python-${PYTHON_VER}.tgz \
  && cd Python-${PYTHON_VER} \
- && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations && make -j 10 altinstall" \
- && cd /tmp \
- && rm -rf Python-${PYTHON_VER}*
+ && scl enable devtoolset-${GCC_MAJOR_VER} \
+    "./configure --enable-optimizations --with-openssl=/usr/share/openssl-${SSL_VER} --with-openssl-rpath=auto && make -j 10 altinstall" \
+ && python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER} -m pip install --upgrade pip \
+ && rm -rf /tmp/Python-${PYTHON_VER}*
 
-CMD ["rpm -q centos-release"]
+ENV PYTHON_MAJOR_VER=${PYTHON_MAJOR_VER} PYTHON_MINOR_VER=${PYTHON_MINOR_VER}
+CMD ["rpm -q centos-release; python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER} -c \"import sys, ssl; print('Python ' + sys.version); print(ssl.OPENSSL_VERSION)\""]
