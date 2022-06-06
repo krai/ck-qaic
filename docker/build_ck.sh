@@ -46,6 +46,7 @@ echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 _BASE_OS=${BASE_OS:-centos7}
 _DOCKER_OS=${DOCKER_OS:-centos7}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+_GCC_MAJOR_VERSION=${GCC_MAJOR_VERSION:-11}
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
@@ -61,6 +62,7 @@ read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 docker build ${_NO_CACHE} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
+--build-arg GCC_MAJOR_VERSION=${_GCC_MAJOR_VERSION} \
 -t krai/ck.${MODEL}.${_DOCKER_OS} \
 -f Dockerfile.ck  .
 END_OF_CMD
