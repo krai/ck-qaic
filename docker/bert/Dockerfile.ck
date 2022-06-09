@@ -36,7 +36,8 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS preamble
+ARG BASE_OS
+FROM krai/ck.common:${BASE_OS}_latest AS preamble
 ARG CK_QAIC_CHECKOUT=main
 
 ###############################################################################

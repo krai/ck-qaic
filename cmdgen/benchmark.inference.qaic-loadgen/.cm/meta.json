@@ -845,7 +845,7 @@
     "docker_exec_command": "docker exec",
     "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
     "docker_group_add": "--group-add <<<shared_group_id>>> ",
-    "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
+    "docker_image": "krai/mlperf.<<<model_name>>>:<<<base_os>>>_<<<sdk>>> ",
     "docker_mode": "--privileged ",
     "docker_user": "--user=krai:kraig ",
     "experiment_dir_default": "${CK_EXPERIMENT_DIR}",

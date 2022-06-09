@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos7}
+_DOCKER_OS=${DOCKER_OS:-centos}
 
 if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
@@ -43,6 +43,8 @@ fi
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _GROUP_ID=${GROUP_ID:-1500}
 _USER_ID=${USER_ID:-2000}
+#_ARCH=${ARCH:-x86_64}
+_ARCH=${ARCH:-$(uname -m)}
 
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 _SDK_VER=${SDK_VER:-1.6.80}
@@ -56,7 +58,10 @@ echo "Using Apps SDK: ${_APPS_SDK}"
 
 _PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"}
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
-  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-x86_64-${_SDK_VER}.zip"
+  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_SDK_VER}.zip"
+fi
+if [[ ! -f "${_PLATFORM_SDK}" ]]; then
+  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_DOCKER_OS}-${_SDK_VER}.zip"
 fi
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
   echo "ERROR: File '${_PLATFORM_SDK}' does not exist!"
@@ -88,8 +93,9 @@ cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
+--build-arg ARCH=${_ARCH} \
 -f Dockerfile.qaic.${_DOCKER_OS} \
--t krai/qaic.${_DOCKER_OS}:${_SDK_VER} .
+-t krai/qaic:${_DOCKER_OS}_${_SDK_VER} .
 END_OF_CMD
 echo "Command: '${CMD}'"
 if [ -z "${DRY_RUN}" ]; then

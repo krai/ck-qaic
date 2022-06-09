@@ -33,7 +33,7 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-ARG BASE_IMAGE=krai/base.centos7
+ARG BASE_IMAGE=krai/base:centos_latest
 FROM $BASE_IMAGE AS preamble
 
 ARG GCC_MAJOR_VER=11
@@ -102,7 +102,7 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
-RUN cd $(ck find repo:ck-qaic) && git checkout --track origin/${CK_QAIC_CHECKOUT}
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \

@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos7}
+_DOCKER_OS=${DOCKER_OS:-centos}
 
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
@@ -53,7 +53,7 @@ time docker build ${_NO_CACHE} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
 --build-arg TIMEZONE=${_TIMEZONE} \
 -f Dockerfile.base.${_DOCKER_OS} \
--t krai/base.${_DOCKER_OS} .
+-t krai/base:${_DOCKER_OS}_latest .
 END_OF_CMD
 echo "Command: '${CMD}'"
 if [ -z "${DRY_RUN}" ]; then

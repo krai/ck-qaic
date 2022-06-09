@@ -37,8 +37,9 @@
 #
 ###############################################################################
 ARG BASE_IMAGE
+ARG BASE_OS
 ARG SDK_VER
-FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
+FROM ${BASE_IMAGE}:${BASE_OS}_${SDK_VER} AS preamble
 
 ###############################################################################
 # BUILDER STAGE
@@ -47,7 +48,7 @@ FROM ${BASE_IMAGE}:${SDK_VER} AS preamble
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.bert.centos7 AS builder
+FROM krai/ck.bert:${BASE_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD

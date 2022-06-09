@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos7}
+_DOCKER_OS=${DOCKER_OS:-centos}
 
 if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
@@ -67,7 +67,7 @@ time docker build ${_NO_CACHE} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 -f Dockerfile.ck.${_DOCKER_OS} \
--t krai/ck.common.${_DOCKER_OS} .
+-t krai/ck.common:${_DOCKER_OS}_latest .
 END_OF_CMD
 echo "Command: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then

@@ -33,9 +33,10 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-FROM krai/base.centos7:latest AS preamble
+FROM krai/base:centos_latest AS preamble
 ARG GROUP_ID
 ARG USER_ID
+ARG ARCH
 
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
@@ -43,13 +44,15 @@ LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 ### BUILDER STAGE
 ###############################################################################
 FROM preamble AS builder
+ARG ARCH
 
 RUN mkdir -p /tmp
 
 COPY tmp/qaic-*.zip /tmp/
 WORKDIR /tmp
+
 RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
-&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd x86_64/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
+&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd ${ARCH}/centos && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
 
 ###############################################################################
 ### FINAL STAGE
