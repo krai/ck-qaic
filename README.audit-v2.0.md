@@ -538,5 +538,5 @@ SUT=r282_z93_q2 SDK_VER=1.6.80 PRECHECK=yes SKIP_CHECK=yes RESOURCES_DIR=dummy_d
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
 
 ```
-SUT=r282_z93_q2 SDK_VER=1.6.80 DOCKER=yes ./run_edge.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 DIVISION=closed DOCKER=yes ./run_edge.sh
 ```
