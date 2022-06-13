@@ -43,7 +43,6 @@ fi
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _GROUP_ID=${GROUP_ID:-1500}
 _USER_ID=${USER_ID:-2000}
-#_ARCH=${ARCH:-x86_64}
 _ARCH=${ARCH:-$(uname -m)}
 
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
@@ -94,7 +93,7 @@ time docker build ${_NO_CACHE} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg ARCH=${_ARCH} \
--f Dockerfile.qaic.${_DOCKER_OS} \
+-f Dockerfile.qaic \
 -t krai/qaic:${_DOCKER_OS}_${_SDK_VER} .
 END_OF_CMD
 echo "Command: '${CMD}'"

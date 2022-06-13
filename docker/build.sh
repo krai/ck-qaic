@@ -120,7 +120,7 @@ ${EXTRA_DOCKER_ARG} \
 --build-arg CK_QAIC_PCV=${_CK_QAIC_PCV} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t ${DOCKER_IMAGE_NAME}:${_BASE_OS}_${_SDK_VER}${tag_suffix} \
--f Dockerfile.${_BASE_OS} .
+-f Dockerfile.mlperf .
 END_OF_CMD
 echo "Running: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then

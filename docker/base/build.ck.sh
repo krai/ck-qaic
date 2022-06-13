@@ -66,7 +66,7 @@ time docker build ${_NO_CACHE} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
--f Dockerfile.ck.${_DOCKER_OS} \
+-f Dockerfile.ck \
 -t krai/ck.common:${_DOCKER_OS}_latest .
 END_OF_CMD
 echo "Command: ${CMD}"
