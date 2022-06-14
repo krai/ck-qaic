@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021-2022 Krai Ltd.
+# Copyright (c) 2022 Krai Ltd.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
 #
@@ -34,8 +34,6 @@ FROM ubuntu:20.04
 
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
-#ARG GCC_MAJOR_VER
-ARG PYTHON_VER
 ARG TIMEZONE
 
 # Use the Bash shell.
@@ -49,29 +47,12 @@ RUN rm -rf /etc/localtime \
  && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
  && ls -la /etc/localtime
 
-#RUN echo "min=1" >> /etc/yum.conf \
-# && echo "timeout=1200" >> /etc/yum.conf
 
 RUN apt upgrade -y \
-# && update-ca-trust force-enable \
  && apt install -y make patch git wget zip unzip python python3 python3-dev python3-pip ca-certificates sudo pciutils pciutils-dev openssl-dev bzip2-dev libffi-dev numactl ipmitool lm-sensors acl vim libbz2-dev lzma \
  && apt clean all
 
 # Start IPMI tool.
-RUN sudo systemctl enable ipmi.service
-
-# NB: Must be two separate calls to yum install.
-#RUN yum install -y centos-release-scl \
-# && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
-
-# Install Python >= 3.7.
-RUN mkdir -p /tmp && cd /tmp \
- && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
- && tar xzf Python-${PYTHON_VER}.tgz \
- && rm Python-${PYTHON_VER}.tgz \
- && cd Python-${PYTHON_VER} \
-# && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations && make -j 10 altinstall" \
- && cd /tmp \
- && rm -rf Python-${PYTHON_VER}*
+#RUN sudo systemctl enable ipmi.service
 
 CMD ["lsb_release -a"]
