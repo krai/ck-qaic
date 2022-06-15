@@ -340,6 +340,24 @@
       "###": {
         "compiler_tags": "gcc"
       },
+      "q4_edge": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "",
+        "power_server_port": "",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "50"
+      },
       "aedk_15w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
