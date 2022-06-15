@@ -33,7 +33,8 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-ARG BASE_IMAGE=krai/base:centos_latest
+ARG DOCKER_OS
+ARG BASE_IMAGE=krai/base:${DOCKER_OS}_latest
 FROM $BASE_IMAGE AS preamble
 
 ARG GCC_MAJOR_VER=11
@@ -74,24 +75,32 @@ FROM preamble AS builder
 
 ARG GCC_MAJOR_VER
 ARG PYTHON_VER
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
 
 ARG CK_QAIC_CHECKOUT
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
- 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)" >> /home/krai/.bashrc;\
-  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)" >> /home/krai/.bashrc;\
-  echo export PYTHON_PATCH_VER="$(echo ${PYTHON_VER} | cut -d '.' -f3)" >> /home/krai/.bashrc' \
+ 'echo "export PYTHON_MAJOR_VER=${PYTHON_MAJOR_VER}" >> /home/krai/.bashrc;\
+  echo "export PYTHON_MINOR_VER=${PYTHON_MINOR_VER}" >> /home/krai/.bashrc;\
+  echo "export PYTHON_PATCH_VER=${PYTHON_PATCH_VER}" >> /home/krai/.bashrc' \
  && source /home/krai/.bashrc \
  && /bin/bash -l -c \
- 'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
+ 'echo "export CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc' \
+ && source /home/krai/.bashrc 
+RUN cat  /home/krai/.bashrc
 
 # Install Collective Knowledge (CK).
 RUN cd ${CK_ROOT} \
  && source /home/krai/.bashrc \
  && ${CK_PYTHON} setup.py install --user \
  && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
- && chmod -R g+rx /home/krai/.local
+ && chmod -R g+rx /home/krai/.local \
+ && ${CK_PYTHON} -m pip install pyyaml
 
 # Explicitly create a CK experiment entry, a folder that will be mounted
 # (with '--volume=<folder_for_results>:/home/krai/CK_REPOS/local/experiment').
@@ -111,7 +120,8 @@ RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
 # Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+#RUN echo "0" | ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+RUN ck detect soft:compiler.gcc --full_path=$(which ${CK_CC})
 
 # Install CMake.
 RUN ck install package --tags=tool,cmake,downloaded --quiet

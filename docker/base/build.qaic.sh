@@ -55,12 +55,12 @@ if [[ ! -f "${_APPS_SDK}" ]]; then
 fi
 echo "Using Apps SDK: ${_APPS_SDK}"
 
-_PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"}
+_PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_DOCKER_OS}-${_SDK_VER}.zip"}
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
   _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_SDK_VER}.zip"
 fi
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
-  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_DOCKER_OS}-${_SDK_VER}.zip"
+  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"
 fi
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
   echo "ERROR: File '${_PLATFORM_SDK}' does not exist!"
@@ -93,6 +93,7 @@ time docker build ${_NO_CACHE} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg ARCH=${_ARCH} \
+--build-arg DOCKER_OS=${_DOCKER_OS} \
 -f Dockerfile.qaic \
 -t krai/qaic:${_DOCKER_OS}_${_SDK_VER} .
 END_OF_CMD
