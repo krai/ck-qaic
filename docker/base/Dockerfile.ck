@@ -91,8 +91,6 @@ RUN /bin/bash -l -c  \
  && source /home/krai/.bashrc \
  && /bin/bash -l -c \
  'echo "export CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc' \
- && source /home/krai/.bashrc 
-RUN cat  /home/krai/.bashrc
 
 # Install Collective Knowledge (CK).
 RUN cd ${CK_ROOT} \
