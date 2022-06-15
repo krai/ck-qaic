@@ -1,8 +1,8 @@
 #!/bin/bash
 
-_category='datacenter'
-DOCKER=${DOCKER:-'yes'}
-WORKLOADS=${WORKLOADS:-"resnet50,ssd_resnet34,bert"}
+_category="datacenter"
+DOCKER=${DOCKER:-"yes"}
+WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh
 
