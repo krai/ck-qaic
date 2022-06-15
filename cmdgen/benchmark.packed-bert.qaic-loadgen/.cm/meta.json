@@ -129,7 +129,7 @@
         "model_tags": [
           "###"
         ],
-        "recommended_activation_count": "<<<recommended_fp16_activation_count>>>",
+        "recommended_offline_server_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed",
         "vc_value_default": "<<<recommended_fp16_vc_value>>>",
         "zero_copy": "disable"
@@ -146,7 +146,7 @@
           "###",
           "quantization.calibration"
         ],
-        "recommended_activation_count": "<<<recommended_mixed_activation_count>>>",
+        "recommended_offline_server_activation_count": "<<<recommended_mixed_activation_count>>>",
         "recommended_queue_length": "4",
         "division": "closed",
         "vc_value_default": "<<<recommended_mixed_vc_value>>>",

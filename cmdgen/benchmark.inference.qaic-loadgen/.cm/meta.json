@@ -275,7 +275,7 @@
     },
     "scenario": {
       "multistream": {
-        "activation_count": "<<<recommended_multistream_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_multistream_activation_count>>>",
         "batch_size": "<<<recommended_multistream_batch_size>>>",
         "num_setup_threads": "<<<recommended_multistream_num_setup_threads>>>",
         "queue_length": "<<<recommended_multistream_queue_length>>>",
@@ -290,7 +290,7 @@
         "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
       },
       "offline": {
-        "activation_count": "<<<recommended_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_offline_server_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline <<<?perf_offline_ck_env>>>",
         "input_select": "<<<recommended_input_select>>>",
@@ -298,7 +298,7 @@
         "compliance_extension": "-target_qps.<<<offline_target_qps>>>"
       },
       "server": {
-        "activation_count": "<<<recommended_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_offline_server_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
@@ -309,7 +309,7 @@
         "compliance_extension": "-target_qps.<<<server_target_qps>>>"
       },
       "singlestream": {
-        "activation_count": "1",
+        "recommended_activation_count": "1",
         "device_ids": "0",
         "batch_size": "1",
         "ck_env": [
@@ -821,6 +821,7 @@
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
+    "activation_count": "<<<recommended_activation_count>>>",
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_opt": "0",
     "check_experiment_dir": "",
