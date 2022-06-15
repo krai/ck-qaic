@@ -37,7 +37,7 @@
       "threads_per_queue.<<<threads_per_queue>>>"
     ],
     "record_uoa_parts": [
-      "mlperf_v2.0",
+      "mlperf_v2.1",
       "<<<division>>>",
       "<<<sut>>>",
       "<<<inference_engine>>>",
