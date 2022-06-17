@@ -37,7 +37,7 @@
 #
 ###############################################################################
 FROM krai/ck.common.centos7 AS preamble
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
 
 ###############################################################################
 # BUILDER STAGE
@@ -47,19 +47,34 @@ ARG CK_QAIC_CHECKOUT=main
 #
 ###############################################################################
 FROM preamble AS builder
-ARG CK_QAIC_CHECKOUT=main
+ARG CK_QAIC_CHECKOUT
+ARG GCC_MAJOR_VERSION
 
 # Update CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} \
  && ck pull all
 
 #-----------------------------------------------------------------------------#
-# Step 1. Install explicit Python dependencies.
+# Step 1. Install explicit Python dependencies (and their dependencies).
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=python-package,onnx --quiet \
- && ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet \
- && ck install package --tags=lib,python-package,transformers --force_version=2.4.0 \
- && ck install package --tags=lib,python-package,tensorflow --quiet
+
+# Install Rust compiler >= 1.32.0 to build tokenizers==0.0.11 for Python >= 3.10.
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/install_rust.sh \
+ && sh /tmp/install_rust.sh -y \
+ && source /home/krai/.bashrc \
+ && scl enable devtoolset-${GCC_MAJOR_VERSION} \
+    "ck install package --tags=lib,python-package,transformers --force_version=2.4.0"
+
+# Install Protobuf compiler/headers and CMake >= 3.1 to build onnx.
+RUN sudo yum install -y protobuf-c-compiler protobuf-devel \
+ && sudo yum install -y http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-1.noarch.rpm \
+ && sudo yum install -y cmake3 && sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
+RUN source /home/krai/.bashrc && ${CK_PYTHON} -m pip install pybind11==2.2.4
+RUN scl enable devtoolset-${GCC_MAJOR_VERSION} \
+    "pybind_DIR=/home/krai/.local/lib/python3.10/site-packages/pybind11/share/cmake/pybind11 CMAKE_PREFIX_PATH=/home/krai/.local/lib/python3.10/site-packages/pybind11 ck install package --tags=python-package,onnx --force_version=1.8.0 --quiet"
+
+RUN ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet \
+ && ck install package --tags=lib,python-package,tensorflow --force_version=2.9.1 --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 2. Install implicit Python dependencies.
