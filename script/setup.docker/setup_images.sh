@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # Copyright (c) 2022 Krai Ltd.
 #
@@ -30,28 +32,36 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-FROM ubuntu:20.04
+function exit_if_error() {
+  message="$1"
+  if [ "${?}" != "0" ]; then
+    echo ""
+    echo "ERROR: ${message}"
+    exit 1
+  fi
+}
 
-LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
+_SDK_VER=${SDK_VER:-1.7.0.34}
+_SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
 
-ARG TIMEZONE
+# Build SDK-independent base image.
+DOCKER_OS=${_DOCKER_OS} $(ck find ck-qaic:docker:base)/build.base.sh
+exit_if_error "Failed to build SDK-independent base image!"
+docker run --rm krai/base:${_DOCKER_OS}_latest
+exit_if_error "Failed to test SDK-independent base image!"
 
-# Use the Bash shell.
-SHELL ["/bin/bash", "-c"]
+# Build SDK-independent common image.
+DOCKER_OS=${_DOCKER_OS} $(ck find ck-qaic:docker:base)/build.ck.sh
+exit_if_error "Failed to build SDK-independent common image!"
+docker run --rm krai/ck.common:${_DOCKER_OS}_latest
+exit_if_error "Failed to test SDK-independent common image!"
 
-# Allow stepping into the Bash shell interactively.
-ENTRYPOINT ["/bin/bash", "-c"]
+# Build SDK-dependent base image.
+DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} $(ck find ck-qaic:docker:base)/build.qaic.sh
+exit_if_error "Failed to build SDK-dependent base image!"
+export SDK_VER=${_SDK_VER} && docker run --privileged --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}
+exit_if_error "Failed to test SDK-dependent base image!"
 
-# Set the timezone.
-RUN rm -rf /etc/localtime \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && ls -la /etc/localtime
-
-RUN apt update -y \
- && apt install -y make patch git wget zip unzip python python3 python3-dev python3-pip ca-certificates sudo pciutils libssl-dev libffi-dev numactl ipmitool lm-sensors acl vim libbz2-dev lzma libncurses5 \
- && apt clean all
-
-# Start IPMI tool.
-#RUN sudo systemctl enable ipmi.service
-
-CMD ["cat /etc/os-release"]
+echo
+echo "Done (building all images)."

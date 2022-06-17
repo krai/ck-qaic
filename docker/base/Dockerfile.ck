@@ -37,7 +37,7 @@ ARG DOCKER_OS
 ARG BASE_IMAGE=krai/base:${DOCKER_OS}_latest
 FROM $BASE_IMAGE AS preamble
 
-ARG GCC_MAJOR_VER=11
+ARG GCC_MAJOR_VER
 ARG PYTHON_VER
 ARG CK_VER
 
@@ -73,15 +73,16 @@ RUN git config --global user.name ${GIT_USER} && git config --global user.email 
 ###############################################################################
 FROM preamble AS builder
 
+ARG CK_QAIC_CHECKOUT
+
 ARG GCC_MAJOR_VER
+
 ARG PYTHON_VER
 ARG PYTHON_MAJOR_VER
 ARG PYTHON_MINOR_VER
 ARG PYTHON_PATCH_VER
 
 ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
-
-ARG CK_QAIC_CHECKOUT
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
@@ -90,12 +91,11 @@ RUN /bin/bash -l -c  \
   echo "export PYTHON_PATCH_VER=${PYTHON_PATCH_VER}" >> /home/krai/.bashrc' \
  && source /home/krai/.bashrc \
  && /bin/bash -l -c \
- 'echo "export CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc' \
+ 'echo "export CK_PYTHON=${CK_PYTHON}" >> /home/krai/.bashrc' \
 
 # Install Collective Knowledge (CK).
-RUN cd ${CK_ROOT} \
- && source /home/krai/.bashrc \
- && ${CK_PYTHON} setup.py install --user \
+RUN source /home/krai/.bashrc \
+ && cd ${CK_ROOT} && ${CK_PYTHON} ${CK_ROOT}/setup.py install --user \
  && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
  && chmod -R g+rx /home/krai/.local \
  && ${CK_PYTHON} -m pip install pyyaml
