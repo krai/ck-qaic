@@ -78,6 +78,9 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
 
+# Install libncurses5.
+#RUN echo "Y" | sudo apt install libncurses5
+
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the ResNet50 workload.
 #-----------------------------------------------------------------------------#

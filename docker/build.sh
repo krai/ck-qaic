@@ -163,6 +163,7 @@ read -d '' CMD <<END_OF_CMD
   time docker build ${_NO_CACHE} \
   --build-arg BASE_IMAGE=${_BASE_IMAGE} \
   --build-arg SDK_VER=${_SDK_VER} \
+  --build-arg BASE_OS=${_BASE_OS} \
   -t ${DOCKER_IMAGE_NAME}:${_BASE_OS}_${_SDK_VER} \
   -f Dockerfile.pc .
 END_OF_CMD

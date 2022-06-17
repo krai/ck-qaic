@@ -65,6 +65,12 @@ RUN ck install package --tags=python-package,onnx --quiet \
 #-----------------------------------------------------------------------------#
 # Step 2. Install implicit Python dependencies.
 #-----------------------------------------------------------------------------#
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+
 RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user onnx-simplifier \
  && ${CK_PYTHON} -m pip install --user tokenization \

@@ -52,6 +52,7 @@ FROM krai/ck.bert:${BASE_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD
+ARG CK_QAIC_PERCENTILE_CALIBRATION
 
 #-----------------------------------------------------------------------------#
 # Step 1. Copy the QAIC SDKs (needed for compilation).
@@ -87,6 +88,9 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
 # --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
+
+# Install libncurses5.
+#RUN echo "Y" | sudo apt install libncurses5
 
 # Compile the bert-99 workload (separately for each scenario).
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
