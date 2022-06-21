@@ -166,7 +166,7 @@
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "dataset_size": "5000",
-    "docker_image": "krai/mlperf.<<<model_name>>>.centos7:<<<sdk>>> ",
+    "docker_image": "krai/mlperf.<<<model_name>>>:centos_<<<sdk>>> ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
