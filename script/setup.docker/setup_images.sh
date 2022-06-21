@@ -63,5 +63,37 @@ exit_if_error "Failed to build SDK-dependent base image!"
 export SDK_VER=${_SDK_VER} && docker run --privileged --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}
 exit_if_error "Failed to test SDK-dependent base image!"
 
+# Build ResNet50
+# Build ImageNet image
+DATASETS_DIR=/local/mnt/workspace/datasets $(ck find ck-qaic:docker:imagenet)/build.sh
+exit_if_error "Failed to build ImageNet image!"
+docker run --rm imagenet:latest
+exit_if_error "Failed to test ImageNet image!"
+
+# Build SDK-independent image
+DOCKER_OS=${_DOCKER_OS} $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
+exit_if_error "Failed to build SDK-independent ResNet50 image!"
+docker run -rm krai/ck.resnet50:${_DOCKER_OS}_latest
+exit_if_error "Failed to test SDK-independent ResNet50 image!"
+
+# Build SDK-dependent image
+DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} $(ck find repo:ck-qaic)/docker/build.sh resnet50
+exit_if_error "Failed to build SDK-dependent ResNet50 image!"
+export SDK_VER=${_SDK_VER} && docker run --rm krai/mlperf.resnet50.full:${_DOCKER_OS}_${_SDK_VER}
+exit_if_error "Failed to test SDK-dependent ResNet50 image!"
+
+# Build BERT
+# Build SDK-independent image
+DOCKER_OS=${_DOCKER_OS} $(ck find repo:ck-qaic)/docker/build_ck.sh bert
+exit_if_error "Failed to build SDK-independent BERT image!"
+docker run -rm krai/ck.bert:${_DOCKER_OS}_latest
+exit_if_error "Failed to test SDK-independent BERT image!"
+
+# Build SDK-dependent image
+DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} $(ck find repo:ck-qaic)/docker/build.sh bert
+exit_if_error "Failed to build SDK-dependent BERT image!"
+export SDK_VER=${_SDK_VER} && docker run --rm krai/mlperf.bert:${_DOCKER_OS}_${_SDK_VER}
+exit_if_error "Failed to test SDK-dependent BERT image!"
+
 echo
 echo "Done (building all images)."
