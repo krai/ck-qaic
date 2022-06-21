@@ -118,8 +118,7 @@ RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
 # Detect C/C++ compiler (gcc).
-#RUN echo "0" | ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
-RUN ck detect soft:compiler.gcc --full_path=$(which ${CK_CC})
+RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
 
 # Install CMake.
 RUN ck install package --tags=tool,cmake,downloaded --quiet

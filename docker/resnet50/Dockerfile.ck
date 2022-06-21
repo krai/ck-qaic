@@ -41,8 +41,8 @@
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT
-ARG BASE_OS
-FROM krai/ck.common:${BASE_OS}_latest AS preamble
+ARG DOCKER_OS
+FROM krai/ck.common:${DOCKER_OS}_latest AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]

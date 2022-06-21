@@ -39,9 +39,9 @@
 #FROM qran-centos7:1.6.80
 # NB: Setting FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
-ARG BASE_OS
+ARG DOCKER_OS
 ARG CK_QAIC_CHECKOUT
-FROM krai/ck.common:${BASE_OS}_latest AS preamble
+FROM krai/ck.common:${DOCKER_OS}_latest AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]

@@ -40,10 +40,9 @@
 # NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
-ARG BASE_OS
+ARG DOCKER_OS
 ARG SDK_VER
-FROM $BASE_IMAGE:${BASE_OS}_${SDK_VER} AS preamble
-#FROM $BASE_IMAGE AS preamble
+FROM $BASE_IMAGE:${DOCKER_OS}_${SDK_VER} AS preamble
 
 ARG CK_QAIC_CHECKOUT
 
@@ -60,7 +59,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.resnet50:${BASE_OS}_latest AS builder
+FROM krai/ck.resnet50:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD

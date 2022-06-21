@@ -43,7 +43,6 @@ fi
 MODEL=$1
 echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
-_BASE_OS=${BASE_OS:-centos}
 _DOCKER_OS=${DOCKER_OS:-centos}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 # Use Python >= 3.7.
@@ -63,8 +62,8 @@ echo "Image: 'krai/mlperf.${_DOCKER_OS}.${MODEL}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 docker build ${_NO_CACHE} \
+--build-arg DOCKER_OS=${_DOCKER_OS} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
---build-arg BASE_OS=${_BASE_OS} \
 --build-arg PYTHON_MAJOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f1) \
 --build-arg PYTHON_MINOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f2) \
 --build-arg PYTHON_PATCH_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f3) \
