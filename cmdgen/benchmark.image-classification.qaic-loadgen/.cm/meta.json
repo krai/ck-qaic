@@ -178,7 +178,7 @@
         "recommended_performance_buffer_size": "1024",
         "workload": "###",
         "model_name": "resnet50",
-	"base_os": "centos",
+	"docker_os": "centos",
         "model_tags": [
           "###",
           "bs.<<<batch_size>>>"
@@ -198,7 +198,7 @@
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_dir_default": "/data/image-classification.qaic-loadgen.cache",
     "dataset_size": "50000",
-    "docker_image" : "krai/mlperf.<<<model_name>>>.full:<<<base_os>>>_<<<sdk>>> ",
+    "docker_image" : "krai/mlperf.<<<model_name>>>.full:<<<docker_os>>>_<<<sdk>>> ",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/image-classification-qaic-loadgen/tmp/preprocessed",
     "max_wait": "1800",
     "program_name": "image-classification-qaic-loadgen",
