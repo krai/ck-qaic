@@ -118,7 +118,8 @@ RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
 # Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+RUN if [[ ${DOCKER_OS} == "centos" ]]; then ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}'); fi
+RUN if [[ ${DOCKER_OS} == "ubuntu" ]]; then ck detect soft:compiler.gcc --full_path=$(which ${CK_CC}); fi
 
 # Install CMake.
 RUN ck install package --tags=tool,cmake,downloaded --quiet
