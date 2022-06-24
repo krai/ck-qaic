@@ -1,16 +1,42 @@
-## Initialize the Docker Setup
-### On Ubuntu-20.04
-`WORKSPACE=/home bash ubuntu-20.04.sh`
+# Qualcomm Cloud AI - MLPerf Inference
 
-### On CentOS-7
-`WORKSPACE=/home bash centos7.sh`
+## Docker setup (for Datacenter and Edge servers)
 
-### Initialize the CK Setup (common for all OS) 
-`WORKSPACE=/home bash ck_init.sh`
+### Host OS dependent
 
-## Create and Launch the Benchmark docker Containers
+#### Ubuntu 20.04 host
+```
+WORKSPACE=/local/mnt/workspace bash ubuntu-20.04.sh
+```
+
+#### CentOS 7 host
+```
+WORKSPACE=/local/mnt/workspace bash centos7.sh
+```
+
+### Host OS independent
+
+#### Collective Knowledge environment
+```
+WORKSPACE=/local/mnt/workspace bash ck_init.sh
+```
+
+### Target OS dependent, SDK dependent
+
+#### Create Docker images
+
+```
+DOCKER_OS=ubuntu SDK_VER=1.7.0.34 bash setup_images.sh
+```
+
+### Further info
+
+#### Current workloads
 
 1. [Image Classification](https://github.com/krai/ck-qaic/tree/main/docker/resnet50)
-2. [Object Detection Small](https://github.com/krai/ck-qaic/tree/main/docker/ssd-mobilenet)
-3. [Object Detection Large](https://github.com/krai/ck-qaic/tree/main/docker/ssd-resnet34)
-4. [Language Processing](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
+1. [Natural Language Processing](https://github.com/krai/ck-qaic/blob/main/docker/bert/README.md)
+
+#### Deprecated workloads
+
+1. [Object Detection Small](https://github.com/krai/ck-qaic/tree/main/docker/ssd-mobilenet)
+1. [Object Detection Large](https://github.com/krai/ck-qaic/tree/main/docker/ssd-resnet34)
