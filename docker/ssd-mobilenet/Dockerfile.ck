@@ -39,8 +39,9 @@
 #FROM qran-centos7:1.6.80
 # NB: Setting FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
+ARG DOCKER_OS
 ARG CK_QAIC_CHECKOUT
-FROM krai/ck.common.centos7 AS preamble
+FROM krai/ck.common:${DOCKER_OS}_latest AS preamble
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -63,7 +64,7 @@ RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull al
 
 # Install implicit Python dependencies.
 RUN source /home/krai/.bashrc \
- && ${CK_PYTHON} -m pip install --user pybind11 onnx-simplifier
+ && ${CK_PYTHON} -m pip install --user pybind11 protobuf==3.19.4 onnx-simplifier==0.3.7
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic

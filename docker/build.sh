@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 #
 # Copyright (c) 2021-2022 Krai Ltd.
@@ -45,13 +45,22 @@ MODEL=$1
 
 echo "Building image for '${MODEL}' ..."
 
-_BASE_OS=${BASE_OS:-centos7}
-_BASE_IMAGE=${BASE_IMAGE:-krai/qaic.${_BASE_OS}}
+_DOCKER_OS=${DOCKER_OS:-centos}
+_BASE_IMAGE=${BASE_IMAGE:-krai/qaic}
 _SDK_VER=${SDK_VER:-1.6.80}
+_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+
+_CK_QAIC_PCV=${CK_QAIC_PCV:-''}
+_CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
+
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 _OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 _NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 _SAVE_IMAGE=${SAVE_IMAGE:-no}
+
+QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
+_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
+_USER_ID=${USER_ID:-2000}
 
 EXTRA_DOCKER_ARG=""
 
@@ -63,9 +72,9 @@ if [[ ${MODEL} == "resnet50" ]]; then
   else
     _IMAGENET_SUFFIX="min"
   fi
-  DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_IMAGENET_SUFFIX}.${_BASE_OS}"
+  DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_IMAGENET_SUFFIX}"
 else
-  DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}.${_BASE_OS}"
+  DOCKER_IMAGE_NAME="krai/mlperf.${MODEL}"
 fi
 
 if [[ ${MODEL} == "ssd-resnet34" ]]; then
@@ -73,13 +82,6 @@ if [[ ${MODEL} == "ssd-resnet34" ]]; then
 else
   HASH_REPLACE=""
 fi
-_CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
-_CK_QAIC_PCV=${CK_QAIC_PCV:-''}
-_CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
-
-QAIC_GROUP_ID=$(getent group qaic | cut -d: -f3)
-_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
-_USER_ID=${USER_ID:-2000}
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
   _DEBUG_BUILD=yes
@@ -92,16 +94,16 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 if [[ ${CLEAN_MODEL_BASE} == 'yes' ]]; then
-  docker image rm krai/ck.${MODEL}.${_BASE_OS} --force
+  docker image rm krai/ck.${MODEL}:${_DOCKER_OS}_latest --force
 fi
 
-if [[ "$(docker images -q krai/qaic.${_BASE_OS}:${_SDK_VER} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/qaic:${_DOCKER_OS}_${_SDK_VER} 2> /dev/null)" == "" ]]; then
   echo "Building base SDK image for v${_SDK_VER} ...";
   cd $(ck find ck-qaic:docker:base) && SDK_VER=${_SDK_VER} ./build.qaic.sh
   exit_if_error
 fi
 
-if [[ "$(docker images -q krai/ck.${MODEL}.${_BASE_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/ck.${MODEL}:${_DOCKER_OS}_latest 2> /dev/null)" == "" ]]; then
   echo "Building base CK image for '${MODEL}' ...";
   cd $(ck find ck-qaic:docker:base) && IMAGENET=${_IMAGENET} ../build_ck.sh ${MODEL}
   exit_if_error
@@ -114,12 +116,13 @@ ${HASH_REPLACE} \
 time docker build ${_NO_CACHE} \
 --build-arg BASE_IMAGE=${_BASE_IMAGE} \
 --build-arg SDK_VER=${_SDK_VER} \
+--build-arg DOCKER_OS=${_DOCKER_OS} \
 ${EXTRA_DOCKER_ARG} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg CK_QAIC_PCV=${_CK_QAIC_PCV} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
--t ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} \
--f Dockerfile.${_BASE_OS} .
+-t ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} \
+-f Dockerfile.mlperf .
 END_OF_CMD
 echo "Running: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then
@@ -128,10 +131,10 @@ fi
 exit_if_error
 
 if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
-  if [[ "$(docker images -q ${DOCKER_IMAGE_NAME}:${_SDK_VER}_PC 2> /dev/null)" == "" ]]; then
+  if [[ "$(docker images -q ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}_PC 2> /dev/null)" == "" ]]; then
 
     CONTAINER=$(docker run -dt --privileged --user=krai:kraig --group-add $(getent group qaic \
-      | cut -d: -f3) --rm ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} bash)
+      | cut -d: -f3) --rm ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} bash)
     if [[ ${MODEL} == "bert" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,bert-99 --force'
       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
@@ -156,13 +159,14 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
         ssd-mobilenet ssd-mobilenet.pcie.16nsp.offline ${_SDK_VER};'
     fi
     docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
-    docker commit $CONTAINER ${DOCKER_IMAGE_NAME}:${_SDK_VER}'_PC'
+    docker commit $CONTAINER ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}'_PC'
 read -d '' CMD <<END_OF_CMD
   cd $(ck find ck-qaic:docker:${MODEL}) && \
   time docker build ${_NO_CACHE} \
   --build-arg BASE_IMAGE=${_BASE_IMAGE} \
   --build-arg SDK_VER=${_SDK_VER} \
-  -t ${DOCKER_IMAGE_NAME}:${_SDK_VER} \
+  --build-arg DOCKER_OS=${_DOCKER_OS} \
+  -t ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER} \
   -f Dockerfile.pc .
 END_OF_CMD
     echo "Running: ${CMD}"
@@ -173,7 +177,7 @@ END_OF_CMD
 fi
 
 if [[ ${_SAVE_IMAGE} == 'yes' ]]; then
-  docker image save ${DOCKER_IMAGE_NAME}:${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
+  docker image save ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} -o $HOME/$MODEL'.'${_SDK_VER}
 fi
 
 echo

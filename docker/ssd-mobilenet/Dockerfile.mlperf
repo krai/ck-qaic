@@ -37,11 +37,12 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Setting FROM from ARGs only works starting with Docker 1.17. 
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
+ARG DOCKER_OS
 ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM $BASE_IMAGE:${DOCKER_OS}_${SDK_VER} AS preamble
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD
 
@@ -58,8 +59,8 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.ssd-resnet34.centos7 AS builder
-ARG CK_QAIC_PCV=9980
+FROM krai/ck.ssd-mobilenet:${DOCKER_OS}_latest AS builder
+ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD
 
@@ -80,27 +81,37 @@ RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
-# The steps below are SSD-ResNet34 specific.
+# The steps below are SSD-MobileNet specific.
 #-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
-# Step 5. Prepare the SSD-ResNet34 workload.
+# Step 5. Prepare the SSD-MobileNet workload.
 #-----------------------------------------------------------------------------#
 # Use a precalibrated profile.
-ADD ssd-resnet34/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1
-RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
---full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1/profile.yaml \
---extra_tags=detected,ssd_resnet34
+#ADD ssd-mobilenet/ /home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/
+#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
+#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.4/profile.yaml \
+#--extra_tags=detected,ssd_mobilenet,bs.4
+#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
+#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
+#--extra_tags=detected,ssd_mobilenet,bs.1
+
+# Generate calibration profiles.
+RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
+RUN ck install package --tags=profile,ssd_mobilenet,bs.2 --quiet
+RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.multistream
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
+RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then \
+ck clean env --tags=dataset,coco.2017,train --force \
+&& rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -109,10 +120,12 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,onnx,no-nms)/* \
-$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
-$(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
-touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
+$(ck locate env --tags=model,pytorch)/* \
+$(ck locate env --tags=python-package,torch)/* \
+$(ck locate env --tags=profile,bs.1)/*.raw \
+$(ck locate env --tags=profile,bs.4)/*.raw \
+$(ck locate env --tags=preprocessed,calibration)/* \
+$(ck locate env --tags=python-package,onnx,for.qaic)/*; fi
 
 ###############################################################################
 # FINAL STAGE

@@ -37,13 +37,14 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
+ARG DOCKER_OS
 ARG SDK_VER
-FROM $BASE_IMAGE:$SDK_VER AS preamble
+FROM $BASE_IMAGE:${DOCKER_OS}_${SDK_VER} AS preamble
+
 ARG CK_QAIC_CHECKOUT
-ARG DEBUG_BUILD
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
@@ -58,13 +59,16 @@ ENTRYPOINT ["/bin/bash", "-c"]
 # which can be simply copied into the final image.
 #
 ###############################################################################
-FROM krai/ck.ssd-mobilenet.centos7 AS builder
+FROM krai/ck.resnet50:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
+
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
+
+ENV PATH "/usr/local/bin:${PATH}"
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
@@ -73,58 +77,51 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
 
-#-----------------------------------------------------------------------------#
-# Step 2. Build the MLPerf LoadGen API.
-#-----------------------------------------------------------------------------#
-RUN ck compile program:object-detection-qaic-loadgen --quiet
+# Install libncurses5.
+#RUN echo "Y" | sudo apt install libncurses5
 
 #-----------------------------------------------------------------------------#
-# The steps above are common for SSD-ResNet34 and SSD-MobileNet-v1.
-# The steps below are SSD-MobileNet specific.
+# Step 2. Prepare the ResNet50 workload.
 #-----------------------------------------------------------------------------#
+# Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
+# to work around a current limitation in the toolchain.
 
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the SSD-MobileNet workload.
-#-----------------------------------------------------------------------------#
-# Use a precalibrated profile.
-#ADD ssd-mobilenet/ /home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/
-#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.4/profile.yaml \
-#--extra_tags=detected,ssd_mobilenet,bs.4
-#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
-#--extra_tags=detected,ssd_mobilenet,bs.1
-
-# Generate calibration profiles.
-RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
-RUN ck install package --tags=profile,ssd_mobilenet,bs.2 --quiet
-RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
+# Use precalibrated profiles.
+#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
+#--extra_tags=resnet50,mlperf.option1,bs.8
+#RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
+#--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
+#--extra_tags=resnet50,mlperf.option1,bs.1
+# Calibrate the workload for bs.1 and bs.8
+RUN ck install package --tags=profile,resnet50,bs.1 --quiet
+RUN ck install package --tags=profile,resnet50,bs.8 --quiet
+RUN ck install package --tags=profile,resnet50,bs.4 --quiet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline --quiet
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
+RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream --quiet
+
+#-----------------------------------------------------------------------------#
+# Step 3. Compile the Image Classification program.
+#-----------------------------------------------------------------------------#
+RUN ck compile program:image-classification-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then \
-ck clean env --tags=dataset,coco.2017,train --force \
-&& rm -rf \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=python-package,tensorflow)/* \
 $(ck locate env --tags=lib,protobuf-host)/src \
 $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,pytorch)/* \
-$(ck locate env --tags=python-package,torch)/* \
-$(ck locate env --tags=profile,bs.1)/*.raw \
-$(ck locate env --tags=profile,bs.4)/*.raw \
-$(ck locate env --tags=preprocessed,calibration)/* \
-$(ck locate env --tags=python-package,onnx,for.qaic)/*; fi
+$(ck locate env --tags=model,fix_input_shape)/*; fi
 
 ###############################################################################
 # FINAL STAGE
@@ -136,8 +133,9 @@ FROM preamble AS final
 COPY --from=builder /home/krai/CK       /home/krai/CK
 COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
-COPY --from=builder /home/krai/.local   /home/krai/.local
-COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
+COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
+COPY --from=builder /home/krai/.local /home/krai/.local
+COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
 
 #-----------------------------------------------------------------------------#
 # Show the status of QAIC devices.

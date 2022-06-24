@@ -36,7 +36,8 @@
 # In this stage, only perform steps that benefit the final image.
 #
 ###############################################################################
-FROM krai/ck.common.centos7 AS preamble
+ARG DOCKER_OS
+FROM krai/ck.common:${DOCKER_OS}_latest AS preamble
 ARG CK_QAIC_CHECKOUT=main
 
 ###############################################################################
@@ -64,6 +65,12 @@ RUN ck install package --tags=python-package,onnx --quiet \
 #-----------------------------------------------------------------------------#
 # Step 2. Install implicit Python dependencies.
 #-----------------------------------------------------------------------------#
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+
 RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user onnx-simplifier \
  && ${CK_PYTHON} -m pip install --user tokenization \

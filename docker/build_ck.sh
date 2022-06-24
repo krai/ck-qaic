@@ -43,15 +43,17 @@ fi
 MODEL=$1
 echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
-_BASE_OS=${BASE_OS:-centos7}
-_DOCKER_OS=${DOCKER_OS:-centos7}
+_DOCKER_OS=${DOCKER_OS:-centos}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+# Use Python >= 3.7.
+_PYTHON_VER=${PYTHON_VER:-3.8.13}
+
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
 fi
 
-if [[ "$(docker images -q krai/ck.common.${_BASE_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q krai/ck.common 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.ck.sh
   exit_if_error
 fi
@@ -60,8 +62,12 @@ echo "Image: 'krai/mlperf.${_DOCKER_OS}.${MODEL}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 docker build ${_NO_CACHE} \
+--build-arg DOCKER_OS=${_DOCKER_OS} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
--t krai/ck.${MODEL}.${_DOCKER_OS} \
+--build-arg PYTHON_MAJOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f1) \
+--build-arg PYTHON_MINOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f2) \
+--build-arg PYTHON_PATCH_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f3) \
+-t krai/ck.${MODEL}:${_DOCKER_OS}_latest \
 -f Dockerfile.ck  .
 END_OF_CMD
 echo "Command: ${CMD}"

@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos7}
+_DOCKER_OS=${DOCKER_OS:-centos}
 
 if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
@@ -62,12 +62,16 @@ cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
+--build-arg PYTHON_MAJOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f1) \
+--build-arg PYTHON_MINOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f2) \
+--build-arg PYTHON_PATCH_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f3) \
 --build-arg CK_VER=${_CK_VER} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg GROUP_ID=${_GROUP_ID} \
 --build-arg USER_ID=${_USER_ID} \
--f Dockerfile.ck.${_DOCKER_OS} \
--t krai/ck.common.${_DOCKER_OS} .
+--build-arg DOCKER_OS=${_DOCKER_OS} \
+-f Dockerfile.ck \
+-t krai/ck.common:${_DOCKER_OS}_latest .
 END_OF_CMD
 echo "Command: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then

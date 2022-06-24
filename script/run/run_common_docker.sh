@@ -41,25 +41,25 @@ enabled ssd_resnet34 && kill_existing_container "$CONTAINER_ID_SSD_RESNET34"
 enabled ssd_mobilenet &&  kill_existing_container "$CONTAINER_ID_SSD_MOBILENET"
 
 if enabled bert; then
-  CONTAINER_ID_BERT=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=bert --experiment_dir`
+  CONTAINER_ID_BERT=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=bert --docker_os=$DOCKER_OS --experiment_dir`
   exit_if_invalid_container  "$CONTAINER_ID_BERT"
   echo  "$CONTAINER_ID_BERT created"
 fi
 
 if enabled resnet50; then
-  CONTAINER_ID_RESNET50=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=resnet50 --experiment_dir`
+  CONTAINER_ID_RESNET50=`ck run cmdgen:benchmark.image-classification.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=resnet50 --docker_os=$DOCKER_OS --experiment_dir`
   exit_if_invalid_container "$CONTAINER_ID_RESNET50"
   echo  "$CONTAINER_ID_RESNET50 created"
 fi
 
 if enabled ssd_resnet34; then
-  CONTAINER_ID_SSD_RESNET34=`ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=ssd-resnet34 --experiment_dir`
+  CONTAINER_ID_SSD_RESNET34=`ck run cmdgen:benchmark.object-detection-large.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=ssd-resnet34 --docker_os=$DOCKER_OS --experiment_dir`
   exit_if_invalid_container "$CONTAINER_ID_SSD_RESNET34"
   echo  "$CONTAINER_ID_SSD_RESNET34 created"
 fi
 
 if enabled ssd_mobilenet; then
-  CONTAINER_ID_SSD_MOBILENET=`ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=ssd-mobilenet --experiment_dir`
+  CONTAINER_ID_SSD_MOBILENET=`ck run cmdgen:benchmark.object-detection-small.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=ssd-mobilenet --docker_os=$DOCKER_OS --experiment_dir`
   exit_if_invalid_container "$CONTAINER_ID_SSD_MOBILENET"
   echo  "$CONTAINER_ID_SSD_MOBILENET created"
 fi

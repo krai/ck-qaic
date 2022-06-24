@@ -33,10 +33,11 @@
 ###############################################################################
 # PREABMLE STAGE
 ###############################################################################
-ARG BASE_IMAGE=krai/base.centos7
+ARG DOCKER_OS
+ARG BASE_IMAGE=krai/base:${DOCKER_OS}_latest
 FROM $BASE_IMAGE AS preamble
 
-ARG GCC_MAJOR_VER=11
+ARG GCC_MAJOR_VER
 ARG PYTHON_VER
 ARG CK_VER
 
@@ -72,26 +73,32 @@ RUN git config --global user.name ${GIT_USER} && git config --global user.email 
 ###############################################################################
 FROM preamble AS builder
 
-ARG GCC_MAJOR_VER
-ARG PYTHON_VER
-
 ARG CK_QAIC_CHECKOUT
+
+ARG GCC_MAJOR_VER
+
+ARG PYTHON_VER
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
 
 # Work out the subversions of Python and place them into the Bash resource file.
 RUN /bin/bash -l -c  \
- 'echo export PYTHON_MAJOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f1)" >> /home/krai/.bashrc;\
-  echo export PYTHON_MINOR_VER="$(echo ${PYTHON_VER} | cut -d '.' -f2)" >> /home/krai/.bashrc;\
-  echo export PYTHON_PATCH_VER="$(echo ${PYTHON_VER} | cut -d '.' -f3)" >> /home/krai/.bashrc' \
+ 'echo "export PYTHON_MAJOR_VER=${PYTHON_MAJOR_VER}" >> /home/krai/.bashrc;\
+  echo "export PYTHON_MINOR_VER=${PYTHON_MINOR_VER}" >> /home/krai/.bashrc;\
+  echo "export PYTHON_PATCH_VER=${PYTHON_PATCH_VER}" >> /home/krai/.bashrc' \
  && source /home/krai/.bashrc \
  && /bin/bash -l -c \
- 'echo export CK_PYTHON="python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}" >> /home/krai/.bashrc'
+ 'echo "export CK_PYTHON=${CK_PYTHON}" >> /home/krai/.bashrc' \
 
 # Install Collective Knowledge (CK).
-RUN cd ${CK_ROOT} \
- && source /home/krai/.bashrc \
- && ${CK_PYTHON} setup.py install --user \
+RUN source /home/krai/.bashrc \
+ && cd ${CK_ROOT} && ${CK_PYTHON} ${CK_ROOT}/setup.py install --user \
  && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
- && chmod -R g+rx /home/krai/.local
+ && chmod -R g+rx /home/krai/.local \
+ && ${CK_PYTHON} -m pip install pyyaml
 
 # Explicitly create a CK experiment entry, a folder that will be mounted
 # (with '--volume=<folder_for_results>:/home/krai/CK_REPOS/local/experiment').
@@ -102,7 +109,7 @@ RUN ck create_entry --data_uoa=experiment --data_uid=bc0409fb61f0aa82 --path=${C
 
 # Pull CK repositories (including ck-mlperf and ck-env).
 RUN ck pull repo --url=https://github.com/krai/ck-qaic
-RUN cd $(ck find repo:ck-qaic) && git checkout --track origin/${CK_QAIC_CHECKOUT}
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT}
 
 # Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
 RUN source /home/krai/.bashrc \
@@ -111,7 +118,8 @@ RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
 
 # Detect C/C++ compiler (gcc).
-RUN ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}')
+RUN if [[ ${DOCKER_OS} == "centos" ]]; then ck detect soft:compiler.gcc --full_path=$(scl enable devtoolset-${GCC_MAJOR_VER} 'which ${CK_CC}'); fi
+RUN if [[ ${DOCKER_OS} == "ubuntu" ]]; then ck detect soft:compiler.gcc --full_path=$(which ${CK_CC}); fi
 
 # Install CMake.
 RUN ck install package --tags=tool,cmake,downloaded --quiet
