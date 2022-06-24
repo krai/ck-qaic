@@ -63,6 +63,12 @@ ARG CK_QAIC_CHECKOUT
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 
 # Install implicit Python dependencies.
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+
 RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user pybind11 protobuf==3.19.4 onnx-simplifier==0.3.7
 
