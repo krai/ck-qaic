@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DATASETS_DIR=${DATASETS_DIR:-/local/mnt/workspace/mlcommons/datasets}
+_DATASETS_DIR=${DATASETS_DIR:-/local/mnt/workspace/datasets}
 _IMAGENET_NAME=${IMAGENET_NAME:-imagenet}
 _IMAGENET_DIR=${_DATASETS_DIR}/${_IMAGENET_NAME}
 
@@ -42,9 +42,9 @@ if [[ ! -f "${_IMAGENET_DIR}/ILSVRC2012_val_00000001.JPEG" ]]; then
 fi
 
 # The image tag ('imagenet') and the path in that image ('/imagenet') are hardcoded on purpose.
-time docker build -t imagenet:latest ${_DATASETS_DIR} -f-<<EOF
+time docker build -t imagenet:latest ${_IMAGENET_DIR} -f-<<EOF
 FROM centos:7
-ADD ${_IMAGENET_NAME} /imagenet
+ADD / /imagenet
 EOF
 
 echo
