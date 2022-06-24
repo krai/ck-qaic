@@ -38,7 +38,7 @@ if [[ $# < 1 ]]; then
 fi
 
 function exit_if_error() {
-    if [ "${?}" != "0" ]; then exit 1; fi
+  if [ "${?}" != "0" ]; then exit 1; fi
 }
 
 MODEL=$1
