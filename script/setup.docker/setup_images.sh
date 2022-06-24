@@ -33,10 +33,9 @@
 #
 
 function exit_if_error() {
-  message="$1"
   if [ "${?}" != "0" ]; then
     echo ""
-    echo "ERROR: ${message}"
+    echo "ERROR: $1"
     exit 1
   fi
 }
@@ -84,7 +83,7 @@ exit_if_error "Failed to test SDK-dependent base image!"
 # Build benchmark images.
 #===============================================================================
 
-#=------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # ResNet50.
 #-------------------------------------------------------------------------------
 
@@ -97,7 +96,7 @@ exit_if_error "Failed to test ImageNet image!"
 # Build SDK-independent image.
 DOCKER_OS=${_DOCKER_OS} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} PYTHON_VER=${_PYTHON_VER} $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
 exit_if_error "Failed to build SDK-independent ResNet50 image!"
-docker run -rm krai/ck.resnet50:${_DOCKER_OS}_latest
+docker run --rm krai/ck.resnet50:${_DOCKER_OS}_latest
 exit_if_error "Failed to test SDK-independent ResNet50 image!"
 
 # Build SDK-dependent image.
@@ -106,14 +105,14 @@ exit_if_error "Failed to build SDK-dependent ResNet50 image!"
 export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/mlperf.resnet50.full:${_DOCKER_OS}_${_SDK_VER}
 exit_if_error "Failed to test SDK-dependent ResNet50 image!"
 
-#=------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # BERT.
 #-------------------------------------------------------------------------------
 
 # Build SDK-independent image.
 DOCKER_OS=${_DOCKER_OS} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} PYTHON_VER=${_PYTHON_VER} $(ck find repo:ck-qaic)/docker/build_ck.sh bert
 exit_if_error "Failed to build SDK-independent BERT image!"
-docker run -rm krai/ck.bert:${_DOCKER_OS}_latest
+docker run --rm krai/ck.bert:${_DOCKER_OS}_latest
 exit_if_error "Failed to test SDK-independent BERT image!"
 
 # Build SDK-dependent image.

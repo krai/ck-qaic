@@ -165,6 +165,7 @@
     "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model_name>>> ]]; then echo 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model_name>>>.'; else",
     "dataset_size": "10833",
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_os": "centos",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/packed-bert-qaic-loadgen/tmp/preprocessed",
     "hyphenated_model_name": "<<<model>>>",
     "max_wait": "50000",
