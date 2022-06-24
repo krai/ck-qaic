@@ -1,8 +1,8 @@
 #!/bin/bash
 
 _category="edge"
-DOCKER=${DOCKER:-'no'}
-WORKLOADS=${WORKLOADS:-"resnet50,ssd_mobilenet,ssd_resnet34,bert"}
+DOCKER=${DOCKER:-"no"}
+WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh
 

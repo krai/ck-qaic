@@ -92,8 +92,8 @@ Default: `DEFS_DIR=./defs`. A directory containing SUT-specific files `def_<SUT>
 ### `WORKLOADS`
 
 Defaults: 
-- `run_datacenter.sh`: `WORKLOADS="resnet50,ssd_resnet34,bert"`
-- `run_edge.sh`: `WORKLOADS="resnet50,ssd_mobilenet,ssd_resnet34,bert"`
+- `run_datacenter.sh`: `WORKLOADS="resnet50,bert"`
+- `run_edge.sh`: `WORKLOADS="resnet50,bert"`
 
 The list of workloads to run.
 

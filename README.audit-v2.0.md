@@ -27,7 +27,7 @@ uname -a
 Linux dyson 5.4.1-1.el7.elrepo.x86_64 #1 SMP Fri Nov 29 10:21:13 EST 2019 x86_64 x86_64 x86_64 GNU/Linux
 </pre></details>
 
-### [Confirm the presence of QAIC cards](https://github.com/krai/ck-qaic/tree/main/docker#confirm-the-presence-of-qaic-cards)
+### [Confirm the QAIC SDK version on the host](https://github.com/krai/ck-qaic/tree/main/docker#confirm-the-QAIC-SDK-version)
 ```
 /opt/qti-aic/tools/qaic-version-util
 ```
@@ -538,5 +538,5 @@ SUT=r282_z93_q2 SDK_VER=1.6.80 PRECHECK=yes SKIP_CHECK=yes RESOURCES_DIR=dummy_d
 ## [Benchmark](https://github.com/krai/ck-qaic/blob/main/script/run/README.md#q2) (with compliance tests)
 
 ```
-SUT=r282_z93_q2 SDK_VER=1.6.80 DOCKER=yes ./run_edge.sh
+SUT=r282_z93_q2 SDK_VER=1.6.80 DIVISION=closed DOCKER=yes ./run_edge.sh
 ```

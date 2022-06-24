@@ -37,7 +37,7 @@
       "threads_per_queue.<<<threads_per_queue>>>"
     ],
     "record_uoa_parts": [
-      "mlperf_v2.0",
+      "mlperf_v2.1",
       "<<<division>>>",
       "<<<sut>>>",
       "<<<inference_engine>>>",
@@ -275,7 +275,7 @@
     },
     "scenario": {
       "multistream": {
-        "activation_count": "<<<recommended_multistream_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_multistream_activation_count>>>",
         "batch_size": "<<<recommended_multistream_batch_size>>>",
         "num_setup_threads": "<<<recommended_multistream_num_setup_threads>>>",
         "queue_length": "<<<recommended_multistream_queue_length>>>",
@@ -290,7 +290,7 @@
         "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
       },
       "offline": {
-        "activation_count": "<<<recommended_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_offline_server_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline <<<?perf_offline_ck_env>>>",
         "input_select": "<<<recommended_input_select>>>",
@@ -298,7 +298,7 @@
         "compliance_extension": "-target_qps.<<<offline_target_qps>>>"
       },
       "server": {
-        "activation_count": "<<<recommended_activation_count>>>",
+        "recommended_activation_count": "<<<recommended_offline_server_activation_count>>>",
         "batch_size": "<<<recommended_batch_size>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE <<<?perf_server_ck_env>>>",
@@ -309,7 +309,7 @@
         "compliance_extension": "-target_qps.<<<server_target_qps>>>"
       },
       "singlestream": {
-        "activation_count": "1",
+        "recommended_activation_count": "1",
         "device_ids": "0",
         "batch_size": "1",
         "ck_env": [
@@ -339,6 +339,24 @@
     "sut": {
       "###": {
         "compiler_tags": "gcc"
+      },
+      "q4_edge": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "",
+        "power_server_port": "",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "50"
       },
       "aedk_15w": {
         "all_device_ids": "0",
@@ -821,6 +839,7 @@
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
   "defaults": {
+    "activation_count": "<<<recommended_activation_count>>>",
     "buffer_size": "<<<recommended_buffer_size>>>",
     "cache_opt": "0",
     "check_experiment_dir": "",
