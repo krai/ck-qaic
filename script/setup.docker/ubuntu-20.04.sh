@@ -94,8 +94,8 @@ sudo cp $DOCKER_DAEMON_JSON{,.bak}
 echo -e "{\n\t\"data-root\": \"$WORKSPACE_DOCKER\"\n}" | sudo tee -a $DOCKER_DAEMON_JSON
 cat $DOCKER_DAEMON_JSON
 
-sudo service docker start
-sudo docker system info
+sudo service docker restart
+sudo docker system info | grep "Docker Root Dir:"
 
 # Test.
 sudo docker --version

@@ -1,6 +1,8 @@
 #!/bin/bash
-#Usage: WORKSPACE=/local/mnt/workspace ./ck_init.sh
-WORKSPACE=${WORKSPACE:-$HOME/MLC2.0}
+
+# Usage: WORKSPACE=/local/mnt/workspace ./ck_init.sh
+
+WORKSPACE=${WORKSPACE:-/local/mnt/workspace}
 
 export CK_PYTHON=${CK_PYTHON:-$(which python3.8)}
 export CK_WORKSPACE=$WORKSPACE
