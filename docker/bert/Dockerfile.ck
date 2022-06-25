@@ -101,3 +101,5 @@ COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
 COPY --from=builder /home/krai/.local   /home/krai/.local
+
+CMD ["ck show env --tags=model,mlperf,qaic,bert-packed"]

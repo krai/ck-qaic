@@ -58,7 +58,9 @@ if [[ "$(docker images -q krai/ck.common 2> /dev/null)" == "" ]]; then
   exit_if_error
 fi
 
+echo
 echo "Image: 'krai/mlperf.${_DOCKER_OS}.${MODEL}'"
+echo
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:${MODEL}) && \
 docker build ${_NO_CACHE} \
@@ -77,4 +79,5 @@ fi
 exit_if_error
 
 echo
-echo "Done."
+echo "Done (building 'krai/mlperf.${_DOCKER_OS}.${MODEL}')"
+echo

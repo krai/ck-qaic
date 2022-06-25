@@ -46,7 +46,7 @@ _USER_ID=${USER_ID:-2000}
 _ARCH=${ARCH:-$(uname -m)}
 
 _SDK_DIR=${SDK_DIR:-/local/mnt/workspace/sdks}
-_SDK_VER=${SDK_VER:-1.6.80}
+_SDK_VER=${SDK_VER:-1.7.0.34}
 
 _APPS_SDK=${APPS_SDK:-"${_SDK_DIR}/qaic-apps-${_SDK_VER}.zip"}
 if [[ ! -f "${_APPS_SDK}" ]]; then

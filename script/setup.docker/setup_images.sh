@@ -41,12 +41,12 @@ function exit_if_error() {
 }
 
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
-_SDK_VER=${SDK_VER:-1.7.0.34}
-_WORKSPACE_DIR=${WORKSPACE_DIR:-"/local/mnt/workspace"}
-_DATASETS_DIR=${DATASETS_DIR:-"${WORKSPACE_DIR}/datasets"}
-_IMAGENET_NAME=${IMAGENET_NAME:-"imagenet"}
-_SDK_DIR=${SDK_DIR:-"${WORKSPACE_DIR}/sdks"}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-"main"}
+_WORKSPACE_DIR=${WORKSPACE_DIR:-"/local/mnt/workspace"}
+_DATASETS_DIR=${DATASETS_DIR:-"${_WORKSPACE_DIR}/datasets"}
+_IMAGENET_NAME=${IMAGENET_NAME:-"imagenet"}
+_SDK_DIR=${SDK_DIR:-"${_WORKSPACE_DIR}/sdks"}
+_SDK_VER=${SDK_VER:-1.7.0.34}
 _PYTHON_VER=${PYTHON_VER:-3.8.13}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 _CK_VER=${CK_VER:-2.6.1}
@@ -76,7 +76,7 @@ exit_if_error "Failed to test SDK-independent common image!"
 # Build SDK-dependent base image.
 DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.qaic.sh
 exit_if_error "Failed to build SDK-dependent base image!"
-export SDK_VER=${_SDK_VER} && docker run --privileged --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}
+export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}
 exit_if_error "Failed to test SDK-dependent base image!"
 
 #===============================================================================
@@ -122,4 +122,5 @@ export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group
 exit_if_error "Failed to test SDK-dependent BERT image!"
 
 echo
-echo "DONE (building all images)."
+echo "DONE (building ALL images)."
+echo

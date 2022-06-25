@@ -47,7 +47,7 @@ echo "Building image for '${MODEL}' ..."
 
 _DOCKER_OS=${DOCKER_OS:-centos}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic}
-_SDK_VER=${SDK_VER:-1.6.80}
+_SDK_VER=${SDK_VER:-1.7.0.34}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
 _CK_QAIC_PCV=${CK_QAIC_PCV:-''}
@@ -181,4 +181,5 @@ if [[ ${_SAVE_IMAGE} == 'yes' ]]; then
 fi
 
 echo
-echo "Done."
+echo "Done (building '${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix}')"
+echo

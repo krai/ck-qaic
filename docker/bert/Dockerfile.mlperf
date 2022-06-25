@@ -49,9 +49,9 @@ FROM ${BASE_IMAGE}:${DOCKER_OS}_${SDK_VER} AS preamble
 #
 ###############################################################################
 FROM krai/ck.bert:${DOCKER_OS}_latest AS builder
-ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
 ARG DEBUG_BUILD
+ARG CK_QAIC_PCV=9983
 ARG CK_QAIC_PERCENTILE_CALIBRATION
 
 #-----------------------------------------------------------------------------#

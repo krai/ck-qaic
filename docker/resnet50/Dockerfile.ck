@@ -37,7 +37,7 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Feeding FROM from ARGs only works starting with Docker 1.17. 
+# NB: Feeding FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG IMAGENET=full
 ARG CK_QAIC_CHECKOUT
@@ -89,9 +89,9 @@ RUN if [[ "${IMAGENET}" == "full" ]]; \
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
 # to work around a current limitation in the toolchain.
-RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet;
-RUN ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet;
-RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
+RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet \
+ && ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet \
+ && ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
 
 ###############################################################################
 # FINAL STAGE
@@ -106,3 +106,5 @@ COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG
 COPY --from=builder /home/krai/.local /home/krai/.local
 COPY --from=builder /home/krai/.bashrc /home/krai/.bashrc
+
+CMD ["ck show env --tags=model,tf,mlperf,resnet50,fix_input_shape"]
