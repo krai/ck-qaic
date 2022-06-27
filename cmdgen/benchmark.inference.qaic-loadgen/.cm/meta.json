@@ -340,9 +340,9 @@
       "###": {
         "compiler_tags": "gcc"
       },
-      "q4_edge": {
+      "q4_dc": {
         "all_device_ids": "0,1,2,3",
-        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_benchmark_prefix": "",
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
@@ -356,7 +356,27 @@
         "power_server_port": "",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "50"
+        "fan_raw_default": "50",
+        "ecc_default": "on"
+      },
+      "q4_edge": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "",
+        "power_server_port": "",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "50",
+        "ecc_default": "off"
       },
       "aedk_15w": {
         "all_device_ids": "0",
@@ -423,7 +443,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "200",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "g292_z43_q18e": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
@@ -442,7 +462,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "g292_z43_q16e": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -461,7 +481,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "g292_z43_q16": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
@@ -480,7 +500,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "150",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "r282_z93_q1": {
         "all_device_ids": "0",
@@ -589,7 +609,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "r282_z93_q5e_dc": {
         "all_device_ids": "0,1,2,3,4",
@@ -608,7 +628,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "r282_z93_q8": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -627,7 +647,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "r282_z93_q8e": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -646,7 +666,7 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75",
-        "ecc_default":"on"
+        "ecc_default": "on"
       },
       "r282_z93_q8_edge": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
@@ -846,8 +866,8 @@
    },
    "ecc": {
      "###": {
-        "ecc_default":"",
-	"ecc_value":"###"
+        "ecc_default": "",
+	"ecc_value": "###"
      }
    }
   },
@@ -881,7 +901,7 @@
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
     "docker_mode": "--privileged ",
     "docker_user": "--user=krai:kraig ",
-    "ecc_default":"off",
+    "ecc_default": "off",
     "ecc_value": "",
     "ecc_cmd":"export ECC_VAL=<<<ecc_default>>><<<ecc_value>>>;",
     "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
