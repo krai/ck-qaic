@@ -5,28 +5,27 @@
   },
   "build_map": {
     "sut": {
+      "q4_dc": {
+        "recommended_mixed_activation_count": "8",
+        "recommended_fp16_activation_count": "4"
+      },
       "q4_edge": {
         "recommended_mixed_activation_count": "7"
       },
       "aedk_15w": {
-        "recommended_mixed_activation_count": "4",
-        "recommended_multistream_activation_count": "2"
+        "recommended_mixed_activation_count": "4"
       },
       "aedk_20w": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_multistream_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       },
       "aedk_25w": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_multistream_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       },
       "gloria": {
-        "recommended_mixed_activation_count": "4",
-        "recommended_multistream_activation_count": "2"
+        "recommended_mixed_activation_count": "4"
       },
       "haishen": {
-        "recommended_mixed_activation_count": "4",
-        "recommended_multistream_activation_count": "2"
+        "recommended_mixed_activation_count": "4"
       },
       "g292_z43_q18e": {
         "recommended_mixed_activation_count": "8",
@@ -50,32 +49,20 @@
       },
       "r282_z93_q2e": {
         "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4",
-        "recommended_mixed_vc_value": "10",
-        "recommended_fp16_vc_value": "6"
+        "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q2": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       },
       "r282_z93_q1": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       },
       "r282_z93_q5e": {
         "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4",
-        "recommended_mixed_vc_value": "10",
-        "recommended_fp16_vc_value": "6"
+        "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q5": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       },
       "r282_z93_q8e": {
         "recommended_mixed_activation_count": "8",
@@ -99,21 +86,13 @@
       },
       "r282_z93_q8e_edge": {
         "recommended_mixed_activation_count": "8",
-        "recommended_fp16_activation_count": "4",
-        "recommended_multistream_activation_count": "4",
-        "recommended_mixed_vc_value": "10",
-        "recommended_fp16_vc_value": "6"
+        "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q8_edge": {
-        "recommended_mixed_activation_count": "8",
-        "recommended_multistream_activation_count": "4",
-        "recommended_fp16_activation_count": "4"
+        "recommended_mixed_activation_count": "8"
       }
     },
     "scenario": {
-      "multistream": {
-        "batch_size": "<<<multistream_override_batch_size>>>"
-      },
       "offline": {
         "batch_size": "<<<offline_override_batch_size>>>"
       },
@@ -170,7 +149,6 @@
     "hyphenated_model_name": "<<<model>>>",
     "max_wait": "50000",
     "model_name": "bert",
-    "multistream_override_batch_size": "<<<override_batch_size>>>",
     "offline_override_batch_size": "<<<override_batch_size>>>",
     "override_batch_size": "1000",
     "preprocessed_using": "tensorflow",
@@ -182,7 +160,6 @@
     "recommended_batch_size": "<<<override_batch_size>>>",
     "recommended_performance_buffer_size": "10833",
     "recommended_num_setup_threads": "2",
-    "recommended_multistream_num_setup_threads": "2",
     "recommended_queue_length": "4",
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
