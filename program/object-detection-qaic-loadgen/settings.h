@@ -309,6 +309,8 @@ public:
   const bool has_background_class =
       getenv_s("ML_MODEL_HAS_BACKGROUND_CLASS") == "YES";
 
+  const bool disable_nms = (getenv("CK_ENV_DISABLE_NMS") != NULL);
+
   // defaults for hardware setup
   const int qaic_activation_count = alter_str_i(getenv("CK_ENV_QAIC_ACTIVATION_COUNT"), 1);
   const int qaic_set_size = alter_str_i(getenv("CK_ENV_QAIC_QUEUE_LENGTH"), 4);

@@ -31,6 +31,11 @@
             "_MODEL_TO_CONVERT": "compile_ssd_resnet34_no_nms_mlperf"
           }
         ],
+        "retinanet,resnext50,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "compile_retinanet_resnext50_no_nms_mlperf"
+          }
+        ],
         "ssd-mobilenet,pytorch,mlperf,for.qaic": [
           {
             "_MODEL_TO_CONVERT": "compile_ssd_mobilenet_no_nms_mlperf"
@@ -56,6 +61,54 @@
       "sort": 100,
       "tags": "profile,ssd_resnet34",
       "update_tags_if_env": {
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile-resnext50": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_retinanet_resnext50_no_nms_mlperf"
+          ],
+          "_QUANTIZED": [
+            "yes"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "Retinanet ResNext50 profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,retinanet_resnext50",
+      "update_tags_if_env": {
+        "bs.1": [
+          {
+            "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
+        "bs.8": [
+          {
+            "_BATCH_SIZE": "8"
+          }
+        ],
+        "bs.explicit": [
+          {
+            "_BATCH_SIZE_EXPLICIT": "yes"
+          }
+        ],
         "first.5": [
           {
             "_CAL": "calibrate_first.5"
@@ -457,6 +510,65 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
       }
     },
+    "retinanet-resnext50.fp16": {
+      "extra_customize": {
+        "package_name": "SSD Retinanet ResNext50 FP16"
+      },
+      "extra_env": {
+        "_BATCH_SIZE": "0",
+        "_NO_QUANTIZATION" : "yes",
+        "_MODEL_TO_CONVERT": "compile_retinanet_resnext50_no_nms_mlperf",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_COMPILER_ARGS_OFFLINE": "-aic-perf-metrics -time-passes -version",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=1",
+        "_FP_16": "yes"
+      }
+    },
+    "retinanet-resnext50.fp16.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet-resnext50": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf Retinanet ResNext50 No NMS)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_OPENIMAGES": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "retinanet-resnext50",
+        "_MODEL_TO_CONVERT": "compile_retinanet_resnext50_no_nms_mlperf",
+        "_ENABLE_CHANNEL_WISE": "yes",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_COMPILER_ARGS_OFFLINE": "",
+        "_COMPILER_ARGS_SINGLESTREAM": "",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=1",
+        "_QUANTIZED": "yes",
+        "_BATCH_SIZE_EXPLICIT": "yes"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ]
+    },
+    "retinanet-resnext50.pcie.16nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "4",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.4"
+      ]
+   },
     "ssd_mobilenet": {
       "extra_customize": {
         "package_name": "QAIC model (MLPerf SSD-MobileNet No NMS)"

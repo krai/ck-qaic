@@ -131,10 +131,13 @@ Program::Program() {
     benchmark.reset(
         new Benchmark<InCopy, OutCopy, float, float, float>(settings, in, out));
   else
-#ifdef MODEL_R34
+#if defined(MODEL_R34)
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(
         settings, in, out));
-#else
+#elif defined(MODEL_RX50)
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
+        settings, in, out));
+#else // MODEL_MV1
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
         settings, in, out));
 #endif

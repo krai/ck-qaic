@@ -148,7 +148,7 @@
           "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin"
         ],
         "deps": [
-          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full"
+          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full --cmd_key=coco"
         ],
         "division": "closed",
         "hyphenated_model_name": "ssd-mobilenet",
