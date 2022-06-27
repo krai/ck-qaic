@@ -2,6 +2,7 @@
 
 _category="datacenter"
 DOCKER=${DOCKER:-"yes"}
+DOCKER_OS=${DOCKER_OS:-"ubuntu"}
 WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh

@@ -91,7 +91,7 @@ Default: `DEFS_DIR=./defs`. A directory containing SUT-specific files `def_<SUT>
 
 ### `WORKLOADS`
 
-Defaults: 
+Defaults:
 - `run_datacenter.sh`: `WORKLOADS="resnet50,bert"`
 - `run_edge.sh`: `WORKLOADS="resnet50,bert"`
 
@@ -121,14 +121,30 @@ Default: `POWER=no`. If `POWER=yes`, measure power consumption during performanc
 
 Default: `DIVISION=open`. If `DIVISION=closed`, run all applicable compliance tests.
 
+### `DOCKER`
+
+Defaults:
+- `run_datacenter.sh`: `DOCKER=yes`.
+- `run_edge.sh`: `DOCKER=no`.
+
+Whether to use Docker images to run workloads.
+
+### `DOCKER_OS`
+
+Default: `DOCKER_OS=ubuntu`. If `DOCKER_OS=ubuntu`, assume Ubuntu 20.04 based images have been created. If `DOCKER_OS=centos`, assume CentOS 7 based images have been created.
+
 ### `OFFLINE_ONLY`
 
-Default: `OFFLINE_ONLY=no`. If `OFFLINE_ONLY`, run only the offline scenario in performance mode.
+Default: `OFFLINE_ONLY=no`. If `OFFLINE_ONLY=yes`, run only the Offline scenario in the performance mode.
 
 ### `ZIP_EXPERIMENT`
 
-If `ZIP_EXPERIMENT=yes`, after the run, create zip archive of the experiment repository in the `$HOME/krai_experiment_results/$SDK_VER` directory. Default: `ZIP_EXPERIMENT=no`.
+Default: `ZIP_EXPERIMENT=no`. If `ZIP_EXPERIMENT=yes`, after the run, archive the whole experiment repository into a file called `ZIP_FILE` and store it under a directory called `ZIP_DIR`.
+
+### `ZIP_DIR`
+
+Give a custom name to the directory containing the zip archive. Default: `$HOME/krai_experiment_results/$SDK_VER`.
 
 ### `ZIP_FILE`
 
-Give custom name to the zip archive of the experiment repository. Default: `ZIP_FILE=mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip`.
+Give a custom name to the zip archive. Default: `ZIP_FILE=mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip`.
