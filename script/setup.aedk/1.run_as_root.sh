@@ -18,7 +18,7 @@ dnf install -y scl-utils
 dnf install -y gcc-toolset-11-gcc-c++
 
 # Install Python >= 3.7 from source.
-export PYTHON_VERSION=3.8.12
+export PYTHON_VERSION=3.9.13
 cd /usr/src \
 && wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
 && tar xzf Python-${PYTHON_VERSION}.tgz \

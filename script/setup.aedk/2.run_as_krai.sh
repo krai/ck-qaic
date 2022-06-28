@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set up environment.
-echo 'export CK_PYTHON=$(which python3.8)'     >> $HOME/.bashrc
+echo 'export CK_PYTHON=$(which python3.9)'     >> $HOME/.bashrc
 echo 'export PATH=$HOME/.local/bin:$PATH'      >> $HOME/.bashrc
 echo "source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
 source $HOME/.bashrc
@@ -24,7 +24,7 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 
 # Init CK environment.
 ck detect platform.os --platform_init_uoa=aedk
-ck detect soft:compiler.python --full_path=$(which python3.8)
+ck detect soft:compiler.python --full_path=$(which $CK_PYTHON)
 ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck detect soft:tool.cmake --full_path=$(which cmake)
 
