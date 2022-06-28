@@ -6,18 +6,20 @@ echo 'export PATH=$HOME/.local/bin:$PATH'      >> $HOME/.bashrc
 echo "source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
 source $HOME/.bashrc
 
-# Set up Git.
+# Configure Git.
 export GIT_USER="krai"
 export GIT_EMAIL="info@krai.ai"
 git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
-curl https://sh.rustup.rs -sSf | sh
+
+# Install the Rust compiler.
+curl https://sh.rustup.rs -sSf > /tmp/install_rust.sh && sh /tmp/install_rust.sh -y
 
 # Install implicit Python dependencies.
 $CK_PYTHON -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
 $CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
 $CK_PYTHON -m pip install transformers==2.4.0 --user
 
-# Set up CK.
+# Install CK.
 $CK_PYTHON -m pip install ck==2.6.1
 ck set kernel var.package_quiet_install=yes
 ck pull repo --url=https://github.com/krai/ck-qaic
@@ -29,7 +31,7 @@ ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck detect soft:tool.cmake --full_path=$(which cmake)
 
 # Install explicit Python dependencies.
-ck install package --tags=python-package,numpy
+echo "1.2x" | ck install package --tags=python-package,numpy
 ck install package --tags=python-package,absl
 ck install package --tags=python-package,cython
 ck install package --tags=python-package,opencv-python-headless
