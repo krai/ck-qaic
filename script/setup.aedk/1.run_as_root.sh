@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Update the Repo URLs
+# Update the Repo URLs. (CentOS 8 has reached End of Life.)
 cd /etc/yum.repos.d/
 sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
@@ -8,8 +8,8 @@ cd
 
 # Install system-level packages via 'yum'.
 yum upgrade -y
-yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
-yum install -y epel-release htop tmux
+yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel tmux epel-release
+yum install -y htop
 yum install -y dnf
 yum clean all
 # Install system-level packages via 'dnf'.
@@ -32,7 +32,8 @@ groupadd -f qaic
 # Create group 'krai'.
 groupadd -f krai
 # Create user 'krai'.
-useradd -m -g krai -s /bin/bash krai
+_BASE_DIR=${BASE_DIR:-"/data"}
+useradd -m -g krai -s /bin/bash -b ${_BASE_DIR} krai
 # Add user 'krai' to some groups.
 usermod -aG qaic,root,wheel krai
 # Do not ask user 'krai' for 'sudo' password.
