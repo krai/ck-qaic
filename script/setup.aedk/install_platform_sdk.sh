@@ -7,11 +7,19 @@ if [[ "${ARCH}" != "${_ARCH}" ]]; then
   exit 1
 fi	
 
-_SDK_VER=${SDK_VER:-1.6.80}
-_SDK_DIR=${SDK_DIR:-/home/krai}
-_PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"}
+if [[ $(cat /etc/os-release) == *Ubuntu* ]]; then
+  _OS="ubuntu"
+else
+  _OS="centos"
+fi
+
+_SDK_VER=${SDK_VER:-1.7.1.7}
+_SDK_DIR=${SDK_DIR:-/data/krai}
+
+_PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_OS}-${_SDK_VER}.zip"}
+echo ${_PLATFORM_SDK}
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
-  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_SDK_VER}.zip"
+  _PLATFORM_SDK="${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}.zip"
 fi
 if [[ ! -f "${_PLATFORM_SDK}" ]]; then
   echo "ERROR: File '${_PLATFORM_SDK}' does not exist!"
@@ -20,13 +28,7 @@ fi
 echo "Using Platform SDK: ${_PLATFORM_SDK}"
 
 unzip -o ${_PLATFORM_SDK} -d "$(dirname ${_PLATFORM_SDK})"
-
-if [[ $(cat /etc/os-release) == *Ubuntu* ]]
-then
-  cd ${_PLATFORM_SDK::-4}/${_ARCH}/ubuntu
-else
-  cd ${_PLATFORM_SDK::-4}/${_ARCH}/centos
-fi
+cd "$(dirname ${_PLATFORM_SDK})/qaic-platform-sdk-${_SDK_VER}/${_ARCH}/${_OS}"
 
 if [[ $(cat /proc/device-tree/model | tr -d '\0') == *HDK ]]; then
   echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm
