@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: WORKSPACE=/local/mnt/workspace bash ubuntu-20.04.sh
+# Usage: WORKSPACE_DIR=/local/mnt/workspace bash ubuntu-20.04.sh
 
 #
 # Copyright (c) 2022 Krai Ltd.
@@ -43,12 +43,12 @@ function exit_if_error() {
   fi
 }
 
-_WORKSPACE=${WORKSPACE:-/local/mnt/workspace}
+_WORKSPACE_DIR=${WORKSPACE_DIR:-/local/mnt/workspace}
 _APT_INSTALL=${APT_INSTALL:-"yes"}
 _DOCKER_INSTALL=${DOCKER_INSTALL:-"yes"}
 
 echo "'$0' parameters:"
-echo "- WORKSPACE=${_WORKSPACE}"
+echo "- WORKSPACE_DIR=${_WORKSPACE_DIR}"
 echo "- APT_INSTALL=${_APT_INSTALL}"
 echo "- DOCKER_INSTALL=${_DOCKER_INSTALL}"
 echo
@@ -85,8 +85,8 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-export WORKSPACE=${_WORKSPACE}
-export WORKSPACE_DOCKER=${_WORKSPACE}/docker
+export WORKSPACE_DIR=${_WORKSPACE_DIR}
+export WORKSPACE_DOCKER=${_WORKSPACE_DIR}/docker
 export DOCKER_DAEMON_JSON=/etc/docker/daemon.json
 
 sudo mkdir -p $WORKSPACE_DOCKER

@@ -1,6 +1,6 @@
 #!/bin/bash
-#Usage: WORKSPACE=/local/mnt/workspace bash centos7.sh
-WORKSPACE=${WORKSPACE:-$HOME/MLC2.0}
+#Usage: WORKSPACE_DIR=/local/mnt/workspace bash centos7.sh
+_WORKSPACE_DIR=${WORKSPACE_DIR:-$HOME/MLC2.0}
 sudo yum upgrade -y
 sudo yum install -y \
   git wget patch vim which \
@@ -18,8 +18,8 @@ yum list docker-ce --showduplicates | sort -r | head -12
 sudo yum install -y docker-ce-20.10.12-3.el7
 docker --version
 
-export WORKSPACE=$WORKSPACE
-export WORKSPACE_DOCKER=$WORKSPACE/docker
+export WORKSPACE_DIR=${_WORKSPACE_DIR}
+export WORKSPACE_DOCKER=${_WORKSPACE_DIR}/docker
 export DOCKER_DAEMON_JSON=/etc/docker/daemon.json
 
 sudo mkdir -p $WORKSPACE_DOCKER

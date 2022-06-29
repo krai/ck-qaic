@@ -24,7 +24,7 @@ WORKSPACE=/local/mnt/workspace bash ck_init.sh
 ### Target OS dependent, SDK dependent
 
 #### Create Docker images
-
+Make sure to have copied required datasets and SDKs to `$WORKSPACE/datasets` and `$WORKSPACE/sdks`
 ```
 DOCKER_OS=ubuntu SDK_VER=1.7.0.34 bash setup_images.sh
 ```
