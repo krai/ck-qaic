@@ -11,33 +11,43 @@ export CK_PYTHON=${CK_PYTHON:-$(which python${_PYTHON_VER})}
 export CK_WORKSPACE=${_WORKSPACE_DIR}
 export CK_TOOLS=${_WORKSPACE_DIR}/$USER/CK-TOOLS
 export CK_REPOS=${_WORKSPACE_DIR}/$USER/CK-REPOS
-export CK_EXPERIMENT_REPO=mlperf_v${_MLPERF_VER}.$(hostname).$USER
+export CK_EXPERIMENT_REPO=mlperf_v${_MLPERF_VER}.'$(hostname)'.$USER
 export CK_EXPERIMENT_DIR=$CK_REPOS/$CK_EXPERIMENT_REPO/experiment
 export PATH=$HOME/.local/bin:$PATH
 
-echo -n "\
-# CK-QAIC.
-export CK_PYTHON=${CK_PYTHON}
-export CK_WORKSPACE=${_WORKSPACE_DIR}
-export CK_TOOLS=$CK_TOOLS
-export CK_REPOS=$CK_REPOS
-export CK_EXPERIMENT_REPO=$CK_EXPERIMENT_REPO
-export CK_EXPERIMENT_DIR=$CK_EXPERIMENT_DIR
-export PATH=$PATH" >> $HOME/.bashrc
+if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then
+  echo -n "\
+  # CK-QAIC.
+  export CK_PYTHON=${CK_PYTHON}
+  export CK_WORKSPACE=${_WORKSPACE_DIR}
+  export CK_TOOLS=$CK_TOOLS
+  export CK_REPOS=$CK_REPOS
+  export CK_EXPERIMENT_REPO=$CK_EXPERIMENT_REPO
+  export CK_EXPERIMENT_DIR=$CK_EXPERIMENT_DIR
+  export PATH=$PATH" >> $HOME/.bashrc
 
-source $HOME/.bashrc
+  source $HOME/.bashrc
 
-sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
+  sudo mkdir -p $CK_WORKSPACE/$USER && sudo chown $USER:qaic $CK_WORKSPACE/$USER
 
-$CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==${_CK_VER} --user --upgrade
-ck pull repo --url=https://github.com/krai/ck-qaic
+  $CK_PYTHON -m pip install --ignore-installed pip setuptools testresources ck==${_CK_VER} --user --upgrade
+  ck pull repo --url=https://github.com/krai/ck-qaic
 
-ck add repo:$CK_EXPERIMENT_REPO --quiet
-ck add $CK_EXPERIMENT_REPO:experiment:dummy --common_func
-ck rm  $CK_EXPERIMENT_REPO:experiment:dummy --force
-chgrp -R qaic $CK_EXPERIMENT_DIR
-chmod -R g+ws $CK_EXPERIMENT_DIR
-setfacl -R -d -m group:qaic:rwx $CK_EXPERIMENT_DIR
+  if [[ -z $(find $CK_REPOS -name $CK_EXPERIMENT_REPO) ]]; then 
+    ck add repo:$CK_EXPERIMENT_REPO --quiet
+    ck add $CK_EXPERIMENT_REPO:experiment:dummy --common_func
+    ck rm  $CK_EXPERIMENT_REPO:experiment:dummy --force
+  else
+    echo "$CK_EXPERIMENT_REPO has already been added."
+  fi
+
+  chgrp -R qaic $CK_EXPERIMENT_DIR
+  chmod -R g+ws $CK_EXPERIMENT_DIR
+  setfacl -R -d -m group:qaic:rwx $CK_EXPERIMENT_DIR
+
+else
+  echo "CK-QAIC has already been added."
+fi
 
 echo
 echo "Done."
