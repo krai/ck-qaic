@@ -26,7 +26,7 @@ if [[ $platform_sdk != $requested_platform_sdk ]]; then
 fi
 
 CK_QAIC=$(ck find repo:ck-qaic)
-if [[ $DRY_RUN != 'yes' ]]; then 
+if [[ $DRY_RUN != 'yes' ]] && [[ $UPDATE_CK_QAIC != 'no' ]]; then
   if [[ $CK_QAIC == '' ]]; then
     ck pull repo --url=https://github.com/krai/ck-qaic.git
     exit_if_error
@@ -64,7 +64,7 @@ if enabled ssd_mobilenet; then
   echo  "$CONTAINER_ID_SSD_MOBILENET created"
 fi
 
-if [[ $UPDATE_CK_QAIC == "yes" ]]; then
+if [[ "$UPDATE_CK_QAIC" == "yes" ]]; then
   enabled bert && RUN "docker exec $CONTAINER_ID_BERT bash -c \"ck pull repo:ck-qaic\""
   enabled resnet50 && RUN "docker exec $CONTAINER_ID_RESNET50 bash -c \"ck pull repo:ck-qaic\""
   enabled ssd_resnet34 && RUN "docker exec $CONTAINER_ID_SSD_RESNET34 bash -c \"ck pull repo:ck-qaic\""
