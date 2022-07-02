@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: WORKSPACE_DIR=/local/mnt/workspace bash ubuntu-20.04.sh
+# Usage: WORKSPACE_DIR=/local/mnt/workspace bash setup_ubuntu.sh
 
 #
 # Copyright (c) 2022 Krai Ltd.

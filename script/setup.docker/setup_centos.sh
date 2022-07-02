@@ -1,5 +1,7 @@
 #!/bin/bash
-#Usage: WORKSPACE_DIR=/local/mnt/workspace bash centos7.sh
+
+# Usage: WORKSPACE_DIR=/local/mnt/workspace bash setup_centos.sh
+
 _WORKSPACE_DIR=${WORKSPACE_DIR:-$HOME/MLC2.0}
 sudo yum upgrade -y
 sudo yum install -y \

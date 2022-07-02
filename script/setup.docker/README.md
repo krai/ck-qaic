@@ -4,29 +4,34 @@
 
 ### Host OS dependent
 
-#### Ubuntu 20.04 host
+#### Ubuntu host (supported: Ubuntu 20.04)
 ```
-WORKSPACE=/local/mnt/workspace bash ubuntu-20.04.sh
+WORKSPACE=/local/mnt/workspace bash setup_ubuntu.sh
 ```
 
-#### CentOS 7 host
+#### CentOS host (supported: CentOS 7)
 ```
-WORKSPACE=/local/mnt/workspace bash centos7.sh
+WORKSPACE=/local/mnt/workspace bash setup_centos.sh
 ```
 
 ### Host OS independent
 
-#### Collective Knowledge environment
+#### Set up Collective Knowledge environment
 ```
-WORKSPACE=/local/mnt/workspace bash ck_init.sh
+WORKSPACE=/local/mnt/workspace bash setup_ck.sh
 ```
 
 ### Target OS dependent, SDK dependent
 
 #### Create Docker images
-Make sure to have copied required datasets and SDKs to `$WORKSPACE/datasets` and `$WORKSPACE/sdks`
+
+**NB:** In principle, you can use any combination of the host OS and target OS e.g. Ubuntu host and CentOS target.  For simplicity, however, we recommend to use the same OS to satisfy MLPerf requirements.
+
+**NB:** Make sure to have copied the required datasets (e.g. ImageNet) and SDKs
+to `$WORKSPACE/datasets` and `$WORKSPACE/sdks`, respectively.
+
 ```
-DOCKER_OS=ubuntu SDK_VER=1.7.0.34 bash setup_images.sh
+DOCKER_OS=ubuntu SDK_VER=1.7.1.12 bash setup_images.sh
 ```
 
 ### Further info
