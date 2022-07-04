@@ -193,6 +193,8 @@ public:
   const int num_setup_threads =
       alter_str_i(getenv("CK_ENV_NUM_SETUP_THREADS"), 2);
 
+  const int model_packed_seq_len = alter_str_i(getenv("ML_MODEL_SEQ_LENGTH"), 384);
+
   BenchmarkSettings() {
 
     //std::cout << "MAX WAIT: " << max_wait << std::endl;

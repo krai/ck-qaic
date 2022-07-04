@@ -43,6 +43,7 @@ input_pickle_blob = Path(sys.argv[1])
 output_dir = Path(sys.argv[2])
 strategy_set_fp = Path(sys.argv[3])
 strategy_count_fp = Path(sys.argv[4])
+packed_seq_len = int(sys.argv[5])
 
 with open(Path(input_pickle_blob), 'rb') as tokenized_features_file:
     eval_features = pickle.load(tokenized_features_file)
@@ -54,7 +55,7 @@ with open(strategy_set_fp) as f:
 with open(strategy_count_fp) as f:
     strategy_count = [int(x) for x in f.readlines()]
 
-def pack_and_write_data(data_list, dirpath, max_sl=384):
+def pack_and_write_data(data_list, dirpath, max_sl):
 
     input_ids = np.zeros((max_sl), dtype=np.int64)
     segment_ids = np.zeros((max_sl), dtype=np.int64)
@@ -104,7 +105,7 @@ for group, group_freq in zip(strategy_set, strategy_count):
         for sl in group:
             to_pack.append(samples_by_sl[sl].get_nowait())
 
-        packed_data = pack_and_write_data(to_pack, output_dir / str(output_idx))
+        packed_data = pack_and_write_data(to_pack, output_dir / str(output_idx), packed_seq_len)
         output_idx += 1
 
 # check if packed all

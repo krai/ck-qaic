@@ -43,7 +43,8 @@ mkdir -p packed
 
 PYTHONPATH=$PYTHONPATH:${CK_ENV_MLPERF_INFERENCE}/language/bert/ \
 ${CK_ENV_COMPILER_PYTHON_FILE} ${ORIGINAL_PACKAGE_DIR}/pack.py ${CK_ENV_DATASET_SQUAD_TOKENIZED} ${INSTALL_DIR}/packed \
-                               ${ORIGINAL_PACKAGE_DIR}/strategySetCalib.txt ${ORIGINAL_PACKAGE_DIR}/strategyRepeatCountCalib.txt
+                               ${ORIGINAL_PACKAGE_DIR}/strategySetCalib.txt ${ORIGINAL_PACKAGE_DIR}/strategyRepeatCountCalib.txt \
+                               ${_PACKED_SEQ_LEN}
 
 # create a list of the input files
 

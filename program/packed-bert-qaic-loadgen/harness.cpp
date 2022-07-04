@@ -214,7 +214,7 @@ void Program::Inference(std::vector<mlperf::QuerySample> samples) {
 
   std::vector<std::vector<SizedSample>> packed_samples;
 
-  pack(sized_samples, settings->max_seq_length, 3, packed_samples);
+  pack(sized_samples, settings->model_packed_seq_len, 3, packed_samples);
 
   for(int x=0 ; x<packed_samples.size() ; ++x) {
 

@@ -140,4 +140,5 @@ void pack(const std::vector<SizedSample> &samples, int max_seq_len, int max_seq_
 
   pack_samples(strategies_per_length, histogram, packed_samples);
 
+  //std::cout << "Pack Ratio: " << samples.size() << " " << packed_samples.size() << " " << (float)samples.size()/packed_samples.size() << std::endl;
 }

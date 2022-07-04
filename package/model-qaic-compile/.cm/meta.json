@@ -7,7 +7,7 @@
       "PACKAGE_VERSION": "1",
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1",
-      "_SEG": "384"      
+      "_SEG": "384"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -161,14 +161,19 @@
       "sort": 100,
       "tags": "profile,qaic,bert-packed",
       "update_tags_if_env": {
-        "seg.384": [
+        "seq.384": [
           {
-            "_SEG": "seg.384"
+            "_SEG": "384"
           }
         ],
-        "seg.512": [
+        "seq.448": [
           {
-            "_SEG": "seg.512"
+            "_SEG": "448"
+          }
+        ],
+        "seq.512": [
+          {
+            "_SEG": "512"
           }
         ]
       }
@@ -701,7 +706,7 @@
         "_NO_QUANTIZATION" : "yes",
         "_MODEL_TO_CONVERT": "compile_bert_99.9",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16",
-        "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,384",
+        "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG]",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
       },
       "extra_tags": [
@@ -749,12 +754,20 @@
     },
     "seg.384": {
       "extra_env": {
-        "_SEG": "384"
+        "_SEG": "384",
+        "ML_MODEL_SEQ_LENGTH": "384"
+      }
+    },
+    "seg.448": {
+      "extra_env": {
+        "_SEG": "448",
+        "ML_MODEL_SEQ_LENGTH": "448"
       }
     },
     "seg.512": {
       "extra_env": {
-        "_SEG": "512"
+        "_SEG": "512",
+        "ML_MODEL_SEQ_LENGTH": "512"
       }
     }
   }

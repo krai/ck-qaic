@@ -57,6 +57,11 @@
       },
       "on_by_default": "yes"
     },
+    "seq.448": {
+      "extra_env": {
+        "_PACKED_SEQ_LEN": "448"
+      }
+    },
     "seq.512": {
       "extra_env": {
         "_PACKED_SEQ_LEN": "512"
