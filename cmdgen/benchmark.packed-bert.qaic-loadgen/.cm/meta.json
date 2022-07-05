@@ -5,6 +5,9 @@
   },
   "build_map": {
     "sut": {
+      "q1_edge": {
+        "recommended_mixed_activation_count": "14"
+      },
       "q4_dc": {
         "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
