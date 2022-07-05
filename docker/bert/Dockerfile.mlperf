@@ -89,7 +89,6 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
-
 # Compile the bert-99 workload (separately for each scenario).
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448 --quiet \
@@ -102,10 +101,11 @@ RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
 else \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448 --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,set.384 --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384 --quiet; \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet; \
   ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; \
 fi
+
 # Compile the bert-99.9 workload.
 RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
 
