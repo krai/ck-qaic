@@ -1,10 +1,43 @@
 #!/bin/bash
 
-# Set up environment.
-echo 'export CK_PYTHON=$(which python3.9)'     >> $HOME/.bashrc
-echo 'export PATH=$HOME/.local/bin:$PATH'      >> $HOME/.bashrc
-echo "source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
-source $HOME/.bashrc
+function exit_if_error() {
+  if [ "${?}" != "0" ]; then
+    echo ""
+    echo "ERROR: $1"
+    exit 1
+  fi
+}
+
+_DEVICE_OS=${DEVICE_OS:-centos}
+# _BENCHMARKS = ${BENCHMARKS:-("image_classification" "object_detection" "language_processing")}
+_BENCHMARKS=${BENCHMARKS:-("image_classification" "object_detection" "language_processing")}
+_DEVICE_DATASETS_DIR=${DEVICE_DATASETS_DIR:-"/data"}
+_CK_VER=${CK_VER:-2.6.1}
+
+echo " Setting Parameters:"
+echo "- BENCHMARKS=${_BENCHMARKS}"
+echo "- DEVICE_DATASETS_DIR=${_DEVICE_DATASETS_DIR}"
+echo "- CK_VER =${_CK_VER}"
+echo
+
+# Set up environment
+if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then
+  echo "Adding CK-QAIC environment to '~/.bashrc'."
+  echo -n "\
+
+# CK-QAIC.
+export CK_PYTHON=$(which python3.9)
+export PATH=$HOME/.local/bin:$PATH" >> $HOME/.bashrc
+  
+  # Centos OS Dependency
+  if [[ "${_DEVICE_OS}" == centos ]]; then
+    echo -n "source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
+  fi
+
+  source $HOME/.bashrc
+else
+  echo "CK-QAIC environment has already been added to '~/.bashrc'."
+fi
 
 # Configure Git.
 export GIT_USER="krai"
@@ -20,7 +53,7 @@ $CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.h
 $CK_PYTHON -m pip install transformers==2.4.0 --user
 
 # Install CK.
-$CK_PYTHON -m pip install ck==2.6.1
+$CK_PYTHON -m pip install ck==${_CK_VER}
 ck set kernel var.package_quiet_install=yes
 ck pull repo --url=https://github.com/krai/ck-qaic
 
@@ -36,4 +69,10 @@ ck install package --tags=python-package,absl
 ck install package --tags=python-package,cython
 ck install package --tags=python-package,opencv-python-headless
 
-# TODO: Install LoadGen.
+# Install LoadGen.
+ck install package --tags=mlperf,inference,source
+ck install package --tags=mlperf,loadgen,static
+ck install package --tags=mlperf,power,source
+
+# Install Benchmark dependencies.
+BENCHMARKS=${_BENCHMARKS} DEVICE_DATASETS_DIR=${_DEVICE_DATASETS_DIR} ./3.install_benchmark.sh

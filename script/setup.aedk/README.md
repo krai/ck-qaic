@@ -18,9 +18,39 @@ are to be repeated as needed e.g. for new SDK versions (marked with `R`).
 
 # `[H1]` Initial host setup
 
+## `[H1]` Set Variables and Paths
+Assume the device is called `aedk1`
+```
+export AEDK1=aedk1
+```
+
+Set data paths for host and devices
+```
+export HOST_DATASETS_DIR="/datasets" \
+export DEVICE_DATASETS_DIR="/data"
+export DEVICE_OS=centos
+```
+
 ## `[H1]` Pull the `ck-qaic` repository
 ```
 ck pull repo --url=https://github.com/krai/ck-qaic
+```
+
+## `[H1]` Set up ImageNet
+
+### `[H1]` Obtain the ImageNet dataset
+
+Suppose the ImageNet validation dataset (50,000 images) is in an archive (6.4G) called
+`dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine.
+
+<details><pre>
+&dollar; md5sum ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar
+3f31a40f2bb902e28aa23aad0fc8e383  dataset-imagenet-ilsvrc2012-val.tar
+</pre></details>
+
+### `[H1]` Copy the ImageNet dataset to the device
+```
+scp ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar root@${AEDK1}:${DEVICE_DATASETS_DIR}
 ```
 
 # `[D1]` Initial device setup
@@ -29,19 +59,19 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 
 Copy the numbered scripts in this directory to a temporary directory on the device e.g.:
 ```
-scp $(ck find repo:ck-qaic)/script/setup.aedk/?.*.sh aedk1:/tmp
+scp $(ck find repo:ck-qaic)/script/setup.aedk/?.*.sh ${AEDK1}:/tmp
 ```
 
 ## `[D1S]` Run under the `root` user
 
 Connect to the device as `root` e.g.:
 ```
-ssh root@aedk1
+ssh root@${AEDK1}
 ```
 
 Go to the temporary directory and run:
 ```
-./1.run_as_root.sh
+./1.run_as_root.${DEVICE_OS}.sh
 ```
 
 **NB:** The full installation can take more than 50G. If the space on the root
@@ -56,42 +86,21 @@ usermod -d /data/krai krai
 
 Connect to the device as `krai` e.g.:
 ```
-ssh krai@aedk1
+ssh krai@${AEDK1}
 ```
 
-Go to the temporary directory and run:
 ```
-sudo chown krai ./2.run_as_krai.sh
-sudo chmod u+x ./2.run_as_krai.sh
-./2.run_as_krai.sh
-```
-
-# `[H1]` Set up ImageNet
-
-## `[H1]` Obtain the ImageNet dataset
-
-Suppose the ImageNet validation dataset (50,000 images) is in an archive called
-`dataset-imagenet-ilsvrc2012-val.tar` (6.4G).
-
-<details><pre>
-&dollar; md5sum dataset-imagenet-ilsvrc2012-val.tar
-3f31a40f2bb902e28aa23aad0fc8e383  dataset-imagenet-ilsvrc2012-val.tar
-</pre></details>
-
-Extract it under e.g. `$HOME` or `/datasets`:
-```
-tar xvf dataset-imagenet-ilsvrc2012-val.tar -C $HOME
+cd /tmp/ && \ 
+sudo chown krai ./2.run_as_krai.sh && \ 
+sudo chmod u+x ./2.run_as_krai.sh && \ 
+sudo chown krai ./3.install_benchmark.sh && \ 
+sudo chmod u+x ./3.install_benchmark.sh
 ```
 
-## `[H1]` Detect the ImageNet dataset
+Run:
 ```
-echo "full" | ck detect soft:dataset.imagenet.val --extra_tags=ilsvrc2012,full \
---full_path=$HOME/dataset-imagenet-ilsvrc2012-val/ILSVRC2012_val_00000001.JPEG
-```
-
-## `[H1]` Copy the ImageNet dataset to the device
-```
-scp dataset-imagenet-ilsvrc2012-val.tar aedk1:/home/krai
+cd /tmp/ && \
+DEVICE_OS=${DEVICE_OS} BENCHMARKS[@1]="image_classification" DEVICE_DATASETS_DIR="/data" ./2.run_as_krai.sh
 ```
 
 # `[R]` Set up QAIC SDKs
@@ -122,11 +131,11 @@ Alternatively, specify `APPS_SDK`, the full path to the Apps SDK archive.
 ## `[HR]` Copy the Platform SDK to the device
 
 Go to the directory containing your Platform SDK archive e.g. `/local/mnt/workspace/sdks`
-and copy it to the device e.g. `aedk1`:
+and copy it to the device e.g. `${AEDK1}`:
 
 ```
 export SDK_VER=1.6.80
-scp qaic-platform-sdk-$SDK_VER.zip aedk1:/home/krai
+scp qaic-platform-sdk-$SDK_VER.zip ${AEDK1}:/home/krai
 ```
 
 ## `[DSR]` Uninstall/Install the Platform SDK
@@ -213,10 +222,10 @@ ssh-keygen -t rsa
 and install it on the device e.g.:
 
 ```
-ssh-copy-id krai@aedk1
+ssh-copy-id krai@${AEDK1}
 ```
 
 Compile and install the benchmarks e.g. to a `aedk_15w` device:
 ```
-SUT=aedk_15w USER=krai IPS=aedk1 PORTS=22 $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
+SUT=aedk_15w USER=krai IPS=${AEDK1} PORTS=22 $(ck find ck-qaic:script:setup.aedk)/install_to_aedk.sh
 ```
