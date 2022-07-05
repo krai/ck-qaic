@@ -107,7 +107,8 @@ else \
 fi
 
 # Compile the bert-99.9 workload.
-RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
+RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.448 --quiet \
+ && ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.384 --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
