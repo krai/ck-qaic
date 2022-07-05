@@ -109,7 +109,8 @@
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
         "model_tags": [
-          "###"
+          "###",
+          "seg.<<<override_seg_length>>>"
         ],
         "recommended_offline_server_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed",
@@ -124,10 +125,11 @@
           "--env.ML_MODEL_MODEL_NAME=bert",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
-	"docker_os": "centos",
+        "docker_os": "centos",
         "model_tags": [
           "###",
-          "quantization.calibration"
+          "quantization.calibration",
+          "seg.<<<override_seg_length>>>"
         ],
         "recommended_offline_server_activation_count": "<<<recommended_mixed_activation_count>>>",
         "recommended_queue_length": "4",
@@ -163,6 +165,7 @@
     "recommended_queue_length": "4",
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
+    "override_seg_length": "384",
     "task_name": "bert-question-answering"
   },
   "groups": {
