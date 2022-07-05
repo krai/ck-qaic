@@ -189,9 +189,6 @@ public:
 
   void FlushQueries() override;
 
-  void ReportLatencyResults(
-      const std::vector<mlperf::QuerySampleLatency> &latencies_ns) override;
-
 private:
   std::string name_{"QAIC_SUT"};
   Program *prg;
