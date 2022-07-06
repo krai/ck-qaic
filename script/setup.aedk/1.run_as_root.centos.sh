@@ -39,7 +39,6 @@ fi
 
 # Install Python >= 3.7 from source.
 if [[ -z _INSTALL_PYTHON ]]; then
-#   export PYTHON_VERSION=${_PYTHON_MAJOR}.${_PYTHON_MINOR}.${_PYTHON_BATCH}
   echo "Installing Python ${_PYTHON_VERSION}"
   cd /usr/src \
   && wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${_PYTHON_VERSION}.tgz \
