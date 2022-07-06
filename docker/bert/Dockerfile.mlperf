@@ -113,17 +113,17 @@ RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offl
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck locate env --tags=python-package,pytorch)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,bert-packed)/*; fi
+#RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
+#$(ck find repo:ctuning-programs)/* \
+#$(ck locate env --tags=python-package,pytorch)/* \
+#$(ck find repo:ck-crowdtuning-platforms)/* \
+#$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+#$(ck locate env --tags=lib,protobuf-host)/src \
+#$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+#$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+#$(ck locate env --tags=tool,cmake)/cmake*/Source \
+#$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+#$(ck locate env --tags=model,bert-packed)/*; fi
 
 ###############################################################################
 # FINAL STAGE
