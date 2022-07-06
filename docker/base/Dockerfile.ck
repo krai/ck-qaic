@@ -65,7 +65,7 @@ ENV CK_ROOT=/home/krai/CK \
     LANG=C.UTF-8
 
 RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL} \
- && git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT} \
+ && git clone --branch V${CK_VER} https://github.com/mlcommons/ck.git ${CK_ROOT} \
  && mkdir -p ${CK_REPOS} ${CK_TOOLS} .local
 
 ###############################################################################
