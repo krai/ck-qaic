@@ -13,7 +13,7 @@
         "recommended_queue_length": "3"
       },
       "q4_edge": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_server_activation_count": "3",
         "recommended_multistream_activation_count": "1",
         "recommended_num_setup_threads": "32",
         "recommended_multistream_num_setup_threads": "8",
