@@ -16,7 +16,7 @@ additionally marked with `S`.
 Some instructions are to be run only once (marked with `1`). Some instructions
 are to be repeated as needed e.g. for new SDK versions (marked with `R`).
 
-# `[H1]` Initial host setup
+# A. Initial host setup
 
 ## `[H1]` Set Variables and Paths
 Assume the device is called `aedk1`
@@ -24,87 +24,91 @@ Assume the device is called `aedk1`
 export AEDK1=aedk1
 ```
 
-Set data paths for host and devices
+## `[H1]` Set paths for the host and the device
 ```
-export HOST_DATASETS_DIR="/datasets" \
-export DEVICE_DATASETS_DIR="/data"
-export DEVICE_OS=centos
+source $(ck find repo:ck-qaic)/script/setup.aedk/config.sh
 ```
+
+**NB:** The full installation can take more than 50G. If the space on the root
+partition of the device is limited and you wish to use a different partition, 
+change the `BASE_DIR` in `config.sh`.
 
 ## `[H1]` Pull the `ck-qaic` repository
 ```
 ck pull repo --url=https://github.com/krai/ck-qaic
 ```
 
-## `[H1]` Set up ImageNet
+# B. Initial device setup under the `root` user
 
-### `[H1]` Obtain the ImageNet dataset
+## `[H1]` Copy the scripts to the device
+Copy the scripts in this directory to a temporary directory on the device e.g.:
+```
+scp $(ck find repo:ck-qaic)/script/setup.aedk/*.sh ${AEDK1}:/tmp
+```
 
+## `[H1]` Connect to the device as `root`
+Connect to the device as `root` e.g.:
+```
+ssh root@${AEDK1}
+```
+
+## `[D1S]` Run
+Go to the temporary directory and run:
+```
+cd /tmp/ && \
+source ./config.sh && \
+./1.run_as_root.${DEVICE_OS}.sh
+```
+
+# C. Initial device setup under the `krai` user
+
+## `[H1]` Connect to the device as `krai`
+Connect to the device as `krai` e.g.:
+```
+ssh krai@${AEDK1}
+```
+
+## `[D1]` Configure variables:
+```
+cd /tmp/ && source config.sh
+```
+
+## `[D1]` Update scripts permissions
+```
+cd /tmp/ && \ 
+sudo chown krai ./2.run_as_krai.sh ./3.install_benchmark.sh ./run_common.sh && \
+sudo chmod u+x ./2.run_as_krai.sh ./3.install_benchmark.sh ./run_common.sh
+```
+
+## `[D1]` Run:
+```
+cd /tmp/ && \
+source ./config.sh && \
+./2.run_as_krai.sh
+```
+
+# D. Set up Imagenet
 Suppose the ImageNet validation dataset (50,000 images) is in an archive (6.4G) called
-`dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine.
+`dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine. Check the md5sum.
 
 <details><pre>
 &dollar; md5sum ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar
 3f31a40f2bb902e28aa23aad0fc8e383  dataset-imagenet-ilsvrc2012-val.tar
 </pre></details>
 
-### `[H1]` Copy the ImageNet dataset to the device
+## `[H1]` Copy the ImageNet dataset from the host to the device
 ```
 scp ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar root@${AEDK1}:${DEVICE_DATASETS_DIR}
 ```
 
-# `[D1]` Initial device setup
-
-## `[H1]` Copy the scripts to the device
-
-Copy the numbered scripts in this directory to a temporary directory on the device e.g.:
-```
-scp $(ck find repo:ck-qaic)/script/setup.aedk/?.*.sh ${AEDK1}:/tmp
-```
-
-## `[D1S]` Run under the `root` user
-
-Connect to the device as `root` e.g.:
-```
-ssh root@${AEDK1}
-```
-
-Go to the temporary directory and run:
-```
-./1.run_as_root.${DEVICE_OS}.sh
-```
-
-**NB:** The full installation can take more than 50G. If the space on the root
-partition is limited and you wish to use a different partition, say, `/data`,
-change the `krai` user's home directory as follows:
-
-```
-usermod -d /data/krai krai
-```
-
-## `[D1]` Run under the `krai` user
-
-Connect to the device as `krai` e.g.:
-```
-ssh krai@${AEDK1}
-```
-
-```
-cd /tmp/ && \ 
-sudo chown krai ./2.run_as_krai.sh && \ 
-sudo chmod u+x ./2.run_as_krai.sh && \ 
-sudo chown krai ./3.install_benchmark.sh && \ 
-sudo chmod u+x ./3.install_benchmark.sh
-```
-
-Run:
+## `[D1]` Preprocess Imagenet on the device
 ```
 cd /tmp/ && \
-DEVICE_OS=${DEVICE_OS} BENCHMARKS[@1]="image_classification" DEVICE_DATASETS_DIR="/data" ./2.run_as_krai.sh
+source ./config.sh && \
+./3.install_benchmark.sh
 ```
 
-# `[R]` Set up QAIC SDKs
-
+# E. Set up QAIC SDKs
 Obtain a pair of QAIC SDKs:
 - Apps SDK to be used on the host for compilation (e.g. `qaic-apps-1.6.80.zip`).
 - Platform SDK to be used on the device for execution (e.g. `qaic-platform-sdk-1.6.80.zip`).
