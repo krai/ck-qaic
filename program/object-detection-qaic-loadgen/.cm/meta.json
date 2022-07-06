@@ -41,7 +41,7 @@
     "CK_ENV_LIB_MLPERF_LOADGEN_INCLUDE"
   ],
   "compiler_env": "CK_CXX",
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP17>>$ -std=c++17  -Wall -Wno-sign-compare $<<CK_EXTRA_COMPILER_DEPS0>>$ $<<CK_EXTRA_COMPILER_DEPS1>>$  $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ -I/opt/qti-aic/dev/inc/ -I/opt/qti-aic/dev/inc/qaic-api-common -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/ -I$<<CK_ENV_LIB_NMS_ABP_INCLUDE>>$",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP17>>$ -std=c++17 -Wall -Wno-sign-compare $<<CK_EXTRA_COMPILER_DEPS0>>$ $<<CK_EXTRA_COMPILER_DEPS1>>$  $<<CK_EXTRA_COMPILER_DEPS2>>$  $<<CK_EXTRA_COMPILER_DEPS3>>$ -I/opt/qti-aic/dev/inc/ -I/opt/qti-aic/dev/inc/qaic-api-common -I$<<CK_ENV_LIB_QAIC_API>>$/install/ -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/ -I$<<CK_ENV_LIB_NMS_ABP_INCLUDE>>$",
   "data_name": "object-detection-qaic-loadgen",
   "extra_ld_vars": "-L$<<CK_ENV_LIB_MLPERF_LOADGEN_LIB>>$ -L$<<CK_ENV_LIB_QAIC_API>>$/install/lib/ -L$<<CK_ENV_LIB_NMS_ABP>>$/lib -lmlperf_loadgen -ldl -lpthread -lprotobuf -lQAic -lnms_abp",
   "linker_add_lib_as_env": [
@@ -58,7 +58,7 @@
   "process_in_tmp": "yes",
   "program": "yes",
   "run_cmds": {
-    "default": {
+    "coco": {
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
@@ -72,6 +72,34 @@
           "module_uoa": "script",
           "script_name": "loadgen_preprocess"
         },
+        "run_cmd_main_env": "env",
+        "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<CK_ENV_LIB_STDCPP_DYNAMIC>>$"
+        ],
+        "run_output_files": [
+          "mlperf_log_accuracy.json",
+          "mlperf_log_detail.txt",
+          "mlperf_log_summary.txt",
+          "mlperf_log_trace.json"
+        ]
+      }
+    },
+    "openimages": {
+      "ignore_return_code": "no",
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json",
+        "post_process_via_ck": {
+          "data_uoa": "object-detection",
+          "module_uoa": "script",
+          "script_name": "loadgen_postprocess_openimages"
+        },
+        "pre_process_via_ck": {
+          "data_uoa": "object-detection",
+          "module_uoa": "script",
+          "script_name": "loadgen_preprocess"
+        },
+        "run_cmd_main_env": "env",
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
           "$<<CK_ENV_LIB_STDCPP_DYNAMIC>>$"

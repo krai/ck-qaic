@@ -131,10 +131,13 @@ Program::Program() {
     benchmark.reset(
         new Benchmark<InCopy, OutCopy, float, float, float>(settings, in, out));
   else
-#ifdef MODEL_R34
+#if defined(MODEL_R34)
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(
         settings, in, out));
-#else
+#elif defined(MODEL_RX50)
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
+        settings, in, out));
+#else // MODEL_MV1
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
         settings, in, out));
 #endif
@@ -542,46 +545,6 @@ void SystemUnderTestQAIC::FlushQueries() {
   if (vl) {
     cout << endl;
   }
-};
-
-void SystemUnderTestQAIC::ReportLatencyResults(
-    const std::vector<mlperf::QuerySampleLatency> &latencies_ns) {
-
-  size_t size = latencies_ns.size();
-  uint64_t avg =
-      accumulate(latencies_ns.begin(), latencies_ns.end(), uint64_t(0)) / size;
-
-  std::vector<mlperf::QuerySampleLatency> sorted_lat(latencies_ns.begin(),
-                                                     latencies_ns.end());
-  sort(sorted_lat.begin(), sorted_lat.end());
-
-  cout << endl
-       << "------------------------------------------------------------";
-  cout << endl
-       << "|            LATENCIES (in nanoseconds and fps)            |";
-  cout << endl
-       << "------------------------------------------------------------";
-  size_t p50 = size * 0.5;
-  size_t p90 = size * 0.9;
-  cout << endl << "Number of queries run: " << size;
-  cout << endl << "Min latency:                      " << sorted_lat[0]
-       << "ns  (" << 1e9 / sorted_lat[0] << " fps)";
-  cout << endl << "Median latency:                   " << sorted_lat[p50]
-       << "ns  (" << 1e9 / sorted_lat[p50] << " fps)";
-  cout << endl << "Average latency:                  " << avg << "ns  ("
-       << 1e9 / avg << " fps)";
-  cout << endl << "90 percentile latency:            " << sorted_lat[p90]
-       << "ns  (" << 1e9 / sorted_lat[p90] << " fps)";
-
-  if (!prg->settings->trigger_cold_run) {
-    cout << endl << "First query (cold model) latency: " << latencies_ns[0]
-         << "ns  (" << 1e9 / latencies_ns[0] << " fps)";
-  }
-  cout << endl << "Max latency:                      " << sorted_lat[size - 1]
-       << "ns  (" << 1e9 / sorted_lat[size - 1] << " fps)";
-  cout << endl
-       << "------------------------------------------------------------ "
-       << endl;
 };
 
 class QuerySampleLibraryQAIC : public mlperf::QuerySampleLibrary {

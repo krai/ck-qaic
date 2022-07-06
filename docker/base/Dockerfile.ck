@@ -65,7 +65,7 @@ ENV CK_ROOT=/home/krai/CK \
     LANG=C.UTF-8
 
 RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL} \
- && git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT} \
+ && git clone --branch V${CK_VER} https://github.com/mlcommons/ck.git ${CK_ROOT} \
  && mkdir -p ${CK_REPOS} ${CK_TOOLS} .local
 
 ###############################################################################
@@ -131,7 +131,7 @@ RUN ck install package --tags=python-package,cython \
  && ck install package --tags=python-package,opencv-python-headless \
  && echo "latest" | ck install package --tags=python-package,numpy
 
-RUN ck install package --tags=mlperf,inference,source,r2.0 --quiet \
+RUN ck install package --tags=mlperf,inference,source --quiet \
  && ck install package --tags=mlperf,loadgen,static \
  && ck install package --tags=mlperf,power,source --quiet
 

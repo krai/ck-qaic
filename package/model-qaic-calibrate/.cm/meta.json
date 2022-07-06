@@ -61,6 +61,47 @@
 	     ]
       }
     },
+    "openimages-cal": {
+      "enable_if_env": [
+        {
+          "CK_CALIBRATE_OPENIMAGES": [
+            "on",
+            "ON",
+            "yes",
+            "YES",
+            "true",
+            "TRUE",
+            "1"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "OpenImages calibration dataset in NCHW",
+      "sort": 1,
+      "tags": "dataset,calibration,openimages",
+      "update_tags_if_env": {
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ],
+        "first.1": [
+          {
+            "_CAL": "calibrate_first.1"
+          }
+        ],
+        "mlperf": [
+          {
+            "_COCO_CAL": "calibrate_mlperf"
+          }
+        ],
+	     "for.retinanet_resnext50.onnx.preprocessed": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
+          }
+	     ]
+      }
+    },
     "imagenet-cal": {
       "enable_if_env": [
         {
@@ -121,6 +162,11 @@
         "ssd-resnet34,onnx,mlperf,non-quantized,no-nms": [
           {
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
+          }
+        ],
+        "retinanet-resnext50,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
           }
         ],
         "ssd-mobilenet,pytorch,non-quantized,for.qaic": [
@@ -201,6 +247,11 @@
         "_BATCH_SIZE": "16"
       }
     },
+    "bs.explicit": {
+      "extra_env": {
+        "_BATCH_SIZE_EXPLICIT": "yes"
+      }
+    },
     "first.5": {
       "extra_env": {
         "_CAL": "calibrate_first.5"
@@ -253,6 +304,27 @@
         "_COMPILER_ARGS": "",
         "_COMPILER_PARAMS": "-enable-channelwise -profiling-backend=Interpreter -profiling-threads=32 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ]
+    },
+    "retinanet_resnext50": {
+      "extra_customize": {
+        "package_name": "Profile for QAIC model (MLPerf Retinanet ResNext50 No NMS)"
+      },
+      "extra_env": {
+        "_COCO_CAL": "calibrate_mlperf",
+        "CK_CALIBRATE_OPENIMAGES": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "retinanet-resnext50",
+        "_NODE_PRECISION_FILE_PATH": "retinanet-resnext50/node-precision.yaml",
+        "_COMPILER_ARGS": "",
+        "_COMPILER_PARAMS": "-enable-channelwise -profiling-threads=32 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
       },
       "extra_tags": [
         "object-detection",

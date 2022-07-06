@@ -1,0 +1,103 @@
+diff --git a/single_stage_detector/requirements.txt b/single_stage_detector/requirements.txt
+index bebbf35..2ab1aed 100644
+--- a/single_stage_detector/requirements.txt
++++ b/single_stage_detector/requirements.txt
+@@ -1,5 +1,13 @@
+-scikit-image>=0.15.0
+-ujson>=4.0.2
+-matplotlib>=3.5.1
+-pycocotools==2.0.4
+-git+https://github.com/mlcommons/logging.git@1.1.0-rc4
++dataclasses==0.8
++-e git+https://github.com/mlperf/logging.git@4272f73c952d9b22c735aef88640699700d5a0b8#egg=mlperf_logging
++numpy==1.19.5
++pandas==1.1.5
++Pillow==8.4.0
++python-dateutil==2.8.2
++pytz==2022.1
++PyYAML==6.0
++scipy==1.5.4
++six==1.16.0
++torch==1.8.1+cpu
++torchvision==0.9.1+cpu
++typing_extensions==4.1.1
+diff --git a/single_stage_detector/scripts/pth_to_onnx.py b/single_stage_detector/scripts/pth_to_onnx.py
+index 78945aa..c4173ec 100755
+--- a/single_stage_detector/scripts/pth_to_onnx.py
++++ b/single_stage_detector/scripts/pth_to_onnx.py
+@@ -46,11 +46,11 @@ def main(args):
+                                     data_layout=args.data_layout,
+                                     pretrained=False,
+                                     trainable_backbone_layers=args.trainable_backbone_layers)
+-    device = torch.device(args.device)
++    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+     model.to(device)
+ 
+     print("Loading model")
+-    checkpoint = torch.load(args.input)
++    checkpoint = torch.load(args.input, map_location=torch.device('cpu'))
+     model.load_state_dict(checkpoint['model'])
+ 
+     print("Creating input tensor")
+@@ -74,6 +74,11 @@ def main(args):
+             dynamic_axes['images'][2] = 'width'
+             dynamic_axes['images'][3] = 'height'
+ 
++    new_dynamic_axes = {
++        'images': {0: 'batch_size'},
++        'scores': {0: 'batch_size'},
++        'boxes':  {0: 'batch_size'}
++    }
+ 
+     print("Exporting the model")
+     model.eval()
+@@ -81,11 +86,12 @@ def main(args):
+                       inputs,
+                       args.output,
+                       export_params=True,
+-                      opset_version=13,
++                      opset_version=11,
+                       do_constant_folding=False,
+                       input_names=['images'],
+-                      output_names=['boxes', 'scores', 'labels'],
+-                      dynamic_axes=dynamic_axes)
++                      output_names=['scores', 'boxes'],
++                      #)
++                      dynamic_axes=new_dynamic_axes)
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/single_stage_detector/ssd/model/retinanet.py b/single_stage_detector/ssd/model/retinanet.py
+index 2f10d96..05652e5 100644
+--- a/single_stage_detector/ssd/model/retinanet.py
++++ b/single_stage_detector/ssd/model/retinanet.py
+@@ -445,7 +445,9 @@ class RetinaNet(nn.Module):
+                 scores_per_level, idxs = scores_per_level.topk(num_topk)
+                 topk_idxs = topk_idxs[idxs]
+ 
+-                anchor_idxs = torch.div(topk_idxs, num_classes, rounding_mode='floor')
++                anchor_idxs = torch.div(topk_idxs, num_classes).long()
++                print(type(anchor_idxs))
++                # exit(0)
+                 labels_per_level = topk_idxs % num_classes
+ 
+                 boxes_per_level = self.box_coder.decode_single(box_regression_per_level[anchor_idxs],
+@@ -543,6 +545,18 @@ class RetinaNet(nn.Module):
+         # create the set of anchors
+         anchors = self.anchor_generator(images, features)
+ 
++        # Save the Prior boxes
++        anchors_numpy = anchors[0].cpu().numpy()
++        anchors_numpy.tofile("retinanet_priors.bin")
++
++        head_outputs['cls_logits'] = torch.sigmoid(head_outputs['cls_logits'])
++
++        #head_outputs['cls_logits'] = torch.transpose(head_outputs['cls_logits'], 1, 2)
++
++        print(head_outputs)
++
++        return head_outputs
++
+         losses = {}
+         detections: List[Dict[str, Tensor]] = []
+         if self.training:

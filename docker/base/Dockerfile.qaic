@@ -92,6 +92,7 @@ ENV CK_ROOT=/home/krai/CK \
     GIT_EMAIL="info@krai.ai" \
     LANG=C.UTF-8
 
+RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
 RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

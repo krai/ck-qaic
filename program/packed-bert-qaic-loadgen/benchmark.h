@@ -281,7 +281,7 @@ public:
   void apply_mask(uint8_t *ptr, int seq_len, int offset) {
 
     // add the y offset
-    ptr += offset * _settings->max_seq_length;
+    ptr += offset * _settings->model_packed_seq_len;
 
     // create the mask for the first line
     for(int i=offset ; i<seq_len+offset ; ++i)
@@ -290,7 +290,7 @@ public:
     // replicate in the y direction
     for(int i=1 ; i<seq_len ; ++i) {
       uint8_t* src = ptr + offset;
-      uint8_t* dst = src + _settings->max_seq_length*i;
+      uint8_t* dst = src + _settings->model_packed_seq_len*i;
       memcpy(dst, src, seq_len);
     }
   }
@@ -307,7 +307,7 @@ public:
       for (int i = 0; i < samples.size(); ++i) {
         ((TInputDataType *)ptr)[i] = samples[i].second;*/
       int offset = 0;
-      memset((uint8_t*)ptr, 0, _settings->max_seq_length*_settings->max_seq_length*sizeof(uint8_t));
+      memset((uint8_t*)ptr, 0, _settings->model_packed_seq_len*_settings->model_packed_seq_len*sizeof(uint8_t));
       for (int i = 0; i < samples.size(); ++i) {
         int seq_len = samples[i].second;
         apply_mask((uint8_t*)ptr, seq_len, offset);
@@ -315,7 +315,7 @@ public:
       }
     } else if(buf_idx == 3) {
       int offset = 0;
-      memset(ptr, 0, _settings->max_seq_length*sizeof(TInputDataType));
+      memset(ptr, 0, _settings->model_packed_seq_len*sizeof(TInputDataType));
       for (int i = 0; i < samples.size(); ++i) {
         int seq_len = samples[i].second;
         for(int w=0 ; w<seq_len ; ++w)
@@ -324,7 +324,7 @@ public:
       }
     } else {
       int offset = 0;
-      memset(ptr, 0, _settings->max_seq_length*sizeof(TInputDataType));
+      memset(ptr, 0, _settings->model_packed_seq_len*sizeof(TInputDataType));
       for (int i = 0; i < samples.size(); ++i) {
         int seq_len = samples[i].second;
 	for(int m = 0; m < seq_len; m++) {

@@ -78,8 +78,16 @@ rm -f ${INSTALL_DIR}/*.raw
 image_list="${INSTALL_DIR}/image_list.txt"
 rm -f ${image_list}
 
-# Batch size.
+
+# If batch size is explicit then place the batch size in the command line.
 batchsize=${_BATCH_SIZE:-1}
+
+if [[ -n ${_BATCH_SIZE_EXPLICIT} ]]; then
+_COMPILER_PARAMS=${_COMPILER_PARAMS/"[BATCH_SIZE]"/${_BATCH_SIZE}}
+batch_size_implicit=""
+else
+batch_size_implicit="-batchsize=${batchsize}"
+fi
 
 filenames=`cat $images`
 i=0;
@@ -124,7 +132,7 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   read -d '' CMD <<END_OF_CMD
   ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec \
   -input-list-file=${image_list} \
-  -batchsize=${batchsize} \
+  ${batch_size_implicit} \
   ${_COMPILER_PARAMS} \
   -dump-profile=${INSTALL_DIR}/profile.yaml \
   -model=${model}

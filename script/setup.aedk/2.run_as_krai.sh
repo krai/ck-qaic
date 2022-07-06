@@ -1,10 +1,38 @@
 #!/bin/bash
 
-# Set up environment.
-echo 'export CK_PYTHON=$(which python3.9)'     >> $HOME/.bashrc
-echo 'export PATH=$HOME/.local/bin:$PATH'      >> $HOME/.bashrc
-echo "source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
-source $HOME/.bashrc
+_PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
+_DEVICE_OS=${DEVICE_OS:-centos}
+_CK_VER=${CK_VER:-2.6.1}
+_INSTALL_PYTHON_DEPENDENCY=${INSTALL_PYTHON_DEPENDENCY:-1}
+_INSTALL_LOADGEN=${INSTALL_LOADGEN:-1}
+
+. run_common.sh
+
+echo "Running '$0'"
+print_variables "${!_@}"
+
+# Set up environment
+if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then
+  echo "Adding CK-QAIC environment to '~/.bashrc'."
+  _PYTHON_VERSION_ARR=($(echo ${_PYTHON_VERSION} | tr "." " "))
+  _PYTHON_MAJOR=${_PYTHON_VERSION_ARR[0]}
+  _PYTHON_MINOR=${_PYTHON_VERSION_ARR[1]}
+  _PYTHON_BATCH=${_PYTHON_VERSION_ARR[2]}
+  echo -n "\
+# CK-QAIC.
+export CK_PYTHON=$(which python${_PYTHON_MAJOR}.${_PYTHON_MINOR})
+export PATH=$HOME/.local/bin:$PATH" >> $HOME/.bashrc
+
+  # Centos OS Dependency
+  if [[ "${_DEVICE_OS}" == centos ]]; then
+    echo -n "\
+source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
+  fi
+
+  source $HOME/.bashrc
+else
+  echo "CK-QAIC environment has already been added to '~/.bashrc'."
+fi
 
 # Configure Git.
 export GIT_USER="krai"
@@ -20,8 +48,7 @@ $CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.h
 $CK_PYTHON -m pip install transformers==2.4.0 --user
 
 # Install CK.
-$CK_PYTHON -m pip install ck==2.6.1
-ck set kernel var.package_quiet_install=yes
+$CK_PYTHON -m pip install ck==${_CK_VER}
 ck pull repo --url=https://github.com/krai/ck-qaic
 
 # Init CK environment.
@@ -31,9 +58,22 @@ ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck detect soft:tool.cmake --full_path=$(which cmake)
 
 # Install explicit Python dependencies.
-echo "1.2x" | ck install package --tags=python-package,numpy
-ck install package --tags=python-package,absl
-ck install package --tags=python-package,cython
-ck install package --tags=python-package,opencv-python-headless
+if [[ -z _INSTALL_PYTHON_DEPENDENCY ]]; then
+  echo "Installing explicit Python dependencies."
+  echo "1.2x" | ck install package --tags=python-package,numpy
+  ck install package --tags=python-package,absl
+  ck install package --tags=python-package,cython
+  ck install package --tags=python-package,opencv-python-headless
+else
+  echo "Passing explicit Python dependencies installation."
+fi
 
-# TODO: Install LoadGen.
+# Install LoadGen.
+if [[ -z _INSTALL_LOADGEN ]]; then
+  echo "Installing loadgen."
+  ck install package --tags=mlperf,inference,source
+  ck install package --tags=mlperf,loadgen,static
+  ck install package --tags=mlperf,power,source
+else
+  echo "Passing loadgen installation."
+fi
