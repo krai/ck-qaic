@@ -91,19 +91,19 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 
 # Compile the bert-99 workload (separately for each scenario).
 RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448 --quiet \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet \
      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384 --quiet \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet \
      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet \
      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet \
      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
 else \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448 --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384 --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet; \
+  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet; \
 fi
 
 # Compile the bert-99.9 workload.
