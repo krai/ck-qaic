@@ -60,17 +60,17 @@ source ./config.sh && \
 ./1.run_as_root.${DEVICE_OS}.sh
 ```
 
+## `[D1S]` Set user password
+```
+passwd ${USER}
+```
+
 # C. Initial device setup under the `krai` user
 
 ## `[H1]` Connect to the device as `krai`
 Connect to the device as `krai` e.g.:
 ```
 ssh krai@${AEDK1}
-```
-
-## `[D1]` Configure variables:
-```
-cd /tmp/ && source config.sh
 ```
 
 ## `[D1]` Update scripts permissions

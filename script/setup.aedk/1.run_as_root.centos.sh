@@ -3,9 +3,8 @@
 _PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _GROUP=${GROUP:-krai}
 _USER=${USER:-krai}
-_USER_PASSWORD=${_USER_PASSWORD:-"oelinux123"}
 _BASE_DIR=${BASE_DIR:-"/data"}
-_TIMEZONE=${TIMEZONE:-"/Europe/London"}
+_TIMEZONE=${TIMEZONE:-"Europe/London"}
 _INSTALL_SYS_PACKAGE=${INSTALL_SYS_PACKAGE:-1}
 _INSTALL_PYTHON=${INSTALL_PYTHON:-1}
 
@@ -60,8 +59,6 @@ groupadd -f ${_GROUP}
 useradd -m -g ${_USER} -s /bin/bash -b ${_BASE_DIR} ${_USER}
 # Add user 'krai' to some groups.
 usermod -aG qaic,root,wheel ${_USER}
-# Set user 'krai' password
-echo ${_USER_PASSWORD} | passwd --stdin ${_USER}
 # Do not ask user 'krai' for 'sudo' password.
 echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
@@ -70,5 +67,5 @@ chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
 
 # Set to local timezone (for power measurements).
 rm /etc/localtime -f
-ln -s /usr/share/zoneinfo"${_TIMEZONE}" /etc/localtime
+ln -s /usr/share/zoneinfo/"${_TIMEZONE}" /etc/localtime
 date
