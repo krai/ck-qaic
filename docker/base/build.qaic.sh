@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
 
 if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
@@ -47,7 +47,7 @@ _ARCH=${ARCH:-$(uname -m)}
 
 _WORKSPACE_DIR=${WORKSPACE_DIR:-/local/mnt/workspace}
 _SDK_DIR=${SDK_DIR:-${_WORKSPACE_DIR}/sdks}
-_SDK_VER=${SDK_VER:-1.7.0.34}
+_SDK_VER=${SDK_VER:-1.7.1.12}
 
 _APPS_SDK=${APPS_SDK:-"${_SDK_DIR}/qaic-apps-${_SDK_VER}.zip"}
 if [[ ! -f "${_APPS_SDK}" ]]; then

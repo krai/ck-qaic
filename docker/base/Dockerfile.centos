@@ -54,7 +54,12 @@ RUN echo "min=1" >> /etc/yum.conf \
 
 RUN yum update -y \
  && update-ca-trust force-enable \
- && yum install -y make which patch git wget zip unzip python python3 ca-certificates sudo pciutils pciutils-lib openssl-devel bzip2-devel libffi-devel numactl OpenIPMI OpenIPMI-tools lm_sensors acl \
+ && yum install -y \
+    sudo acl which make patch git vim \
+    python python3 \
+    wget rsync ca-certificates sshpass openssl-devel libffi-devel \
+    zip unzip bzip2-devel \
+    pciutils pciutils-lib numactl OpenIPMI OpenIPMI-tools lm_sensors \
  && yum clean all
 
 # Start IPMI tool.

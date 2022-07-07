@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
 
 if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh

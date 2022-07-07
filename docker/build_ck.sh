@@ -43,7 +43,7 @@ fi
 MODEL=$1
 echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 # Use Python >= 3.7.
 _PYTHON_VER=${PYTHON_VER:-3.8.13}

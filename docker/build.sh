@@ -45,9 +45,9 @@ MODEL=$1
 
 echo "Building image for '${MODEL}' ..."
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic}
-_SDK_VER=${SDK_VER:-1.7.0.34}
+_SDK_VER=${SDK_VER:-1.7.1.12}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
 _CK_QAIC_PCV=${CK_QAIC_PCV:-''}
