@@ -514,7 +514,7 @@
         "package_name": "SSD Retinanet ResNext50 FP16"
       },
       "extra_env": {
-        "_BATCH_SIZE": "0",
+        "_BATCH_SIZE_EXPLICIT": "yes",
         "_NO_QUANTIZATION" : "yes",
         "_MODEL_TO_CONVERT": "compile_retinanet_resnext50_no_nms_mlperf",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
