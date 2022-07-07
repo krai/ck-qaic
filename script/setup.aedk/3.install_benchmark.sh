@@ -10,8 +10,8 @@ print_variables "${!_@}"
 
 if [[ -z $(contains_element "resnet50" "${_BENCHMARKS[@]}") ]]; then
     _DEVICE_DATASETS=${_DEVICE_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val
-    if [[ ! -f "${_DEVICE_DATASETS}" ]]; then
-      echo "Passing: File '${_DEVICE_DATASETS}' already exist!"
+    if [[ -d "${_DEVICE_DATASETS}" ]]; then
+      echo "Passing: Directory '${_DEVICE_DATASETS}' already exist!"
     else
       echo "Extracting dataset to '${_DEVICE_DATASETS}'"
       ## Detect dataset
