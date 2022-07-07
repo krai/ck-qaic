@@ -560,12 +560,12 @@
     },
     "retinanet-resnext50.pcie.16nsp.offline": {
       "extra_env": {
-        "_BATCH_SIZE": "4",
+        "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=1 -ols=3"
       },
       "extra_tags": [
-        "bs.4"
+        "bs.1"
       ]
    },
     "ssd_mobilenet": {
