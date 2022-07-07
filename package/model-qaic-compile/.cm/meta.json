@@ -356,8 +356,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_ARGS_NAME_PREFIX": "_14NSP",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -776,7 +775,7 @@
     "bert-99.pcie.14nsp.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.14nsp.multistream": {
@@ -860,7 +859,7 @@
     },
     "quantization.calibration": {
       "extra_env": {
-        "_PERCENTILE_CALIBRATION_VALUE": "99.9983",
+        "_PERCENTILE_CALIBRATION_VALUE": "99.9980",
         "_QUANTIZATION_PARAMS": "-quantization-calibration=Percentile  -percentile-calibration-value=[PERCENTILE_CALIBRATION_VALUE]"
       }
     },
