@@ -40,7 +40,7 @@ fi
 if [[ -z _INSTALL_PYTHON ]]; then
   echo "Installing Python ${_PYTHON_VERSION}"
   cd /usr/src \
-  && wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${_PYTHON_VERSION}.tgz \
+  && wget https://www.python.org/ftp/python/${_PYTHON_VERSION}/Python-${_PYTHON_VERSION}.tgz \
   && tar xzf Python-${_PYTHON_VERSION}.tgz \
   && rm -f Python-${_PYTHON_VERSION}.tgz \
   && cd /usr/src/Python-${_PYTHON_VERSION} \

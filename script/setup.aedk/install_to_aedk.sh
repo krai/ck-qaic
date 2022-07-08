@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: PASSWORD=111111 IPS=aedk1 PORTS=3231 SUT=aedk_15w bash install_to_aedk.sh
+# Usage: PASSWORD=111111 IPS=aedk1 PORT=3231 SUT=aedk_15w bash install_to_aedk.sh
 
 
 _DOCKER=${DOCKER:-yes}
@@ -29,8 +29,12 @@ if [ -z ${IPS} ]; then
   echo 'Please set IPS (device IP addresses) e.g. IPS="aedk1 aedk2"!';
   exit -1
 fi
-if [ -z ${PORTS} ]; then
-  echo 'Please set PORTS (device ports) e.g. PORTS="3231 3232"!';
+if [ -z ${PORT} ]; then
+  echo 'Please set PORT (device port) e.g. PORT="3231"!';
+  exit -1
+fi
+if [ -z ${HOSTNAME} ]; then
+  echo 'Please set HOSTNAME e.g. HOSTNAME="hostname"!';
   exit -1
 fi
 
@@ -50,7 +54,7 @@ function install () {
       CMD="\
 ck install package --tags=install-to-aedk \
 -dep_add_tags.model-qaic=$workload,$workload.${SUT}.${scenario}${EXTRA_SUFFIX} \
---env.CK_AEDK_USERNAME=${_USERNAME} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORTS}' \
+--env.CK_AEDK_USERNAME=${_USERNAME} --env.CK_AEDK_IPS='${IPS}' --env.CK_AEDK_PORTS='${PORT}' \
 --env.CK_DEST_PATH=${_BASE_DIR}/${_USERNAME}/CK-TOOLS"
       echo "    CMD: $CMD"
       #eval $CMD
@@ -68,8 +72,9 @@ if [[ ${_DOCKER} == "yes" ]]; then
   fi
   echo "Installing workloads from Docker image '$image' ..."
   container=$(docker run -dt --rm $image bash)
-  docker exec $container ssh-keygen -q -N '' > /dev/zero
-  docker exec $container sshpass -p ${PASSWORD} ssh-copy-id ${USERNAME}@${IPS} -p ${PORTS} -o StrictHostKeyChecking=no
+  docker exec $container ssh-keygen -q -N '' -f /home/${_USERNAME}/.ssh/id_rsa > /dev/zero 
+  docker exec $container sudo apt-get install -y sshpass
+  docker exec ${container} sshpass -p ${PASSWORD} ssh-copy-id ${_USERNAME}@${HOSTNAME} -p ${PORT} -o StrictHostKeyChecking=no
   install ${_WORKLOADS}
   docker container stop $container
 else
