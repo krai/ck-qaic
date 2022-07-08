@@ -67,19 +67,58 @@ index 78945aa..c4173ec 100755
  
  
  if __name__ == "__main__":
+diff --git a/single_stage_detector/ssd/model/feature_pyramid_network.py b/single_stage_detector/ssd/model/feature_pyramid_network.py
+index eab65d2..8c59ce2 100644
+--- a/single_stage_detector/ssd/model/feature_pyramid_network.py
++++ b/single_stage_detector/ssd/model/feature_pyramid_network.py
+@@ -6,7 +6,7 @@ from torch import nn, Tensor
+ from typing import Tuple, List, Dict, Optional
+ 
+ from ssd_logger import mllogger
+-from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
++#from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
+ 
+ 
+ class ExtraFPNBlock(nn.Module):
+@@ -91,9 +91,9 @@ class FeaturePyramidNetwork(nn.Module):
+         # initialize parameters now to avoid modifying the initialization of top_blocks
+         for name, m in self.named_modules(prefix=module_name):
+             if isinstance(m, nn.Conv2d):
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.weight"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.weight"})
+                 nn.init.kaiming_uniform_(m.weight, a=1)
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.bias"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.bias"})
+                 nn.init.constant_(m.bias, 0)
+ 
+         if extra_blocks is not None:
+@@ -192,9 +192,9 @@ class LastLevelP6P7(ExtraFPNBlock):
+         self.p7 = nn.Conv2d(out_channels, out_channels, 3, 2, 1)
+         for name, module in self.named_modules(prefix=module_name):
+             if module in [self.p6, self.p7]:
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.weight"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.weight"})
+                 nn.init.kaiming_uniform_(module.weight, a=1)
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.bias"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{name}.bias"})
+                 nn.init.constant_(module.bias, 0)
+         self.use_P5 = in_channels == out_channels
+ 
 diff --git a/single_stage_detector/ssd/model/resnet.py b/single_stage_detector/ssd/model/resnet.py
-index ef46881..ba73a68 100644
+index ef46881..d7aeef2 100644
 --- a/single_stage_detector/ssd/model/resnet.py
 +++ b/single_stage_detector/ssd/model/resnet.py
-@@ -4,7 +4,7 @@ import torch.nn as nn
+@@ -4,8 +4,8 @@ import torch.nn as nn
  from torch.hub import load_state_dict_from_url
  from typing import Type, Any, Callable, Union, List, Optional
  
 -from ssd_logger import mllogger
+-from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
 +#from ssd_logger import mllogger
- from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
++#from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
  
  __all__ = ['resnet50', 'resnet101',
+            'resnext50_32x4d', 'resnext101_32x8d']
 @@ -184,12 +184,12 @@ class ResNet(nn.Module):
  
          for name, m in self.named_modules(prefix=module_name):
@@ -110,9 +149,59 @@ index ef46881..ba73a68 100644
  
      def _make_layer(self, block: Type[Union[BasicBlock, Bottleneck]], planes: int, blocks: int,
 diff --git a/single_stage_detector/ssd/model/retinanet.py b/single_stage_detector/ssd/model/retinanet.py
-index 2f10d96..05652e5 100644
+index 2f10d96..f4e3b8f 100644
 --- a/single_stage_detector/ssd/model/retinanet.py
 +++ b/single_stage_detector/ssd/model/retinanet.py
+@@ -16,7 +16,7 @@ from model.boxes import box_iou, clip_boxes_to_image, batched_nms
+ from model.utils import Matcher, overwrite_eps, BoxCoder
+ 
+ from ssd_logger import mllogger
+-from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
++#from mlperf_logging.mllog.constants import WEIGHTS_INITIALIZATION
+ 
+ __all__ = [
+     "retinanet_from_backbone",
+@@ -87,15 +87,15 @@ class RetinaNetClassificationHead(nn.Module):
+ 
+         for name, layer in self.conv.named_children():
+             if isinstance(layer, nn.Conv2d):
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.weight"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.weight"})
+                 torch.nn.init.normal_(layer.weight, std=0.01)
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.bias"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.bias"})
+                 torch.nn.init.constant_(layer.bias, 0)
+ 
+         self.cls_logits = nn.Conv2d(in_channels, num_anchors * num_classes, kernel_size=3, stride=1, padding=1)
+-        mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.cls_logits.weight"})
++        #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.cls_logits.weight"})
+         torch.nn.init.normal_(self.cls_logits.weight, std=0.01)
+-        mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.cls_logits.bias"})
++        #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.cls_logits.bias"})
+         torch.nn.init.constant_(self.cls_logits.bias, -math.log((1 - prior_probability) / prior_probability))
+ 
+         self.num_classes = num_classes
+@@ -177,16 +177,16 @@ class RetinaNetRegressionHead(nn.Module):
+         self.conv = nn.Sequential(*conv)
+ 
+         self.bbox_reg = nn.Conv2d(in_channels, num_anchors * 4, kernel_size=3, stride=1, padding=1)
+-        mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.bbox_reg.weight"})
++        #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.bbox_reg.weight"})
+         torch.nn.init.normal_(self.bbox_reg.weight, std=0.01)
+-        mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.bbox_reg.bias"})
++        #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.bbox_reg.bias"})
+         torch.nn.init.zeros_(self.bbox_reg.bias)
+ 
+         for name, layer in self.conv.named_children():
+             if isinstance(layer, nn.Conv2d):
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.weight"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.weight"})
+                 torch.nn.init.normal_(layer.weight, std=0.01)
+-                mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.bias"})
++                #mllogger.event(key=WEIGHTS_INITIALIZATION, metadata={"tensor": f"{module_name}.conv.{name}.bias"})
+                 torch.nn.init.zeros_(layer.bias)
+ 
+         self.box_coder = BoxCoder(weights=(1.0, 1.0, 1.0, 1.0))
 @@ -445,7 +445,9 @@ class RetinaNet(nn.Module):
                  scores_per_level, idxs = scores_per_level.topk(num_topk)
                  topk_idxs = topk_idxs[idxs]
@@ -143,3 +232,58 @@ index 2f10d96..05652e5 100644
          losses = {}
          detections: List[Dict[str, Tensor]] = []
          if self.training:
+diff --git a/single_stage_detector/ssd/ssd_logger.py b/single_stage_detector/ssd/ssd_logger.py
+index 0a12a62..073b1fd 100644
+--- a/single_stage_detector/ssd/ssd_logger.py
++++ b/single_stage_detector/ssd/ssd_logger.py
+@@ -2,15 +2,16 @@ import os
+ from functools import wraps
+ 
+ import utils
+-from mlperf_logging import mllog
++#from mlperf_logging import mllog
+ 
+ 
+ class SSDLogger:
+     def __init__(self, filename=None, default_stack_offset=2):
+-        self.mllogger = mllog.get_mllogger()
+-        mllog.config(default_stack_offset=default_stack_offset,
+-                     filename=(filename or os.getenv("COMPLIANCE_FILE") or "mlperf_compliance.log"),
+-                     root_dir=os.path.normpath(os.path.dirname(os.path.realpath(__file__))))
++        #self.mllogger = mllog.get_mllogger()
++        #mllog.config(default_stack_offset=default_stack_offset,
++        #             filename=(filename or os.getenv("COMPLIANCE_FILE") or "mlperf_compliance.log"),
++        #             root_dir=os.path.normpath(os.path.dirname(os.path.realpath(__file__))))
++        pass
+ 
+     @property
+     def rank(self):
+@@ -20,22 +21,22 @@ class SSDLogger:
+         log_rank = self.rank==0 if log_rank is None else log_rank
+         if sync:
+             utils.barrier()
+-        if log_rank:
+-            self.mllogger.event(*args, **kwargs)
++        #if log_rank:
++        #    self.mllogger.event(*args, **kwargs)
+ 
+     def start(self, sync=False, log_rank=None, *args, **kwargs):
+         log_rank = self.rank==0 if log_rank is None else log_rank
+         if sync:
+             utils.barrier()
+-        if log_rank:
+-            self.mllogger.start(*args, **kwargs)
++        #if log_rank:
++        #    self.mllogger.start(*args, **kwargs)
+ 
+     def end(self, sync=False, log_rank=None, *args, **kwargs):
+         log_rank = self.rank==0 if log_rank is None else log_rank
+         if sync:
+             utils.barrier()
+-        if log_rank:
+-            self.mllogger.end(*args, **kwargs)
++        #if log_rank:
++        #    self.mllogger.end(*args, **kwargs)
+ 
+ 
+ mllogger = SSDLogger()
