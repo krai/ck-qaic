@@ -46,17 +46,22 @@ _WORKSPACE_DIR=${WORKSPACE_DIR:-"/local/mnt/workspace"}
 _DATASETS_DIR=${DATASETS_DIR:-"${_WORKSPACE_DIR}/datasets"}
 _IMAGENET_NAME=${IMAGENET_NAME:-"imagenet"}
 _SDK_DIR=${SDK_DIR:-"${_WORKSPACE_DIR}/sdks"}
-_SDK_VER=${SDK_VER:-1.7.0.34}
-_PYTHON_VER=${PYTHON_VER:-3.8.13}
+_SDK_VER=${SDK_VER:-1.7.1.12}
+_PYTHON_VER=${PYTHON_VER:-3.9.13}
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 _CK_VER=${CK_VER:-2.6.1}
 _GROUP_ID=${GROUP_ID:-1500}
 _USER_ID=${USER_ID:-2000}
-#_CK_QAIC_PCV=${CK_QAIC_PCV:-''}
 _CK_QAIC_PCV_BERT=${CK_QAIC_PCV_BERT:-'9980'}
 _CK_QAIC_PCV_RESNET50=${CK_QAIC_PCV_RESNET50:-''}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
+_COMPILE_PRO=${COMPILE_PRO:-yes}
+_COMPILE_STD=${COMPILE_STD:-no}
  #_NO_CACHE=${NO_CACHE:-"--no-cache"}
+
+if [[ "${_DOCKER_OS}" == "ubuntu" ]]; then
+    _PYTHON_VER="3.8.10"
+fi
 
 #===============================================================================
 # Build & test base images.
@@ -118,7 +123,7 @@ exit_if_error "Failed to test SDK-independent ResNet50 image!"
 
 # Build SDK-dependent image.
 echo "Building SDK-dependent ResNet50 image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_RESNET50} $(ck find repo:ck-qaic)/docker/build.sh resnet50
+DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_RESNET50} COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} $(ck find repo:ck-qaic)/docker/build.sh resnet50
 exit_if_error "Failed to build SDK-dependent ResNet50 image!"
 # Test SDK-dependent image.
 echo "Testing SDK-dependent ResNet50 image ..."
@@ -140,7 +145,7 @@ exit_if_error "Failed to test SDK-independent BERT image!"
 
 # Build SDK-dependent image.
 echo "Building SDK-dependent BERT image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT} $(ck find repo:ck-qaic)/docker/build.sh bert
+DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT} COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} $(ck find repo:ck-qaic)/docker/build.sh bert
 exit_if_error "Failed to build SDK-dependent BERT image!"
 # Test SDK-dependent image.
 echo "Testing SDK-dependent BERT image ..."
