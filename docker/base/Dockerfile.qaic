@@ -94,5 +94,6 @@ ENV CK_ROOT=/home/krai/CK \
 
 RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
 RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
+RUN ssh-keygen -q -N '' -f /home/krai/.ssh/id_rsa > /dev/zero
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
