@@ -104,9 +104,11 @@ exit_if_error "Failed to test SDK-dependent base image!"
 #-------------------------------------------------------------------------------
 
 # Build ImageNet image.
-echo "Building ImageNet image ..."
-DATASETS_DIR=${_DATASETS_DIR} IMAGENET_NAME=${_IMAGENET_NAME} $(ck find ck-qaic:docker:imagenet)/build.sh
-exit_if_error "Failed to build ImageNet image!"
+if [[ "$(docker images -q imagenet:latest 2> /dev/null)" == "" ]]; then
+  echo "Building ImageNet image ..."
+  DATASETS_DIR=${_DATASETS_DIR} IMAGENET_NAME=${_IMAGENET_NAME} $(ck find ck-qaic:docker:imagenet)/build.sh
+  exit_if_error "Failed to build ImageNet image!"
+fi
 # Test ImageNet image.
 echo "Testing ImageNet image ..."
 docker run --rm imagenet:latest /bin/bash -c "du -hs /imagenet"
