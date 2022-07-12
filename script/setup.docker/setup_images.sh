@@ -60,7 +60,7 @@ _COMPILE_STD=${COMPILE_STD:-no}
  #_NO_CACHE=${NO_CACHE:-"--no-cache"}
 
 if [[ "${_DOCKER_OS}" == "ubuntu" ]]; then
-    _PYTHON_VER="3.8.10"
+  _PYTHON_VER="3.8.10"
 fi
 
 #===============================================================================
@@ -88,7 +88,7 @@ exit_if_error "Failed to test SDK-independent common image!"
 
 # Build SDK-dependent base image.
 echo "Building SDK-dependent base image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.qaic.sh
+WORKSPACE_DIR=${_WORKSPACE_DIR} DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.qaic.sh
 exit_if_error "Failed to build SDK-dependent base image!"
 # Test SDK-dependent base image.
 echo "Testing SDK-dependent base image ..."
