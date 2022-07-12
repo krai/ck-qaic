@@ -33,6 +33,7 @@
 #
 
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
+_DOCKER_BASE_IMAGE="krai/base:${_DOCKER_OS}_latest"
 
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
@@ -46,15 +47,18 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 echo
-echo "Building image: 'krai/base.${_DOCKER_OS}'"
+echo "Building image: '${_DOCKER_BASE_IMAGE}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
 --build-arg GCC_MAJOR_VER=${_GCC_MAJOR_VER} \
 --build-arg PYTHON_VER=${_PYTHON_VER} \
+--build-arg PYTHON_MAJOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f1) \
+--build-arg PYTHON_MINOR_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f2) \
+--build-arg PYTHON_PATCH_VER=$(echo ${_PYTHON_VER} | cut -d '.' -f3) \
 --build-arg TIMEZONE=${_TIMEZONE} \
 -f Dockerfile.${_DOCKER_OS} \
--t krai/base:${_DOCKER_OS}_latest .
+-t ${_DOCKER_BASE_IMAGE} .
 END_OF_CMD
 echo "Command: '${CMD}'"
 if [ -z "${DRY_RUN}" ]; then
@@ -62,5 +66,5 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 echo
-echo "Done (building 'krai/base.${_DOCKER_OS}')"
+echo "Done (building '${_DOCKER_BASE_IMAGE}')"
 echo

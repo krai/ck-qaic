@@ -33,8 +33,10 @@
 #
 
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
+_DOCKER_CK_COMMON_IMAGE="krai/ck.common:${_DOCKER_OS}_latest"
+_DOCKER_BASE_IMAGE="krai/base:${_DOCKER_OS}_latest"
 
-if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q ${_DOCKER_BASE_IMAGE} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
 fi
 
@@ -57,7 +59,7 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 echo
-echo "Building image: 'krai/ck.common.${_DOCKER_OS}'"
+echo "Building image: '${_DOCKER_CK_COMMON_IMAGE}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
@@ -72,7 +74,7 @@ time docker build ${_NO_CACHE} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg DOCKER_OS=${_DOCKER_OS} \
 -f Dockerfile.ck \
--t krai/ck.common:${_DOCKER_OS}_latest .
+-t ${_DOCKER_CK_COMMON_IMAGE} .
 END_OF_CMD
 echo "Command: ${CMD}"
 if [ -z "${DRY_RUN}" ]; then
@@ -80,5 +82,5 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 echo
-echo "Done (building 'krai/ck.common.${_DOCKER_OS}')"
+echo "Done (building '${_DOCKER_CK_COMMON_IMAGE}')"
 echo

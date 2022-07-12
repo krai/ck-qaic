@@ -35,7 +35,12 @@ FROM centos:7.9.2009
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
 ARG GCC_MAJOR_VER
+
 ARG PYTHON_VER
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
 ARG TIMEZONE
 
 # Use the Bash shell.
@@ -56,7 +61,6 @@ RUN yum update -y \
  && update-ca-trust force-enable \
  && yum install -y \
     sudo acl which make patch git vim \
-    python python3 \
     wget rsync ca-certificates sshpass openssl-devel libffi-devel \
     zip unzip bzip2-devel \
     pciutils pciutils-lib numactl OpenIPMI OpenIPMI-tools lm_sensors \
@@ -78,5 +82,10 @@ RUN mkdir -p /tmp && cd /tmp \
  && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations && make -j 10 altinstall" \
  && cd /tmp \
  && rm -rf Python-${PYTHON_VER}*
+
+# Make the installed Python default for both python and python3.
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+RUN rm -f /usr/bin/python3 && ln -s /usr/local/bin/${CK_PYTHON} /usr/bin/python3 \
+ && rm -f /usr/bin/python  && ln -s /usr/local/bin/${CK_PYTHON} /usr/bin/python
 
 CMD ["rpm -q centos-release"]

@@ -62,6 +62,8 @@ RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh
 FROM preamble AS final
 ARG GROUP_ID
 ARG USER_ID
+ARG DOCKER_OS
+ARG SDK_VER
 
 COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
 
@@ -94,6 +96,7 @@ ENV CK_ROOT=/home/krai/CK \
 
 RUN git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL}
 RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} .local
-RUN ssh-keygen -q -N '' -f /home/krai/.ssh/id_rsa > /dev/zero
+ENV KEY_COMMENT="krai@${DOCKER_OS}_${SDK_VER}"
+RUN ssh-keygen -q -N '' -f /home/krai/.ssh/id_rsa -C ${KEY_COMMENT} > /dev/zero
 
 CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]
