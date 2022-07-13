@@ -33,7 +33,7 @@
 #
 
 if [[ $# < 1 ]]; then
-  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet).";
+  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet, retinanet ).";
   exit 1;
 fi
 
@@ -80,6 +80,12 @@ else
 fi
 
 if [[ ${MODEL} == "ssd-resnet34" ]]; then
+  HASH_REPLACE="sed -i 's/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g' ./${MODEL}/bs.1/profile.yaml &&";
+else
+  HASH_REPLACE=""
+fi
+
+if [[ ${MODEL} == "retinanet" ]]; then
   HASH_REPLACE="sed -i 's/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g' ./${MODEL}/bs.1/profile.yaml &&";
 else
   HASH_REPLACE=""
@@ -155,6 +161,12 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-resnet34 --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
         ssd-resnet34 ssd-resnet34.pcie.16nsp.offline ${_SDK_VER};'
+    fi
+
+    if [[ ${MODEL} == "retinanet" ]]; then
+      docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,retinanet-resnext50 --force'
+      docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        retinanet-resnext50 retinanet-resnext50.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-mobilenet" ]]; then

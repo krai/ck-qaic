@@ -37,13 +37,14 @@ function exit_if_error() {
 }
 
 if [[ $# < 1 ]]; then
-  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet).";
+  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet, retinanet).";
   exit 1;
 fi
 MODEL=$1
 echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
+
 # Use Python >= 3.7.
 _PYTHON_VER=${PYTHON_VER:-3.8.13}
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
