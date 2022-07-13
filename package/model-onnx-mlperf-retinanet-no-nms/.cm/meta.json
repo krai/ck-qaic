@@ -4,7 +4,7 @@
     "extra_dir": "",
     "install_env": {
 
-      "ML_MODEL_MODEL_NAME": "retinanet-resnext50",
+      "ML_MODEL_MODEL_NAME": "retinanet",
       "ML_MODEL_DATA_LAYOUT": "NCHW",
       "ML_MODEL_DATA_TYPE": "float32",
       "ML_MODEL_INPUT_DATA_TYPE": "float32",
@@ -60,9 +60,9 @@
     },
     "tf-model": {
       "local": "yes",
-      "name": "Pytorch Retinanet ResNext50",
+      "name": "Pytorch Retinanet",
       "sort": 5,
-      "tags": "model,pytorch,retinanet,resnext50"
+      "tags": "model,pytorch,retinanet"
     }
   },
   "end_full_path": {
@@ -74,17 +74,15 @@
   "only_for_target_os_tags": [
     "linux"
   ],
-  "package_extra_name": " (MLPerf Retinanet ResNext50 no NMS)",
+  "package_extra_name": " (MLPerf Retinanet no NMS)",
   "process_script": "install",
   "soft_uoa": "bcaac306e9041879",
-  "suggested_path": "model-onnx-mlperf-retinanet-resnext50-no-nms-downloaded",
+  "suggested_path": "model-onnx-mlperf-retinanet-no-nms-downloaded",
   "tags": [
     "mlperf",
     "object-detection",
     "model",
     "onnx",
-    "retinanet-resnext50",
-    "resnext50",
     "retinanet",
     "non-quantized",
     "nchw",

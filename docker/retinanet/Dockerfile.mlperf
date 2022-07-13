@@ -81,7 +81,7 @@ RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # The steps above are common.
-# The steps below are Retinanet-resnext50 specific.
+# The steps below are Retinanet specific.
 #-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
@@ -93,12 +93,12 @@ RUN ck compile program:object-detection-qaic-loadgen --quiet
 #ADD retinanet/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1
 #RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
 #--full_path=/home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1/profile.yaml \
-#--extra_tags=detected,retinanet-resnext50
+#--extra_tags=detected,retinanet
 
 # Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=retinanet-resnext50,retinanet-resnext50.pcie.16nsp.offline 
-#RUN ck install package --tags=retinanet-resnext50,retinanet-resnext50.pcie.16nsp.singlestream
-#RUN ck install package --tags=retinanet-resnext50,retinanet-resnext50.pcie.16nsp.multistream
+RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.offline
+RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.singlestream
+RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.multistream
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.

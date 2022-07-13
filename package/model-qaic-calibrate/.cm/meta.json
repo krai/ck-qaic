@@ -95,9 +95,9 @@
             "_COCO_CAL": "calibrate_mlperf"
           }
         ],
-	     "for.retinanet_resnext50.onnx.preprocessed": [
+	     "for.retinanet.onnx.preprocessed": [
           {
-            "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
+            "_MODEL_TO_CONVERT": "calibrate_retinanet_no_nms_mlperf"
           }
 	     ]
       }
@@ -164,9 +164,9 @@
             "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
           }
         ],
-        "retinanet-resnext50,onnx,mlperf,non-quantized,no-nms": [
+        "retinanet,onnx,mlperf,non-quantized,no-nms": [
           {
-            "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
+            "_MODEL_TO_CONVERT": "calibrate_retinanet_no_nms_mlperf"
           }
         ],
         "ssd-mobilenet,pytorch,non-quantized,for.qaic": [
@@ -311,20 +311,20 @@
         "no-nms"
       ]
     },
-    "retinanet_resnext50": {
+    "retinanet": {
       "extra_customize": {
-        "package_name": "Profile for QAIC model (MLPerf Retinanet ResNext50 No NMS)"
+        "package_name": "Profile for QAIC model (MLPerf Retinanet No NMS)"
       },
       "extra_env": {
         "_COCO_CAL": "calibrate_mlperf",
         "CK_CALIBRATE_OPENIMAGES": "yes",
         "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
-        "ML_MODEL_MODEL_NAME": "retinanet-resnext50",
-        "_NODE_PRECISION_FILE_PATH": "retinanet-resnext50/node-precision.yaml",
+        "ML_MODEL_MODEL_NAME": "retinanet",
+        "_NODE_PRECISION_FILE_PATH": "retinanet/node-precision.yaml",
         "_COMPILER_ARGS": "",
         "_COMPILER_PARAMS": "-enable-channelwise -profiling-threads=32 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
-        "_MODEL_TO_CONVERT": "calibrate_retinanet_resnext50_no_nms_mlperf"
+        "_MODEL_TO_CONVERT": "calibrate_retinanet_no_nms_mlperf"
       },
       "extra_tags": [
         "object-detection",

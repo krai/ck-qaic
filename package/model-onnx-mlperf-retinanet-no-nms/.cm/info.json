@@ -11,5 +11,5 @@
       "2"
     ]
   },
-  "data_name": "model-onnx-mlperf-retinanet-resnext50-no-nms"
+  "data_name": "model-onnx-mlperf-retinanet-no-nms"
 }

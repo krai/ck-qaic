@@ -164,9 +164,9 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
     fi
 
     if [[ ${MODEL} == "retinanet" ]]; then
-      docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,retinanet-resnext50 --force'
+      docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,retinanet --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        retinanet-resnext50 retinanet-resnext50.pcie.16nsp.offline ${_SDK_VER};'
+        retinanet retinanet.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-mobilenet" ]]; then

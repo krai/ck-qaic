@@ -130,7 +130,7 @@
       }
     },
     "model": {
-      "retinanet-resnext50": {
+      "retinanet": {
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_RX50",
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
@@ -140,11 +140,11 @@
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "deps": [
-          "--dep_add_tags.dataset=dataset,preprocessed,openimages,for.retinanet_resnext50.onnx.preprocessed.quantized,validation,first.500 --cmd_key=openimages"
+          "--dep_add_tags.dataset=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,first.500 --cmd_key=openimages"
         ],
         "division": "closed",
-        "hyphenated_model_name": "retinanet-resnext50",
-        "model_name": "retinanet-resnext50",
+        "hyphenated_model_name": "retinanet",
+        "model_name": "retinanet",
 	"docker_os": "centos",
         "model_tags": [
           "###"
