@@ -6,19 +6,21 @@
 
 #### Ubuntu host (supported: Ubuntu 20.04)
 ```
-WORKSPACE=/local/mnt/workspace bash setup_ubuntu.sh
+WORKSPACE_DIR=/local/mnt/workspace bash setup_ubuntu.sh
 ```
 
 #### CentOS host (supported: CentOS 7)
 ```
-WORKSPACE=/local/mnt/workspace bash setup_centos.sh
+WORKSPACE_DIR=/local/mnt/workspace bash setup_centos.sh
 ```
+
+**NB:** Log out and log back in for the necessary group permissions to take effect.
 
 ### Host OS independent
 
 #### Set up Collective Knowledge environment
 ```
-WORKSPACE=/local/mnt/workspace bash setup_ck.sh
+WORKSPACE_DIR=/local/mnt/workspace bash setup_ck.sh
 ```
 
 ### Target OS dependent, SDK dependent
@@ -30,8 +32,10 @@ WORKSPACE=/local/mnt/workspace bash setup_ck.sh
 **NB:** Make sure to have copied the required datasets (e.g. ImageNet) and SDKs
 to `$WORKSPACE/datasets` and `$WORKSPACE/sdks`, respectively.
 
+**NB:** Use `COMPILE_PRO=yes COMPILE_STD=no` or `COMPILE_PRO=no COMPILE_STD=yes` for PCIe Pro and PCIe Standard server cards, respectively.
+Default: `COMPILE_PRO=yes COMPILE_STD=no`
 ```
-DOCKER_OS=ubuntu SDK_VER=1.7.1.12 bash setup_images.sh
+COMPILE_PRO=no COMPILE_STD=yes DOCKER_OS=ubuntu SDK_VER=1.7.1.12 bash setup_images.sh
 ```
 
 #### Test Docker images
