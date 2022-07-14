@@ -43,9 +43,9 @@ SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
 
 # Set the timezone.
-RUN rm -rf /etc/localtime \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && ls -la /etc/localtime
+RUN rm -rf /etc/timezone \
+ && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/timezone \
+ && ls -la /etc/timezone
 
 RUN apt update -y \
  && apt install -y \
