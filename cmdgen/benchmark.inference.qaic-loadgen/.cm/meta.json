@@ -877,7 +877,7 @@
     "vc": {
       "yes": {
         "vc_value_input":"<<<vc_value_default>>>",
-        "vc_value":"$(printf \"0x%.2x\" <<<vc_value_input>>>)",
+        "vc_value":"<<<?escape_char>>>$(printf \"0x%.2x\" <<<vc_value_input>>>)",
         "vc_cmd": "<<<vc_cmd_def_2>>>",
         "check_vc_value_begin": "<<<check_vc_value_begin_def_2>>>",
         "check_vc_value_end": "<<<check_vc_value_end_def_2>>>",
@@ -886,7 +886,7 @@
       },
       "###": {
         "vc_value_input": "###",
-        "vc_value": "$(printf \"0x%.2x\" ###)",
+        "vc_value": "<<<?escape_char>>>$(printf \"0x%.2x\" ###)",
         "vc_cmd": "<<<vc_cmd_def_2>>>",
         "check_vc_value_begin": "<<<check_vc_value_begin_def_2>>>",
         "check_vc_value_end": "<<<check_vc_value_end_def_2>>>",
