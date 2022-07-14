@@ -896,7 +896,7 @@
    },
    "timestamp": {
       "yes": {
-	"timestamp_value":"${timestamp_val}",
+	"timestamp_value":"<<<?escape_char>>>${timestamp_val}",
 	"timestamp_value_cmd": "<<<timestamp_value_def>>>"
       }
    },
@@ -996,7 +996,7 @@
     "singlestream_target_latency": "<<<target_latency>>>",
     "sleep_before_ck_benchmark_sec": "0",
     "threads_per_queue": "<<<recommended_threads_per_queue>>>",
-    "timestamp_value_def": "export timestamp_val=-$(date +'%Y%m%dT%H%M%S' -u);",
+    "timestamp_value_def": "export timestamp_val=-<<<?escape_char>>>$(date +'%Y%m%dT%H%M%S' -u); echo timestamp=\\$timestamp_val; ",
     "verbosity": "<<<recommended_verbosity>>>",
     "vc_cmd_def": "export VC_VAL=<<<vc_value>>>;",
     "vc_cmd_def_2": "",
