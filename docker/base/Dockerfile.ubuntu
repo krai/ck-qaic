@@ -40,11 +40,6 @@ SHELL ["/bin/bash", "-c"]
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
 
-# Set the timezone.
-ARG TIMEZONE
-RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
- && echo ${TIMEZONE} > /etc/timezone
-
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update -y \
  && apt install -y \
@@ -55,7 +50,13 @@ RUN apt update -y \
     pciutils numactl ipmitool lm-sensors \
  && apt clean all
 
+# Set the timezone.
+ARG TIMEZONE
+RUN apt install tzdata -y \
+ && ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+ && echo ${TIMEZONE} > /etc/timezone
+
 # Start IPMI tool.
 #RUN sudo systemctl enable ipmi.service
 
-CMD ["cat /etc/os-release; echo TIMEZONE=$(cat /etc/timezone)"]
+CMD ["cat /etc/os-release; date"]
