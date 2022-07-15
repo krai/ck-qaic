@@ -34,8 +34,6 @@ FROM ubuntu:20.04
 
 LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
-ARG TIMEZONE
-
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
@@ -43,10 +41,11 @@ SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
 
 # Set the timezone.
-RUN rm -rf /etc/timezone \
- && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/timezone \
- && ls -la /etc/timezone
+ARG TIMEZONE
+RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+ && echo ${TIMEZONE} > /etc/timezone
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update -y \
  && apt install -y \
     sudo acl make patch git vim \
@@ -59,4 +58,4 @@ RUN apt update -y \
 # Start IPMI tool.
 #RUN sudo systemctl enable ipmi.service
 
-CMD ["cat /etc/os-release"]
+CMD ["cat /etc/os-release; echo TIMEZONE=$(cat /etc/timezone)"]

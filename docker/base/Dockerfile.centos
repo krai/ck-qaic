@@ -41,8 +41,6 @@ ARG PYTHON_MAJOR_VER
 ARG PYTHON_MINOR_VER
 ARG PYTHON_PATCH_VER
 
-ARG TIMEZONE
-
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
 
@@ -50,6 +48,7 @@ SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/bin/bash", "-c"]
 
 # Set the timezone.
+ARG TIMEZONE
 RUN rm -rf /etc/localtime \
  && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
  && ls -la /etc/localtime
