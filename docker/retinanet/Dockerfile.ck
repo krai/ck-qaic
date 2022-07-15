@@ -95,7 +95,7 @@ RUN ck install package --tags=dataset,openimages,validation,original
 #-----------------------------------------------------------------------------#
 # Step 4. Preprocess the dataset for quantized Retinanet.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,first.500
+RUN ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
 
 #-----------------------------------------------------------------------------#
 # Step 5. Prepare the Retinanet workload.
