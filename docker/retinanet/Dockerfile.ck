@@ -83,22 +83,18 @@ RUN ck install package --tags=python-package,onnx,for.qaic --force_version=1.8.1
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 3. Download the dataset.
+# Step 2. Download the dataset.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=dataset,openimages,validation,original
 
 #-----------------------------------------------------------------------------#
-# The steps above are common.
-# The steps below are Retinanet specific.
+# Step 3. Preprocess the dataset for quantized RetinaNet.
 #-----------------------------------------------------------------------------#
+RUN ck install package \
+--tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
 
 #-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized Retinanet.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the Retinanet workload.
+# Step 4. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=model,onnx,retinanet,no-nms
 
@@ -114,3 +110,5 @@ COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /home/krai/.local   /home/krai/.local
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
+
+CMD ["ck show env --tags=model,onnx,retinanet,no-nms"]

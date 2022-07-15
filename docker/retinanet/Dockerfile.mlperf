@@ -80,12 +80,7 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 RUN ck compile program:object-detection-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
-# The steps above are common.
-# The steps below are Retinanet specific.
-#-----------------------------------------------------------------------------#
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the Retinanet workload.
+# Step 3. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
 
 #RUN ck install package --tags=profile,qaic,retinanet --quiet
@@ -101,7 +96,7 @@ RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.singlestream
 RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.multistream
 
 #-----------------------------------------------------------------------------#
-# Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
+# Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
 #RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 #$(ck find repo:ctuning-programs)/* \
