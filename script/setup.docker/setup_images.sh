@@ -40,6 +40,10 @@ function exit_if_error() {
   fi
 }
 
+# Convert comma-separated workload list into array.
+_WORKLOADS=${WORKLOADS:-"resnet50,bert"}
+IFS=',' read -ra _WORKLOADS_AS_ARRAY <<< "${_WORKLOADS}"
+
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-"main"}
 _WORKSPACE_DIR=${WORKSPACE_DIR:-"/local/mnt/workspace"}
@@ -69,113 +73,109 @@ fi
 
 # Build SDK-independent base image.
 echo "Building SDK-independent base image ..."
-DOCKER_OS=${_DOCKER_OS} GCC_MAJOR_VER=${_GCC_MAJOR_VER} PYTHON_VER=${_PYTHON_VER} $(ck find ck-qaic:docker:base)/build.base.sh
+CMD="DOCKER_OS=${_DOCKER_OS} GCC_MAJOR_VER=${_GCC_MAJOR_VER} PYTHON_VER=${_PYTHON_VER} $(ck find ck-qaic:docker:base)/build.base.sh"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to build SDK-independent base image!"
+echo
 # Test SDK-independent base image.
 echo "Testing SDK-independent base image ..."
-docker run --rm krai/base:${_DOCKER_OS}_latest
+CMD="docker run --rm krai/base:${_DOCKER_OS}_latest"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to test SDK-independent base image!"
-
+echo
 # Build SDK-independent common image.
 echo "Building SDK-independent common image ..."
-DOCKER_OS=${_DOCKER_OS} GCC_MAJOR_VER=${_GCC_MAJOR_VER} PYTHON_VER=${_PYTHON_VER} CK_VER=${_CK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} \
-$(ck find ck-qaic:docker:base)/build.ck.sh
+CMD="DOCKER_OS=${_DOCKER_OS} GCC_MAJOR_VER=${_GCC_MAJOR_VER} PYTHON_VER=${_PYTHON_VER} CK_VER=${_CK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.ck.sh"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to build SDK-independent common image!"
+echo
 # Test SDK-independent common image.
 echo "Testing SDK-independent common image ..."
-docker run --rm krai/ck.common:${_DOCKER_OS}_latest
+CMD="docker run --rm krai/ck.common:${_DOCKER_OS}_latest"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to test SDK-independent common image!"
-
+echo
 # Build SDK-dependent base image.
 echo "Building SDK-dependent base image ..."
-WORKSPACE_DIR=${_WORKSPACE_DIR} DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.qaic.sh
+CMD="WORKSPACE_DIR=${_WORKSPACE_DIR} DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} SDK_DIR=${_SDK_DIR} GROUP_ID=${_GROUP_ID} USER_ID=${_USER_ID} $(ck find ck-qaic:docker:base)/build.qaic.sh"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to build SDK-dependent base image!"
+echo
 # Test SDK-dependent base image.
 echo "Testing SDK-dependent base image ..."
-export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}
+CMD="export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/qaic:${_DOCKER_OS}_${_SDK_VER}"
+echo ${CMD}; eval ${CMD}
 exit_if_error "Failed to test SDK-dependent base image!"
+echo
 
 #===============================================================================
-# Build & test benchmark images.
+# Build & test workload images.
 #===============================================================================
-
-#------------------------------------------------------------------------------
-# ResNet50.
-#-------------------------------------------------------------------------------
-
-# Build ImageNet image.
-if [[ "$(docker images -q imagenet:latest 2> /dev/null)" == "" ]]; then
-  echo "Building ImageNet image ..."
-  DATASETS_DIR=${_DATASETS_DIR} IMAGENET_NAME=${_IMAGENET_NAME} $(ck find ck-qaic:docker:imagenet)/build.sh
-  exit_if_error "Failed to build ImageNet image!"
-fi
-# Test ImageNet image.
-echo "Testing ImageNet image ..."
-docker run --rm imagenet:latest /bin/bash -c "du -hs /imagenet"
-exit_if_error "Failed to test ImageNet image!"
-
-# Build SDK-independent image.
-echo "Building SDK-independent ResNet50 image ..."
-DOCKER_OS=${_DOCKER_OS} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} PYTHON_VER=${_PYTHON_VER} $(ck find repo:ck-qaic)/docker/build_ck.sh resnet50
-exit_if_error "Failed to build SDK-independent ResNet50 image!"
-# Test SDK-independent image.
-echo "Testing SDK-independent ResNet50 image ..."
-docker run --rm krai/ck.resnet50:${_DOCKER_OS}_latest
-exit_if_error "Failed to test SDK-independent ResNet50 image!"
-
-# Build SDK-dependent image.
-echo "Building SDK-dependent ResNet50 image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_RESNET50} COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} $(ck find repo:ck-qaic)/docker/build.sh resnet50
-exit_if_error "Failed to build SDK-dependent ResNet50 image!"
-# Test SDK-dependent image.
-echo "Testing SDK-dependent ResNet50 image ..."
-export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/mlperf.resnet50.full:${_DOCKER_OS}_${_SDK_VER}
-exit_if_error "Failed to test SDK-dependent ResNet50 image!"
-
-#-------------------------------------------------------------------------------
-# BERT.
-#-------------------------------------------------------------------------------
-
-# Build SDK-independent image.
-echo "Building SDK-independent BERT image ..."
-DOCKER_OS=${_DOCKER_OS} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} PYTHON_VER=${_PYTHON_VER} $(ck find repo:ck-qaic)/docker/build_ck.sh bert
-exit_if_error "Failed to build SDK-independent BERT image!"
-# Test SDK-independent image.
-echo "Testing SDK-independent BERT image ..."
-docker run --rm krai/ck.bert:${_DOCKER_OS}_latest
-exit_if_error "Failed to test SDK-independent BERT image!"
-
-# Build SDK-dependent image.
-echo "Building SDK-dependent BERT image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT} COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} $(ck find repo:ck-qaic)/docker/build.sh bert
-exit_if_error "Failed to build SDK-dependent BERT image!"
-# Test SDK-dependent image.
-echo "Testing SDK-dependent BERT image ..."
-export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/mlperf.bert:${_DOCKER_OS}_${_SDK_VER}
-exit_if_error "Failed to test SDK-dependent BERT image!"
-
-#-------------------------------------------------------------------------------
-# RetinaNet.
-#-------------------------------------------------------------------------------
-_WORKLOAD=retinanet
-
-# Build SDK-independent image.
-echo "Building SDK-independent ${_WORKLOAD} image ..."
-DOCKER_OS=${_DOCKER_OS} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} PYTHON_VER=${_PYTHON_VER} $(ck find repo:ck-qaic)/docker/build_ck.sh ${_WORKLOAD}
-exit_if_error "Failed to build SDK-independent ${_WORKLOAD} image!"
-# Test SDK-independent image.
-echo "Testing SDK-independent ${_WORKLOAD} image ..."
-docker run --rm krai/ck.${_WORKLOAD}:${_DOCKER_OS}_latest
-exit_if_error "Failed to test SDK-independent ${_WORKLOAD} image!"
-
-# Build SDK-dependent image.
-echo "Building SDK-dependent ${_WORKLOAD} image ..."
-DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT} COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} $(ck find repo:ck-qaic)/docker/build.sh ${_WORKLOAD}
-exit_if_error "Failed to build SDK-dependent ${_WORKLOAD} image!"
-# Test SDK-dependent image.
-echo "Testing SDK-dependent ${_WORKLOAD} image ..."
-export SDK_VER=${_SDK_VER} && docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm krai/mlperf.${_WORKLOAD}:${_DOCKER_OS}_${_SDK_VER}
-exit_if_error "Failed to test SDK-dependent ${_WORKLOAD} image!"
+WORKLOAD_INDEPENDENT_PARAMS="CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} DOCKER_OS=${_DOCKER_OS} SDK_VER=${_SDK_VER} PYTHON_VER=${_PYTHON_VER}"
+for _WORKLOAD in ${_WORKLOADS_AS_ARRAY[@]}
+do
+  SDK_INDEPENDENT_IMAGE="krai/ck.${_WORKLOAD}:${_DOCKER_OS}_latest"
+  SDK_DEPENDENT_IMAGE="krai/mlperf.${_WORKLOAD}:${_DOCKER_OS}_${_SDK_VER}"
+  #-----------------------------------------------------------------------------
+  # ResNet50-dependent setup.
+  #-----------------------------------------------------------------------------
+  if [[ ${_WORKLOAD} == "resnet50" ]]; then
+    SDK_DEPENDENT_IMAGE="krai/mlperf.${_WORKLOAD}.full:${_DOCKER_OS}_${_SDK_VER}"
+    WORKLOAD_DEPENDENT_PARAMS="COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD}" # TODO: Add "CK_QAIC_PCV=${_CK_QAIC_PCV_RESNET50}"?
+    # Build ImageNet image.
+    if [[ "$(docker images -q imagenet:latest 2> /dev/null)" == "" ]]; then
+      echo "Building ImageNet image ..."
+      CMD="DATASETS_DIR=${_DATASETS_DIR} IMAGENET_NAME=${_IMAGENET_NAME} $(ck find ck-qaic:docker:imagenet)/build.sh"
+      echo ${CMD}; eval ${CMD}
+      exit_if_error "Failed to build ImageNet image!"
+    fi
+    # Test ImageNet image.
+    echo "Testing ImageNet image ..."
+    CMD="docker run --rm imagenet:latest /bin/bash -c \"du -hs /imagenet\""
+    echo ${CMD}; eval ${CMD}
+    exit_if_error "Failed to test ImageNet image!"
+  fi
+  #-----------------------------------------------------------------------------
+  # RetinaNet-dependent setup.
+  #-----------------------------------------------------------------------------
+  if [[ ${_WORKLOAD} == "retinanet" ]]; then
+    WORKLOAD_DEPENDENT_PARAMS="" # TODO: Add "COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD}"?
+  fi
+  #-----------------------------------------------------------------------------
+  # BERT-dependent setup.
+  #-----------------------------------------------------------------------------
+  if [[ ${_WORKLOAD} == "bert" ]]; then
+    WORKLOAD_DEPENDENT_PARAMS="COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT}"
+  fi
+  echo
+  #-----------------------------------------------------------------------------
+  # Build & test.
+  #-----------------------------------------------------------------------------
+  # Build SDK-independent image.
+  echo "Building SDK-independent image for '${_WORKLOAD}' ..."
+  CMD="${WORKLOAD_INDEPENDENT_PARAMS} $(ck find repo:ck-qaic)/docker/build_ck.sh ${_WORKLOAD}"
+  echo ${CMD}; eval ${CMD}
+  exit_if_error "Failed to build SDK-independent image for '${_WORKLOAD}'!"
+  echo
+  # Test SDK-independent image.
+  echo "Testing SDK-independent image for '${_WORKLOAD}' ..."
+  CMD="docker run --rm ${SDK_INDEPENDENT_IMAGE}"
+  echo ${CMD}; eval ${CMD}
+  exit_if_error "Failed to test SDK-independent image for '${_WORKLOAD}'!"
+  echo
+  # Build SDK-dependent image.
+  echo "Building SDK-dependent image for '${_WORKLOAD}' ..."
+  CMD="${WORKLOAD_INDEPENDENT_PARAMS} ${WORKLOAD_DEPENDENT_PARAMS} $(ck find repo:ck-qaic)/docker/build.sh ${_WORKLOAD}"
+  echo ${CMD}; eval ${CMD}
+  exit_if_error "Failed to build SDK-dependent image for '${_WORKLOAD}'!"
+  echo
+  # Test SDK-dependent image.
+  echo "Testing SDK-dependent image for '${_WORKLOAD}' ..."
+  export SDK_VER=${_SDK_VER}
+  CMD="docker run --privileged --group-add $(getent group qaic | cut -d: -f3) --rm ${SDK_DEPENDENT_IMAGE}"
+  echo ${CMD}; eval ${CMD}
+  exit_if_error "Failed to test SDK-dependent image for '${_WORKLOAD}'!"
+done # for WORKLOAD in WORKLOADS
 
 #-------------------------------------------------------------------------------
 
