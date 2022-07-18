@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copyright (c) 2022 Krai Ltd.
-i#
+#
 # SPDX-License-Identifier: BSD-3-Clause.
 #
 # Redistribution and use in source and binary forms, with or without
