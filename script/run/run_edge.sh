@@ -2,6 +2,7 @@
 
 _category="edge"
 DOCKER=${DOCKER:-"no"}
+DOCKER_OS=${DOCKER_OS:-"ubuntu"}
 WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh

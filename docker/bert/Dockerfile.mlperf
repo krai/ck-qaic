@@ -50,6 +50,8 @@ FROM ${BASE_IMAGE}:${DOCKER_OS}_${SDK_VER} AS preamble
 ###############################################################################
 FROM krai/ck.bert:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_CHECKOUT
+ARG COMPILE_PRO
+ARG COMPILE_STD
 ARG DEBUG_BUILD
 ARG CK_QAIC_PCV=9983
 ARG CK_QAIC_PERCENTILE_CALIBRATION
@@ -89,37 +91,72 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
-
 # Compile the bert-99 workload (separately for each scenario).
-RUN if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration      --quiet \
-     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet \
-     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet \
-     --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-else \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration      --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration  --quiet; \
-  ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --quiet; \
+# Compile the workload for the PCIe Pro server cards.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  else \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet; \
+  fi \
 fi
+
+# Compile the workload for the PCIe Standard server cards.
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet \
+       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  else \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet; \
+  fi \
+fi
+
 # Compile the bert-99.9 workload.
-RUN ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline --quiet
+# Compile the workload for the PCIe Pro server cards.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.448 --quiet; \
+  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.384 --quiet; \
+fi
+
+# Compile the workload for the PCIe Standard server cards.
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.448 --quiet; \
+  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.384 --quiet; \
+fi
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck locate env --tags=python-package,pytorch)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,bert-packed)/*; fi
+#RUN if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
+#$(ck find repo:ctuning-programs)/* \
+#$(ck locate env --tags=python-package,pytorch)/* \
+#$(ck find repo:ck-crowdtuning-platforms)/* \
+#$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+#$(ck locate env --tags=lib,protobuf-host)/src \
+#$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+#$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+#$(ck locate env --tags=tool,cmake)/cmake*/Source \
+#$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+#$(ck locate env --tags=model,bert-packed)/*; fi
 
 ###############################################################################
 # FINAL STAGE

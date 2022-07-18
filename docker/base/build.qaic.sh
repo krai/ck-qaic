@@ -32,9 +32,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_SDK_VER=${SDK_VER:-1.7.1.12}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
+_DOCKER_QAIC_IMAGE="krai/qaic:${_DOCKER_OS}_${_SDK_VER}"
+_DOCKER_BASE_IMAGE="krai/base:${_DOCKER_OS}_latest"
 
-if [[ "$(docker images -q krai/base.${_DOCKER_OS} 2> /dev/null)" == "" ]]; then
+if [[ "$(docker images -q ${_DOCKER_BASE_IMAGE} 2> /dev/null)" == "" ]]; then
   cd $(ck find ck-qaic:docker:base) && ./build.base.sh
 fi
 
@@ -47,7 +50,6 @@ _ARCH=${ARCH:-$(uname -m)}
 
 _WORKSPACE_DIR=${WORKSPACE_DIR:-/local/mnt/workspace}
 _SDK_DIR=${SDK_DIR:-${_WORKSPACE_DIR}/sdks}
-_SDK_VER=${SDK_VER:-1.7.0.34}
 
 _APPS_SDK=${APPS_SDK:-"${_SDK_DIR}/qaic-apps-${_SDK_VER}.zip"}
 if [[ ! -f "${_APPS_SDK}" ]]; then
@@ -88,7 +90,7 @@ if [ ! -z "${NO_CACHE}" ]; then
 fi
 
 echo
-echo "Building image: 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}'"
+echo "Building image: '${_DOCKER_QAIC_IMAGE}'"
 read -d '' CMD <<END_OF_CMD
 cd $(ck find ck-qaic:docker:base) && \
 time docker build ${_NO_CACHE} \
@@ -96,8 +98,9 @@ time docker build ${_NO_CACHE} \
 --build-arg USER_ID=${_USER_ID} \
 --build-arg ARCH=${_ARCH} \
 --build-arg DOCKER_OS=${_DOCKER_OS} \
+--build-arg SDK_VER=${_SDK_VER} \
 -f Dockerfile.qaic \
--t krai/qaic:${_DOCKER_OS}_${_SDK_VER} .
+-t ${_DOCKER_QAIC_IMAGE} .
 END_OF_CMD
 echo "Command: '${CMD}'"
 if [ -z "${DRY_RUN}" ]; then
@@ -105,5 +108,5 @@ if [ -z "${DRY_RUN}" ]; then
 fi
 
 echo
-echo "Done (building 'krai/qaic.${_DOCKER_OS}:${_SDK_VER}')"
+echo "Done (building '${_DOCKER_QAIC_IMAGE}')"
 echo

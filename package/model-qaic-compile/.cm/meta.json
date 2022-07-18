@@ -7,7 +7,7 @@
       "PACKAGE_VERSION": "1",
       "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
       "_BATCH_SIZE": "1",
-      "_SEG": "384"      
+      "_SEG": "384"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -29,6 +29,11 @@
         "ssd-resnet34,onnx,mlperf,non-quantized,no-nms": [
           {
             "_MODEL_TO_CONVERT": "compile_ssd_resnet34_no_nms_mlperf"
+          }
+        ],
+        "retinanet,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf"
           }
         ],
         "ssd-mobilenet,pytorch,mlperf,for.qaic": [
@@ -56,6 +61,54 @@
       "sort": 100,
       "tags": "profile,ssd_resnet34",
       "update_tags_if_env": {
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_retinanet_no_nms_mlperf"
+          ],
+          "_QUANTIZED": [
+            "yes"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "Retinanet profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,retinanet",
+      "update_tags_if_env": {
+        "bs.1": [
+          {
+            "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
+        "bs.8": [
+          {
+            "_BATCH_SIZE": "8"
+          }
+        ],
+        "bs.explicit": [
+          {
+            "_BATCH_SIZE_EXPLICIT": "yes"
+          }
+        ],
         "first.5": [
           {
             "_CAL": "calibrate_first.5"
@@ -161,14 +214,19 @@
       "sort": 100,
       "tags": "profile,qaic,bert-packed",
       "update_tags_if_env": {
-        "seg.384": [
+        "seq.384": [
           {
-            "_SEG": "seg.384"
+            "_SEG": "384"
           }
         ],
-        "seg.512": [
+        "seq.448": [
           {
-            "_SEG": "seg.512"
+            "_SEG": "448"
+          }
+        ],
+        "seq.512": [
+          {
+            "_SEG": "512"
           }
         ]
       }
@@ -298,8 +356,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_ARGS_NAME_PREFIX": "_14NSP",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -452,6 +509,173 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
       }
     },
+    "retinanet.fp16": {
+      "extra_customize": {
+        "package_name": "SSD Retinanet FP16"
+      },
+      "extra_env": {
+        "_BATCH_SIZE_EXPLICIT": "yes",
+        "_NO_QUANTIZATION" : "yes",
+        "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_COMPILER_ARGS_OFFLINE": "-aic-perf-metrics -time-passes -version",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=1",
+        "_FP_16": "yes"
+      }
+    },
+    "retinanet.fp16.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf Retinanet No NMS)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_OPENIMAGES": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "retinanet",
+        "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf",
+        "_ENABLE_CHANNEL_WISE": "yes",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_COMPILER_ARGS_OFFLINE": "",
+        "_COMPILER_ARGS_SINGLESTREAM": "",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_QUANTIZED": "yes",
+        "_BATCH_SIZE_EXPLICIT": "yes"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ]
+    },
+    "retinanet.aedk_20w.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_20w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_20w.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_15w.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_15w.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_15w.singlestream": {
+        "_BATCH_SIZE": "1",
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=3"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=3"
+      }
+    },
     "ssd_mobilenet": {
       "extra_customize": {
         "package_name": "QAIC model (MLPerf SSD-MobileNet No NMS)"
@@ -602,7 +826,7 @@
       "extra_env": {
         "_BATCH_SIZE": "0",
         "_MODEL_TO_CONVERT": "compile_bert_99",
-        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Mul,Sqrt,Div,Add,ReduceMean,Softmax,Sub,Gather,Erf,Pow,Concat,Tile,LayerNormalization -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only -allocator-dealloc-delay=2 -size-split-granularity=1536 -vtcm-working-set-limit-ratio=1",
         "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -multicast-weights -quantization-precision-bias=Int32",
         "_COMPILER_ARGS_SINGLESTREAM": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG]",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
@@ -659,7 +883,7 @@
     "bert-99.pcie.14nsp.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.14nsp.multistream": {
@@ -677,7 +901,7 @@
     "bert-99.pcie.16nsp.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.16nsp.multistream": {
@@ -701,7 +925,7 @@
         "_NO_QUANTIZATION" : "yes",
         "_MODEL_TO_CONVERT": "compile_bert_99.9",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16",
-        "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,384",
+        "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG]",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
       },
       "extra_tags": [
@@ -743,18 +967,26 @@
     },
     "quantization.calibration": {
       "extra_env": {
-        "_PERCENTILE_CALIBRATION_VALUE": "99.9983",
+        "_PERCENTILE_CALIBRATION_VALUE": "99.9980",
         "_QUANTIZATION_PARAMS": "-quantization-calibration=Percentile  -percentile-calibration-value=[PERCENTILE_CALIBRATION_VALUE]"
       }
     },
     "seg.384": {
       "extra_env": {
-        "_SEG": "384"
+        "_SEG": "384",
+        "ML_MODEL_SEQ_LENGTH": "384"
+      }
+    },
+    "seg.448": {
+      "extra_env": {
+        "_SEG": "448",
+        "ML_MODEL_SEQ_LENGTH": "448"
       }
     },
     "seg.512": {
       "extra_env": {
-        "_SEG": "512"
+        "_SEG": "512",
+        "ML_MODEL_SEQ_LENGTH": "512"
       }
     }
   }

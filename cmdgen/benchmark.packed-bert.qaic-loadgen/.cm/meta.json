@@ -5,12 +5,19 @@
   },
   "build_map": {
     "sut": {
-      "q4_dc": {
-        "recommended_mixed_activation_count": "8",
+      "q1_pro_edge": {
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
-      "q4_edge": {
-        "recommended_mixed_activation_count": "7"
+      "q1_std_edge": {
+        "recommended_mixed_activation_count": "14"
+      },
+      "q4_pro_dc": {
+        "recommended_mixed_activation_count": "16",
+        "recommended_fp16_activation_count": "4"
+      },
+      "q4_std_edge": {
+        "recommended_mixed_activation_count": "14"
       },
       "aedk_15w": {
         "recommended_mixed_activation_count": "4"
@@ -28,68 +35,68 @@
         "recommended_mixed_activation_count": "4"
       },
       "g292_z43_q18e": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
       "g292_z43_q18": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
       "g292_z43_q16e": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
       "g292_z43_q16": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q2e": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q2": {
-        "recommended_mixed_activation_count": "8"
+        "recommended_mixed_activation_count": "16"
       },
       "r282_z93_q1": {
-        "recommended_mixed_activation_count": "8"
+        "recommended_mixed_activation_count": "16"
       },
       "r282_z93_q5e": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q5": {
-        "recommended_mixed_activation_count": "8"
+        "recommended_mixed_activation_count": "16"
       },
       "r282_z93_q8e": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "9",
         "recommended_fp16_vc_value": "6"
       },
       "r282_z93_q8": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q5e_dc": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4",
         "recommended_mixed_vc_value": "10",
         "recommended_fp16_vc_value": "6"
       },
       "r282_z93_q5_dc": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
       "r282_z93_q8e_edge": {
-        "recommended_mixed_activation_count": "8",
+        "recommended_mixed_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q8_edge": {
-        "recommended_mixed_activation_count": "8"
+        "recommended_mixed_activation_count": "16"
       }
     },
     "scenario": {
@@ -109,7 +116,8 @@
           "--env.ML_MODEL_MODEL_NAME=bert"
         ],
         "model_tags": [
-          "###"
+          "###",
+          "seg.<<<override_seg_length>>>"
         ],
         "recommended_offline_server_activation_count": "<<<recommended_fp16_activation_count>>>",
         "division": "closed",
@@ -124,10 +132,11 @@
           "--env.ML_MODEL_MODEL_NAME=bert",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
-	"docker_os": "centos",
+        "docker_os": "centos",
         "model_tags": [
           "###",
-          "quantization.calibration"
+          "quantization.calibration",
+          "seg.<<<override_seg_length>>>"
         ],
         "recommended_offline_server_activation_count": "<<<recommended_mixed_activation_count>>>",
         "recommended_queue_length": "4",
@@ -163,6 +172,7 @@
     "recommended_queue_length": "4",
     "recommended_threads_per_queue": "4",
     "server_override_batch_size": "<<<override_batch_size>>>",
+    "override_seg_length": "384",
     "task_name": "bert-question-answering"
   },
   "groups": {

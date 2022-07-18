@@ -62,6 +62,8 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM krai/ck.resnet50:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
+ARG COMPILE_PRO
+ARG COMPILE_STD
 ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
@@ -76,9 +78,6 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
-
-# Install libncurses5.
-#RUN echo "Y" | sudo apt install libncurses5
 
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the ResNet50 workload.
@@ -98,10 +97,18 @@ RUN ck install package --tags=profile,resnet50,bs.1 --quiet
 RUN ck install package --tags=profile,resnet50,bs.8 --quiet
 RUN ck install package --tags=profile,resnet50,bs.4 --quiet
 
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline --quiet
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet
-RUN ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream --quiet
+# Compile the workload for the PCIe Pro server cards.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline      --quiet; \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet; \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream  --quiet; \
+fi
+# Compile the workload for the PCIe Standard server cards.
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.14nsp.offline      --quiet; \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.14nsp.singlestream --quiet; \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.14nsp.multistream  --quiet; \
+fi
 
 #-----------------------------------------------------------------------------#
 # Step 3. Compile the Image Classification program.
@@ -111,17 +118,17 @@ RUN ck compile program:image-classification-qaic-loadgen --quiet
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-$(ck find repo:ctuning-programs)/* \
-$(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-$(ck locate env --tags=python-package,tensorflow)/* \
-$(ck locate env --tags=lib,protobuf-host)/src \
-$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-$(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,fix_input_shape)/*; fi
+#RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
+#$(ck find repo:ctuning-programs)/* \
+#$(ck find repo:ck-crowdtuning-platforms)/* \
+#$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+#$(ck locate env --tags=python-package,tensorflow)/* \
+#$(ck locate env --tags=lib,protobuf-host)/src \
+#$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+#$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+#$(ck locate env --tags=tool,cmake)/cmake*/Source \
+#$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+#$(ck locate env --tags=model,fix_input_shape)/*; fi
 
 ###############################################################################
 # FINAL STAGE

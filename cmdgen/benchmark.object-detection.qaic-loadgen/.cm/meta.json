@@ -1,0 +1,215 @@
+{
+  "_base_entry": "cmdgen:05ee58d2d664fb59",
+  "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
+  "accu_init": {
+  },
+  "build_map": {
+    "sut": {
+      "aedk_15w": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "aedk_20w": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "aedk_25w": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "gloria": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "haishen": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "g292_z43_q18e": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "g292_z43_q18": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "g292_z43_q16e": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "g292_z43_q16": {
+        "recommended_offline_server_activation_count": "8",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q2e": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q2": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q1": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q5e": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q5": {
+        "recommended_offline_server_activation_count": "4",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8e": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q8": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q5e_dc": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q5_dc": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8e_edge": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_num_setup_threads": "8",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q8_edge": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_num_setup_threads": "8",
+        "recommended_threads_per_queue": "2"
+      },
+      "q4_pro_dc": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "q1_pro_edge": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_num_setup_threads": "8",
+        "recommended_threads_per_queue": "2"
+      },
+      "q1_std_edge": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_num_setup_threads": "8",
+        "recommended_threads_per_queue": "2"
+      },
+      "q4_std_edge": {
+        "recommended_offline_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_num_setup_threads": "8",
+        "recommended_threads_per_queue": "2"
+      }
+    },
+    "model": {
+      "retinanet": {
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS0=-DMODEL_RX50",
+          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
+          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
+          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full --cmd_key=openimages"
+        ],
+        "division": "closed",
+        "hyphenated_model_name": "retinanet",
+        "model_name": "retinanet",
+	"docker_os": "centos",
+        "model_tags": [
+          "###"
+        ],
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "64"
+      }
+    },
+    "compliance": {
+      "TEST04-A" : {
+        "recommended_stream_buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      },
+      "TEST04-B" : {
+        "recommended_stream_buffer_size": "<<<recommended_accuracy_buffer_size>>>"
+      }
+    }
+  },
+  "defaults": {
+    "buffer_size": "<<<recommended_buffer_size>>>",
+    "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
+    "dataset_size": "500",
+    "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_os": "centos",
+    "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
+    "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
+    "preprocessed_using": "opencv",
+    "program_name": "object-detection-qaic-loadgen",
+    "recommended_batch_size": "1",
+    "recommended_input_select": "0",
+    "recommended_multistream_activation_count": "4",
+    "recommended_multistream_batch_size": "1",
+    "recommended_multistream_num_setup_threads": "2",
+    "recommended_num_setup_threads": "2",
+    "task_name": "object-detection",
+    "vc_value_default": "17",
+    "zero_copy": "enable"
+  }
+}

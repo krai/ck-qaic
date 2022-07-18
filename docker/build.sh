@@ -33,7 +33,7 @@
 #
 
 if [[ $# < 1 ]]; then
-  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet).";
+  echo "Please enter the model name to build the Docker image for (one of: bert, resnet50, ssd-resnet34, ssd-mobilenet, retinanet ).";
   exit 1;
 fi
 
@@ -45,14 +45,16 @@ MODEL=$1
 
 echo "Building image for '${MODEL}' ..."
 
-_DOCKER_OS=${DOCKER_OS:-centos}
+_DOCKER_OS=${DOCKER_OS:-ubuntu}
 _BASE_IMAGE=${BASE_IMAGE:-krai/qaic}
-_SDK_VER=${SDK_VER:-1.7.0.34}
+_SDK_VER=${SDK_VER:-1.7.1.12}
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
 _CK_QAIC_PCV=${CK_QAIC_PCV:-''}
 _CK_QAIC_PERCENTILE_CALIBRATION=${CK_QAIC_PERCENTILE_CALIBRATION:-no}
 
+_COMPILE_PRO=${COMPILE_PRO:-yes}
+_COMPILE_STD=${COMPILE_STD:-no}
 _DEBUG_BUILD=${DEBUG_BUILD:-no}
 _OLD_PROFILE_HASH=${OLD_PROFILE_HASH:-0x3CE0AC3D278EDF57}
 _NEW_PROFILE_HASH=${NEW_PROFILE_HASH:-0x3CE0AC3D278EDF57}
@@ -78,6 +80,12 @@ else
 fi
 
 if [[ ${MODEL} == "ssd-resnet34" ]]; then
+  HASH_REPLACE="sed -i 's/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g' ./${MODEL}/bs.1/profile.yaml &&";
+else
+  HASH_REPLACE=""
+fi
+
+if [[ ${MODEL} == "retinanet" ]]; then
   HASH_REPLACE="sed -i 's/${_OLD_PROFILE_HASH}/${_NEW_PROFILE_HASH}/g' ./${MODEL}/bs.1/profile.yaml &&";
 else
   HASH_REPLACE=""
@@ -120,6 +128,8 @@ time docker build ${_NO_CACHE} \
 ${EXTRA_DOCKER_ARG} \
 --build-arg CK_QAIC_CHECKOUT=${_CK_QAIC_CHECKOUT} \
 --build-arg CK_QAIC_PCV=${_CK_QAIC_PCV} \
+--build-arg COMPILE_PRO=${_COMPILE_PRO} \
+--build-arg COMPILE_STD=${_COMPILE_STD} \
 --build-arg DEBUG_BUILD=${_DEBUG_BUILD} \
 -t ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} \
 -f Dockerfile.mlperf .
@@ -151,6 +161,12 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-resnet34 --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
         ssd-resnet34 ssd-resnet34.pcie.16nsp.offline ${_SDK_VER};'
+    fi
+
+    if [[ ${MODEL} == "retinanet" ]]; then
+      docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,retinanet --force'
+      docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        retinanet retinanet.pcie.16nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-mobilenet" ]]; then

@@ -140,7 +140,7 @@
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "deps": [
-          "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full"
+          "--dep_add_tags.dataset=for.ssd_resnet34.onnx.preprocessed.quantized,validation,full --cmd_key=coco"
         ],
         "division": "closed",
         "hyphenated_model_name": "ssd-resnet34",

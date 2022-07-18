@@ -126,17 +126,22 @@ else
   _RUN_TYPES="--group.${_category} --group.${_division}"
 fi
 
-if [[ ${UPDATE_CK_QAIC} == 'yes' ]]; then
+if [[ "${UPDATE_CK_QAIC}" == "yes" ]]; then
+  echo "Updating repo:ck-qaic ..."
   ck pull repo:ck-qaic
 fi
 
-if [[ ${QUICK_RUN} == 'yes' ]]; then
+echo
+if [[ "${QUICK_RUN}" == "yes" ]]; then
   echo "Running a quick test with default parameters ..."
+elif [[ "${SHORT_RUN}" == "yes" ]]; then
+  echo "Running a short test with '$SUT' parameters ..."
+  . ${_defs_dir}/def_${SUT}.sh
 else
   echo "Running a full test with '$SUT' parameters ..."
   . ${_defs_dir}/def_${SUT}.sh
 fi
-echo ""
+echo
 
 CMD_QUOTE=''
 RUN_CMD_PREFIX_BERT=''
@@ -148,5 +153,5 @@ RUN_CMD_SUFFIX_RESNET50=''
 RUN_CMD_SUFFIX_SSD_MOBILENET=''
 
 if [[ ${_docker} == 'yes' ]]; then
-. run_common_docker.sh
+  . run_common_docker.sh
 fi

@@ -63,7 +63,7 @@
           "module_uoa": "script",
           "script_name": "loadgen_preprocess"
         },
-        "run_cmd_main": "env ; $PREFIX $#BIN_FILE#$",
+        "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
           "$<<CK_ENV_LIB_STDCPP_DYNAMIC>>$"
         ],

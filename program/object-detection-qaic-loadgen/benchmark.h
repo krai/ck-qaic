@@ -69,6 +69,14 @@
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
+#if defined(MODEL_R34)
+  #define Model_Params R34_Params
+#elif defined(MODEL_RX50)
+  #define Model_Params RX50_Params
+#else
+  #define Model_Params MV1_Params
+#endif
+
 
 namespace CK {
 
@@ -229,13 +237,7 @@ public:
       }
     }
   }
-#ifdef MODEL_R34
-  NMS_ABP<TOutput1DataType, TOutput2DataType, R34_Params> nms_abp_processor;
-  R34_Params modelParams;
-#else
-  NMS_ABP<TOutput1DataType, TOutput2DataType, MV1_Params> nms_abp_processor;
-  MV1_Params modelParams;
-#endif
+
   Benchmark(
       BenchmarkSettings *settings,
       std::vector<std::vector<std::vector<void *> > > &in_ptrs,
@@ -393,26 +395,32 @@ for (int i = 0; i < samples.size(); ++i) {
       TOutput2DataType *dataConf =
           classes_ptr + i * modelParams.TOTAL_NUM_BOXES * modelParams.NUM_CLASSES;
 
-      nms_abp_processor.anchorBoxProcessing(dataLoc, dataConf, std::ref(nms_res), (float)image_idxs[i]);
+      if(_settings->disable_nms) {
+        next_result_ptr->set_size(1 * 7);
+        next_result_ptr->data()[0]=(float)image_idxs[i];
+      } else {
+        nms_abp_processor.anchorBoxProcessing(dataLoc, dataConf, std::ref(nms_res), (float)image_idxs[i]);
 
-      int num_elems = nms_res.size() < _settings->detections_buffer_size()
-                          ? nms_res.size()
-                          : _settings->detections_buffer_size();
+        int num_elems = nms_res.size() < _settings->detections_buffer_size()
+                            ? nms_res.size()
+                            : _settings->detections_buffer_size();
 
-      next_result_ptr->set_size(num_elems * 7);
-      float *buffer = next_result_ptr->data();
+        next_result_ptr->set_size(num_elems * 7);
+        float *buffer = next_result_ptr->data();
 
-      for (int j = 0; j < num_elems; j++) {
-        buffer[0] = nms_res[j][0];
-        buffer[1] = nms_res[j][1];
-        buffer[2] = nms_res[j][2];
-        buffer[3] = nms_res[j][3];
-        buffer[4] = nms_res[j][4];
-        buffer[5] = nms_res[j][5];
-        buffer[6] = nms_res[j][6];
-        buffer += 7;
+        for (int j = 0; j < num_elems; j++) {
+          buffer[0] = nms_res[j][0];
+          buffer[1] = nms_res[j][1];
+          buffer[2] = nms_res[j][2];
+          buffer[3] = nms_res[j][3];
+          buffer[4] = nms_res[j][4];
+          buffer[5] = nms_res[j][5];
+          buffer[6] = nms_res[j][6];
+
+          //std::cout << buffer[0] << "," << buffer[1] << "," << buffer[2] << "," << buffer[3] << "," << buffer[4] << "," << buffer[5] << "," << buffer[6] << std::endl;
+          buffer += 7;
+        }
       }
-
       results.push_back(next_result_ptr);
     }
   }
@@ -456,6 +464,9 @@ private:
   std::vector<int> get_next_results_finished;
   std::vector<int> get_next_results_batch_idx;
   std::vector<int> get_next_results_turn;
+
+  NMS_ABP<TOutput1DataType, TOutput2DataType, Model_Params> nms_abp_processor;
+  Model_Params modelParams;
 };
 
 //----------------------------------------------------------------------
@@ -478,7 +489,7 @@ public:
     size_t size = source -> size();
     uint8_t *src = source -> data();
 #if defined(__amd64__) && defined(ENABLE_ZEN2)
-#ifndef MODEL_R34
+#if !defined(MODEL_R34) && !defined(MODEL_RX50)
       __m128i *srca =  reinterpret_cast< __m128i*>(src);
       __m128i *desta = reinterpret_cast<__m128i*>(target);
       int64_t vectors = size / sizeof(*srca);
