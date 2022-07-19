@@ -286,7 +286,7 @@
       "extra_env": {
         "_BATCH_SIZE": "16",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
       },
       "extra_tags": [
         "bs.16"
@@ -296,7 +296,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -316,7 +316,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
       },
       "extra_tags": [
         "bs.1"
@@ -326,7 +326,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -346,7 +346,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
       },
       "extra_tags": [
         "bs.1"
@@ -376,7 +376,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=7 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
       },
       "extra_tags": [
         "bs.1"
@@ -841,13 +841,13 @@
     "bert-99.aedk_25w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.aedk_20w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.aedk_20w.multistream": {
@@ -859,13 +859,13 @@
     "bert-99.aedk_20w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
       }
     },
     "bert-99.aedk_15w.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.aedk_15w.multistream": {
@@ -877,7 +877,7 @@
     "bert-99.aedk_15w.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
       }
     },
     "bert-99.pcie.14nsp.offline": {
@@ -895,7 +895,7 @@
     "bert-99.pcie.14nsp.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=7 -mos=7 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
       }
     },
     "bert-99.pcie.16nsp.offline": {

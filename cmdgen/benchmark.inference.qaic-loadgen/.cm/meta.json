@@ -453,7 +453,15 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4960"
       },
-      "haishen": {
+      "aedkh": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ]
+      },
+      "aedkr": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
