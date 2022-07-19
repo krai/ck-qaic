@@ -3,8 +3,8 @@
 _PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _DEVICE_OS=${DEVICE_OS:-centos}
 _CK_VER=${CK_VER:-2.6.1}
-_INSTALL_PYTHON_DEPENDENCY=${INSTALL_PYTHON_DEPENDENCY:-1}
-_INSTALL_LOADGEN=${INSTALL_LOADGEN:-1}
+_INSTALL_PYTHON_DEPENDENCY=${INSTALL_PYTHON_DEPENDENCY:-"yes"}
+_INSTALL_LOADGEN=${INSTALL_LOADGEN:-"yes"}
 
 . run_common.sh
 
@@ -45,7 +45,7 @@ curl https://sh.rustup.rs -sSf > /tmp/install_rust.sh && sh /tmp/install_rust.sh
 # Install implicit Python dependencies.
 $CK_PYTHON -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
 $CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
-$CK_PYTHON -m pip install transformers==2.4.0 --user
+$CK_PYTHON -m pip install transformers --user
 
 # Install CK.
 $CK_PYTHON -m pip install ck==${_CK_VER}
@@ -58,7 +58,7 @@ ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck detect soft:tool.cmake --full_path=$(which cmake)
 
 # Install explicit Python dependencies.
-if [[ -z _INSTALL_PYTHON_DEPENDENCY ]]; then
+if [[ "${_INSTALL_PYTHON_DEPENDENCY}" == "yes" ]]; then
   echo "Installing explicit Python dependencies."
   echo "1.2x" | ck install package --tags=python-package,numpy
   ck install package --tags=python-package,absl
@@ -69,7 +69,7 @@ else
 fi
 
 # Install LoadGen.
-if [[ -z _INSTALL_LOADGEN ]]; then
+if [[ "${_INSTALL_LOADGEN}" == "yes" ]]; then
   echo "Installing loadgen."
   ck install package --tags=mlperf,inference,source
   ck install package --tags=mlperf,loadgen,static
