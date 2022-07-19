@@ -19,12 +19,7 @@ are to be repeated as needed e.g. for new SDK versions (marked with `R`).
 # A. Initial host setup
 
 ## `[H1]` Set Variables and Paths
-Assume the device is called `aedk1`
-```
-export AEDK1=aedk1
-```
-
-## `[H1]` Set paths for the host and the device
+Update device name, paths and variables in `config.sh`, then `source` it
 ```
 source $(ck find repo:ck-qaic)/script/setup.aedk/config.sh
 ```
@@ -57,7 +52,7 @@ Go to the temporary directory and run:
 ```
 cd /tmp/ && \
 source ./config.sh && \
-./1.run_as_root.${DEVICE_OS}.sh
+./1.run_as_root.sh
 ```
 
 ## `[D1S]` Set user password
