@@ -1,6 +1,5 @@
 #!/bin/bash
 
-_USER=${USER:-krai}
 _INSTALL_SYS_PACKAGE=${INSTALL_SYS_PACKAGE:-"yes"}
 
 echo "Running '$0'"
@@ -23,9 +22,3 @@ if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
 else
   echo "Passing system packages installation."
 fi
-
-# Add user 'krai' to some groups.
-usermod -aG qaic,sudo ${_USER}
-groups krai
-# Do not ask user 'krai' for 'sudo' password.
-echo "krai ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers

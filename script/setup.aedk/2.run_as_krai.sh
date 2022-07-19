@@ -1,7 +1,8 @@
 #!/bin/bash
 
-_PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _DEVICE_OS=${DEVICE_OS:-centos}
+_PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
+_DEVICE_USER=${DEVICE_USER:-krai}
 _CK_VER=${CK_VER:-2.6.1}
 _INSTALL_PYTHON_DEPENDENCY=${INSTALL_PYTHON_DEPENDENCY:-"yes"}
 _INSTALL_LOADGEN=${INSTALL_LOADGEN:-"yes"}
@@ -10,6 +11,15 @@ _INSTALL_LOADGEN=${INSTALL_LOADGEN:-"yes"}
 
 echo "Running '$0'"
 print_variables "${!_@}"
+
+# Add user 'krai' to some groups
+if [[ "${_DEVICE_OS}" == "centos" ]]; then
+  echo "set for centos"
+  sudo usermod -aG qaic,root,wheel ${_DEVICE_USER}
+elif [[ "${_DEVICE_OS}" == "ubuntu" ]]; then
+  echo "set for ubuntu"
+  sudo usermod -aG qaic,sudo ${_DEVICE_USER}
+fi
 
 # Set up environment
 if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then

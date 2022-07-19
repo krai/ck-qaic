@@ -26,7 +26,7 @@ source $(ck find repo:ck-qaic)/script/setup.aedk/config.sh
 
 **NB:** The full installation can take more than 50G. If the space on the root
 partition of the device is limited and you wish to use a different partition, 
-change the `BASE_DIR` in `config.sh`.
+change the `DEVICE_BASE_DIR` in `config.sh`.
 
 ## `[H1]` Pull the `ck-qaic` repository
 ```
@@ -57,7 +57,7 @@ source ./config.sh && \
 
 ## `[D1S]` Set user password
 ```
-passwd ${USER}
+passwd ${DEVICE_USER}
 ```
 
 # C. Initial device setup under the `krai` user
@@ -134,7 +134,7 @@ and copy it to the device e.g. `${AEDK1}`:
 
 ```
 export SDK_VER=1.6.80
-scp qaic-platform-sdk-$SDK_VER.zip ${AEDK1}:/home/krai
+scp qaic-platform-sdk-$SDK_VER.zip ${AEDK1}:${DEVICE_BASE_DIR}/${DEVICE_USER}
 ```
 
 ## `[DSR]` Uninstall/Install the Platform SDK
@@ -143,7 +143,9 @@ Specify `SDK_DIR`, the path to a directory with one or more Platform SDK archive
 The full path to the Platform SDK archive is formed as follows: `PLATFORM_SDK=$SDK_DIR/qaic-platform-sdk-$SDK_VER.zip`.
 
 ```
-SDK_DIR=/home/krai SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
+chmod +x $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
+
+SDK_DIR=${DEVICE_BASE_DIR}/${DEVICE_USER} SDK_VER=1.6.80 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
 ```
 
 Alternatively, specify `PLATFORM_SDK`, the full path to the Platform SDK archive.
