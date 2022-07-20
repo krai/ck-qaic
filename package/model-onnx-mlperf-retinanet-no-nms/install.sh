@@ -58,18 +58,11 @@ cd ${INSTALL_DIR}
 PYTHONPATH=${INSTALL_DIR}/training/single_stage_detector/ssd/
 ${CK_ENV_COMPILER_PYTHON_FILE} ${INSTALL_DIR}/training/single_stage_detector/scripts/pth_to_onnx.py \
                                --input ${CK_ENV_PYTORCH_MODEL_PYTORCH_FILEPATH} \
-                               --output ${INSTALL_DIR}/retinanet_with_preprocessing.onnx \
+                               --output ${INSTALL_DIR}//retinanet.onnx \
                                --image-size 800 800
 exit_if_error
 
-# remove preprocessing
-${CK_ENV_COMPILER_PYTHON_FILE} ${ORIGINAL_PACKAGE_DIR}/strip-preprocessing.py \
-                               ${INSTALL_DIR}/retinanet_with_preprocessing.onnx \
-                               ${INSTALL_DIR}/retinanet.onnx
-exit_if_error
-
 # remove temporary files
-rm -f  ${INSTALL_DIR}/retinanet_with_preprocessing.onnx
 rm -rf ${INSTALL_DIR}/training
 
 echo "${INSTALL_SCRIPT_NAME} : Done."

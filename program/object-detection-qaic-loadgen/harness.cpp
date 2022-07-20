@@ -135,7 +135,7 @@ Program::Program() {
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint16_t>(
         settings, in, out));
 #elif defined(MODEL_RX50)
-    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(
+    benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint16_t, uint16_t>(
         settings, in, out));
 #else // MODEL_MV1
     benchmark.reset(new Benchmark<InCopy, OutCopy, uint8_t, uint8_t, uint8_t>(

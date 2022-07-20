@@ -377,10 +377,14 @@ for (int i = 0; i < samples.size(); ++i) {
                         std::vector<ResultData *> &results, int dev_idx,
                         int act_idx, int set_idx) override {
 
-    TOutput1DataType *boxes_ptr =
-        (TOutput1DataType *)_out_ptrs[dev_idx][act_idx][set_idx][modelParams.BOXES_INDEX];
-    TOutput2DataType *classes_ptr = (TOutput2DataType *)
-        _out_ptrs[dev_idx][act_idx][set_idx][modelParams.CLASSES_INDEX];
+    #if defined(MODEL_RX50)
+    std::vector<TOutput1DataType*> boxes_ptrs(modelParams.OUTPUT_LEVELS);
+    std::vector<TOutput2DataType*> classes_ptrs(modelParams.OUTPUT_LEVELS);
+    std::vector<uint64_t*> topk_ptrs(modelParams.OUTPUT_LEVELS);
+    #else
+    TOutput1DataType *boxes_ptr = (TOutput1DataType *) _out_ptrs[dev_idx][act_idx][set_idx][modelParams.BOXES_INDEX];
+    TOutput2DataType *classes_ptr = (TOutput2DataType *) _out_ptrs[dev_idx][act_idx][set_idx][modelParams.CLASSES_INDEX];
+    #endif
 
     for(int i = 0; i < image_idxs.size(); i++){
       nms_results[dev_idx][act_idx][set_idx][i].clear();
@@ -390,16 +394,30 @@ for (int i = 0; i < samples.size(); ++i) {
           nms_results[dev_idx][act_idx][set_idx][i];
       ResultData *next_result_ptr =
           reformatted_results[dev_idx][act_idx][set_idx][i];
-      TOutput1DataType *dataLoc =
-          boxes_ptr + i * modelParams.TOTAL_NUM_BOXES * NUM_COORDINATES;
-      TOutput2DataType *dataConf =
-          classes_ptr + i * modelParams.TOTAL_NUM_BOXES * modelParams.NUM_CLASSES;
 
       if(_settings->disable_nms) {
         next_result_ptr->set_size(1 * 7);
         next_result_ptr->data()[0]=(float)image_idxs[i];
       } else {
-        nms_abp_processor.anchorBoxProcessing(dataLoc, dataConf, std::ref(nms_res), (float)image_idxs[i]);
+          #if defined(MODEL_RX50)
+            for(int g=0 ; g<modelParams.OUTPUT_LEVELS ; ++g) {
+              TOutput1DataType *boxes_ptr = (TOutput1DataType *) _out_ptrs[dev_idx][act_idx][set_idx][modelParams.BOXES_INDEX+g];
+              TOutput2DataType *classes_ptr = (TOutput2DataType *) _out_ptrs[dev_idx][act_idx][set_idx][modelParams.CLASSES_INDEX+g];
+              uint64_t *topk_ptr = (uint64_t *) _out_ptrs[dev_idx][act_idx][set_idx][modelParams.TOPK_INDEX+g];
+
+              boxes_ptrs[g]   = boxes_ptr + i * modelParams.TOTAL_NUM_BOXES * NUM_COORDINATES;
+              classes_ptrs[g] = classes_ptr + i * modelParams.TOTAL_NUM_BOXES;
+              topk_ptrs[g]    = topk_ptr + i * modelParams.TOTAL_NUM_BOXES;
+            }
+            nms_abp_processor.anchorBoxProcessing((const TOutput1DataType **)boxes_ptrs.data(),
+                                                  (const TOutput2DataType **)classes_ptrs.data(),
+                                                  (const uint64_t **)topk_ptrs.data(),
+                                                  std::ref(nms_res), (float)image_idxs[i]);
+          #else // Classes + Boxes only
+            TOutput1DataType *dataLoc = boxes_ptr + i * modelParams.TOTAL_NUM_BOXES * NUM_COORDINATES;
+            TOutput2DataType *dataConf = classes_ptr + i * modelParams.TOTAL_NUM_BOXES * modelParams.NUM_CLASSES;
+            nms_abp_processor.anchorBoxProcessing(dataLoc, dataConf, std::ref(nms_res), (float)image_idxs[i]);
+          #endif
 
         int num_elems = nms_res.size() < _settings->detections_buffer_size()
                             ? nms_res.size()
