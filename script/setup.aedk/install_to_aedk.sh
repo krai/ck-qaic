@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: DEVICE_IP=192.168.0.11 DEVICE_PORT=3311 DEVICE_TYPE=aedk_15w DEVICE_PASSWORD=01234567 ./install_to_aedk.sh
+# Basic usage: DEVICE_TYPE=aedk_15w DEVICE_IP=192.168.0.12 DEVICE_PORT=1234 DEVICE_PASSWORD=12345678 ./install_to_aedk.sh
 
 _DRY_RUN=${DRY_RUN:-"no"}
 _DRY_COMPILE=${DRY_COMPILE:-"no"}
@@ -8,16 +8,16 @@ _DRY_INSTALL=${DRY_INSTALL:-"no"}
 _UPDATE_CK_QAIC=${UPDATE_CK_QAIC:-"yes"}
 
 # No sensible defaults.
-if [ -z ${DEVICE_IP} ]; then
-  echo 'Please set device IP address e.g. DEVICE_IP="192.168.1.11"!'
-  exit 1
-fi
 if [ -z ${DEVICE_TYPE} ]; then
   echo 'Please set device type e.g. DEVICE_TYPE="aedk_15w"!'
   exit 1
 fi
+if [ -z ${DEVICE_IP} ]; then
+  echo 'Please set device IP address e.g. DEVICE_IP="192.168.0.12"!'
+  exit 1
+fi
 if [ -z ${DEVICE_PASSWORD} ]; then
-  echo 'Please set device password e.g. DEVICE_PASSWORD="01234567"!'
+  echo 'Please set device password e.g. DEVICE_PASSWORD="12345678"!'
   exit 1
 fi
 # Sensible defaults.
