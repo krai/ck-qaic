@@ -118,16 +118,16 @@ RUN ck compile program:image-classification-qaic-loadgen --quiet
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-#RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-#$(ck find repo:ctuning-programs)/* \
-#$(ck find repo:ck-crowdtuning-platforms)/* \
-#$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities; fi
 #$(ck locate env --tags=python-package,tensorflow)/* \
-#$(ck locate env --tags=lib,protobuf-host)/src \
-#$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-#$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-#$(ck locate env --tags=tool,cmake)/cmake*/Source \
-#$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 #$(ck locate env --tags=model,fix_input_shape)/*; fi
 
 ###############################################################################
