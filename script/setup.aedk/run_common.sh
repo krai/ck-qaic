@@ -8,6 +8,14 @@ function exit_if_error() {
   fi
 }
 
+function exit_if_empty() {
+  if [ -z "$1" ]; then
+    echo ""
+    echo "ERROR: $2"
+    exit 1
+  fi
+}
+
 function print_variables() {
   a=("$@")
   echo $a
@@ -15,11 +23,4 @@ function print_variables() {
   for var in "${a[@]}"; do
     printf "Setting %s%q\n" "${var:1}=" "${!var}"
   done
-}
-
-function contains_element () {
-  local e match="$1"
-  shift
-  for e; do [[ "$e" == "$match" ]] && return 0; done
-  return 1
 }

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-_BENCHMARKS=${BENCHMARKS:-("resnet50")}
+_INSTALL_BENCHMARK_RESNET50=${INSTALL_BENCHMARKS_RESNET50:-"yes"}
+_INSTALL_BENCHMARK_BERT=${INSTALL_BENCHMARKS_BERT:-"yes"}
 _DEVICE_DATASETS_DIR=${DEVICE_DATASETS_DIR:-"${HOME}"}
 
 . run_common.sh
@@ -8,7 +9,7 @@ _DEVICE_DATASETS_DIR=${DEVICE_DATASETS_DIR:-"${HOME}"}
 echo "Running '$0'"
 print_variables "${!_@}"
 
-if [[ -z $(contains_element "resnet50" "${_BENCHMARKS[@]}") ]]; then
+if [[ "${_INSTALL_BENCHMARK_RESNET50}" == "yes" ]]; then
     _DEVICE_DATASETS=${_DEVICE_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val
     if [[ -d "${_DEVICE_DATASETS}" ]]; then
       echo "Passing: Directory '${_DEVICE_DATASETS}' already exist!"
@@ -27,10 +28,31 @@ if [[ -z $(contains_element "resnet50" "${_BENCHMARKS[@]}") ]]; then
     fi
 fi
 
-# TODO
-# if [[ contains_element "object_detection" "${_BENCHMARKS[@]}" ]]; then
-# fi
+if [[ "${_INSTALL_BENCHMARK_BERT}" == "yes" ]]; then
+
+  # Install implicit dependencies via pip
+  source $HOME/.bashrc
+  exit_if_empty ${CK_PYTHON} "Please set CK_PYTHON first!"
+  ${CK_PYTHON} -m pip install --user onnx-simplifier
+  ${CK_PYTHON} -m pip install --user tokenization
+  ${CK_PYTHON} -m pip install --user nvidia-pyindex
+  ${CK_PYTHON} -m pip install --user onnx-graphsurgeon==0.3.11
+
+  # Install explicit dependencies via CK (also via pip, but register with CK at the same time)
+  ck install package --tags=python-package,onnx --force_version=1.8.1 --quiet
+  ck install package --tags=lib,python-package,pytorch --force_version=1.8.1 --quiet
+  ck install package --tags=lib,python-package,transformers --force_version=2.4.0
+
+  # Download the SQuAD v1.1 dataset
+  ck install package --tags=dataset,squad,raw,width.384 --quiet
+  ck install package --tags=dataset,calibration,squad,pickle,width.384 --quiet
+  # Install the model
+  ck install package --tags=model,mlperf,qaic,bert-packed --quiet
+  # Calibrate the workload
+  ck install package --tags=profile,qaic,bert-packed --quiet
+
+fi
 
 # TODO
-# if [[ contains_element "language_processing" "${_BENCHMARKS[@]}" ]]; then
+# if [[ "${_INSTALL_BENCHMARKS_OBJECT_DETECTION}" == "yes" ]]; then
 # fi
