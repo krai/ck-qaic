@@ -31,7 +31,7 @@ if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then
   echo -n "\
 # CK-QAIC.
 export CK_PYTHON=$(which python${_PYTHON_MAJOR}.${_PYTHON_MINOR})
-export PATH=$HOME/.local/bin:$PATH" >> $HOME/.bashrc
+export PATH=/opt/qti-aic/tools:$HOME/.local/bin:$PATH" >> $HOME/.bashrc
 
   # Centos OS Dependency
   if [[ "${_DEVICE_OS}" == centos ]]; then

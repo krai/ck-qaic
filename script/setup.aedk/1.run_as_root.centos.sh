@@ -18,6 +18,7 @@ if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
   yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel tmux epel-release
   yum install -y htop
   yum install -y dnf
+  yum install -y lm_sensors
   yum clean all
   # Install system-level packages via 'dnf'.
   dnf install -y libarchive cmake

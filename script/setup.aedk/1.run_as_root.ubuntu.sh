@@ -16,7 +16,8 @@ if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
     python3-dev python3-pip \
     lm-sensors ipmitool \
     ca-certificates curl gnupg lsb-release \
-    acl
+    acl \
+    bc rsync cmake
   sudo apt clean all
   exit_if_error "apt install failed!"
 else
