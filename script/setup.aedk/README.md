@@ -217,35 +217,44 @@ If you do not wish to use Docker images, you can follow common [instructions](ht
 
 ### `SDK_VER`
 
-The SDK version. Must be set.
+The SDK version.
+Must be set.
 
 ### `DEVICE_IP`
 
-The IP address or hostname of the device. Must be set.
+The IP address or hostname of the device.
+Must be set.
 
 ### `DEVICE_PORT`
 
-The SSH port on the device. Default: `22`.
+The SSH port on the device.
+Default: `22`.
 
 ### `DEVICE_PASSWORD`
 
-The password on the device. Must be set. The password is not stored.
+The password on the device.
+Must be set.
+Does not get cached.
 
 ### `DEVICE_BASE_DIR`
 
-The root of the user directories on the device. Default: `data`.
+The root of the user directories on the device.
+Default: `/data`.
 
 ### `DEVICE_USER`
 
-The username on the device. Default: `krai`.
+The username on the device.
+Default: `krai`.
 
 ### `DEVICE_TYPE`
 
-The type of the device.  Default: `aedk_15w` (e.g. for Foxconn Gloria and Alibaba Haishen).
+The type of the device.
+Default: `aedk_15w` (e.g. for Foxconn Gloria and Alibaba Haishen).
 
 ### `WORKLOADS`
 
-Default: `WORKLOADS="resnet50,bert"`. A comma-separated list of workloads to compile and install.
+A comma-separated list of workloads to compile and install.
+Default: `WORKLOADS="resnet50,bert"`. 
 
 ### `UPDATE_CK_QAIC`
 
@@ -257,22 +266,30 @@ Default: `DRY_RUN=no`. If `DRY_RUN=yes`, only print commands but do not execute 
 
 ### `DRY_COMPILE`
 
-Default: `DRY_COMPILE=no`. If `DRY_COMPILE=yes`, only print compilation commands. This requires operating with workload binaries baked into the Docker image. See `DOCKER_DEVICE_TYPE`.
+Default: `DRY_COMPILE=no`.
+If `DRY_COMPILE=yes`, only print compilation commands.
+This requires operating with workload binaries baked into the Docker image.
+See `DOCKER_DEVICE_TYPE`.
 
 ### `DRY_INSTALL`
 
-Default: `DRY_INSTALL=no`. If `DRY_INSTALL=yes`, only print installation commands.
+Default: `DRY_INSTALL=no`.
+If `DRY_INSTALL=yes`, only print installation commands.
 
 ### `DOCKER`
 
-Default: `yes`. Whether to use Docker images to run compile and install workloads.
+Default: `yes`.
+Whether to use Docker images to run compile and install workloads.
 
 ### `DOCKER_OS`
 
-Default: `DOCKER_OS=ubuntu`. If `DOCKER_OS=ubuntu`, assume Ubuntu 20.04 based images have been created. If `DOCKER_OS=centos`, assume CentOS 7 based images have been created.
+Default: `DOCKER_OS=ubuntu`.
+If `DOCKER_OS=ubuntu`, assume Ubuntu 20.04 based images have been created.
+If `DOCKER_OS=centos`, assume CentOS 7 based images have been created.
 
 ### `DOCKER_DEVICE_TYPE`
 
-Default: `DOCKER_DEVICE_TYPE=pcie.16nsp`. See `DRY_COMPILE`.
+Default: `DOCKER_DEVICE_TYPE=pcie.16nsp`.
+See `DRY_COMPILE`.
 
 Use `DOCKER_DEVICE_TYPE=pcie.14nsp` if images have been compiled with the `COMPILE_PRO=no COMPILE_STD=yes` flags.
