@@ -5,7 +5,7 @@
       "CUDA_VISIBLE_DEVICES": "-1",
       "MODEL_NAME": "profile",
       "PACKAGE_VERSION": "1",
-      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/"
+      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
