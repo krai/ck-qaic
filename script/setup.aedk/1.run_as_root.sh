@@ -1,25 +1,25 @@
 #!/bin/bash
 
 _DEVICE_OS=${DEVICE_OS:-centos}
-_PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _DEVICE_GROUP=${DEVICE_GROUP:-krai}
 _DEVICE_USER=${DEVICE_USER:-krai}
 _DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-"/data"}
 _TIMEZONE=${TIMEZONE:-"Europe/London"}
-_INSTALL_SYS_PACKAGE=${INSTALL_SYS_PACKAGE:-"yes"}
+_INSTALL_SYSTEM_PACKAGES=${INSTALL_SYSTEM_PACKAGES:-"yes"}
 _INSTALL_PYTHON=${INSTALL_PYTHON:-"yes"}
+_PYTHON_VERSION=${PYTHON_VERSION:-${PYTHON_VER:-3.9.13}}
 
 . run_common.sh
 
 echo "Running '$0'"
 print_variables "${!_@}"
 
-# Install OS dependencies
-INSTALL_SYS_PACKAGE=${_INSTALL_SYS_PACKAGE} . 1.run_as_root.${_DEVICE_OS}.sh
+# Install system-wide dependencies.
+INSTALL_SYSTEM_PACKAGES=${_INSTALL_SYSTEM_PACKAGES} . 1.run_as_root.${_DEVICE_OS}.sh
 
 # Install Python >= 3.7 from source.
 if [[ "${_INSTALL_PYTHON}" == "yes" ]]; then
-  echo "Installing Python ${_PYTHON_VERSION}."
+  echo "Installing Python v${_PYTHON_VERSION} ..."
   cd /usr/src \
   && wget https://www.python.org/ftp/python/${_PYTHON_VERSION}/Python-${_PYTHON_VERSION}.tgz \
   && tar xzf Python-${_PYTHON_VERSION}.tgz \
@@ -29,7 +29,7 @@ if [[ "${_INSTALL_PYTHON}" == "yes" ]]; then
   && rm -rf /usr/src/Python-${_PYTHON_VERSION}*
   exit_if_error "Failed to install Python ${_PYTHON_VERSION}."
 else
-  echo "Passing Python ${_PYTHON_VERSION} installation."
+  echo "Skipping Python v${_PYTHON_VERSION} installation ..."
 fi
 
 # Create group 'qaic'.
