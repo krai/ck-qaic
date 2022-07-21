@@ -12,7 +12,7 @@ if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
   sudo apt upgrade -y
   sudo apt install -y \
     git wget patch vim \
-    libbz2-dev lzma \
+    libbz2-dev lzma libffi-dev \
     python3-dev python3-pip \
     lm-sensors ipmitool \
     ca-certificates curl gnupg lsb-release \
