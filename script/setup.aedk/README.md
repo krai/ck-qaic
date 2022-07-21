@@ -204,7 +204,7 @@ The easiest way to install the workloads to the device is to use Docker images [
 
 ```base
 cd $(ck find ck-qaic:script:setup.aedk)
-DEVICE_IP=192.168.0.12 DEVICE_PORT=1234 DEVICE_PASSWORD=12345678 DEVICE_TYPE=aedk_15w ./install_to_aedk.sh
+DEVICE_IP=192.168.0.12 DEVICE_PORT=1234 DEVICE_PASSWORD=12345678 ./install_to_aedk.sh
 ```
 
 If you do not wish to use Docker images, you can follow common [instructions](https://github.com/krai/ck-qaic/blob/main/program/README.md), and then instructions for individual workloads:
@@ -215,25 +215,33 @@ If you do not wish to use Docker images, you can follow common [instructions](ht
 
 ## Arguments
 
-### `DEVICE_TYPE`
+### `SDK_VER`
 
-The type of the device e.g. `aedk_15w` for Gloria and Haishen. Must be set.
+The SDK version. Must be set.
 
 ### `DEVICE_IP`
 
 The IP address or hostname of the device. Must be set.
 
+### `DEVICE_PORT`
+
+The SSH port on the device. Default: `22`.
+
 ### `DEVICE_PASSWORD`
 
 The password on the device. Must be set. The password is not stored.
+
+### `DEVICE_BASE_DIR`
+
+The root of the user directories on the device. Default: `data`.
 
 ### `DEVICE_USER`
 
 The username on the device. Default: `krai`.
 
-### `SDK_VER`
+### `DEVICE_TYPE`
 
-The SDK version. Default: `1.7.1.12`.
+The type of the device.  Default: `aedk_15w` (e.g. for Foxconn Gloria and Alibaba Haishen).
 
 ### `WORKLOADS`
 
