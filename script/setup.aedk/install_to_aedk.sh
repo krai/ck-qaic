@@ -32,6 +32,7 @@ _DOCKER_OS=${DOCKER_OS:-ubuntu}
 _DOCKER_DEVICE_TYPE=${DOCKER_DEVICE_TYPE:-pcie.16nsp}
 
 _UPDATE_CK_QAIC=${UPDATE_CK_QAIC:-yes}
+_PCV_BERT=${PCV_BERT:-9980}
 
 # Convert comma-separated workload list into array.
 _WORKLOADS=${WORKLOADS:-"resnet50,bert"} # "resnet50,bert,retinanet,ssd_mobilenet,ssd_resnet34"
@@ -80,7 +81,8 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
   if [[ "${workload}" == "bert" || "${workload}" == "bert-99" ]]; then
     workload="bert-99"
     scenarios=(offline singlestream) # no multistream
-    extra_suffix=",quantization.calibration"
+    extra_suffix=",quantization.calibration,seg.384"
+    extra_env="--env._PERCENTILE_CALIBRATION_VALUE=99.${_PCV_BERT} --extra_tags=pcv.${_PCV_BERT}"
   else
     scenarios=(offline singlestream multistream)
     extra_suffix=""
@@ -89,7 +91,7 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
     echo "  - Scenario: '${scenario}'"
     model_tags="model,qaic,${workload},${workload}.${_DEVICE_TYPE}.${scenario}${extra_suffix}"
     # Compile workload.
-    compile_cmd="${docker_cmd_prefix} ck install package --tags=${model_tags}"
+    compile_cmd="${docker_cmd_prefix} ck install package --tags=${model_tags} ${extra_env}"
     echo "    - Compile command:"
     echo "      ${compile_cmd}"
     if [[ "${_DRY_COMPILE}" != "yes" ]]; then
