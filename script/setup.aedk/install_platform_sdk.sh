@@ -13,7 +13,7 @@ else
   _OS="centos"
 fi
 
-_SDK_VER=${SDK_VER:-1.7.1.7}
+_SDK_VER=${SDK_VER:-1.7.1.12}
 _SDK_DIR=${SDK_DIR:-/data/krai}
 
 _PLATFORM_SDK=${PLATFORM_SDK:-"${_SDK_DIR}/qaic-platform-sdk-${_ARCH}-${_OS}-${_SDK_VER}.zip"}
@@ -36,6 +36,14 @@ if [[ $(cat /proc/device-tree/model | tr -d '\0') == *HDK ]]; then
 fi
 echo "yes" | sudo ./uninstall.sh
 sudo ./install.sh
+
+_LOGS_DIR=${LOGS_DIR:-/opt/qti-aic/logs}
+_DEVICE_GROUP=${DEVICE_GROUP:-krai}
+
+sudo mkdir -p ${_LOGS_DIR}
+sudo chgrp ${_DEVICE_GROUP} ${_LOGS_DIR}
+sudo chmod g+ws ${_LOGS_DIR}
+sudo setfacl -R -d -m group:${_DEVICE_GROUP}:rw ${_LOGS_DIR}
 
 echo
 echo "Done."
