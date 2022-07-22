@@ -39,11 +39,13 @@ sudo ./install.sh
 
 _LOGS_DIR=${LOGS_DIR:-/opt/qti-aic/logs}
 _DEVICE_GROUP=${DEVICE_GROUP:-krai}
+_DEVICE_USER=${DEVICE_USER:-krai}
 
 sudo mkdir -p ${_LOGS_DIR}
 sudo chgrp ${_DEVICE_GROUP} ${_LOGS_DIR}
 sudo chmod g+ws ${_LOGS_DIR}
 sudo setfacl -R -d -m group:${_DEVICE_GROUP}:rw ${_LOGS_DIR}
+sudo usermod -aG qaic ${_DEVICE_USER}
 
 echo
-echo "Done."
+echo "Done. Please reboot for the user to be added into the groups."
