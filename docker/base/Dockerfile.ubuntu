@@ -36,6 +36,7 @@ LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
 
 # Use the Bash shell.
 SHELL ["/bin/bash", "-c"]
+RUN ln -sf /bin/bash /bin/sh
 
 # Allow stepping into the Bash shell interactively.
 ENTRYPOINT ["/bin/bash", "-c"]
