@@ -1,6 +1,7 @@
 #!/bin/bash
 
 _DEVICE_OS=${DEVICE_OS:-centos}
+_DEVICE_OS_OVERRIDE=${DEVICE_OS_OVERRIDE:-no}
 _PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _DEVICE_USER=${DEVICE_USER:-krai}
 _CK_VER=${CK_VER:-2.6.1}
@@ -11,6 +12,9 @@ _INSTALL_LOADGEN=${INSTALL_LOADGEN:-"yes"}
 
 echo "Running '$0'"
 print_variables "${!_@}"
+
+# Determine Device OS
+get_os ${_DEVICE_OS} ${_DEVICE_OS_OVERRIDE}
 
 # Add user 'krai' to some groups
 if [[ "${_DEVICE_OS}" == "centos" ]]; then

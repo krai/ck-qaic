@@ -1,6 +1,7 @@
 #!/bin/bash
 
 _DEVICE_OS=${DEVICE_OS:-centos}
+_DEVICE_OS_OVERRIDE=${DEVICE_OS_OVERRIDE:-no}
 _DEVICE_GROUP=${DEVICE_GROUP:-krai}
 _DEVICE_USER=${DEVICE_USER:-krai}
 _DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-"/data"}
@@ -13,6 +14,9 @@ _PYTHON_VERSION=${PYTHON_VERSION:-${PYTHON_VER:-3.9.13}}
 
 echo "Running '$0'"
 print_variables "${!_@}"
+
+# Determine Device OS
+get_os ${_DEVICE_OS} ${_DEVICE_OS_OVERRIDE}
 
 # Install system-wide dependencies.
 INSTALL_SYSTEM_PACKAGES=${_INSTALL_SYSTEM_PACKAGES} . 1.run_as_root.${_DEVICE_OS}.sh
