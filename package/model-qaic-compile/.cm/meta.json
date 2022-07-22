@@ -5,7 +5,7 @@
       "_COMPILER_ARGS_NAME_PREFIX": "",
       "MODEL_NAME": "converted_model",
       "PACKAGE_VERSION": "1",
-      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic/",
+      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic",
       "_BATCH_SIZE": "1",
       "_SEG": "384"
     },
