@@ -130,7 +130,7 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   # Generate the profile.yaml file from the calibration dataset using best known options.
   echo ${_COMPILER_PARAMS}
   read -d '' CMD <<END_OF_CMD
-  ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec \
+  ${QAIC_TOOLCHAIN_PATH}/exec/qaic-runner \
   -input-list-file=${image_list} \
   ${batch_size_implicit} \
   ${_COMPILER_PARAMS} \
