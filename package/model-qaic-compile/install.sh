@@ -112,7 +112,7 @@ if [[ -n ${_COMPILER_PARAMS} ]]; then
   echo
   echo "Compile QAIC network binaries:"
   read -d '' CMD <<END_OF_CMD
-  ${QAIC_TOOLCHAIN_PATH}/exec/qaic-runner -model=${model} \
+  ${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec -model=${model} \
   ${LOAD_PROFILE} -aic-binary-dir=${aic_binary_dir} \
   ${_COMPILER_PARAMS}
 END_OF_CMD

@@ -55,6 +55,6 @@ done
 
 # quantize the model
 
-${QAIC_TOOLCHAIN_PATH}/exec/qaic-runner -m=${CK_ENV_ONNX_MODEL_ROOT}/model.onnx \
+${QAIC_TOOLCHAIN_PATH}/exec/qaic-exec -m=${CK_ENV_ONNX_MODEL_ROOT}/model.onnx \
 -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,${_PACKED_SEQ_LEN} \
 -input-list-file=${INSTALL_DIR}/packed/inputfiles.txt -num-histogram-bins=512 -dump-profile=${INSTALL_DIR}/profile.yaml -profiling-threads=4
