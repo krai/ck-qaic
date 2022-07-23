@@ -1040,10 +1040,7 @@
         "compliance": "TEST01"
       },
       {
-        "compliance": "TEST04-A"
-      },
-      {
-        "compliance": "TEST04-B"
+        "compliance": "TEST04"
       },
       {
         "compliance": "TEST05"
@@ -1051,21 +1048,21 @@
     ],
     "datacenter": [
       {
-        "scenario": "server"
+        "scenario": "offline"
       },
       {
-        "scenario": "offline"
+        "scenario": "server"
       }
     ],
     "edge": [
+      {
+        "scenario": "offline"
+      },
       {
         "scenario": "singlestream"
       },
       {
         "scenario": "multistream"
-      },
-      {
-        "scenario": "offline"
       }
     ],
     "open": [
