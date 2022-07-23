@@ -30,6 +30,10 @@ echo "Using Platform SDK: ${_PLATFORM_SDK}"
 unzip -o ${_PLATFORM_SDK} -d "$(dirname ${_PLATFORM_SDK})"
 cd "$(dirname ${_PLATFORM_SDK})/qaic-platform-sdk-${_SDK_VER}/${_ARCH}/${_OS}"
 
+if [[ $(cat /proc/device-tree/model | tr -d '\0') == *Gloria ]] && [[ $(hostname) == *1 ]]; then
+  echo "yes" | rm deb/qaic-kmd_${_SDK_VER}_arm64.deb
+  cp deb-perf/qaic-kmd_${_SDK_VER}_arm64.deb deb/
+fi
 if [[ $(cat /proc/device-tree/model | tr -d '\0') == *HDK ]]; then
   echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm
   cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm rpm/
@@ -46,6 +50,8 @@ sudo chgrp ${_DEVICE_GROUP} ${_LOGS_DIR}
 sudo chmod g+ws ${_LOGS_DIR}
 sudo setfacl -R -d -m group:${_DEVICE_GROUP}:rw ${_LOGS_DIR}
 sudo usermod -aG qaic ${_DEVICE_USER}
+
+sudo chgrp qaic /opt/qti-aic/tools/qaic-version-util
 
 echo
 echo "Done. Please reboot for the user to be added into the groups."

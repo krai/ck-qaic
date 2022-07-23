@@ -213,6 +213,11 @@ SDK_DIR=${DEVICE_BASE_DIR}/${DEVICE_USER} SDK_VER=1.7.1.12 bash $(ck find ck-qai
 Alternatively, specify `PLATFORM_SDK`, the full path to the Platform SDK archive.
 
 <details><pre>
+SDK_DIR=~ SDK_VER=1.7.1.12 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
+</pre></details>
+
+
+<details><pre>
 LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
 LRT IMAGE_VARIANT: LRT.AIC.REL
 Number of devices: 1
