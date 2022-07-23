@@ -166,7 +166,7 @@
           "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
-          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=15",
           "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
         ],
         "deps": [
