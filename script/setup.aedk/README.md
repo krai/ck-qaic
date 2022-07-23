@@ -35,25 +35,70 @@ ck pull repo --url=https://github.com/krai/ck-qaic
 
 # B. Initial device setup under the `root` user
 
-## `[H1]` Copy the scripts to the device
-Copy the scripts in this directory to a temporary directory on the device e.g.:
-```
-scp -P ${DEVICE_PORT} $(ck find repo:ck-qaic)/script/setup.aedk/*.sh ${DEVICE_IP}:/tmp
-```
-
 ## `[H1]` Connect to the device as `root`
 Connect to the device as `root` e.g.:
 ```
 ssh -p ${DEVICE_PORT} root@${DEVICE_IP}
 ```
 
+## `[H1]` Clone the repository with setup scripts
+
+```
+git clone https://github.com/krai/ck-qaic /tmp/ck-qaic
+```
+
 ## `[D1S]` Run
-Go to the temporary directory and run:
+Go to the temporary directory:
 ```
-cd /tmp/ && \
-source ./config.sh && \
-./1.run_as_root.sh
+cd /tmp/ck-qaic/script/setup.aedk
 ```
+
+Check the config file:
+```
+cat ./config.sh
+```
+
+<details><pre>
+#!/bin/bash
+
+export DEVICE_IP=aedk3
+export DEVICE_PORT=3233
+export DEVICE_BASE_DIR="/data"
+export DEVICE_GROUP="krai"
+export DEVICE_USER="krai"
+export DEVICE_OS=centos
+export DEVICE_OS_OVERRIDE=no
+export DEVICE_DATASETS_DIR=${DEVICE_BASE_DIR}/${DEVICE_USER}
+export HOST_DATASETS_DIR="/datasets"
+export PYTHON_VERSION=3.9.13
+export INSTALL_BENCHMARK_RESNET50=yes
+export INSTALL_BENCHMARK_BERT=yes
+</pre></details>
+
+Source it if you are happy with the settings and run:
+```
+source ./config.sh && ./1.run_as_root.sh
+```
+
+Alternatively, you can override variables from the command line e.g.:
+```
+time DEVICE_BASE_DIR=/home TIMEZONE=US/Central ./1.run_as_root.sh
+```
+
+<details></pre>
+root@aus655-gloria-1:~# df -h /home
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        99G   11G   89G  11% /
+root@aus655-gloria-1:~# df -h /datasets
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p1  880G   77M  835G   1% /datasets
+root@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk# time DEVICE_BASE_DIR=/datasets TIMEZONE=US/Central ./1.run_as_root.sh
+...
+Sat Jul 23 09:05:56 CDT 2022
+real    3m42.599s
+user    6m4.276s
+sys     1m5.008s
+</pre></details>
 
 ## `[D1S]` Set user password
 ```
@@ -70,25 +115,29 @@ ssh -p ${DEVICE_PORT} krai@${DEVICE_IP}
 
 ## `[D1]` Update scripts permissions
 ```
-cd /tmp && \
-sudo chown krai ./2.run_as_krai.sh ./3.install_benchmark.sh ./run_common.sh && \
-sudo chmod u+x ./2.run_as_krai.sh ./3.install_benchmark.sh ./run_common.sh
+sudo chown -R krai:krai /tmp/ck-qaic
+sudo chmod u+x /tmp/ck-qaic/script/setup.aedk/*.sh
 ```
 
-## `[D1]` Run:
+## `[D1]` Run
 ```
-cd /tmp/ && \
-source ./config.sh && \
-./2.run_as_krai.sh
+cd /tmp/ck-qaic/script/setup.aedk
+source ./config.sh && time ./2.run_as_krai.sh
 ```
 
-# D. Set up Imagenet
+# D. Set up ImageNet
 Suppose the ImageNet validation dataset (50,000 images) is in an archive (6.4G) called
-`dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine. Check the md5sum.
+`dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine.
+Validate the `md5sum` checksum.
 
 <details><pre>
 &dollar; md5sum ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar
 3f31a40f2bb902e28aa23aad0fc8e383  dataset-imagenet-ilsvrc2012-val.tar
+</pre></details>
+
+<details><pre>
+krai@aus655-gloria-1:/datasets&dollar; md5sum imagenet.tar
+2398abe8c17b3bf5df61946fff0b8494  imagenet.tar
 </pre></details>
 
 ## `[H1]` Copy the ImageNet dataset from the host to the device
@@ -96,12 +145,27 @@ Suppose the ImageNet validation dataset (50,000 images) is in an archive (6.4G) 
 scp -P ${DEVICE_PORT} ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar root@${DEVICE_IP}:${DEVICE_DATASETS_DIR}
 ```
 
-## `[D1]` Preprocess Imagenet on the device
+## `[D1]` Extract and preprocess ImageNet on the device
 ```
-cd /tmp/ && \
-source ./config.sh && \
-./3.install_benchmark.sh
+cd /tmp/ck-qaic/script/setup.aedk
+source ./config.sh && time ./3.install_workload.sh
 ```
+
+<details><pre>
+krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=yes INSTALL_WORKLOAD_BERT=no DEVICE_DATASETS_DIR=/datasets DEVICE_IMAGENET_DIR=imagenet ./3.install_workload.sh
+...
+real    10m3.297s
+user    8m24.348s
+sys     12m31.936s
+</pre></details>
+
+<details><pre>
+krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=no INSTALL_WORKLOAD_BERT=yes ./3.install_workload.sh
+...
+real    15m10.001s
+user    27m41.982s
+sys     2m2.424s
+</pre></details>
 
 # E. Set up QAIC SDKs
 Obtain a pair of QAIC SDKs:

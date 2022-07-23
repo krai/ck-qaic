@@ -4,19 +4,23 @@ _DEVICE_OS=${DEVICE_OS:-centos}
 _DEVICE_OS_OVERRIDE=${DEVICE_OS_OVERRIDE:-no}
 _DEVICE_GROUP=${DEVICE_GROUP:-krai}
 _DEVICE_USER=${DEVICE_USER:-krai}
-_DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-"/data"}
-_TIMEZONE=${TIMEZONE:-"Europe/London"}
-_INSTALL_SYSTEM_PACKAGES=${INSTALL_SYSTEM_PACKAGES:-"yes"}
-_INSTALL_PYTHON=${INSTALL_PYTHON:-"yes"}
+_DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-/data}
+_TIMEZONE=${TIMEZONE:-Europe/London}
+_INSTALL_SYSTEM_PACKAGES=${INSTALL_SYSTEM_PACKAGES:-yes}
+_INSTALL_PYTHON=${INSTALL_PYTHON:-yes}
 _PYTHON_VERSION=${PYTHON_VERSION:-${PYTHON_VER:-3.9.13}}
 
-. run_common.sh
+. common.sh
 
-echo "Running '$0'"
-print_variables "${!_@}"
-
-# Determine Device OS
+# Determine device OS.
 get_os ${_DEVICE_OS} ${_DEVICE_OS_OVERRIDE}
+
+# Print environment variables.
+echo "Running '$0' ..."
+print_variables "${!_@}"
+echo
+echo "Press Ctrl-C to break ..."
+sleep 10
 
 # Install system-wide dependencies.
 INSTALL_SYSTEM_PACKAGES=${_INSTALL_SYSTEM_PACKAGES} . 1.run_as_root.${_DEVICE_OS}.sh

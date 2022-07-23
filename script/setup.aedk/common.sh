@@ -29,15 +29,15 @@ function get_os() {
   local os=$1
   local override=$2
   if [[ "${override}" == "yes" && ! -z "${os}" ]]; then
-    echo "User overriding Device OS detection ..."
+    echo "User overriding device OS detection ..."
     _DEVICE_OS="${os}"
   else
-    echo "Automatically detecting OS ..."
+    echo "Automatically detecting device OS ..."
     if [[ $(cat /etc/os-release) == *Ubuntu* ]]; then
       _DEVICE_OS="ubuntu"
     else
       _DEVICE_OS="centos"
     fi
   fi
-  echo "Setting Device OS as ${_DEVICE_OS}."
+  echo "Setting device OS as '${_DEVICE_OS}' ..."
 }

@@ -2,51 +2,62 @@
 
 _DEVICE_OS=${DEVICE_OS:-centos}
 _DEVICE_OS_OVERRIDE=${DEVICE_OS_OVERRIDE:-no}
-_PYTHON_VERSION=${PYTHON_VERSION:-3.9.13}
 _DEVICE_USER=${DEVICE_USER:-krai}
-_CK_VER=${CK_VER:-2.6.1}
-_INSTALL_PYTHON_DEPENDENCY=${INSTALL_PYTHON_DEPENDENCY:-"yes"}
-_INSTALL_LOADGEN=${INSTALL_LOADGEN:-"yes"}
 
-. run_common.sh
+_INSTALL_LOADGEN=${INSTALL_LOADGEN:-yes}
+_INSTALL_PYTHON_DEPS=${INSTALL_PYTHON_DEPS:-yes}
 
-echo "Running '$0'"
-print_variables "${!_@}"
+_CK_VERSION=${CK_VERSION:-${CK_VER:-2.6.1}}
 
-# Determine Device OS
+_PYTHON_VERSION=${PYTHON_VERSION:-${PYTHON_VER:-3.9.13}}
+_PYTHON_VERSION_ARRAY=($(echo ${_PYTHON_VERSION} | tr "." " "))
+_PYTHON_VERSION_MAJOR=${_PYTHON_VERSION_ARRAY[0]}
+_PYTHON_VERSION_MINOR=${_PYTHON_VERSION_ARRAY[1]}
+_PYTHON_VERSION_PATCH=${_PYTHON_VERSION_ARRAY[2]}
+_CK_PYTHON=${CK_PYTHON:-"python${_PYTHON_VERSION_MAJOR}.${_PYTHON_VERSION_MINOR}"}
+
+_MLPERF_VERSION=${MLPERF_VERSION:-${MLPERF_VER:-2.1}}
+_MLPERF_INFERENCE_VERSION=${MLPERF_INFERENCE_VERSION:-${_MLPERF_VERSION}}
+_MLPERF_POWER_VERSION=${MLPERF_POWER_VERSION:-${_MLPERF_VERSION}}
+
+. common.sh
+
+# Determine device OS.
 get_os ${_DEVICE_OS} ${_DEVICE_OS_OVERRIDE}
 
-# Add user 'krai' to some groups
-if [[ "${_DEVICE_OS}" == "centos" ]]; then
-  echo "set for centos"
-  sudo usermod -aG qaic,root,wheel ${_DEVICE_USER}
-elif [[ "${_DEVICE_OS}" == "ubuntu" ]]; then
-  echo "set for ubuntu"
-  sudo usermod -aG qaic,sudo ${_DEVICE_USER}
-fi
+# Print environment variables.
+echo "Running '$0' ..."
+print_variables "${!_@}"
+echo
+echo "Press Ctrl-C to break ..."
+sleep 10
 
-# Set up environment
+# Add user 'krai' to required groups.
+if [[ "${_DEVICE_OS}" == "centos" ]]; then
+  _DEVICE_GROUPS="root,qaic,wheel"
+elif [[ "${_DEVICE_OS}" == "ubuntu" ]]; then
+  _DEVICE_GROUPS="sudo,qaic"
+fi
+echo "Adding user '${_DEVICE_USER}' to groups '${_DEVICE_GROUPS}' ..."
+sudo usermod -aG ${_DEVICE_GROUPS} ${_DEVICE_USER}
+
+# Set up environment.
 if [[ -z $(grep "# CK-QAIC." ~/.bashrc) ]]; then
-  echo "Adding CK-QAIC environment to '~/.bashrc'."
-  _PYTHON_VERSION_ARR=($(echo ${_PYTHON_VERSION} | tr "." " "))
-  _PYTHON_MAJOR=${_PYTHON_VERSION_ARR[0]}
-  _PYTHON_MINOR=${_PYTHON_VERSION_ARR[1]}
-  _PYTHON_BATCH=${_PYTHON_VERSION_ARR[2]}
+  echo "Adding CK-QAIC environment to '~/.bashrc' ..."
   echo -n "\
 # CK-QAIC.
-export CK_PYTHON=$(which python${_PYTHON_MAJOR}.${_PYTHON_MINOR})
-export PATH=/opt/qti-aic/tools:$HOME/.local/bin:$PATH" >> $HOME/.bashrc
-
-  # Centos OS Dependency
+export CK_PYTHON=$(which python${_PYTHON_VERSION_MAJOR}.${_PYTHON_VERSION_MINOR})
+export LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/aarch64:$LD_LIBRARY_PATH
+export PATH=$HOME/.local/bin:/opt/qti-aic/tools:$PATH" >> ~/.bashrc
+  # CentOS-specific dependency.
   if [[ "${_DEVICE_OS}" == centos ]]; then
     echo -n "\
-source scl_source enable gcc-toolset-11" >> $HOME/.bashrc
+source scl_source enable gcc-toolset-11" >> ~/.bashrc
   fi
-
-  source $HOME/.bashrc
 else
   echo "CK-QAIC environment has already been added to '~/.bashrc'."
 fi
+source ~/.bashrc
 
 # Configure Git.
 export GIT_USER="krai"
@@ -57,37 +68,42 @@ git config --global user.name ${GIT_USER} && git config --global user.email ${GI
 curl https://sh.rustup.rs -sSf > /tmp/install_rust.sh && sh /tmp/install_rust.sh -y
 
 # Install implicit Python dependencies.
-$CK_PYTHON -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
-$CK_PYTHON -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
-$CK_PYTHON -m pip install transformers --user
+${_CK_PYTHON} -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
+${_CK_PYTHON} -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
+${_CK_PYTHON} -m pip install transformers --user
 
 # Install CK.
-$CK_PYTHON -m pip install ck==${_CK_VER}
+${_CK_PYTHON} -m pip install ck==${_CK_VERSION}
+source ~/.bashrc
+ck version
 ck pull repo --url=https://github.com/krai/ck-qaic
 
 # Init CK environment.
 ck detect platform.os --platform_init_uoa=aedk
-ck detect soft:compiler.python --full_path=$(which $CK_PYTHON)
+ck detect soft:compiler.python --full_path=$(which ${_CK_PYTHON})
 ck detect soft:compiler.gcc --full_path=$(which gcc)
 ck detect soft:tool.cmake --full_path=$(which cmake)
 
 # Install explicit Python dependencies.
-if [[ "${_INSTALL_PYTHON_DEPENDENCY}" == "yes" ]]; then
-  echo "Installing explicit Python dependencies."
+echo "Installing explicit Python dependencies ..."
+if [[ "${_INSTALL_PYTHON_DEPS}" == "yes" ]]; then
   echo "1.2x" | ck install package --tags=python-package,numpy
   ck install package --tags=python-package,absl
   ck install package --tags=python-package,cython
   ck install package --tags=python-package,opencv-python-headless
 else
-  echo "Passing explicit Python dependencies installation."
+  echo "- skipping ..."
 fi
 
 # Install LoadGen.
+echo "Installing LoadGen ..."
 if [[ "${_INSTALL_LOADGEN}" == "yes" ]]; then
-  echo "Installing loadgen."
-  ck install package --tags=mlperf,inference,source
+  ck install package --tags=mlperf,inference,source,r${_MLPERF_INFERENCE_VERSION}
+  ck install package --tags=mlperf,power,source,r${_MLPERF_POWER_VERSION}
   ck install package --tags=mlperf,loadgen,static
-  ck install package --tags=mlperf,power,source
 else
-  echo "Passing loadgen installation."
+  echo "- skipping ..."
 fi
+
+echo
+echo "Done."
