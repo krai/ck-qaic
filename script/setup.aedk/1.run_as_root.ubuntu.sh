@@ -20,7 +20,7 @@ if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
     ca-certificates curl gnupg lsb-release \
     acl \
     bc rsync cmake \
-    top tmux
+    htop tmux tree
   sudo apt clean all
   exit_if_error "apt install failed!"
 else

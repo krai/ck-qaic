@@ -216,147 +216,120 @@ Alternatively, specify `PLATFORM_SDK`, the full path to the Platform SDK archive
 SDK_DIR=~ SDK_VER=1.7.1.12 $(ck find ck-qaic:script:setup.aedk)/install_platform_sdk.sh
 </pre></details>
 
-
-<details><pre>
-LRT QC_IMAGE_VERSION: LRT.AIC.6.7.1.6.52
-LRT IMAGE_VARIANT: LRT.AIC.REL
-Number of devices: 1
-QID 0
-        Status:Ready
-        PCI Address:0002:01:00.0
-        PCI Info:Unassigned class [ff00] Qualcomm Device a100
-        HW Version:0.2.0.0
-        HW Serial:0x2b36e75d
-        FW Version:1.6.36
-        FW QC_IMAGE_VERSION:QSM.AIC.1.6.36
-        FW OEM_IMAGE_VERSION:
-        FW IMAGE_VARIANT:AIC100.REL
-        NSP Version:1.6.18
-        NSP QC_IMAGE_VERSION:NSP.AIC.1.6.18
-        NSP OEM_IMAGE_VERSION:
-        NSP IMAGE_VARIANT:aic100.nsp.prodQ
-        Compiler Version:0
-        Dram Total:8116 MB
-        Dram Free:8116 MB
-        Dram Fragmentation:0.00%
-        Vc Total:16
-        Vc Free:16
-        Nsp Total:8
-        Nsp Free:8
-        Peak Dram Bw:0.0
-        Peak Sram Bw:0.0
-        Peak PcieBw:0.0
-        MCID Total:3072
-        MCID Free:3072
-        Semaphore Total:32
-        Semaphore Free:32
-        Constants Loaded:0
-        Constants In-Use:0
-        Networks Loaded:0
-        Networks Active:0
-        NSP Frequency(Mhz):595
-        DDR Frequency(Mhz):2133
-        COMPNOC Frequency(Mhz):1450
-        MEMNOC Frequency(Mhz):1000
-        SYSNOC Frequency(Mhz):667
-        Metadata Version:0.10
-        NNC Command Protocol Version:8.1
-        SBL Image:SBL.AIC.1.6.21
-        PVS Image Version:24
-        NSP Defective PG Mask: 0xAAAA
-        Board serial:
-</pre></details>
-
 ## `[HR]` Compile the workloads on the host and copy to the device
 
 The easiest way to install the workloads to the device is to use Docker images [prebuilt](https://github.com/krai/ck-qaic/blob/main/script/setup.docker/README.md) on the host e.g.:
 
-```base
+```
 cd $(ck find ck-qaic:script:setup.aedk)
-DEVICE_IP=192.168.0.12 DEVICE_PORT=1234 DEVICE_PASSWORD=12345678 ./install_to_aedk.sh
+SDK_VER=1.7.1.12 DEVICE_IP=192.168.0.12 DEVICE_PORT=1234 DEVICE_PASSWORD=12345678 ./install_to_aedk.sh
 ```
 
-If you do not wish to use Docker images, you can follow common [instructions](https://github.com/krai/ck-qaic/blob/main/program/README.md), and then instructions for individual workloads:
+If you do not wish to use Docker images for some reason, you can follow common [instructions](https://github.com/krai/ck-qaic/blob/main/program/README.md), and then instructions for individual workloads:
 
 1. [Image Classfication](https://github.com/krai/ck-qaic/blob/main/program/image-classification-qaic-loadgen/README.md) (ResNet50)
-1. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md) (SSD-MobileNet, SSD-ResNet34)
-1. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md) (BERT-99)
+1. [Object Detection](https://github.com/krai/ck-qaic/blob/main/program/object-detection-qaic-loadgen/README.md) (RetinaNet)
+1. [Language Processing](https://github.com/krai/ck-qaic/blob/main/program/packed-bert-qaic-loadgen/README.md) (BERT)
 
-## Arguments
+### Example
 
-### `SDK_VER`
+#### Host
+<details><pre>
+krai@aus655-el-01-5:/local/mnt/workspace/krai/CK-REPOS/ck-qaic/script/setup.aedk&dollar; time DEVICE_BASE_DIR=/datasets DEVICE_IP=10.222.147.222 DEVICE_PASSWORD=123 SDK_VER=1.7.1.12 ./install_to_aedk.sh
+...
+DONE (installing workloads).
+real    6m58.061s
+user    0m3.306s
+sys     0m2.730s
+</pre></details>
+
+#### Device
+
+<details><pre>
+krai@aus655-gloria-1:~&dollar; ck show env --tags=qaic,model
+Env UID:         Target OS: Bits: Name:                   Version: Tags:
+7f20244d5a912e91   linux-64    64 Qualcomm Cloud AI model 1.7.1.12 64bits,bs.1,calibrated-by-qaic,compiled,compiled-by-qaic,converted,host-os-linux-64,image-classification,model,qaic,qualcomm,qualcomm-ai,qualcomm-cloud-ai,resnet50,resnet50.aedk_15w.singlestream,target-os-linux-64,v1,v1.7,v1.7.1,v1.7.1.12
+57f5445dc811641f   linux-64    64 Qualcomm Cloud AI model 1.7.1.12 64bits,bert,bert-99,bert-99.aedk_15w.singlestream,bert.mixed,calibrated-by-qaic,compiled,compiled-by-qaic,converted,host-os-linux-64,model,pcv.9980,qaic,qualcomm,qualcomm-ai,qualcomm-cloud-ai,quantization.calibration,seg.384,target-os-linux-64,v1,v1.7,v1.7.1,v1.7.1.12
+46d8b9edf850be49   linux-64    64 Qualcomm Cloud AI model 1.7.1.12 64bits,bs.1,calibrated-by-qaic,compiled,compiled-by-qaic,converted,host-os-linux-64,image-classification,model,qaic,qualcomm,qualcomm-ai,qualcomm-cloud-ai,resnet50,resnet50.aedk_15w.multistream,target-os-linux-64,v1,v1.7,v1.7.1,v1.7.1.12
+886152f267c43908   linux-64    64 Qualcomm Cloud AI model 1.7.1.12 64bits,bert,bert-99,bert-99.aedk_15w.offline,bert.mixed,calibrated-by-qaic,compiled,compiled-by-qaic,converted,host-os-linux-64,model,pcv.9980,qaic,qualcomm,qualcomm-ai,qualcomm-cloud-ai,quantization.calibration,seg.384,target-os-linux-64,v1,v1.7,v1.7.1,v1.7.1.12
+8ebc64fba89f7665   linux-64    64 Qualcomm Cloud AI model 1.7.1.12 64bits,bs.8,calibrated-by-qaic,compiled,compiled-by-qaic,converted,host-os-linux-64,image-classification,model,qaic,qualcomm,qualcomm-ai,qualcomm-cloud-ai,resnet50,resnet50.aedk_15w.offline,target-os-linux-64,v1,v1.7,v1.7.1,v1.7.1.12
+</pre></details>
+
+### Arguments
+
+#### `SDK_VER`
 
 The SDK version.
 Must be set.
 
-### `DEVICE_IP`
+#### `DEVICE_IP`
 
 The IP address or hostname of the device.
 Must be set.
 
-### `DEVICE_PORT`
+#### `DEVICE_PORT`
 
 The SSH port on the device.
 Default: `22`.
 
-### `DEVICE_PASSWORD`
+#### `DEVICE_PASSWORD`
 
 The password on the device.
 Must be set.
 Does not get cached.
 
-### `DEVICE_BASE_DIR`
+#### `DEVICE_BASE_DIR`
 
 The root of the user directories on the device.
 Default: `/data`.
 
-### `DEVICE_USER`
+#### `DEVICE_USER`
 
 The username on the device.
 Default: `krai`.
 
-### `DEVICE_TYPE`
+#### `DEVICE_TYPE`
 
 The type of the device.
 Default: `aedk_15w` (e.g. for Foxconn Gloria and Alibaba Haishen).
 
-### `WORKLOADS`
+#### `WORKLOADS`
 
 A comma-separated list of workloads to compile and install.
 Default: `WORKLOADS="resnet50,bert"`. 
 
-### `UPDATE_CK_QAIC`
+#### `UPDATE_CK_QAIC`
 
 Default: `UPDATE_CK_QAIC=yes`. If `UPDATE_CK_QAIC=no`, do not update the `ck-qaic` repo.
 
-### `DRY_RUN`
+#### `DRY_RUN`
 
 Default: `DRY_RUN=no`. If `DRY_RUN=yes`, only print commands but do not execute them.
 
-### `DRY_COMPILE`
+#### `DRY_COMPILE`
 
 Default: `DRY_COMPILE=no`.
 If `DRY_COMPILE=yes`, only print compilation commands.
 This requires operating with workload binaries baked into the Docker image.
 See `DOCKER_DEVICE_TYPE`.
 
-### `DRY_INSTALL`
+#### `DRY_INSTALL`
 
 Default: `DRY_INSTALL=no`.
 If `DRY_INSTALL=yes`, only print installation commands.
 
-### `DOCKER`
+#### `DOCKER`
 
 Default: `yes`.
 Whether to use Docker images to run compile and install workloads.
 
-### `DOCKER_OS`
+#### `DOCKER_OS`
 
 Default: `DOCKER_OS=ubuntu`.
 If `DOCKER_OS=ubuntu`, assume Ubuntu 20.04 based images have been created.
 If `DOCKER_OS=centos`, assume CentOS 7 based images have been created.
 
-### `DOCKER_DEVICE_TYPE`
+#### `DOCKER_DEVICE_TYPE`
 
 Default: `DOCKER_DEVICE_TYPE=pcie.16nsp`.
 See `DRY_COMPILE`.
