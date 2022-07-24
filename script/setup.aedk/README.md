@@ -63,14 +63,15 @@ cat ./config.sh
 
 export DEVICE_IP=aedk3
 export DEVICE_PORT=3233
-export DEVICE_BASE_DIR="/data"
-export DEVICE_GROUP="krai"
-export DEVICE_USER="krai"
+export DEVICE_BASE_DIR="/home"
+export DEVICE_GROUP=krai
+export DEVICE_USER=krai
 export DEVICE_OS=centos
 export DEVICE_OS_OVERRIDE=no
-export DEVICE_DATASETS_DIR=${DEVICE_BASE_DIR}/${DEVICE_USER}
+export DEVICE_DATASETS_DIR="${DEVICE_BASE_DIR}/${DEVICE_USER}"
 export HOST_DATASETS_DIR="/datasets"
 export PYTHON_VERSION=3.9.13
+export TIMEZONE="US/Central"
 export INSTALL_BENCHMARK_RESNET50=yes
 export INSTALL_BENCHMARK_BERT=yes
 </pre></details>
@@ -85,7 +86,7 @@ Alternatively, you can override variables from the command line e.g.:
 time DEVICE_BASE_DIR=/home TIMEZONE=US/Central ./1.run_as_root.sh
 ```
 
-<details></pre>
+<details><pre>
 root@aus655-gloria-1:~# df -h /home
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/root        99G   11G   89G  11% /
