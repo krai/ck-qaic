@@ -9,7 +9,7 @@ sleep 5
 
 # Install system packages using apt.
 echo "Installing system packages ..."
-if [[ "${_INSTALL_SYS_PACKAGE}" == "yes" ]]; then
+if [[ "${_INSTALL_SYSTEM_PACKAGES}" == "yes" ]]; then
   sudo apt update -y
   sudo apt upgrade -y
   sudo apt install -y \
