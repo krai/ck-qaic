@@ -84,6 +84,14 @@
         "recommended_multistream_num_setup_threads": "2",
         "recommended_num_setup_threads": "2"
       },
+      "aedkh1": {
+        "recommended_offline_server_activation_count": "2",
+        "recommended_threads_per_queue": "2",
+        "recommended_queue_length": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_num_setup_threads": "2",
+        "recommended_num_setup_threads": "2"
+      },
       "aedkr": {
         "recommended_offline_server_activation_count": "2",
         "recommended_threads_per_queue": "2",
