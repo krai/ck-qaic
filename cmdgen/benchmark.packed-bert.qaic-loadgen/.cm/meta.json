@@ -12,6 +12,9 @@
       "q1_std_edge": {
         "recommended_mixed_activation_count": "14"
       },
+      "gloria1": {
+        "recommended_mixed_activation_count": "14"
+      },
       "q4_pro_dc": {
         "recommended_mixed_activation_count": "16",
         "recommended_fp16_activation_count": "4"
@@ -35,6 +38,9 @@
         "recommended_mixed_activation_count": "9"
       },
       "aedkr": {
+        "recommended_mixed_activation_count": "9"
+      },
+      "aedke": {
         "recommended_mixed_activation_count": "9"
       },
       "g292_z43_q18e": {
