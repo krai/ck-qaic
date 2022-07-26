@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2018-2019 cTuning foundation.
 // Copyright (c) 2019-2020 dividiti Limited.
-// Copyright (c) 2021 Krai Ltd.
+// Copyright (c) 2021-2022 Krai Ltd.
 //
 // SPDX-License-Identifier: BSD-3-Clause.
 //
@@ -555,7 +555,7 @@ public:
 
   ~QuerySampleLibraryQAIC() = default;
 
-  const std::string &Name() const override { return name_; }
+  const std::string &Name() override { return name_; }
 
   size_t TotalSampleCount() override { return prg->available_images_max(); }
 
