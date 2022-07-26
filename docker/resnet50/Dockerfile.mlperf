@@ -111,8 +111,12 @@ RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
 fi
 
 #-----------------------------------------------------------------------------#
-# Step 3. Compile the Image Classification program.
+# Step 5. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
+# FIXME: Workaround for https://github.com/mlcommons/inference/issues/1193
+RUN ck clean env --tags=mlperf,loadgen,static -f \
+ && cd /home/krai/CK_TOOLS/mlperf-inference-r2.1/inference \
+ && git checkout 67eb6a0d0e067dcc314a9f60388c0ed98ee86013
 RUN ck compile program:image-classification-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
@@ -121,7 +125,6 @@ RUN ck compile program:image-classification-qaic-loadgen --quiet
 RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
-$(ck locate env --tags=mlperf,inference,source)/inference/.git \
 $(ck locate env --tags=lib,protobuf-host)/src \
 $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \

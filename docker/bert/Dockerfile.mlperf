@@ -76,12 +76,7 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 RUN ck detect platform.os --platform_init_uoa=qaic
 
 #-----------------------------------------------------------------------------#
-# Step 4. Build the MLPerf LoadGen API.
-#-----------------------------------------------------------------------------#
-RUN ck compile program:packed-bert-qaic-loadgen --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 5. Prepare the BERT workload for 16-NSP server cards.
+# Step 4. Prepare the BERT workload for PCIe Pro or Standard server cards.
 #-----------------------------------------------------------------------------#
 # Uncomment if not using precalibrated profile; comment out otherwise.
 RUN ck install package --tags=profile,qaic,bert-packed --quiet
@@ -142,6 +137,15 @@ RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.448 --quiet; \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.384 --quiet; \
 fi
+
+#-----------------------------------------------------------------------------#
+# Step 5. Build the MLPerf LoadGen API.
+#-----------------------------------------------------------------------------#
+# FIXME: Workaround for https://github.com/mlcommons/inference/issues/1193
+RUN ck clean env --tags=mlperf,loadgen,static -f \
+ && cd /home/krai/CK_TOOLS/mlperf-inference-r2.1/inference \
+ && git checkout 67eb6a0d0e067dcc314a9f60388c0ed98ee86013
+RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#
 # Step 6. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
