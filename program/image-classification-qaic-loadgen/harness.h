@@ -181,7 +181,7 @@ public:
 
   ~SystemUnderTestQAIC() override;
 
-  const std::string &Name() override { return name_; }
+  const std::string &Name() const override { return name_; }
 
   void ServerModeScheduler();
 
