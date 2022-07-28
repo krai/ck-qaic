@@ -75,14 +75,8 @@ RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,m
 RUN ck detect platform.os --platform_init_uoa=qaic
 
 #-----------------------------------------------------------------------------#
-# Step 2. Build the MLPerf LoadGen API.
+# Step 2. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
-RUN ck compile program:object-detection-qaic-loadgen --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 3. Prepare the RetinaNet workload.
-#-----------------------------------------------------------------------------#
-
 #RUN ck install package --tags=profile,qaic,retinanet --quiet
 # Use a precalibrated profile.
 #ADD retinanet/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1
@@ -96,21 +90,24 @@ RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.singlestream
 RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.multistream
 
 #-----------------------------------------------------------------------------#
+# Step 3. Build the MLPerf LoadGen API.
+#-----------------------------------------------------------------------------#
+RUN ck compile program:object-detection-qaic-loadgen --quiet
+
+#-----------------------------------------------------------------------------#
 # Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-#RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
-#$(ck find repo:ctuning-programs)/* \
-#$(ck find repo:ck-crowdtuning-platforms)/* \
-#$(ck locate env --tags=mlperf,inference,source)/inference/.git \
-#$(ck locate env --tags=lib,protobuf-host)/src \
-#$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
-#$(ck locate env --tags=tool,cmake)/cmake*/Tests \
-#$(ck locate env --tags=tool,cmake)/cmake*/Source \
-#$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-#$(ck locate env --tags=model,onnx,no-nms)/* \
-#$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
-#$(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
-#touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=dataset,openimages,original,validation)/validation \
+$(ck locate env --tags=dataset,openimages,original,calibration)/train; fi
 
 ###############################################################################
 # FINAL STAGE
