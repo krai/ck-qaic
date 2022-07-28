@@ -170,7 +170,7 @@
           "--env.CK_ENV_QAIC_SKIP_STAGE=<<<skip_stage>>>"
         ],
         "deps": [
-          "--dep_add_tags.dataset=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full --cmd_key=openimages"
+          "--dep_add_tags.dataset=dataset,preprocessed,openimages,<<<dataset>>>,full --cmd_key=openimages"
         ],
         "division": "closed",
         "hyphenated_model_name": "retinanet",
@@ -211,6 +211,7 @@
     "task_name": "object-detection",
     "vc_value_default": "17",
     "zero_copy": "enable",
-    "skip_stage": "convert"
+    "skip_stage": "convert",
+    "dataset": "for.retinanet.onnx.preprocessed.quantized"
   }
 }
