@@ -322,6 +322,7 @@
         "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
         "ML_MODEL_MODEL_NAME": "retinanet",
         "_NODE_PRECISION_FILE_PATH": "retinanet/node-precision.yaml",
+        "_IMAGE_ORDER_FILE_PATH": "retinanet/openimages_cal_images_list.txt",
         "_COMPILER_ARGS": "",
         "_COMPILER_PARAMS": "-enable-channelwise -profiling-threads=32 -onnx-define-symbol=batch_size,[BATCH_SIZE] -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_retinanet_no_nms_mlperf"

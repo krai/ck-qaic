@@ -89,7 +89,14 @@ else
 batch_size_implicit="-batchsize=${batchsize}"
 fi
 
+if [[ -n ${_IMAGE_ORDER_FILE_PATH} ]]; then
+filenames=`cat  ${PACKAGE_DIR}/$_IMAGE_ORDER_FILE_PATH | sed "s/jpg/rgbf32/g"`
+echo ${PACKAGE_DIR}/$_IMAGE_ORDER_FILE_PATH
+echo $filenames
+else
 filenames=`cat $images`
+fi
+
 i=0;
 lastset=""
 for filename in ${filenames}
