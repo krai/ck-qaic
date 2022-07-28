@@ -167,7 +167,7 @@
           "--env.ML_MODEL_OUT_BUFFER_IDX=1",
           "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=600",
           "--env.CK_ENV_QAIC_OUTPUT_COUNT=15",
-          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
+          "--env.CK_ENV_QAIC_SKIP_STAGE=<<<skip_stage>>>"
         ],
         "deps": [
           "--dep_add_tags.dataset=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full --cmd_key=openimages"
@@ -210,6 +210,7 @@
     "recommended_num_setup_threads": "2",
     "task_name": "object-detection",
     "vc_value_default": "17",
-    "zero_copy": "enable"
+    "zero_copy": "enable",
+    "skip_stage": "convert"
   }
 }
