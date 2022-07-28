@@ -32,6 +32,7 @@ if [[ "${_INSTALL_WORKLOAD_RESNET50}" == "yes" ]]; then
     --tags=dataset,imagenet,val,full,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,validation
     exit_if_error "Failed to preprocess ImageNet dataset!"
   fi
+  ck install package --tags=dataset,imagenet,aux,from.berkeley
 fi
 
 if [[ "${_INSTALL_WORKLOAD_BERT}" == "yes" ]]; then

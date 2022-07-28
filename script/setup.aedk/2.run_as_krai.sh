@@ -101,6 +101,7 @@ if [[ "${_INSTALL_LOADGEN}" == "yes" ]]; then
   ck install package --tags=mlperf,inference,source,r${_MLPERF_INFERENCE_VERSION}
   ck install package --tags=mlperf,power,source,r${_MLPERF_POWER_VERSION}
   ck install package --tags=mlperf,loadgen,static
+  ck install package --tags=qaic,master
 else
   echo "- skipping ..."
 fi

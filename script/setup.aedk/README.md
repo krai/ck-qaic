@@ -244,6 +244,13 @@ user    0m3.306s
 sys     0m2.730s
 </pre></details>
 
+<details><pre>
+krai@aus655-el-01-5:/local/mnt/workspace/krai/CK-REPOS/ck-qaic/script/setup.aedk&dollar; time DEVICE_BASE_DIR=/home DEVICE_IP=10.222.147.231 DEVICE_PASSWORD=123 SDK_VER=1.7.1.12 ./install_to_aedk.sh
+...
+DONE (installing workloads).
+</pre></details>
+
+
 #### Device
 
 <details><pre>
