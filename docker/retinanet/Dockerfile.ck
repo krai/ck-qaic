@@ -70,7 +70,7 @@ ARG PYTHON_PATCH_VER
 ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
 
 RUN source /home/krai/.bashrc \
- && ${CK_PYTHON} -m pip install --user fiftyone pybind11 protobuf==3.20.1 onnx-simplifier==0.3.7 torch==1.8.1 torchvision==0.9.1
+ && ${CK_PYTHON} -m pip install --user fiftyone pybind11 protobuf==3.20.1 onnx-simplifier==0.3.7 torch==1.8.1 torchvision==0.9.1 pillow==8.3.2
 
 ARG DOCKER_OS
 RUN if [[ "${DOCKER_OS}" == "centos" ]]; then ${CK_PYTHON} -m pip install --user fiftyone-db-rhel7; fi
