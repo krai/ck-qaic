@@ -1,7 +1,7 @@
 {
   "data": {
     "accelerator_frequency": "",
-    "accelerator_host_interconnect": "4x PCIe 8 lane Gen4",
+    "accelerator_host_interconnect": "4x PCIe",
     "accelerator_interconnect": "",
     "accelerator_interconnect_topology": "",
     "accelerator_memory_capacity": "16 GB",
@@ -12,7 +12,7 @@
     "cooling": "air",
     "division": "closed",
     "framework": "Qualcomm Cloud AI SDK v1.7.1",
-    "host_memory_capacity": "8x 64 GB",
+    "host_memory_capacity": "256 GB",
     "host_memory_configuration": "",
     "host_networking": "",
     "host_networking_topology": "",
@@ -32,6 +32,6 @@
     "submitter": "Qualcomm",
     "sw_notes": "Powered by MLCommons Collective Knowledge v2.6.1",
     "system_name": "Datacenter (4x QAIC100 Pro)",
-    "system_type": "datecenter"
+    "system_type": "datacenter"
   }
 }

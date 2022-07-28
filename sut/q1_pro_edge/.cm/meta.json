@@ -12,7 +12,7 @@
     "cooling": "air",
     "division": "closed",
     "framework": "Qualcomm Cloud AI SDK v1.7.1",
-    "host_memory_capacity": "8x 64 GB",
+    "host_memory_capacity": "128 GB",
     "host_memory_configuration": "",
     "host_networking": "",
     "host_networking_topology": "",
