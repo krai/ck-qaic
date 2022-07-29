@@ -22,7 +22,7 @@ fi
 # Sensible defaults.
 _DEVICE_TYPE=${DEVICE_TYPE:-aedk_15w}
 _DEVICE_USER=${DEVICE_USER:-krai}
-_DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-/data}
+_DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-/home}
 _DEVICE_PORT=${DEVICE_PORT:-22}
 
 _DOCKER=${DOCKER:-yes}
@@ -40,6 +40,10 @@ IFS=',' read -ra _WORKLOADS_AS_ARRAY <<< "${_WORKLOADS}"
 echo "Installing workloads: '${_WORKLOADS}'"
 echo
 
+_OFFLINE_ONLY=${OFFLINE_ONLY:-no}
+_MULTISTREAM_ONLY=${MULTISTREAM_ONLY:-no}
+_SINGLESTREAM_ONLY=${SINGLESTREAM_ONLY:-no}
+
 for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
   echo "- Workload: '${workload}'"
   #-----------------------------------------------------------------------------
@@ -53,8 +57,13 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
     fi
     echo "Installing '${workload}' from the '${image}' Docker image ..."
     if [[ "${_DRY_RUN}" != "yes" ]]; then
-      container=$(docker run -dt --rm ${image} bash)
-      echo "Starting '${workload}' container: '${container}' ..."
+      if [[ ! -z "${CONTAINER_ID}" ]]; then
+        container=${CONTAINER_ID}
+        echo "Using container for '${workload}': '${container}' ..."
+      else
+        container=$(docker run -dt --rm ${image} bash)
+        echo "Starting container for '${workload}': '${container}' ..."
+      fi
       docker exec ${container} /bin/sshpass -p ${DEVICE_PASSWORD} ssh-copy-id ${_DEVICE_USER}@${DEVICE_IP} -p ${_DEVICE_PORT} -o StrictHostKeyChecking=no
     else
       container="01234567890abcdefghijklmnopqrstuvwxyz"
@@ -89,6 +98,18 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
   fi
   for scenario in ${scenarios[@]}; do
     echo "  - Scenario: '${scenario}'"
+    if [[ "${OFFLINE_ONLY}" == "yes" ]] && [[ "${scenario}" != "offline" ]]; then
+      echo "    - skipping ..."
+      continue
+    fi
+    if [[ "${MULTISTREAM_ONLY}" == "yes" ]] && [[ "${scenario}" != "multistream" ]]; then
+      echo "    - skipping ..."
+      continue
+    fi
+    if [[ "${SINGLESTREAM_ONLY}" == "yes" ]] && [[ "${scenario}" != "singlestream" ]]; then
+      echo "    - skipping ..."
+      continue
+    fi
     model_tags="model,qaic,${workload},${workload}.${_DEVICE_TYPE}.${scenario}${extra_suffix}"
     # Compile workload.
     compile_cmd="${docker_cmd_prefix} ck install package --tags=${model_tags} ${extra_env}"
@@ -175,9 +196,11 @@ echo ${SDK_VER} | ck detect soft:model.qaic --full_path='${tgt_dir}/programqpc.b
   #-----------------------------------------------------------------------------
   # Stop Docker container.
   #-----------------------------------------------------------------------------
-  if [[ ${_DOCKER} == "yes" ]]; then
-    echo "Stopping '${workload}' container: '${container}' ..."
-    if [[ "${_DRY_RUN}" != "yes" ]]; then
+  if [[ ${_DOCKER} == "yes" ]] && [[ "${_DRY_RUN}" != "yes" ]]; then
+    if [[ ! -z "${CONTAINER_ID}" ]]; then
+      echo "Retaining container for '${workload}': '${container}' ..."
+    else
+      echo "Stopping container for '${workload}': '${container}' ..."
       docker container stop ${container}
     fi
   fi

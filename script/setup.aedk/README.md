@@ -270,6 +270,16 @@ Env UID:         Target OS: Bits: Name:                   Version: Tags:
 The SDK version.
 Must be set.
 
+#### `CONTAINER_ID`
+
+If set, use this container to compile and install workloads from, do not start a new one.
+Only works with a single workload at a time e.g. `WORKLOADS=resnet50`.
+
+<details><pre>
+CONTAINER_ID=&dollar;(docker run -dt --rm krai/mlperf.resnet50.full:ubuntu_1.7.1.12 bash)
+CONTAINER_ID=$CONTAINER_ID DEVICE_IP=192.168.0.12 DEVICE_PASSWORD=123 SDK_VER=1.7.1.12 ./install_to_aedk.sh
+</pre></details>
+
 #### `DEVICE_IP`
 
 The IP address or hostname of the device.
@@ -289,7 +299,7 @@ Does not get cached.
 #### `DEVICE_BASE_DIR`
 
 The root of the user directories on the device.
-Default: `/data`.
+Default: `/home`.
 
 #### `DEVICE_USER`
 
@@ -305,6 +315,18 @@ Default: `aedk_15w` (e.g. for Foxconn Gloria and Alibaba Haishen).
 
 A comma-separated list of workloads to compile and install.
 Default: `WORKLOADS="resnet50,bert"`. 
+
+#### `OFFLINE_ONLY`
+
+Default: `OFFLINE_ONLY=no`. If `OFFLINE_ONLY=yes`, only compile and install workloads for the Offline scenario.
+
+#### `SINGLESTREAM_ONLY`
+
+Default: `SINGLESTREAM_ONLY=no`. If `SINGLESTREAM_ONLY=yes`, only compile and install workloads for the Single Stream scenario.
+
+#### `MULTISTREAM_ONLY`
+
+Default: `MULTISTREAM_ONLY=no`. If `MULTISTREAM_ONLY=yes`, only compile and install workloads for the Multi Stream scenario.
 
 #### `UPDATE_CK_QAIC`
 
