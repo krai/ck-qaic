@@ -106,8 +106,9 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=dataset,openimages,original,validation)/validation \
-$(ck locate env --tags=dataset,openimages,original,calibration)/train; fi
+; fi
+#$(ck locate env --tags=dataset,openimages,original,validation)/validation \
+#$(ck locate env --tags=dataset,openimages,original,calibration)/train; fi
 
 ###############################################################################
 # FINAL STAGE
