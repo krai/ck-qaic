@@ -392,6 +392,16 @@
         "bs.8"
       ]
     },
+    "resnet50.pcie.16nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
     "resnet50.pcie.16nsp.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -1020,6 +1030,12 @@
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
+      }
+    },
+    "bert-99.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
       }
     },
     "bert-99.pcie.16nsp.multistream": {
