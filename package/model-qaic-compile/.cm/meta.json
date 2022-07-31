@@ -362,6 +362,16 @@
         "bs.8"
       ]
     },
+    "resnet50.pcie.14nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
     "resnet50.pcie.14nsp.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -489,6 +499,12 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
       }
     },
+    "ssd_resnet34.pcie.14nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
     "ssd_resnet34.pcie.14nsp.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -502,6 +518,12 @@
       }
     },
     "ssd_resnet34.pcie.16nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.server": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
@@ -534,6 +556,16 @@
       }
     },
     "retinanet.fp16.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.fp16.server": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -757,6 +789,16 @@
         "bs.1"
       ]
     },
+    "retinanet.pcie.14nsp.prev.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "retinanet.pcie.14nsp.prev.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -778,6 +820,16 @@
       ]
     },
     "retinanet.pcie.16nsp.prev.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.prev.server": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -1009,6 +1061,12 @@
       }
     },
     "bert-99.pcie.14nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
+      }
+    },
+    "bert-99.pcie.14nsp.server": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"

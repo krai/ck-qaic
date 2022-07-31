@@ -6,64 +6,74 @@
   "build_map": {
     "sut": {
       "aedk_15w": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_activation_count": "1",
+        "recommended_server_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
       "aedk_20w": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_activation_count": "1",
+        "recommended_server_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "10",
         "recommended_threads_per_queue": "8"
       },
       "aedk_25w": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_activation_count": "1",
+        "recommended_server_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
       "gloria": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_activation_count": "1",
+        "recommended_server_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
       "haishen": {
-        "recommended_offline_server_activation_count": "1",
+        "recommended_offline_activation_count": "1",
+        "recommended_server_activation_count": "1",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "8",
         "recommended_threads_per_queue": "8"
       },
       "g292_z43_q18e": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
       "g292_z43_q18": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
       "g292_z43_q16e": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
       "g292_z43_q16": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
       "r282_z93_q2e": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
@@ -71,21 +81,24 @@
         "vc_value_default": "14"
       },
       "r282_z93_q2": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2"
       },
       "r282_z93_q1": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2"
       },
       "r282_z93_q5e": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
@@ -93,36 +106,42 @@
         "vc_value_default": "14"
       },
       "r282_z93_q5": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "2",
         "recommended_multistream_batch_size": "2",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2"
       },
       "r282_z93_q8e": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3",
         "vc_value_default": "12"
       },
       "r282_z93_q8": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_threads_per_queue": "3"
       },
       "r282_z93_q5e_dc": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2",
         "vc_value_default": "12"
       },
       "r282_z93_q5_dc": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "6",
         "recommended_threads_per_queue": "2"
       },
       "r282_z93_q8e_edge": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "1",
@@ -130,7 +149,8 @@
         "vc_value_default": "12"
       },
       "r282_z93_q8_edge": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
         "recommended_queue_length": "3",
         "recommended_multistream_activation_count": "1",
         "recommended_multistream_batch_size": "1",
