@@ -325,6 +325,7 @@
       },
       "q1_pro_edge": {
         "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
@@ -334,6 +335,7 @@
       },
       "q1_std_edge": {
         "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
@@ -343,6 +345,7 @@
       },
       "q4_pro_dc": {
         "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
@@ -358,6 +361,7 @@
       },
       "q4_std_edge": {
         "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
         "ck_env": [
           "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
           "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
