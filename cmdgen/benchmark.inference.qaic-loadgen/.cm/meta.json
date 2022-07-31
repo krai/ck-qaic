@@ -341,24 +341,6 @@
         "power_server_ip": "",
         "power_server_port": ""
       },
-      "gloria1": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4961",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "100"
-      },
       "q4_pro_dc": {
         "all_device_ids": "0,1,2,3",
         "ck_benchmark_prefix": "",
@@ -427,6 +409,16 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
+      "aedke": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.196",
+        "power_server_port": "4956"
+      },
       "gloria": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
@@ -437,15 +429,15 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4960"
       },
-      "aedkh": {
+      "gloria1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip": "10.222.146.194",
+        "power_server_port": "4961"
       },
       "aedkh1": {
         "all_device_ids": "0",
@@ -457,7 +449,7 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4962"
       },
-      "aedkr": {
+      "aedkh": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
@@ -467,15 +459,15 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedke": {
+      "aedkr": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.196",
-        "power_server_port": "4956"
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
       },
       "g292_z43_q18": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
