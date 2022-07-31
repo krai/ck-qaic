@@ -143,7 +143,7 @@
         "recommended_threads_per_queue": "2"
       },
       "q1_std_edge": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_server_activation_count": "14",
         "recommended_queue_length": "2",
         "recommended_multistream_queue_length": "1",
         "recommended_multistream_activation_count": "1",
@@ -151,7 +151,7 @@
         "recommended_threads_per_queue": "2"
       },
       "q4_std_edge": {
-        "recommended_offline_server_activation_count": "16",
+        "recommended_offline_server_activation_count": "14",
         "recommended_queue_length": "2",
         "recommended_multistream_queue_length": "1",
         "recommended_multistream_activation_count": "1",
