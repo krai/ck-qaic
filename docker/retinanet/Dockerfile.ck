@@ -83,15 +83,14 @@ RUN ck install package --tags=python-package,onnx,for.qaic --force_version=1.8.1
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 2. Download the validation and calibration datasets.
+# Step 2. Download the validation dataset.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=dataset,openimages,original,validation
-RUN ck install package --tags=dataset,openimages,original,calibration
 
 #-----------------------------------------------------------------------------#
 # Step 3. Preprocess the validation dataset for quantized RetinaNet.
 #-----------------------------------------------------------------------------#
-RUN ck install package \
+RUN ck pull repo:ck-env && ck install package \
 --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
 
 #-----------------------------------------------------------------------------#

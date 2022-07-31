@@ -37,7 +37,7 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Setting FROM from ARGs only works starting with Docker 1.17. 
+# NB: Setting FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG DOCKER_OS
@@ -62,6 +62,8 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM krai/ck.retinanet:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
+ARG COMPILE_PRO
+ARG COMPILE_STD
 ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
@@ -77,17 +79,31 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
-#RUN ck install package --tags=profile,qaic,retinanet --quiet
-# Use a precalibrated profile.
-#ADD retinanet/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1
-#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1/profile.yaml \
-#--extra_tags=detected,retinanet
+# # Uncomment if not using a precalibrated profile.
+# # Calibrate the workload for bs.1.
+# RUN ck install package --tags=dataset,openimages,original,calibration \
+#  && ck install package --tags=profile,qaic,retinanet --quiet
 
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.offline
-RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.singlestream
-RUN ck install package --tags=retinanet,retinanet.pcie.16nsp.multistream
+# Use a precalibrated profile.
+ADD retinanet/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1
+RUN echo "v1.8.0.73" | ck detect soft:compiler.glow.profile \
+--full_path=/home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1/profile.yaml \
+--extra_tags=detected,retinanet,bs.1,bs.explicit
+
+# Compile the workload for the PCIe Pro server cards.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.offline      ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.server       ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.singlestream ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.multistream  ; \
+fi
+# Compile the workload for the PCIe Standard server cards.
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.offline      ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.server       ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.singlestream ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.multistream  ; \
+fi
 
 #-----------------------------------------------------------------------------#
 # Step 3. Build the MLPerf LoadGen API.
@@ -106,9 +122,9 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-; fi
-#$(ck locate env --tags=dataset,openimages,original,validation)/validation \
-#$(ck locate env --tags=dataset,openimages,original,calibration)/train; fi
+$(ck locate env --tags=profile)/*.raw \
+$(ck locate env --tags=dataset,openimages,original,validation)/validation \
+$(ck locate env --tags=dataset,openimages,original,calibration)/train; fi
 
 ###############################################################################
 # FINAL STAGE

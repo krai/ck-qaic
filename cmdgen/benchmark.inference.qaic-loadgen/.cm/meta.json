@@ -344,6 +344,22 @@
         "power_server_ip": "",
         "power_server_port": ""
       },
+      "q4_pro_dc_prev": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.209",
+        "power_server_port": "4915",
+        "ecc_default": "on"
+      },
       "q4_pro_dc": {
         "all_device_ids": "0,1,2,3",
         "ck_benchmark_prefix": "",
@@ -359,6 +375,22 @@
         "power_server_ip": "10.222.146.209",
         "power_server_port": "4915",
         "ecc_default": "on"
+      },
+      "q4_std_edge_prev": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.209",
+        "power_server_port": "4980",
+        "ecc_default": "off"
       },
       "q4_std_edge": {
         "all_device_ids": "0,1,2,3",
