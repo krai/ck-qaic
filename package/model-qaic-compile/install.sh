@@ -83,14 +83,6 @@ if [[ -n ${_SEG} ]]; then
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[SEG]"/$_SEG}
 fi
 
-if [[ -z ${_BATCH_SIZE_EXPLICIT} && ${_BATCH_SIZE} > 0 ]]; then
-  _COMPILER_PARAMS=${_COMPILER_PARAMS}" -batchsize=$_BATCH_SIZE"
-fi
-
-if [[ -z ${_BATCH_SIZE_EXPLICIT} && ${_BATCH_SIZE} > 0 ]]; then
-  _COMPILER_PARAMS=${_COMPILER_PARAMS}" -batchsize=$_BATCH_SIZE"
-fi
-
 if [[ -n ${_BATCH_SIZE_EXPLICIT} ]]; then
   _BATCH_SIZE=${_BATCH_SIZE:-1}
   _COMPILER_PARAMS=${_COMPILER_PARAMS/"[BATCH_SIZE]"/${_BATCH_SIZE}}
