@@ -1199,6 +1199,18 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
+    "bert-99.9.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.14nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
     "bs.1": {
       "extra_env": {
         "_BATCH_SIZE": "1"
