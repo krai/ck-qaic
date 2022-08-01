@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "9623bb096949739c",
+  "backup_module_uid": "194e44c4cacd5101",
+  "backup_module_uoa": "sut",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2022-08-02T00:32:20.840945",
+    "version": [
+      "2",
+      "6",
+      "1"
+    ]
+  },
+  "data_name": "gloria1"
+}
