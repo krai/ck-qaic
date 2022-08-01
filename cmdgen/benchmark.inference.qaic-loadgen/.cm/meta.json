@@ -468,7 +468,7 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4961"
       },
-      "aedkh1": {
+      "aedkh": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
@@ -478,7 +478,7 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4962"
       },
-      "aedkh": {
+      "aedkh1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
