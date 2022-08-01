@@ -51,8 +51,7 @@ export LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/aarch64:$LD_LIBRARY_PATH
 export PATH=$HOME/.local/bin:/opt/qti-aic/tools:$PATH" >> ~/.bashrc
   # CentOS-specific dependency.
   if [[ "${_DEVICE_OS}" == centos ]]; then
-    echo -n "\
-source scl_source enable gcc-toolset-11" >> ~/.bashrc
+    echo "source scl_source enable gcc-toolset-11" >> ~/.bashrc
   fi
 else
   echo "CK-QAIC environment has already been added to '~/.bashrc'."
