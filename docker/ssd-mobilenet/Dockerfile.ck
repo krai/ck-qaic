@@ -63,6 +63,12 @@ ARG CK_QAIC_CHECKOUT
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 
 # Install implicit Python dependencies.
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+
 RUN source /home/krai/.bashrc \
  && ${CK_PYTHON} -m pip install --user pybind11 protobuf==3.19.4 onnx-simplifier==0.3.7
 
@@ -77,11 +83,7 @@ RUN ck install package --tags=python-package,onnx,for.qaic --quiet \
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 2. INTENTIONALLY LEFT BLANK.
-#-----------------------------------------------------------------------------#
-
-#-----------------------------------------------------------------------------#
-# Step 3. Download the dataset.
+# Step 2. Download the dataset.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=dataset,coco.2017,val --quiet
 
@@ -91,20 +93,20 @@ RUN ck install package --tags=dataset,coco.2017,val --quiet
 #-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized SSD-MobileNet.
+# Step 3. Preprocess the dataset for quantized SSD-MobileNet.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=dataset,for.ssd_mobilenet.onnx.preprocessed,calibration,mlperf --quiet
 RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 --tags=dataset,object-detection,for.ssd_mobilenet.onnx.preprocessed.quantized,using-opencv,full,validation
 
 #-----------------------------------------------------------------------------#
-# Step 5. Prepare the SSD-MobileNet workload.
+# Step 4. Prepare the SSD-MobileNet workload.
 #-----------------------------------------------------------------------------#
 # Remove NMS.
 RUN ck install package --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 6. Clean up.
+# Step 5. Clean up.
 #-----------------------------------------------------------------------------#
 RUN rm -rf $(ck locate env --tags=dataset,coco.2017,original,train)/*  \
   $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \

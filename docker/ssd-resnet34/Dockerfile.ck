@@ -79,7 +79,7 @@ RUN ck install package --tags=python-package,onnx,for.qaic --force_version=1.8.1
  && ck install package --tags=tool,coco --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 3. Download the dataset.
+# Step 2. Download the dataset.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=dataset,coco.2017,val --quiet
 
@@ -89,14 +89,14 @@ RUN ck install package --tags=dataset,coco.2017,val --quiet
 #-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
-# Step 4. Preprocess the dataset for quantized SSD-ResNet34.
+# Step 3. Preprocess the dataset for quantized SSD-ResNet34.
 #-----------------------------------------------------------------------------#
 RUN ck install package --dep_add_tags.lib-python-cv2=opencv-python-headless \
 --tags=dataset,object-detection,for.ssd_resnet34.onnx.preprocessed.quantized,using-opencv,full \
 --extra_tags=validation --quiet
 
 #-----------------------------------------------------------------------------#
-# Step 5. Prepare the SSD-ResNet34 workload.
+# Step 4. Prepare the SSD-ResNet34 workload.
 #-----------------------------------------------------------------------------#
 RUN ck install package --tags=model,onnx,ssd-resnet34,no-nms --quiet
 
