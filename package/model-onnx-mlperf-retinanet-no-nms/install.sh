@@ -43,6 +43,14 @@ echo "${INSTALL_SCRIPT_NAME} : Converting Retinanet ResNext50 from Pytorch to ON
 
 cd ${INSTALL_DIR}
 
+rm -rf *
+
+if [[ -n ${_DOWNLOAD} ]]; then
+
+wget https://zenodo.org/record/6951458/files/retinanet.onnx
+
+else
+
 #clone mlcommons training directory to access script to convert from pytorch to ONNX
 git clone https://github.com/mlcommons/training.git
 exit_if_error
@@ -64,5 +72,7 @@ exit_if_error
 
 # remove temporary files
 rm -rf ${INSTALL_DIR}/training
+
+fi
 
 echo "${INSTALL_SCRIPT_NAME} : Done."

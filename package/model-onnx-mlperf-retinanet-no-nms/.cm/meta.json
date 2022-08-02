@@ -34,6 +34,11 @@
       "name": "Python ONNX library",
       "sort": 10,
       "tags": "lib,python-package,onnx",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ],
       "version_from": [
         1,
         8,
@@ -45,24 +50,27 @@
         99
       ]
     },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "no_tags": "tensorflow_cc,vstatic,source",
-      "sort": 70,
-      "tags": "lib,python-package,tensorflow"
-    },
     "python": {
       "local": "yes",
       "name": "Python interpreter",
       "sort": 5,
-      "tags": "compiler,python"
+      "tags": "compiler,python",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ]
     },
-    "tf-model": {
+    "pytorch-model": {
       "local": "yes",
       "name": "Pytorch Retinanet",
       "sort": 5,
-      "tags": "model,pytorch,retinanet"
+      "tags": "model,pytorch,retinanet",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ]
     }
   },
   "end_full_path": {
@@ -77,7 +85,7 @@
   "package_extra_name": " (MLPerf Retinanet no NMS)",
   "process_script": "install",
   "soft_uoa": "bcaac306e9041879",
-  "suggested_path": "model-onnx-mlperf-retinanet-no-nms-downloaded",
+  "suggested_path": "model-onnx-mlperf-retinanet-no-nms",
   "tags": [
     "mlperf",
     "object-detection",
@@ -88,7 +96,26 @@
     "nchw",
     "channel-stable",
     "side.800",
-    "downloaded",
     "no-nms"
-  ]
+  ],
+  "variations": {
+    "downloaded": {
+      "extra_customize": {
+        "package_extra_name": " (downloaded)"
+      },
+      "extra_env": {
+        "_DOWNLOAD": "yes"
+      },
+      "on_by_default": "yes"
+    },
+    "converted-from-pytorch": {
+      "extra_customize": {
+        "package_extra_name": " (converted from pytorch)"
+      },
+      "extra_env": {
+        "_CONVERT": "yes"
+      },
+      "on_by_default": "no"
+    }
+  }
 }

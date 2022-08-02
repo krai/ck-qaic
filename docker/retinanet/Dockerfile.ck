@@ -96,7 +96,7 @@ RUN ck pull repo:ck-env && ck install package \
 #-----------------------------------------------------------------------------#
 # Step 4. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=model,onnx,retinanet,no-nms
+RUN ck install package --tags=model,onnx,retinanet,no-nms --quiet
 
 ###############################################################################
 # FINAL STAGE
