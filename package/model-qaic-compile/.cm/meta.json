@@ -780,6 +780,43 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=1"
       }
     },
+    "retinanet.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=1"
+      }
+    },
     "retinanet.aedk_20w.prev.offline": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -912,6 +949,43 @@
       ]
     },
     "retinanet.pcie.16nsp.prev.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      }
+    },
+    "retinanet.pcie.16nsp.prev.quad.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.prev.quad.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.prev.quad.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.prev.quad.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -1170,6 +1244,30 @@
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
       }
     },
+    "bert-99.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
     "bert-99.9": {
       "extra_customize": {
         "package_name": "BERT model FP16"
@@ -1200,6 +1298,18 @@
       }
     },
     "bert-99.9.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.quad.server": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
