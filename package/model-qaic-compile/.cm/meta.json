@@ -1148,7 +1148,7 @@
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
         "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
         "_COMPILER_PARAMS_SERVER_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -execute-nodes-in-fp16=Mul,Div,Add,Softmax,Sub,Gather,Erf,LayerNormalization",
-        "_COMPILER_ARGS_SERVER": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG]"
+        "_COMPILER_ARGS_SERVER": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -multicast-weights"
       },
       "extra_tags": [
         "bert",
