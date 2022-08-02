@@ -439,10 +439,10 @@ For more details, see benchmark-specific instructions:
 
 The most important build arguments and their default values are provided below:
 
-- `SDK_VER=1.6.80`
+- `SDK_VER=1.7.1.12`
 - `SDK_DIR=/local/mnt/workspace/sdks`
-- `DOCKER_OS=centos7` (only CentOS 7 is supported)
-- `PYTHON_VER=3.8.13` (Python interpreter)
+- `DOCKER_OS=ubuntu` (only CentOS 7 and Ubuntu 20.04 are supported)
+- `PYTHON_VER=3.9.13` (Python interpreter)
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9985` (PCV stands for percentile calibration value, see below)

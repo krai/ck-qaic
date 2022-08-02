@@ -74,7 +74,6 @@ ENV PATH "/usr/local/bin:${PATH}"
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
-RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -83,27 +82,31 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 # Step 2. Prepare the ResNet50 workload.
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
-# to work around a current limitation in the toolchain.
+# to work around a limitation in the toolchain.
+RUN ck install package --tags=model,tf,mlperf,resnet50,fix_input_shape --quiet
 
-# Use precalibrated profiles.
+## Use precalibrated profiles.
 #RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
 #--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.8/profile.yaml \
 #--extra_tags=resnet50,mlperf.option1,bs.8
 #RUN echo "precalibrated" | ck detect soft --tags=compiler,glow,profile \
 #--full_path=$(ck find repo:ck-qaic)/profile/resnet50/bs.1/profile.yaml \
 #--extra_tags=resnet50,mlperf.option1,bs.1
-# Calibrate the workload for bs.1 and bs.8
+
+# Calibrate the workload for bs.1 and bs.8.
+RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet \
+ && ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet
 RUN ck install package --tags=profile,resnet50,bs.1 --quiet
 RUN ck install package --tags=profile,resnet50,bs.8 --quiet
-RUN ck install package --tags=profile,resnet50,bs.4 --quiet
 
-# Compile the workload for the PCIe Pro server cards.
+# Compile the workload for the PCIe Pro server cards. (Both Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline      --quiet; \
+  ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.server       --quiet; \
   ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.singlestream --quiet; \
   ck install package --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream  --quiet; \
 fi
-# Compile the workload for the PCIe Standard server cards.
+# Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   ck install package --tags=model,qaic,resnet50,resnet50.pcie.14nsp.offline      --quiet; \
   ck install package --tags=model,qaic,resnet50,resnet50.pcie.14nsp.singlestream --quiet; \
@@ -113,10 +116,6 @@ fi
 #-----------------------------------------------------------------------------#
 # Step 5. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-# FIXME: Workaround for https://github.com/mlcommons/inference/issues/1193
-RUN ck clean env --tags=mlperf,loadgen,static -f \
- && cd /home/krai/CK_TOOLS/mlperf-inference-r2.1/inference \
- && git checkout 67eb6a0d0e067dcc314a9f60388c0ed98ee86013
 RUN ck compile program:image-classification-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#

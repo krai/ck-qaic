@@ -67,10 +67,8 @@ ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}
 #-----------------------------------------------------------------------------#
 USER krai:kraig
 WORKDIR /home/krai
-RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
-RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
-RUN ck pull repo:ck-qaic
 
+RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
 
 #-----------------------------------------------------------------------------#
 # Step 3. Set platform scripts (ensuring that ECC is on).
@@ -88,8 +86,8 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
 # --extra_tags=detected,profile,qaic,bert-packed,mixed
 
-# Compile the bert-99 workload (separately for each scenario).
-# Compile the workload for the PCIe Pro server cards.
+# Compile the BERT-99 workload (separately for each scenario).
+# Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet \
@@ -114,7 +112,7 @@ RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   fi \
 fi
 
-# Compile the workload for the PCIe Standard server cards.
+# Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet \
@@ -125,22 +123,16 @@ RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.448      --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.384      --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   else \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.448      --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.384      --quiet; \
   fi \
 fi
 
-# Compile the bert-99.9 workload.
-# Compile the workload for the PCIe Pro server cards.
+# Compile the BERT-99.9 workload.
+# Compile the workload for the PCIe Pro server cards. (Only Datacenter scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.448 --quiet; \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.384 --quiet; \
@@ -148,21 +140,9 @@ RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.384 --quiet; \
 fi
 
-# Compile the workload for the PCIe Standard server cards.
-RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.448 --quiet; \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.384 --quiet; \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.server,seg.448 --quiet; \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.server,seg.384 --quiet; \
-fi
-
 #-----------------------------------------------------------------------------#
 # Step 5. Build the MLPerf LoadGen API.
 #-----------------------------------------------------------------------------#
-# FIXME: Workaround for https://github.com/mlcommons/inference/issues/1193
-RUN ck clean env --tags=mlperf,loadgen,static -f \
- && cd /home/krai/CK_TOOLS/mlperf-inference-r2.1/inference \
- && git pull
 RUN ck compile program:packed-bert-qaic-loadgen --quiet
 
 #-----------------------------------------------------------------------------#

@@ -71,7 +71,6 @@ ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
-RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -90,17 +89,16 @@ RUN echo "v1.8.0.73" | ck detect soft:compiler.glow.profile \
 --full_path=/home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1/profile.yaml \
 --extra_tags=detected,retinanet,bs.1,bs.explicit
 
-# Compile the workload for the PCIe Pro server cards.
+# Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.offline      ; \
   ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.server       ; \
   ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.singlestream ; \
   ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.multistream  ; \
 fi
-# Compile the workload for the PCIe Standard server cards.
+# Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.offline      ; \
-  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.server       ; \
   ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.singlestream ; \
   ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.multistream  ; \
 fi

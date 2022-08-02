@@ -46,7 +46,7 @@ echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.8.13}
+_PYTHON_VER=${PYTHON_VER:-3.9.13}
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
 _DOCKER_MODEL_IMAGE="krai/ck.${MODEL}:${_DOCKER_OS}_latest"
 _DOCKER_COMMON_IMAGE="krai/ck.common:${_DOCKER_OS}_latest"

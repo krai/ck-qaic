@@ -10,7 +10,7 @@ $(ck find ck-qaic:docker:base)/build.base.sh
 
 ### Parameters
 - `DOCKER_OS=ubuntu`: only `ubuntu` (Ubuntu 20.04) and `centos` (CentOS 7) are supported.
-- `PYTHON_VER=3.8.13`.
+- `PYTHON_VER=3.9.13`.
 - `GCC_MAJOR_VER=11`.
 - `TIMEZONE=US/Central` (Austin).
 
@@ -55,7 +55,7 @@ $(ck find ck-qaic:docker:base)/build.ck.sh
 
 ### Parameters
 - `DOCKER_OS=ubuntu`: only `ubuntu` (Ubuntu 20.04) and `centos` (CentOS 7) are supported.
-- `PYTHON_VER=3.8.13`.
+- `PYTHON_VER=3.9.13`.
 - `GCC_MAJOR_VER=11`.
 - `CK_VER=2.6.1`.
 - `GROUP_ID=1500`.
