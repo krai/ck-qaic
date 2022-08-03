@@ -274,10 +274,7 @@
       }
     },
     "compliance": {
-      "TEST04-A" : {
-        "recommended_stream_buffer_size": "<<<recommended_accuracy_buffer_size>>>"
-      },
-      "TEST04-B" : {
+      "TEST04" : {
         "recommended_stream_buffer_size": "<<<recommended_accuracy_buffer_size>>>"
       }
     }
