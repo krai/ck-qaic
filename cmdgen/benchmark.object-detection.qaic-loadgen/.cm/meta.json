@@ -222,6 +222,15 @@
         "recommended_multistream_num_setup_threads": "4",
         "recommended_threads_per_queue": "2"
       },
+      "q1_pro_edge_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_num_setup_threads": "4",
+        "recommended_threads_per_queue": "2"
+      },
       "q1_std_edge": {
         "recommended_offline_activation_count": "14",
         "recommended_server_activation_count": "3",
@@ -236,7 +245,7 @@
         "recommended_server_activation_count": "3",
         "recommended_queue_length": "2",
         "recommended_multistream_queue_length": "1",
-        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_activation_count": "3",
         "recommended_multistream_num_setup_threads": "2",
         "recommended_threads_per_queue": "2"
       },
