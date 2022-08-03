@@ -139,7 +139,8 @@ do
   # RetinaNet-dependent setup.
   #-----------------------------------------------------------------------------
   if [[ ${_WORKLOAD} == "retinanet" ]]; then
-    WORKLOAD_DEPENDENT_PARAMS="" # TODO: Add "COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD}"?
+    #WORKLOAD_DEPENDENT_PARAMS="" # TODO: Add "COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD}"?
+    WORKLOAD_DEPENDENT_PARAMS="COMPILE_PRO=${_COMPILE_PRO} COMPILE_STD=${_COMPILE_STD} CK_QAIC_PCV=${_CK_QAIC_PCV_BERT}"
   fi
   #-----------------------------------------------------------------------------
   # BERT-dependent setup.

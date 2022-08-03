@@ -7,14 +7,8 @@ WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh
 
-if [ ${SUT} == 'pf002' ] || [ ${SUT} == 'pf003' ] ||  [ ${SUT} == 'pf003e' ] ||  [ ${SUT} == 'pf002e' ]  ; then
-  DEVICE_IDS_OVERRIDE=' --device_ids=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17'
-else
-  if [ ${SUT} == 'g292_z43_q16e' ] || [ ${SUT} == 'g292_z43_q16' ]  ; then
+if [ ${SUT} == 'g292_z43_q16e' ] || [ ${SUT} == 'g292_z43_q16' ]  ; then
     DEVICE_IDS_OVERRIDE=' --device_ids=2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17'
-  else
-    DEVICE_IDS_OVERRIDE=''
-  fi
 fi
 
 RUN_CMD_COMMON_SUFFIX="${RUN_CMD_COMMON_SUFFIX_DEFAULT} ${RUN_CMD_COMMON_SUFFIX} $DEVICE_IDS_OVERRIDE $POWER_YES $CMD_QUOTE"
@@ -133,6 +127,30 @@ $SET_SERVER_QUERY_COUNT \
 ${RUN_CMD_SUFFIX}"
 
 enabled ssd_resnet34 && RUN "$CMD"
+
+# Retinanet.
+OFFLINE_TARGET_QPS=$(getQPS "${RETINANET_OFFLINE_TARGET_QPS}")
+SERVER_TARGET_QPS=$(getQPS "${RETINANET_SERVER_TARGET_QPS}")
+if [[ $SERVER_TARGET_QPS == '1' ]]; then
+  SERVER_TARGET_QPS=1000
+  SET_SERVER_QUERY_COUNT="--server_query_count=1000"
+elif [[ ${QPS_DIV} != 1 ]]; then
+  SET_SERVER_QUERY_COUNT="--server_query_count=$(getServerQueryCount ${SERVER_TARGET_QPS})"
+else
+  SET_SERVER_QUERY_COUNT=""
+fi
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_RETINANET $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_RETINENET"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=retinanet \
+${_RUN_TYPES} \
+--offline_target_qps=$OFFLINE_TARGET_QPS \
+--server_target_qps=$SERVER_TARGET_QPS \
+
+enabled retinanet && RUN "$CMD"
 
 . run_end.sh
 

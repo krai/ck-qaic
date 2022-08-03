@@ -95,6 +95,26 @@ ${_RUN_TYPES} \
 ${RUN_CMD_SUFFIX}"
 enabled bert && RUN "$CMD"
 
+# Retinanet.
+SINGLESTREAM_TARGET_LATENCY=$(getLatency "${SSD_RETINANET_SINGLESTREAM_TARGET_LATENCY}")
+MULTISTREAM_TARGET_LATENCY=$(getLatency "${SSD_RETINANET_MULTISTREAM_TARGET_LATENCY}")
+OFFLINE_TARGET_QPS=$(getQPS "${SSD_RETINANET_OFFLINE_TARGET_QPS}")
+MULTISTREAM_QUERY_COUNT=$(getQueryCount "${MULTISTREAM_TARGET_LATENCY}")
+
+RUN_CMD_PREFIX="$RUN_CMD_PREFIX_RETINANET $CMD_QUOTE"
+RUN_CMD_SUFFIX="$RUN_CMD_COMMON_SUFFIX $RUN_CMD_SUFFIX_SSD_RETINANET"
+
+CMD="\
+${RUN_CMD_PREFIX} \
+ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
+--sut=$SUT --sdk=$SDK_VER --model=retinanet \
+${_RUN_TYPES} \
+--singlestream_target_latency=$SINGLESTREAM_TARGET_LATENCY \
+--multistream_target_latency=$MULTISTREAM_TARGET_LATENCY \
+--multistream_query_count=$MULTISTREAM_QUERY_COUNT \
+--target_qps=$OFFLINE_TARGET_QPS \
+${RUN_CMD_SUFFIX}"
+enabled retinanet && RUN "$CMD"
 . run_end.sh
 
 echo

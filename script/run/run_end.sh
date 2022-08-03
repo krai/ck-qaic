@@ -5,6 +5,7 @@ if [[ ${_docker} == 'yes' ]]; then
   enabled resnet50 && docker kill $CONTAINER_ID_RESNET50
   enabled ssd_resnet34 && docker kill $CONTAINER_ID_SSD_RESNET34
   enabled ssd_mobilenet && docker kill $CONTAINER_ID_SSD_MOBILENET
+  enabled retinanet && docker kill $CONTAINER_ID_RETINANET
 fi
 
 ZIP_EXPERIMENT=${ZIP_EXPERIMENT:-'no'}

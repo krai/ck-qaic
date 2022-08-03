@@ -39,6 +39,7 @@ enabled bert && kill_existing_container "$CONTAINER_ID_BERT"
 enabled resnet50 && kill_existing_container "$CONTAINER_ID_RESNET50"
 enabled ssd_resnet34 && kill_existing_container "$CONTAINER_ID_SSD_RESNET34"
 enabled ssd_mobilenet &&  kill_existing_container "$CONTAINER_ID_SSD_MOBILENET"
+enabled retinanet && kill_existing_container "$CONTAINER_ID_RETINANET"
 
 if enabled bert; then
   CONTAINER_ID_BERT=`ck run cmdgen:benchmark.packed-bert.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=bert --docker_os=$DOCKER_OS --experiment_dir`
@@ -64,11 +65,17 @@ if enabled ssd_mobilenet; then
   echo  "$CONTAINER_ID_SSD_MOBILENET created"
 fi
 
+if enabled retinanet; then
+  CONTAINER_ID_RETINANET=`ck run cmdgen:benchmark.object-detection.qaic-loadgen --docker=container_only --out=none --sdk=$SDK_VER --model_name=retinanet --docker_os=$DOCKER_OS --experiment_dir`
+  exit_if_invalid_container "$CONTAINER_ID_RETINANET"
+  echo  "$CONTAINER_ID_RETINANET created"
+fi
 if [[ "$UPDATE_CK_QAIC" == "yes" ]]; then
   enabled bert && RUN "docker exec $CONTAINER_ID_BERT bash -c \"ck pull repo:ck-qaic\""
   enabled resnet50 && RUN "docker exec $CONTAINER_ID_RESNET50 bash -c \"ck pull repo:ck-qaic\""
   enabled ssd_resnet34 && RUN "docker exec $CONTAINER_ID_SSD_RESNET34 bash -c \"ck pull repo:ck-qaic\""
   enabled ssd_mobilenet &&   RUN "docker exec $CONTAINER_ID_SSD_MOBILENET bash -c \"ck pull repo:ck-qaic\""
+  enabled retinanet && RUN "docker exec $CONTAINER_ID_RETINANET bash -c \"ck pull repo:ck-qaic\""
 fi
 
 
@@ -78,9 +85,11 @@ if [[ $POWER == 'yes' ]]; then
   RUN_CMD_PREFIX_RESNET50="docker exec $CONTAINER_ID_RESNET50 bash -c"
   RUN_CMD_PREFIX_SSD_RESNET34="docker exec $CONTAINER_ID_SSD_RESNET34 bash -c"
   RUN_CMD_PREFIX_SSD_MOBILENET="docker exec $CONTAINER_ID_SSD_MOBILENET bash -c"
+  RUN_CMD_PREFIX_RETINANET="docker exec $CONTAINER_ID_RETINANET bash -c"
 else
   RUN_CMD_SUFFIX_BERT=" --container=$CONTAINER_ID_BERT"
   RUN_CMD_SUFFIX_RESNET50=" --container=$CONTAINER_ID_RESNET50"
   RUN_CMD_SUFFIX_SSD_RESNET34=" --container=$CONTAINER_ID_SSD_RESNET34"
   RUN_CMD_SUFFIX_SSD_MOBILENET=" --container=$CONTAINER_ID_SSD_MOBILENET"
+  RUN_CMD_SUFFIX_RETINANET=" --container=$CONTAINER_ID_RETINANET"
 fi
