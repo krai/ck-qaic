@@ -222,7 +222,6 @@
         "division": "closed",
         "hyphenated_model_name": "retinanet",
         "model_name": "retinanet",
-	"docker_os": "centos",
         "model_tags": [
           "###"
         ],
@@ -244,7 +243,6 @@
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "dataset_size": "500",
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
-    "docker_os": "centos",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",

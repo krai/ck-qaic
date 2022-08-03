@@ -971,6 +971,7 @@
     "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
     "docker_group_add": "--group-add <<<shared_group_id>>> ",
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_os":"ubuntu",
     "docker_mode": "--privileged ",
     "docker_user": "--user=krai:kraig ",
     "ecc_default": "off",
