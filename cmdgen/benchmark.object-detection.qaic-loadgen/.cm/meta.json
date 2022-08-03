@@ -60,6 +60,12 @@
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
+      "g292_z43_q18_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "8",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
       "g292_z43_q16e": {
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
@@ -88,6 +94,13 @@
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
+      "r282_z93_q2_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "4",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
       "r282_z93_q1": {
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
@@ -110,6 +123,13 @@
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
+      "r282_z93_q5_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
       "r282_z93_q8e": {
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
@@ -120,6 +140,12 @@
       "r282_z93_q8": {
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
@@ -164,7 +190,7 @@
       },
       "q4_pro_dc_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2",
         "vc_value_default": "12"
@@ -174,7 +200,7 @@
         "recommended_server_activation_count": "3",
         "recommended_queue_length": "2",
         "recommended_multistream_queue_length": "1",
-        "recommended_multistream_activation_count": "7",
+        "recommended_multistream_activation_count": "2",
         "recommended_multistream_num_setup_threads": "8",
         "recommended_threads_per_queue": "2"
       },
@@ -192,8 +218,17 @@
         "recommended_server_activation_count": "4",
         "recommended_queue_length": "2",
         "recommended_multistream_queue_length": "1",
-        "recommended_multistream_activation_count": "8",
-        "recommended_multistream_num_setup_threads": "8",
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_num_setup_threads": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "q1_pro_edge_prev": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "4",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_num_setup_threads": "4",
         "recommended_threads_per_queue": "2"
       },
       "q1_std_edge": {
@@ -204,7 +239,16 @@
         "recommended_multistream_activation_count": "7",
         "recommended_multistream_num_setup_threads": "8",
         "recommended_threads_per_queue": "2"
-      }
+      },
+      "q1_std_edge_prev": {
+        "recommended_offline_activation_count": "14",
+        "recommended_server_activation_count": "3",
+        "recommended_queue_length": "2",
+        "recommended_multistream_queue_length": "1",
+        "recommended_multistream_activation_count": "3",
+        "recommended_multistream_num_setup_threads": "2",
+        "recommended_threads_per_queue": "2"
+      } 
     },
     "model": {
       "retinanet": {
@@ -222,7 +266,6 @@
         "division": "closed",
         "hyphenated_model_name": "retinanet",
         "model_name": "retinanet",
-	"docker_os": "centos",
         "model_tags": [
           "###"
         ],
@@ -244,7 +287,6 @@
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "dataset_size": "500",
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
-    "docker_os": "centos",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",

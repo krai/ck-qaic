@@ -173,7 +173,6 @@
         "division": "closed",
         "hyphenated_model_name": "ssd-mobilenet",
         "model_name": "ssd-mobilenet",
-	"docker_os": "centos",
         "model_tags": [
           "###",
           "bs.<<<batch_size>>>"
@@ -195,7 +194,6 @@
     "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
     "dataset_size": "5000",
     "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
-    "docker_os": "centos",
     "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
     "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
     "preprocessed_using": "opencv",
