@@ -149,6 +149,8 @@ ck run cmdgen:benchmark.object-detection.qaic-loadgen --verbose \
 ${_RUN_TYPES} \
 --offline_target_qps=$OFFLINE_TARGET_QPS \
 --server_target_qps=$SERVER_TARGET_QPS \
+$SET_SERVER_QUERY_COUNT \
+${RUN_CMD_SUFFIX}"
 
 enabled retinanet && RUN "$CMD"
 
