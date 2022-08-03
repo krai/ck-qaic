@@ -170,6 +170,10 @@ public:
     file.read(reinterpret_cast<char *>(_buffer), _size * sizeof(uint8_t));
   }
 
+  void duplicate(const ImageData* img_from) {
+    memcpy( _buffer, img_from->_buffer, _size * sizeof(uint8_t));
+  }
+
 private:
   BenchmarkSettings *s;
 };
@@ -310,7 +314,10 @@ public:
       for (auto j = 0; j < actual_batch_size; j++, buf += image_size) {
         _in_batch[d][i + j].reset(new ImageData(_settings, buf));
         _out_batch[d][i + j].reset(new ResultData(_settings));
-        _in_batch[d][i + j]->load(image_filenames[i + j], vl);
+        if(d == 0)
+          _in_batch[d][i + j]->load(image_filenames[i + j], vl);
+        else
+          _in_batch[d][i + j]->duplicate(_in_batch[0][i + j].get());
       }
     }
   }
