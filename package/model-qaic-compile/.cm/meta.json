@@ -902,7 +902,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -942,7 +942,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -979,7 +979,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
