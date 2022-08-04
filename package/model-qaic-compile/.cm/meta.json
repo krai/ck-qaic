@@ -1206,8 +1206,8 @@
     },
     "bert-99.pcie.14nsp.server": {
       "extra_env": {
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SERVER",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.14nsp.multistream": {
@@ -1230,8 +1230,8 @@
     },
     "bert-99.pcie.16nsp.server": {
       "extra_env": {
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SERVER",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.16nsp.multistream": {
@@ -1254,8 +1254,8 @@
     },
     "bert-99.pcie.16nsp.quad.server": {
       "extra_env": {
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SERVER",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2"
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
     "bert-99.pcie.16nsp.quad.multistream": {
