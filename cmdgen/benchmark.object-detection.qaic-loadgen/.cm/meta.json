@@ -123,7 +123,7 @@
       },
       "g292_z43_q16e_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
@@ -135,7 +135,7 @@
       },
       "g292_z43_q16_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
