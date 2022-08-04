@@ -623,7 +623,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev<<<model_suffix>>>"
+          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.217",
         "power_server_port": "4953",
@@ -661,7 +661,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev<<<model_suffix>>>"
+          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.217",
         "power_server_port": "4953",
