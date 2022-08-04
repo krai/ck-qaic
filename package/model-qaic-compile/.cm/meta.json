@@ -272,11 +272,11 @@
         "_MODEL_TO_CONVERT": "compile_resnet50_tf",
         "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -output-node-name=ArgMax -vvv -compile-only -use-producer-dma=1",
         "_COMPILER_ARGS_OFFLINE": "-sdp-cluster-sizes=2,2 -multicast-weights",
-        "_COMPILER_ARGS_SERVER": "-multicast-weights",
         "_COMPILER_ARGS_SINGLESTREAM": "-aic-num-of-instances=1",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ ",
-        "_COMPILER_PARAMS_SERVER_BASE": "$<<_COMPILER_PARAMS_BASE>>$ ",
-        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ "
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ ",
+        "_COMPILER_PARAMS_SERVER_BASE": "-aic-hw -aic-hw-version=2.0 -aic-num-of-instances=1 -use-producer-dma=0 -output-node-name=ArgMax -compile-only",
+        "_COMPILER_ARGS_SERVER": "-sdp-cluster-sizes=4,4 -mos=1,4"
       },
       "extra_tags": [
         "image-classification",
@@ -368,7 +368,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SERVER",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
       },
       "extra_tags": [
         "bs.8"
