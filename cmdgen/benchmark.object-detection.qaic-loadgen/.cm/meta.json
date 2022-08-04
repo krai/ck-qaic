@@ -104,7 +104,7 @@
       },
       "g292_z43_q18e_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
@@ -192,7 +192,7 @@
       },
       "r282_z93_q5e_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_multistream_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
@@ -220,7 +220,7 @@
       },
       "r282_z93_q8e_prev": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "4",
+        "recommended_server_activation_count": "8",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
