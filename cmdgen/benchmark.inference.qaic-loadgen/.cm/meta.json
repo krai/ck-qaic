@@ -438,12 +438,32 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
+      "aedk_15w_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
+      },
       "aedk_20w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_20w.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
+      },
+      "aedk_20w_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_20w.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
@@ -458,12 +478,32 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
+      "aedk_25w_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_20w.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
+      },
       "aedke": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.196",
+        "power_server_port": "4956"
+      },
+      "aedke_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.196",
         "power_server_port": "4956"
@@ -478,12 +518,32 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4960"
       },
+      "gloria_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.194",
+        "power_server_port": "4960"
+      },
       "gloria1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.194",
+        "power_server_port": "4961"
+      },
+      "gloria1_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4961"
@@ -498,6 +558,16 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4962"
       },
+      "aedkh_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "10.222.146.194",
+        "power_server_port": "4962"
+      },
       "aedkh1": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
@@ -508,12 +578,32 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
+      "aedkh1_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
+      },
       "aedkr": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+        ],
+        "power_server_ip": "192.168.0.3",
+        "power_server_port": "4949"
+      },
+      "aedkr_prev": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
