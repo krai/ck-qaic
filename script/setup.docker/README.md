@@ -1,6 +1,22 @@
-# Qualcomm Cloud AI - MLPerf Inference
+# Qualcomm Cloud AI - MLPerf Inference - Datacenter and Edge servers
 
-## Docker setup (for Datacenter and Edge servers)
+We provide instructions to set up an Edge appliance similar to 
+Qualcomm Datacenter and Edge servers, for MLPerf Inference
+benchmarking from scratch.
+
+## General setup
+Please install Collective Knowledge (ck) and the `ck-qaic` package, if it hasn't been done.
+```
+pip install ck
+ck pull repo --url=http://github.com/krai/ck-qaic.git
+```
+
+Go to the following directory as base.
+```
+cd $(ck find repo:ck-qaic)/script/setup.docker
+```
+
+## Docker setup
 
 ### Host OS dependent
 
@@ -80,3 +96,7 @@ $ grep "99th percentile latency (ns) :" $CK_EXPERIMENT_DIR/*r282_z93_q1*target_l
 
 1. [Object Detection Small](https://github.com/krai/ck-qaic/tree/main/docker/ssd-mobilenet)
 1. [Object Detection Large](https://github.com/krai/ck-qaic/tree/main/docker/ssd-resnet34)
+
+# Info
+
+Please contact anton@krai.ai if you have any problems or questions.
