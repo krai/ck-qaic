@@ -191,8 +191,7 @@
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
         "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2",
-        "vc_value_default": "12"
+        "recommended_threads_per_queue": "2"
       },
       "q4_pro_dc_prev": {
         "recommended_offline_activation_count": "16",
