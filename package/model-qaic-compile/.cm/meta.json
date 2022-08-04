@@ -697,7 +697,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=9 -mos=2 -ols=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=2 -ols=2"
       },
       "extra_tags": [
         "bs.1"
