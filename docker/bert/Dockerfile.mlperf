@@ -90,24 +90,12 @@ RUN ck install package --tags=profile,qaic,bert-packed --quiet
 # Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.448      --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384      --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   else \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.448      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.multistream,quantization.calibration,seg.384  --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.448      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384      --quiet; \
   fi \
 fi
@@ -115,8 +103,6 @@ fi
 # Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet \
@@ -124,7 +110,6 @@ RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   else \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.448      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet; \
@@ -134,9 +119,7 @@ fi
 # Compile the BERT-99.9 workload.
 # Compile the workload for the PCIe Pro server cards. (Only Datacenter scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.448 --quiet; \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.384 --quiet; \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.448 --quiet; \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.384 --quiet; \
 fi
 
