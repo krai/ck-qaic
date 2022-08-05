@@ -15,7 +15,7 @@
       "aedk_15w_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_singlestream_activation_count": "1",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
@@ -29,7 +29,7 @@
       "aedk_20w_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
@@ -43,7 +43,7 @@
       "aedk_25w_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
@@ -57,7 +57,7 @@
       "gloria_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
@@ -71,7 +71,7 @@
       "gloria1_prev": {
         "recommended_offline_activation_count": "14",
         "recommended_server_activation_count": "3",
-        "recommended_multistream_activation_count": "7",
+        "recommended_multistream_activation_count": "3",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
@@ -85,21 +85,21 @@
       "haishen_prev": {
         "recommended_offline_activation_count": "8",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "aedkh_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "aedke_prev": {
         "recommended_offline_activation_count": "9",
         "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
+        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
