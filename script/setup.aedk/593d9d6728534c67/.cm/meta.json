@@ -1,0 +1,715 @@
+{
+  "customize": {
+    "_soft_file_universal": "better create a metadata file for all preprocessed images with a relatively unique name, and use it for detection",
+    "detect_bytes_per_pixel": "3",
+    "detect_file_index_name": "original_dimensions.txt",
+    "detect_preprocessed_ext": "rgb8",
+    "env_prefix": "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED",
+    "full_path": "/home/krai/CK-TOOLS/dataset-openimages-preprocessed-using-various-for.retinanet.onnx.preprocessed.quantized-full-openimages-validation/original_dimensions.txt",
+    "install_env": {
+      "CK_HOST_OS_ID": "linux",
+      "CK_IMAGE_FILE": "",
+      "CK_MD5SUM_CMD": "md5sum",
+      "CK_TARGET_CPU_BITS": "64",
+      "CK_TARGET_OS_ID": "linux",
+      "INPUT_DATASET": "openimages",
+      "PACKAGE_VERSION": "1.0",
+      "_CONVERT_DTYPE_BEFORE_RESIZE": "0",
+      "_CONVERT_TO_UNSIGNED": "0",
+      "_DATA_LAYOUT": "NCHW",
+      "_DATA_TYPE": "float32",
+      "_GIVEN_CHANNEL_MEANS": "0.485 0.456 0.406",
+      "_GIVEN_CHANNEL_STDS": "0.229 0.224 0.225",
+      "_INPUT_SQUARE_SIDE": "800",
+      "_NEW_EXTENSION": "rgb8",
+      "_NORMALIZE_DATA": "YES",
+      "_NORMALIZE_LOWER": "0.0",
+      "_NORMALIZE_UPPER": "1.0",
+      "_QUANTIZE": "1",
+      "_QUANT_OFFSET": "113",
+      "_QUANT_SCALE": "0.0185855655",
+      "_SUBSET_FOF": "original_dimensions.txt",
+      "_SUBSET_OFFSET": "0",
+      "_SUBSET_VOLUME": "",
+      "_SUBTRACT_MEAN": "YES",
+      "_VALIDATION": "YES"
+    },
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "win": 3
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "package_extra_name": " (full)",
+    "skip_file_check": "yes",
+    "skip_path": "yes",
+    "soft_file_universal": "000000000139.rgb8",
+    "used_package_uid": "74b1e2923245e7bb",
+    "used_package_uoa": "74b1e2923245e7bb",
+    "version": "1.0",
+    "version_split": [
+      1,
+      0
+    ]
+  },
+  "deps": {},
+  "_deps": {
+    "dataset-source": {
+      "bat": ". /home/krai/CK_REPOS/local/env/4816975904f3691e/env.sh\n",
+      "choices": [
+        "4816975904f3691e"
+      ],
+      "dict": {
+        "customize": {
+          "check_that_exists": "yes",
+          "ck_version": 10,
+          "env_prefix": "CK_ENV_DATASET_OPENIMAGES_MLPERF",
+          "extra_search_dirs": {
+            "linux": [
+              "/datasets",
+              "/data"
+            ]
+          },
+          "full_path": "/home/krai/CK-TOOLS/dataset-openimages-for-object-detection-validation/info.json",
+          "install_env": {
+            "CK_HOST_OS_ID": "linux",
+            "CK_MD5SUM_CMD": "md5sum",
+            "CK_TARGET_CPU_BITS": "64",
+            "CK_TARGET_OS_ID": "linux",
+            "DATASET_VALIDATION": "yes",
+            "PACKAGE_VERSION": "1.0"
+          },
+          "limit_recursion_dir_search": {
+            "linux": 5
+          },
+          "no_os_in_suggested_path": "yes",
+          "no_ver_in_suggested_path": "yes",
+          "package_name": "OpenImages",
+          "skip_file_check": "yes",
+          "skip_path": "yes",
+          "soft_file_universal": "open-images-v6-mlperf/info.json",
+          "used_package_uid": "a322c77453d87d8a",
+          "used_package_uoa": "a322c77453d87d8a",
+          "version": "1.0",
+          "version_split": [
+            1,
+            0
+          ]
+        },
+        "data_name": "OpenImages",
+        "deps": {
+          "mlperf-inference-src": {
+            "add_to_path": "no",
+            "bat": ". /home/krai/CK_REPOS/local/env/7895b1e6a6311c8a/env.sh\n",
+            "choices": [
+              "7895b1e6a6311c8a"
+            ],
+            "dict": {
+              "customize": {
+                "check_that_exists": "yes",
+                "ck_version": 10,
+                "env_prefix": "CK_ENV_MLPERF_INFERENCE",
+                "extra_dir": "",
+                "full_path": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/loadgen/README.md",
+                "git_info": {
+                  "datetime": "Mon Aug 1 17:42:35 2022 +0100",
+                  "iso_datetime": "2022-08-01T17:42:35",
+                  "iso_datetime_cut": "20220801",
+                  "iso_datetime_cut_revision": "20220801-5cc4995",
+                  "revision": "5cc4995"
+                },
+                "git_src_dir": "inference",
+                "install_env": {
+                  "CK_HOST_OS_ID": "linux",
+                  "CK_MD5SUM_CMD": "md5sum",
+                  "CK_TARGET_CPU_BITS": "64",
+                  "CK_TARGET_OS_ID": "linux",
+                  "PACKAGE_BUILD_TYPE": "none",
+                  "PACKAGE_GIT": "YES",
+                  "PACKAGE_GIT_CHECKOUT": "r2.1",
+                  "PACKAGE_GIT_SUBMODULES": "YES",
+                  "PACKAGE_PATCH": "NO",
+                  "PACKAGE_PATCH_AIMET": "",
+                  "PACKAGE_PATCH_COCO": "",
+                  "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH_PY11BIND>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH_AIMET>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH_COCO>>$",
+                  "PACKAGE_PATCH_PY11BIND": "",
+                  "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+                  "PACKAGE_SKIP_LINUX_MAKE": "YES",
+                  "PACKAGE_SUB_DIR": "inference",
+                  "PACKAGE_URL": "https://github.com/mlcommons/inference",
+                  "PACKAGE_VERSION": "r2.1"
+                },
+                "limit_recursion_dir_search": {
+                  "linux": 5
+                },
+                "no_os_in_suggested_path": "yes",
+                "no_ver_in_suggested_path": "yes",
+                "package_extra_name": " (official v2.1 branch)",
+                "skip_path": "yes",
+                "soft_file_universal": "inference$#sep#$loadgen$#sep#$README.md",
+                "use_git_revision": "yes",
+                "used_package_uid": "e4b96c0d80445eca",
+                "used_package_uoa": "e4b96c0d80445eca",
+                "version": "r2.1-5cc4995",
+                "version_split": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "data_name": "MLPerf Inference source (official v2.1 branch)",
+              "deps": {},
+              "env": {
+                "CK_ENV_MLPERF_INFERENCE": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference",
+                "CK_ENV_MLPERF_INFERENCE_LOADGEN": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/loadgen",
+                "CK_ENV_MLPERF_INFERENCE_MLPERF_CONF": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/mlperf.conf",
+                "CK_ENV_MLPERF_INFERENCE_VISION": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/vision",
+                "CK_ENV_MLPERF_INFERENCE_VLATEST": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/vision",
+                "PYTHONPATH": "/home/krai/CK-TOOLS/mlperf-inference-r2.1/inference/vision/classification_and_detection/python:${PYTHONPATH}"
+              },
+              "env_script": "env.sh",
+              "install_location": "/home/krai/CK-TOOLS/mlperf-inference-r2.1",
+              "package_uoa": "e4b96c0d80445eca",
+              "setup": {
+                "host_os_uoa": "4258b5fe54828a50",
+                "target_os_bits": "64",
+                "target_os_uoa": "4258b5fe54828a50",
+                "version": "r2.1",
+                "version_split": [
+                  0,
+                  1,
+                  0
+                ]
+              },
+              "soft_alias": "mlperf.inference.source",
+              "soft_uoa": "d0d94f2c992e9c32",
+              "tags": [
+                "64bits",
+                "host-os-linux-64",
+                "inference",
+                "mlcommons",
+                "mlperf",
+                "r2.1",
+                "source",
+                "src",
+                "target-os-linux-64",
+                "uninstalled",
+                "v0",
+                "v0.1",
+                "v0.1.0"
+              ]
+            },
+            "local": "yes",
+            "name": "MLPerf Inference source",
+            "num_entries": 1,
+            "package_uoa": "e4b96c0d80445eca",
+            "sort": 70,
+            "tags": "mlperf,inference,source",
+            "uoa": "7895b1e6a6311c8a",
+            "ver": "r2.1-5cc4995"
+          },
+          "python": {
+            "bat": ". /home/krai/CK_REPOS/local/env/cde9eff64a4981d0/env.sh\n",
+            "build_dir_name": "python",
+            "choices": [
+              "cde9eff64a4981d0"
+            ],
+            "detected_ver": "3.8.10",
+            "dict": {
+              "customize": {
+                "add_only_with_version": "yes",
+                "build_dir_name": "python",
+                "check_that_exists": "yes",
+                "ck_version": 10,
+                "env_prefix": "CK_ENV_COMPILER_PYTHON",
+                "full_path": "/bin/python3.8",
+                "languages": [
+                  "PYTHON"
+                ],
+                "limit_recursion_dir_search": {
+                  "linux": 3,
+                  "win": 4
+                },
+                "only_for_host_os_tags": [
+                  "windows",
+                  "linux"
+                ],
+                "only_for_target_os_tags": [
+                  "windows",
+                  "android",
+                  "linux"
+                ],
+                "skip_path": "yes",
+                "soft_file": {
+                  "linux": "python*",
+                  "win": "python*.exe"
+                },
+                "soft_file_from_host_os": "yes",
+                "soft_version_cmd": {
+                  "linux": "--version > $#filename#$ 2>&1",
+                  "win": "--version > $#filename#$ 2>&1"
+                },
+                "version": "3.8.10",
+                "version_split": [
+                  3,
+                  8,
+                  10
+                ]
+              },
+              "data_name": "python",
+              "deps": {},
+              "env": {
+                "CK_ENV_COMPILER_PYTHON": "/",
+                "CK_ENV_COMPILER_PYTHON_BIN": "/bin",
+                "CK_ENV_COMPILER_PYTHON_FILE": "/bin/python3.8",
+                "CK_PYC": "python",
+                "CK_PYTHON3_MINOR_VERSION": 8,
+                "CK_PYTHON_BIN": "python3.8",
+                "CK_PYTHON_PIP_BIN": "pip3",
+                "CK_PYTHON_PIP_BIN_FULL": "/bin/pip3",
+                "CK_PYTHON_VER3": "YES",
+                "CK_PY_OBJ_EXT": ".pyc",
+                "CK_PY_RT": "python"
+              },
+              "env_script": "env.sh",
+              "install_location": "",
+              "setup": {
+                "host_os_uoa": "4258b5fe54828a50",
+                "target_os_bits": "64",
+                "target_os_uoa": "4258b5fe54828a50",
+                "version": "3.8.10",
+                "version_split": [
+                  3,
+                  8,
+                  10
+                ]
+              },
+              "soft_alias": "compiler.python",
+              "soft_uoa": "45d68512df22fde7",
+              "tags": [
+                "64bits",
+                "compiler",
+                "host-os-linux-64",
+                "lang-python",
+                "python",
+                "target-os-linux-64",
+                "v3",
+                "v3.8",
+                "v3.8.10"
+              ]
+            },
+            "local": "yes",
+            "name": "Python",
+            "num_entries": 1,
+            "sort": 30,
+            "tags": "compiler,python",
+            "uoa": "cde9eff64a4981d0",
+            "ver": "3.8.10"
+          }
+        },
+        "env": {
+          "CK_ENV_DATASET_OPENIMAGES_MLPERF": "/home/krai/CK-TOOLS/dataset-openimages-for-object-detection-validation/info.json",
+          "CK_ENV_DATASET_OPENIMAGES_MLPERF_ROOT": "/home/krai/CK-TOOLS/dataset-openimages-for-object-detection-validation",
+          "CK_ENV_DATASET_OPENIMAGES_MLPERF_VALIDATION": "yes"
+        },
+        "env_script": "env.sh",
+        "install_location": "/home/krai/CK-TOOLS/dataset-openimages-for-object-detection-validation",
+        "package_uoa": "a322c77453d87d8a",
+        "setup": {
+          "deps_mlperf-inference-src": "7895b1e6a6311c8a",
+          "deps_python": "cde9eff64a4981d0",
+          "host_os_uoa": "4258b5fe54828a50",
+          "target_os_bits": "64",
+          "target_os_uoa": "4258b5fe54828a50",
+          "version": "1.0",
+          "version_split": [
+            1,
+            0
+          ]
+        },
+        "soft_alias": "dataset.openimages.for.object.detection",
+        "soft_uoa": "160844a394f4bb6d",
+        "tags": [
+          "64bits",
+          "dataset",
+          "host-os-linux-64",
+          "mlperf",
+          "object-detection",
+          "openimages",
+          "original",
+          "subset",
+          "target-os-linux-64",
+          "v1",
+          "v1.0",
+          "val",
+          "validation"
+        ]
+      },
+      "enable_if_env": [
+        {
+          "CK_IMAGE_FILE": [
+            ""
+          ]
+        }
+      ],
+      "enabled": "yes",
+      "local": "yes",
+      "name": "Open Images dataset",
+      "num_entries": 1,
+      "package_uoa": "a322c77453d87d8a",
+      "sort": 10,
+      "tags": "dataset,openimages,original",
+      "uoa": "4816975904f3691e",
+      "update_tags_if_env": {
+        "calibration": [
+          {
+            "_CALIBRATION": "YES"
+          }
+        ],
+        "mlperf": [
+          {
+            "_CALIBRATE_MLPERF": "YES"
+          }
+        ],
+        "validation,original": [
+          {
+            "_VALIDATION": "YES"
+          }
+        ]
+      },
+      "ver": "1.0"
+    },
+    "lib-python-numpy": {
+      "bat": ". /home/krai/CK_REPOS/local/env/7eb0d7cd207465da/env.sh\n",
+      "choices": [
+        "7eb0d7cd207465da"
+      ],
+      "dict": {
+        "customize": {
+          "check_that_exists": "yes",
+          "env_prefix": "CK_ENV_PYTHON_PACKAGE_NUMPY",
+          "full_path": "/home/krai/CK-TOOLS/lib-python-numpy-compiler.python-3.8.10-linux-64/build/numpy/__init__.py",
+          "install_env": {
+            "CK_HOST_OS_ID": "linux",
+            "CK_MD5SUM_CMD": "md5sum",
+            "CK_TARGET_CPU_BITS": "64",
+            "CK_TARGET_OS_ID": "linux",
+            "PACKAGE_VERSION": "",
+            "PIP_INSTALL_OPTIONS": "--ignore-installed",
+            "PYTHON_PACKAGE_NAME": "numpy"
+          },
+          "limit_recursion_dir_search": {
+            "linux": 5,
+            "win": 5
+          },
+          "skip_path": "yes",
+          "soft_file_universal": "numpy$#sep#$__init__.py",
+          "used_package_uid": "6aaeb794d288057a",
+          "used_package_uoa": "6aaeb794d288057a",
+          "version": "latest",
+          "version_module_name": "version",
+          "version_split": [
+            0
+          ],
+          "version_variable_name": "version"
+        },
+        "data_name": "Python NumPy library",
+        "deps": {
+          "python": {
+            "add_to_path": "yes",
+            "bat": ". /home/krai/CK_REPOS/local/env/cde9eff64a4981d0/env.sh\n",
+            "build_dir_name": "python",
+            "choices": [
+              "cde9eff64a4981d0"
+            ],
+            "detected_ver": "3.8.10",
+            "dict": {
+              "customize": {
+                "add_only_with_version": "yes",
+                "build_dir_name": "python",
+                "check_that_exists": "yes",
+                "ck_version": 10,
+                "env_prefix": "CK_ENV_COMPILER_PYTHON",
+                "full_path": "/bin/python3.8",
+                "languages": [
+                  "PYTHON"
+                ],
+                "limit_recursion_dir_search": {
+                  "linux": 3,
+                  "win": 4
+                },
+                "only_for_host_os_tags": [
+                  "windows",
+                  "linux"
+                ],
+                "only_for_target_os_tags": [
+                  "windows",
+                  "android",
+                  "linux"
+                ],
+                "skip_path": "yes",
+                "soft_file": {
+                  "linux": "python*",
+                  "win": "python*.exe"
+                },
+                "soft_file_from_host_os": "yes",
+                "soft_version_cmd": {
+                  "linux": "--version > $#filename#$ 2>&1",
+                  "win": "--version > $#filename#$ 2>&1"
+                },
+                "version": "3.8.10",
+                "version_split": [
+                  3,
+                  8,
+                  10
+                ]
+              },
+              "data_name": "python",
+              "deps": {},
+              "env": {
+                "CK_ENV_COMPILER_PYTHON": "/",
+                "CK_ENV_COMPILER_PYTHON_BIN": "/bin",
+                "CK_ENV_COMPILER_PYTHON_FILE": "/bin/python3.8",
+                "CK_PYC": "python",
+                "CK_PYTHON3_MINOR_VERSION": 8,
+                "CK_PYTHON_BIN": "python3.8",
+                "CK_PYTHON_PIP_BIN": "pip3",
+                "CK_PYTHON_PIP_BIN_FULL": "/bin/pip3",
+                "CK_PYTHON_VER3": "YES",
+                "CK_PY_OBJ_EXT": ".pyc",
+                "CK_PY_RT": "python"
+              },
+              "env_script": "env.sh",
+              "install_location": "",
+              "setup": {
+                "host_os_uoa": "4258b5fe54828a50",
+                "target_os_bits": "64",
+                "target_os_uoa": "4258b5fe54828a50",
+                "version": "3.8.10",
+                "version_split": [
+                  3,
+                  8,
+                  10
+                ]
+              },
+              "soft_alias": "compiler.python",
+              "soft_uoa": "45d68512df22fde7",
+              "tags": [
+                "64bits",
+                "compiler",
+                "host-os-linux-64",
+                "lang-python",
+                "python",
+                "target-os-linux-64",
+                "v3",
+                "v3.8",
+                "v3.8.10"
+              ]
+            },
+            "local": "yes",
+            "name": "Python interpreter",
+            "num_entries": 1,
+            "sort": 10,
+            "tags": "compiler,python",
+            "uoa": "cde9eff64a4981d0",
+            "ver": "3.8.10"
+          }
+        },
+        "env": {
+          "PATH": "/home/krai/CK-TOOLS/lib-python-numpy-compiler.python-3.8.10-linux-64/python_deps_site/bin:${PATH}",
+          "PYTHONPATH": "/home/krai/CK-TOOLS/lib-python-numpy-compiler.python-3.8.10-linux-64/build:${PYTHONPATH}"
+        },
+        "env_script": "env.sh",
+        "install_location": "/home/krai/CK-TOOLS/lib-python-numpy-compiler.python-3.8.10-linux-64",
+        "package_uoa": "6aaeb794d288057a",
+        "setup": {
+          "deps_python": "cde9eff64a4981d0",
+          "host_os_uoa": "4258b5fe54828a50",
+          "target_os_bits": "64",
+          "target_os_uoa": "4258b5fe54828a50",
+          "version": "latest",
+          "version_split": [
+            0
+          ]
+        },
+        "soft_alias": "lib.python.numpy",
+        "soft_uoa": "6a10047b1bcd16fc",
+        "tags": [
+          "64bits",
+          "host-os-linux-64",
+          "lib",
+          "needs-python",
+          "needs-python-3.8.10",
+          "numpy",
+          "python-package",
+          "target-os-linux-64",
+          "v0",
+          "vmaster"
+        ]
+      },
+      "local": "yes",
+      "name": "Python NumPy library",
+      "num_entries": 1,
+      "package_uoa": "6aaeb794d288057a",
+      "sort": 110,
+      "tags": "lib,python-package,numpy",
+      "uoa": "7eb0d7cd207465da",
+      "ver": "latest"
+    },
+    "python": {
+      "bat": ". /home/krai/CK_REPOS/local/env/cde9eff64a4981d0/env.sh\n",
+      "build_dir_name": "python",
+      "choices": [
+        "cde9eff64a4981d0"
+      ],
+      "detected_ver": "3.8.10",
+      "dict": {
+        "customize": {
+          "add_only_with_version": "yes",
+          "build_dir_name": "python",
+          "check_that_exists": "yes",
+          "ck_version": 10,
+          "env_prefix": "CK_ENV_COMPILER_PYTHON",
+          "full_path": "/bin/python3.8",
+          "languages": [
+            "PYTHON"
+          ],
+          "limit_recursion_dir_search": {
+            "linux": 3,
+            "win": 4
+          },
+          "only_for_host_os_tags": [
+            "windows",
+            "linux"
+          ],
+          "only_for_target_os_tags": [
+            "windows",
+            "android",
+            "linux"
+          ],
+          "skip_path": "yes",
+          "soft_file": {
+            "linux": "python*",
+            "win": "python*.exe"
+          },
+          "soft_file_from_host_os": "yes",
+          "soft_version_cmd": {
+            "linux": "--version > $#filename#$ 2>&1",
+            "win": "--version > $#filename#$ 2>&1"
+          },
+          "version": "3.8.10",
+          "version_split": [
+            3,
+            8,
+            10
+          ]
+        },
+        "data_name": "python",
+        "deps": {},
+        "env": {
+          "CK_ENV_COMPILER_PYTHON": "/",
+          "CK_ENV_COMPILER_PYTHON_BIN": "/bin",
+          "CK_ENV_COMPILER_PYTHON_FILE": "/bin/python3.8",
+          "CK_PYC": "python",
+          "CK_PYTHON3_MINOR_VERSION": 8,
+          "CK_PYTHON_BIN": "python3.8",
+          "CK_PYTHON_PIP_BIN": "pip3",
+          "CK_PYTHON_PIP_BIN_FULL": "/bin/pip3",
+          "CK_PYTHON_VER3": "YES",
+          "CK_PY_OBJ_EXT": ".pyc",
+          "CK_PY_RT": "python"
+        },
+        "env_script": "env.sh",
+        "install_location": "",
+        "setup": {
+          "host_os_uoa": "4258b5fe54828a50",
+          "target_os_bits": "64",
+          "target_os_uoa": "4258b5fe54828a50",
+          "version": "3.8.10",
+          "version_split": [
+            3,
+            8,
+            10
+          ]
+        },
+        "soft_alias": "compiler.python",
+        "soft_uoa": "45d68512df22fde7",
+        "tags": [
+          "64bits",
+          "compiler",
+          "host-os-linux-64",
+          "lang-python",
+          "python",
+          "target-os-linux-64",
+          "v3",
+          "v3.8",
+          "v3.8.10"
+        ]
+      },
+      "local": "yes",
+      "name": "Python interpreter",
+      "num_entries": 1,
+      "sort": 100,
+      "tags": "compiler,lang-python",
+      "uoa": "cde9eff64a4981d0",
+      "ver": "3.8.10"
+    }
+  },
+  "env": {
+    "CK_ENV_DATASET_ANNOTATIONS": null,
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_CONVERT_DTYPE_BEFORE_RESIZE": "0",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_CONVERT_TO_UNSIGNED": "0",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DATA_LAYOUT": "NCHW",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DATA_TYPE": "float32",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR": "/home/krai/CK-TOOLS/dataset-openimages-preprocessed-using-various-for.retinanet.onnx.preprocessed.quantized-full-openimages-validation",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_GIVEN_CHANNEL_MEANS": "0.485 0.456 0.406",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_GIVEN_CHANNEL_STDS": "0.229 0.224 0.225",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_INPUT_SQUARE_SIDE": "800",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_NEW_EXTENSION": "rgb8",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_NORMALIZE_DATA": "YES",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_NORMALIZE_LOWER": "0.0",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_NORMALIZE_UPPER": "1.0",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_QUANTIZE": "1",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_QUANT_OFFSET": "113",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_QUANT_SCALE": "0.0185855655",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF": "original_dimensions.txt",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_OFFSET": "0",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_VOLUME": "",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBTRACT_MEAN": "YES",
+    "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_VALIDATION": "YES",
+    "CK_ENV_DATASET_TYPE": null
+  },
+  "env_script": "env.sh",
+  "install_location": "/home/krai/CK-TOOLS/dataset-openimages-preprocessed-using-various-for.retinanet.onnx.preprocessed.quantized-full-openimages-validation",
+  "package_uoa": "74b1e2923245e7bb",
+  "setup": {
+    "deps_dataset-source": "4816975904f3691e",
+    "deps_lib-python-numpy": "7eb0d7cd207465da",
+    "deps_python": "cde9eff64a4981d0",
+    "host_os_uoa": "4258b5fe54828a50",
+    "target_os_bits": "64",
+    "target_os_uoa": "4258b5fe54828a50",
+    "version": "1.0",
+    "version_split": [
+      1,
+      0
+    ]
+  },
+  "soft_uoa": "4bab9a0191717489",
+  "tags": [
+    "64bits",
+    "OpenImages",
+    "dataset",
+    "for.retinanet.onnx.preprocessed.quantized",
+    "full",
+    "host-os-linux-64",
+    "object-detection",
+    "openimages",
+    "preprocessed",
+    "target-os-linux-64",
+    "using-various",
+    "v1",
+    "v1.0",
+    "validation"
+  ]
+}
