@@ -133,7 +133,8 @@ cd /tmp/ck-qaic/script/setup.aedk
 source ./config.sh && time ./2.run_as_krai.sh
 ```
 
-# D. Set up ImageNet
+# D. Set up ImageNet and other datasets
+
 Suppose the ImageNet validation dataset (50,000 images) is in an archive (6.4G) called
 `dataset-imagenet-ilsvrc2012-val.tar` in the `${HOST_DATASETS_DIR}` on the host machine.
 Validate the `md5sum` checksum.
@@ -148,6 +149,7 @@ krai@aus655-gloria-1:/datasets&dollar; md5sum imagenet.tar
 2398abe8c17b3bf5df61946fff0b8494  imagenet.tar
 </pre></details>
 
+
 ## `[H1]` Copy the ImageNet dataset from the host to the device
 ```
 scp -P ${DEVICE_PORT} ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar root@${DEVICE_IP}:${DEVICE_DATASETS_DIR}
@@ -161,7 +163,7 @@ source ./config.sh && time ./3.install_workload.sh
 
 <details>
 
-Resnet50 Example:
+ResNet50 example:
 <pre>
 krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=yes INSTALL_WORKLOAD_BERT=no DEVICE_DATASETS_DIR=/datasets DEVICE_IMAGENET_DIR=imagenet ./3.install_workload.sh
 ...
@@ -170,7 +172,7 @@ user    8m24.348s
 sys     12m31.936s
 </pre>
 
-Bert Example:
+BERT example:
 <pre>
 krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=no INSTALL_WORKLOAD_BERT=yes ./3.install_workload.sh
 ...
@@ -180,6 +182,12 @@ sys     2m2.424s
 </pre>
 
 </details>
+
+Detect Open Images
+<details><pre>
+cp -r $(ck find script:setup.aedk)/593d9d6728534c67 ~/CK/local/env/ \
+&& ck show env --tags=dataset,openimages,preprocessed
+</pre></details>
 
 # E. Set up QAIC SDKs
 Obtain a pair of QAIC SDKs:
