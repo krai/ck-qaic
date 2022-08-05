@@ -7,9 +7,10 @@ WORKLOADS=${WORKLOADS:-"resnet50,bert"}
 
 . run_common.sh
 
-if [ ${SUT} == 'g292_z43_q16e' ] || [ ${SUT} == 'g292_z43_q16' ]  ; then
-    DEVICE_IDS_OVERRIDE=' --device_ids=2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17'
-fi
+# # Emulating q16 on q18 system.
+# if [ ${SUT} == 'g292_z43_q16e' ] || [ ${SUT} == 'g292_z43_q16' ]  ; then
+#   DEVICE_IDS_OVERRIDE=' --device_ids=2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17'
+# fi
 
 RUN_CMD_COMMON_SUFFIX="${RUN_CMD_COMMON_SUFFIX_DEFAULT} ${RUN_CMD_COMMON_SUFFIX} $DEVICE_IDS_OVERRIDE $POWER_YES $CMD_QUOTE"
 
