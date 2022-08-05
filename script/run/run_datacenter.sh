@@ -100,7 +100,7 @@ ${_RUN_TYPES} \
 $SET_SERVER_QUERY_COUNT \
 ${RUN_CMD_SUFFIX}"
 
-#enabled bert && RUN "$CMD"
+enabled bert && RUN "$CMD"
 
 
 # SSD-ResNet34.
