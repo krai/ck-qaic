@@ -11,7 +11,7 @@
     "accelerators_per_node": "18",
     "cooling": "air",
     "division": "closed",
-    "framework": "Qualcomm Cloud AI SDK v1.6.80",
+    "framework": "Qualcomm Cloud AI SDK v1.8.0.73",
     "host_memory_capacity": "16x 64 GB",
     "host_memory_configuration": "",
     "host_networking": "",
