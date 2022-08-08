@@ -124,3 +124,5 @@ COPY --from=builder /home/krai/CK_REPOS /home/krai/CK_REPOS
 COPY --from=builder /home/krai/CK_TOOLS /home/krai/CK_TOOLS
 COPY --from=builder /home/krai/.local   /home/krai/.local
 COPY --from=builder /home/krai/.bashrc  /home/krai/.bashrc
+
+CMD ["ck show env --tags=model,pytorch,mlperf,ssd-mobilenet,for.qaic"]
