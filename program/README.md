@@ -27,21 +27,20 @@ cat /opt/qti-aic/versions/platform.xml
 
 **NB:** Run the below commands with `sudo` or as superuser.
 
-<a name="install_system_centos7"></a>
-### CentOS 7
+<a name="install_system_centos"></a>
+### CentOS
 
 #### Generic
 
 ``` 
-sudo yum upgrade -y
-sudo yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel
-sudo yum clean all
-```
-
-#### dnf  ("the new yum"!)
-
-```
-sudo yum install -y dnf
+sudo yum update -y \
+&& update-ca-trust force-enable \
+&& sudo yum install -y \
+   sudo acl which make patch git vim \
+   wget rsync ca-certificates sshpass openssl-devel libffi-devel \
+   zip unzip bzip2-devel \
+   pciutils pciutils-lib numactl OpenIPMI OpenIPMI-tools lm_sensors \
+ && sudo yum clean all
 ```
 
 #### Python 3.8
@@ -62,6 +61,12 @@ python3.8 --version
 <details><pre>
 Python 3.8.12
 </pre></details>
+
+#### Make the installed Python default for both python and python3
+```
+rm -f /usr/bin/python3 && ln -s /usr/local/bin/${PYTHON_VERSION} /usr/bin/python3 \
+&& rm -f /usr/bin/python && ln -s /usr/local/bin/${PYTHON_VERSION} /usr/bin/python
+```
 
 #### GCC 11
 
@@ -97,6 +102,27 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 </pre></details>
 
+
+<a name="install_system_ubuntu"></a>
+### Ubuntu
+
+#### Generic
+```
+sudo apt update -y \
+&& apt install -y \
+   sudo acl make patch git vim \
+   python3 python3-dev python3-pip gcc g++ \
+   wget rsync ca-certificates sshpass libssl-dev libffi-dev libcurl4 \
+   zip unzip libbz2-dev lzma libncurses5 \
+   pciutils numactl ipmitool lm-sensors \
+ && apt clean all
+```
+## Start IPMI tool
+```
+sudo systemctl enable ipmi.service
+```
+
+
 <a name="install_ck"></a>
 ## Install [Collective Knowledge](http://cknowledge.org/) (CK)
 
@@ -129,7 +155,7 @@ ck detect platform.os --platform_init_uoa=qaic
 <a name="detect_python"></a>
 ## Detect Python
 
-**NB:** Please detect only one Python interpreter. Python 3.6, the default on CentOS 7, is <font color="#268BD0"><b>recommended</b></font>. While CK can normally detect available Python interpreters automatically, we are playing safe here by only detecting a particular one. Please only detect multiple Python interpreters, if you understand the consequences.
+**NB:** Please detect only one Python interpreter. While CK can normally detect available Python interpreters automatically, we are playing safe here by only detecting a particular one. Please only detect multiple Python interpreters, if you understand the consequences.
 
 ### <font color="#268BD0">Python v3.8</font>
 
@@ -183,7 +209,8 @@ Env UID:         Target OS: Bits: Name: Version: Tags:
 
 ```
 export CK_PYTHON=$(which python3.8)
-$CK_PYTHON -m pip install --user --upgrade wheel
+$CK_PYTHON -m pip install --user --ignore-installed pip setuptools
+$CK_PYTHON -m pip install --user wheel pyyaml testresources
 ```
 
 #### Install explicit dependencies via CK (also via `pip`, but register with CK at the same time)
@@ -191,11 +218,11 @@ $CK_PYTHON -m pip install --user --upgrade wheel
 **NB:** These dependencies are _explicit_, i.e. CK will try to satisfy them automatically. On a machine with multiple versions of Python, things can get messy, so we are playing safe here.
 
 ```
-ck install package --tags=python-package,numpy --quiet
-ck install package --tags=python-package,absl --quiet
 ck install package --tags=python-package,cython --quiet
+ck install package --tags=python-package,absl --quiet
+ck install package --tags=python-package,matplotlib --quiet
 ck install package --tags=python-package,opencv-python-headless --quiet
-ck install package --tags=lib,python-package,onnx --force_version=1.8.1
+echo "latest" | ck install package --tags=python-package,numpy --quiet
 ```
 
 **NB:** If you have large NFS folders in your $PATH, you can set the following kernel variable to avoid long waiting times when CK searches in them: 

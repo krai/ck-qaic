@@ -187,11 +187,11 @@ Give a custom name to the zip archive. Default: `ZIP_FILE=mlperf_v${MLPERF_VER}-
 
 ### `RUN_CMD_COMMON_SUFFIX`
 
-Pass additional commands to cmdgen. E.g.:
+Run additional options. E.g.:
 `RUN_CMD_COMMON_SUFFIX='--pre_fan=150 --post_fan=50 --vc --timestamp'`.
 
-`--pre_fan=150 --post_fan=50` - sets [fan speed](https://github.com/krai/ck-qaic/blob/main/docker/README.md#set-the-fan-speed) before and after the benchmark.
+`--pre_fan=150 --post_fan=50` - set [fan speed](https://github.com/krai/ck-qaic/blob/main/docker/README.md#set-the-fan-speed) during and after the benchmark.
 
-`--vc=12` - sets [device frequency](https://github.com/krai/ck-qaic/blob/main/docker/README.md#device-frequency). If the `vc_value_default` is included in cmdgen metadata it is enough to do `--vc` and the value will be fetched from cmdgen. Without `--vc` the device will operate at max frequency 1450 MHz corresponding to `--vc=17`.
+`--vc=12` - set [device frequency](https://github.com/krai/ck-qaic/blob/main/docker/README.md#device-frequency). If the `vc_value_default` is included in cmdgen metadata it is enough to do `--vc` and the value will be fetched from cmdgen. Without `--vc` the device will operate at max frequency 1450 MHz corresponding to `--vc=17`.
 
-`--timestamp` - adds timestamp to the filename in the format `%Y%m%dT%H%M%S`.
+`--timestamp` - add timestamp to the filename in the format `%Y%m%dT%H%M%S`.
