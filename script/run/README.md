@@ -54,6 +54,26 @@ SUT=r282_z93_q2 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
 SUT=r282_z93_q1 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
 ```
 
+### PowerEdge R7515 Pro
+```
+SUT=q4_pro_dc SDK_VER=1.7.1.12 ./run_datacenter.sh
+```
+
+### EL8000 / PowerEdge R7515 Std
+```
+SUT=q4_std_edge SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
+### SE350
+```
+SUT=q1_pro_edge SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
+### Gloria "Highend"
+```
+SUT=gloria1 SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
 ### AEDK @ 15W TDP
 ```
 SUT=aedk_15w SDK_VER=1.6.80 POWER=yes ./run_edge.sh
@@ -76,7 +96,23 @@ SUT=haishen SDK_VER=1.6.80 ./run_edge.sh
 
 ### Gloria
 ```
-SUT=gloria SDK_VER=1.6.80 ./run_edge.sh
+SUT=gloria SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
+### Heimdall
+```
+SUT=aedkh SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
+### EB6
+```
+SUT=aedke SDK_VER=1.7.1.12 ./run_edge.sh
+```
+
+**NB:** For RetinaNet Preview benchmarks (run separately) SUT names have `_prev` suffix:
+
+```
+WORKLOADS=retinanet SUT=aedke_prev SDK_VER=1.8.0.73 ./run_edge.sh
 ```
 
 ## Arguments
@@ -92,8 +128,8 @@ Default: `DEFS_DIR=./defs`. A directory containing SUT-specific files `def_<SUT>
 ### `WORKLOADS`
 
 Defaults:
-- `run_datacenter.sh`: `WORKLOADS="resnet50,bert"`
-- `run_edge.sh`: `WORKLOADS="resnet50,bert"`
+- `run_datacenter.sh`: `WORKLOADS="resnet50,bert"` `WORKLOADS=retinanet`
+- `run_edge.sh`: `WORKLOADS="resnet50,bert"` `WORKLOADS=retinanet`
 
 The list of workloads to run.
 
@@ -148,3 +184,14 @@ Give a custom name to the directory containing the zip archive. Default: `$HOME/
 ### `ZIP_FILE`
 
 Give a custom name to the zip archive. Default: `ZIP_FILE=mlperf_v${MLPERF_VER}-closed-${SUT}-qaic-v${SDK_VER}.zip`.
+
+### `RUN_CMD_COMMON_SUFFIX`
+
+Pass additional commands to cmdgen. E.g.:
+`RUN_CMD_COMMON_SUFFIX='--pre_fan=150 --post_fan=50 --vc --timestamp'`.
+
+`--pre_fan=150 --post_fan=50` - sets [fan speed](https://github.com/krai/ck-qaic/blob/main/docker/README.md#set-the-fan-speed) before and after the benchmark.
+
+`--vc=12` - sets [device frequency](https://github.com/krai/ck-qaic/blob/main/docker/README.md#device-frequency). If the `vc_value_default` is included in cmdgen metadata it is enough to do `--vc` and the value will be fetched from cmdgen. Without `--vc` the device will operate at max frequency 1450 MHz corresponding to `--vc=17`.
+
+`--timestamp` - adds timestamp to the filename in the format `%Y%m%dT%H%M%S`.
