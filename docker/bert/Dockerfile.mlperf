@@ -105,13 +105,10 @@ RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet \
-       --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   else \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384      --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.multistream,quantization.calibration,seg.384  --quiet; \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 --quiet; \
   fi \
 fi
