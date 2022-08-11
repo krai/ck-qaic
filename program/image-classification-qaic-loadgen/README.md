@@ -109,7 +109,7 @@ ck install package \
 Once models are compiled for AEDKs they can be installed on to the device(s) using [this](https://github.com/krai/ck-qaic/tree/main/script/setup.aedk#hr-compile-the-models-and-copy-to-the-device) script.
 
 
-### Compilation for edge category 16 NSP PCIe
+### Compilation for PCIe Pro server cards (edge category)
 
 ```
 ck install package \
@@ -127,12 +127,48 @@ ck install package \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.multistream
 ```
 
-### Compilation for datacenter category 16 NSP PCIe
+### Compilation for PCIe Pro server cards (datacenter category)
 
 ```
 ck install package \
 --dep_add_tags.profile-resnet50=mlperf.option1 \
 --tags=model,qaic,resnet50,resnet50.pcie.16nsp.offline
+```
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.16nsp.server
+```
+
+### Compilation for PCIe Standard server cards (edge category)
+
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.14nsp.offline
+```
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.14nsp.singlestream
+```
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.14nsp.multistream
+```
+
+### Compilation for PCIe Standard server cards (datacenter category)
+
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.14nsp.offline
+```
+```
+ck install package \
+--dep_add_tags.profile-resnet50=mlperf.option1 \
+--tags=model,qaic,resnet50,resnet50.pcie.14nsp.server
 ```
 
 ### Benchmarking

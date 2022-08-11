@@ -83,7 +83,7 @@ ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.offline,quanti
 ck install package --tags=model,compiled,bert-99,bert-99.aedk_15w.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 
-### Compilation for edge category 16 NSP PCIe
+### Compilation for PCIe Pro server cards (edge category)
 
 ```
 ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
@@ -92,10 +92,31 @@ ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quan
 ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
 ```
 
-### Compilation of BERT 99.9% for datacenter category 16 NSP PCIe
+### Compilation of BERT 99.9% for PCIe Pro server cards (server category)
 
 ```
 ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline
+```
+```
+ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server
+```
+
+### Compilation for PCIe Standard server cards (edge category)
+
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
+```
+```
+ck install package --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration --env._PERCENTILE_CALIBRATION_VALUE=99.$PCV --extra_tags=pcv.$PCV
+```
+
+### Compilation of BERT 99.9% for PCIe Standard server cards (server category)
+
+```
+ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline
+```
+```
+ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.server
 ```
 
 ## Benchmarking
