@@ -628,7 +628,7 @@
         "ML_MODEL_MODEL_NAME": "retinanet",
         "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf",
         "_ENABLE_CHANNEL_WISE": "yes",
-        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only -onnx-define-symbol=batch_size,[BATCH_SIZE] -node-precision-info=[NODE_PRECISION_FILE] -enable-channelwise -quantization-schema=asymmetric -quantization-calibration=KLMinimization  -execute-nodes-in-fp16=Sigmoid",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema=symmetric -vvv -compile-only -onnx-define-symbol=batch_size,[BATCH_SIZE] -node-precision-info=[NODE_PRECISION_FILE] -enable-channelwise -quantization-schema=asymmetric -quantization-calibration=None  -execute-nodes-in-fp16=Sigmoid",
         "_COMPILER_ARGS_OFFLINE": "",
         "_COMPILER_ARGS_SINGLESTREAM": "",
         "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
