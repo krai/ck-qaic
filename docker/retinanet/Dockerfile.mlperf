@@ -62,6 +62,7 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM krai/ck.retinanet:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
+ARG PRECALIBRATED_PROFILE
 ARG COMPILE_PRO
 ARG COMPILE_STD
 ARG DEBUG_BUILD
@@ -78,16 +79,18 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the RetinaNet workload.
 #-----------------------------------------------------------------------------#
-# # Uncomment if not using a precalibrated profile.
-# # Calibrate the workload for bs.1.
-# RUN ck install package --tags=dataset,openimages,original,calibration \
-#  && ck install package --tags=profile,qaic,retinanet --quiet
-
-# Use a precalibrated profile.
 ADD retinanet/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1
-RUN echo "v1.8.0.73" | ck detect soft:compiler.glow.profile \
+# Use a profile precalibrated with SDK v1.8.0.73.
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then \
+echo "v1.8.0.73" | ck detect soft:compiler.glow.profile \
 --full_path=/home/krai/CK_REPOS/ck-qaic/profile/retinanet/bs.1/profile.yaml \
---extra_tags=detected,retinanet,bs.1,bs.explicit
+--extra_tags=detected,retinanet,bs.1,bs.explicit; \
+fi
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  ck install package --tags=dataset,openimages,calibration,mlperf,original; \
+  ck install package --tags=dataset,openimages,calibration,mlperf,for.retinanet.onnx.preprocessed,using-various; \
+  ck install package --tags=profile,qaic,retinanet,bs.1,bs.explicit; \
+fi
 
 # Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
