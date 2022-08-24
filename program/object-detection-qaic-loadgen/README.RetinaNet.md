@@ -6,8 +6,17 @@ Please refer to [Docker README](https://github.com/krai/ck-qaic/tree/main/docker
 
 Complete the common benchmarking setup as detailed [here](https://github.com/krai/ck-qaic/blob/main/program/README.md)
 
+#### Install implicit Python dependencies
+```
+export CK_PYTHON=$(which python3.8)
+${CK_PYTHON} -m pip install --user fiftyone pybind11 protobuf==3.20.1 onnx-simplifier==0.3.7 torch==1.8.1 torchvision==0.9.1 pillow==8.3.2
+```
+For CentOS install additionally
+```
+${CK_PYTHON} -m pip install --user fiftyone-db-rhel7
+```
 
-#### Install explicit dependencies via CK (also via `pip`, but register with CK at the same time)
+#### Install explicit Python dependencies via CK (also via `pip`, but register with CK at the same time)
 
 **NB:** These dependencies are _explicit_, i.e. CK will try to satisfy them automatically. On a machine with multiple versions of Python, things can get messy, so we are playing safe here.
 
