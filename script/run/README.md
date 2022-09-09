@@ -41,7 +41,7 @@ SUT=r282_z93_q5 SDK_VER=1.6.80 POWER=no DOCKER=yes ./run_edge.sh
 
 ### Q5e
 ```
-SSUT=r282_z93_q5e DK_VER=1.6.80 POWER=yes DOCKER=yes ./run_edge.sh
+SUT=r282_z93_q5e DK_VER=1.6.80 POWER=yes DOCKER=yes ./run_edge.sh
 ```
 
 ### Q2
