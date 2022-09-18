@@ -10,9 +10,9 @@ sleep 5
 # Install system packages using apt.
 echo "Installing system packages ..."
 if [[ "${_INSTALL_SYSTEM_PACKAGES}" == "yes" ]]; then
-  sudo apt update -y
-  sudo apt upgrade -y
-  sudo apt install -y \
+  apt update -y
+  apt upgrade -y
+  apt install -y \
     git wget patch vim \
     libbz2-dev lzma libffi-dev \
     python3-dev python3-pip \
@@ -21,7 +21,7 @@ if [[ "${_INSTALL_SYSTEM_PACKAGES}" == "yes" ]]; then
     acl \
     bc rsync cmake \
     htop tmux tree
-  sudo apt clean all
+  apt clean all
   exit_if_error "apt install failed!"
 else
   echo "- skipping ..."
