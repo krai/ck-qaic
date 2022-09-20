@@ -50,16 +50,16 @@
         "recommended_multistream_activation_count": "4",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "8",
-        "recommended_multistream_num_setup_threads": "2",
-        "recommended_num_setup_threads": "2"
+        "recommended_multistream_num_setup_threads": "4",
+        "recommended_num_setup_threads": "4"
       },
       "aedk_20w": {
         "recommended_offline_activation_count": "4",
         "recommended_multistream_activation_count": "4",
         "recommended_threads_per_queue": "2",
         "recommended_queue_length": "8",
-        "recommended_multistream_num_setup_threads": "2",
-        "recommended_num_setup_threads": "2"
+        "recommended_multistream_num_setup_threads": "4",
+        "recommended_num_setup_threads": "4"
       },
       "aedk_15w": {
         "recommended_offline_activation_count": "2",
