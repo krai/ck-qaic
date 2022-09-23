@@ -30,7 +30,7 @@ Go to the following directory as base.
 cd $(ck find repo:ck-qaic)/script/setup.aedk
 ```
 
-## `[H1]` Set Variables and Paths
+## `[H1]` Set variables and paths
 Update device name, paths and variables in `config.sh`, then `source` it
 ```
 source $(ck find repo:ck-qaic)/script/setup.aedk/config.sh
@@ -48,7 +48,7 @@ Connect to the device as `root` e.g.:
 ssh -p ${DEVICE_PORT} root@${DEVICE_IP}
 ```
 
-## `[H1]` Clone the repository with setup scripts
+## `[D1]` Clone the repository with setup scripts
 
 ```
 git clone https://github.com/krai/ck-qaic /tmp/ck-qaic
@@ -90,7 +90,7 @@ source ./config.sh && ./1.run_as_root.sh
 
 Alternatively, you can override variables from the command line e.g.:
 ```
-time DEVICE_BASE_DIR=/home TIMEZONE=US/Central ./1.run_as_root.sh
+time DEVICE_BASE_DIR=/data TIMEZONE=London/Europe ./1.run_as_root.sh
 ```
 
 <details><pre>
