@@ -131,6 +131,7 @@ sudo chmod u+x /tmp/ck-qaic/script/setup.aedk/*.sh
 ```
 cd /tmp/ck-qaic/script/setup.aedk
 source ./config.sh && time ./2.run_as_krai.sh
+source ./config.sh && time ./3.run_as_krai.sh
 ```
 
 # D. Set up ImageNet and other datasets
@@ -158,14 +159,14 @@ scp -P ${DEVICE_PORT} ${HOST_DATASETS_DIR}/dataset-imagenet-ilsvrc2012-val.tar r
 ## `[D1]` Extract and preprocess ImageNet on the device
 ```
 cd /tmp/ck-qaic/script/setup.aedk
-source ./config.sh && time ./3.install_workload.sh
+source ./config.sh && time ./4.install_workloads.sh
 ```
 
 <details>
 
 ResNet50 example:
 <pre>
-krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=yes INSTALL_WORKLOAD_BERT=no DEVICE_DATASETS_DIR=/datasets DEVICE_IMAGENET_DIR=imagenet ./3.install_workload.sh
+krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=yes INSTALL_WORKLOAD_BERT=no DEVICE_DATASETS_DIR=/datasets DEVICE_IMAGENET_DIR=imagenet ./4.install_workloads.sh
 ...
 real    10m3.297s
 user    8m24.348s
@@ -174,7 +175,7 @@ sys     12m31.936s
 
 BERT example:
 <pre>
-krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=no INSTALL_WORKLOAD_BERT=yes ./3.install_workload.sh
+krai@aus655-gloria-1:/tmp/ck-qaic/script/setup.aedk&dollar; time INSTALL_WORKLOAD_RESNET50=no INSTALL_WORKLOAD_BERT=yes ./4.install_workloads.sh
 ...
 real    15m10.001s
 user    27m41.982s

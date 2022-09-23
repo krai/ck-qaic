@@ -50,9 +50,9 @@ export CK_PYTHON=$(which python${_PYTHON_VERSION_MAJOR}.${_PYTHON_VERSION_MINOR}
 export LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/aarch64:$LD_LIBRARY_PATH
 export PATH=$HOME/.local/bin:/opt/qti-aic/tools:$PATH" >> ~/.bashrc
   # CentOS-specific dependency.
-  if [[ "${_DEVICE_OS}" == centos ]]; then
-    echo "source scl_source enable gcc-toolset-11" >> ~/.bashrc
-  fi
+  #if [[ "${_DEVICE_OS}" == centos ]]; then
+  #  echo "source scl_source enable gcc-toolset-11" >> ~/.bashrc
+  #fi
 else
   echo "CK-QAIC environment has already been added to '~/.bashrc'."
 fi
@@ -70,40 +70,8 @@ curl https://sh.rustup.rs -sSf > /tmp/install_rust.sh && sh /tmp/install_rust.sh
 ${_CK_PYTHON} -m pip install pip setuptools testresources wheel h5py --user --upgrade --ignore-installed
 ${_CK_PYTHON} -m pip install tensorflow-aarch64 -f https://tf.kmtea.eu/whl/stable.html --user
 ${_CK_PYTHON} -m pip install transformers --user
-
 # Install CK.
 ${_CK_PYTHON} -m pip install ck==${_CK_VERSION}
-source ~/.bashrc
-ck version
-ck pull repo --url=https://github.com/krai/ck-qaic
-
-# Init CK environment.
-ck detect platform.os --platform_init_uoa=aedk
-ck detect soft:compiler.python --full_path=$(which ${_CK_PYTHON})
-ck detect soft:compiler.gcc --full_path=$(which gcc)
-ck detect soft:tool.cmake --full_path=$(which cmake)
-
-# Install explicit Python dependencies.
-echo "Installing explicit Python dependencies ..."
-if [[ "${_INSTALL_PYTHON_DEPS}" == "yes" ]]; then
-  echo "1.2x" | ck install package --tags=python-package,numpy
-  ck install package --tags=python-package,absl
-  ck install package --tags=python-package,cython
-  ck install package --tags=python-package,opencv-python-headless
-else
-  echo "- skipping ..."
-fi
-
-# Install LoadGen.
-echo "Installing LoadGen ..."
-if [[ "${_INSTALL_LOADGEN}" == "yes" ]]; then
-  ck install package --tags=mlperf,inference,source,r${_MLPERF_INFERENCE_VERSION}
-  ck install package --tags=mlperf,power,source,r${_MLPERF_POWER_VERSION}
-  ck install package --tags=mlperf,loadgen,static
-  ck install package --tags=qaic,master
-else
-  echo "- skipping ..."
-fi
 
 echo
 echo "Done."
