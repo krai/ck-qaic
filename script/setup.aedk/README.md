@@ -131,6 +131,7 @@ sudo chmod u+x /tmp/ck-qaic/script/setup.aedk/*.sh
 ```
 cd /tmp/ck-qaic/script/setup.aedk
 source ./config.sh && time ./2.run_as_krai.sh
+source ~/.bashrc
 source ./config.sh && time ./3.run_as_krai.sh
 ```
 
