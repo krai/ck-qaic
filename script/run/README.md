@@ -106,13 +106,13 @@ SUT=aedkh SDK_VER=1.7.1.12 ./run_edge.sh
 
 ### EB6
 ```
-SUT=aedke SDK_VER=1.7.1.12 ./run_edge.sh
+SUT=eb6 SDK_VER=1.7.1.12 ./run_edge.sh
 ```
 
 **NB:** For RetinaNet Preview benchmarks (run separately) SUT names have `_prev` suffix:
 
 ```
-WORKLOADS=retinanet SUT=aedke_prev SDK_VER=1.8.0.73 ./run_edge.sh
+WORKLOADS=retinanet SUT=eb6 SDK_VER=1.8.0.73 ./run_edge.sh
 ```
 
 ## Arguments
