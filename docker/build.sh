@@ -150,31 +150,31 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
     if [[ ${MODEL} == "bert" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,bert-99 --force'
       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        bert-99 bert-99.pcie.16nsp.offline ${_SDK_VER};'
+        bert-99 bert-99.pcie.14nsp.offline,seg.384 ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "resnet50" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,resnet50.pcie.16nsp --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        resnet50 resnet50.pcie.16nsp.offline ${_SDK_VER};'
+        resnet50 resnet50.pcie.14nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-resnet34" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-resnet34 --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-resnet34 ssd-resnet34.pcie.16nsp.offline ${_SDK_VER};'
+        ssd-resnet34 ssd-resnet34.pcie.14nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "retinanet" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,retinanet --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        retinanet retinanet.pcie.16nsp.offline ${_SDK_VER};'
+        retinanet retinanet.pcie.14nsp.offline ${_SDK_VER};'
     fi
 
     if [[ ${MODEL} == "ssd-mobilenet" ]]; then
       docker exec $CONTAINER /bin/bash -c  'ck clean env --tags=compiled,ssd-mobilenet --force'
       docker exec $CONTAINER /bin/bash -c  '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-mobilenet ssd-mobilenet.pcie.16nsp.offline ${_SDK_VER};'
+        ssd-mobilenet ssd-mobilenet.pcie.14nsp.offline ${_SDK_VER};'
     fi
     docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
     docker commit $CONTAINER ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}'_PC'
