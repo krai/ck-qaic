@@ -9,6 +9,10 @@ _TIMEZONE=${TIMEZONE:-Europe/London}
 _INSTALL_SYSTEM_PACKAGES=${INSTALL_SYSTEM_PACKAGES:-yes}
 _INSTALL_PYTHON=${INSTALL_PYTHON:-yes}
 _PYTHON_VERSION=${PYTHON_VERSION:-${PYTHON_VER:-3.9.14}}
+_PYTHON_VERSION_ARRAY=($(echo ${_PYTHON_VERSION} | tr "." " "))
+_PYTHON_VERSION_MAJOR=${_PYTHON_VERSION_ARRAY[0]}
+_PYTHON_VERSION_MINOR=${_PYTHON_VERSION_ARRAY[1]}
+_PYTHON_VERSION_PATCH=${_PYTHON_VERSION_ARRAY[2]}
 
 . common.sh
 
@@ -25,7 +29,7 @@ sleep 10
 # Install system-wide dependencies.
 INSTALL_SYSTEM_PACKAGES=${_INSTALL_SYSTEM_PACKAGES} . 1.run_as_root.${_DEVICE_OS}.sh
 
-# Install Python >= 3.7 from source.
+# Install Python >= 3.7, <= 3.9 from source.
 if [[ "${_INSTALL_PYTHON}" == "yes" ]]; then
   echo "Installing Python v${_PYTHON_VERSION} ..."
   cd /usr/src \
@@ -36,9 +40,14 @@ if [[ "${_INSTALL_PYTHON}" == "yes" ]]; then
   && ./configure --enable-optimizations && make -j8 altinstall \
   && rm -rf /usr/src/Python-${_PYTHON_VERSION}*
   exit_if_error "Failed to install Python ${_PYTHON_VERSION}."
+  # Make it the default Python 3 by specifying it as the last alternative.
+  # NB: On Heimdall, the default Python 3 is python3.5, not python3.6, hence the need for readlink.
+  update-alternatives --install /usr/bin/python3 python3 /usr/bin/$(readlink $(which python3)) 1
+  update-alternatives --install /usr/bin/python3 python3 $(which python3.${_PYTHON_VERSION_MINOR}) 2
 else
   echo "Skipping Python v${_PYTHON_VERSION} installation ..."
 fi
+echo "Python 3: $(which python3)"
 
 # Create group 'qaic'.
 groupadd -f qaic
