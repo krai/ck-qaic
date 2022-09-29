@@ -33,13 +33,13 @@ cd "$(dirname ${_PLATFORM_SDK})/qaic-platform-sdk-${_SDK_VER}/${_ARCH}/${_OS}"
 # Devices with perf kernel.
 if [[ $(uname -r) == *perf ]]; then
   _DEVICE_MODEL=$(cat /proc/device-tree/model | tr -d '\0')
-  # Ubuntu-based devices: Gloria, EB6, RB6.
-  if [[ ${_DEVICE_MODEL} == *Gloria ]] || [[ ${_DEVICE_MODEL} == *RB6 ]]; then
+  # Ubuntu-based devices: Gloria, RB6, EB6 (also ends with RB6).
+  if [[ ${_OS} == "ubuntu" ]] && [[ ${_DEVICE_MODEL} == *Gloria || ${_DEVICE_MODEL} == *RB6 ]]; then
     echo "yes" | rm deb/qaic-kmd_${_SDK_VER}_arm64.deb
     cp deb-perf/qaic-kmd_${_SDK_VER}_arm64.deb deb/
   fi
   # CentOS-based devices: Haishen (*HDK), Heimdall (*AEDK).
-  if [[ ${_DEVICE_MODEL} == *DK ]] && ; then
+  if [[ ${_OS} == "centos" ]] && [[ ${_DEVICE_MODEL} == *DK ]]; then
     echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm
     cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm rpm/
   fi
