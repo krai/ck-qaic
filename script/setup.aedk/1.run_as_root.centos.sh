@@ -18,10 +18,9 @@ echo "Installing system packages ..."
 if [[ "${_INSTALL_SYSTEM_PACKAGES}" == "yes" ]]; then
   # Install system-level packages via 'yum'.
   yum upgrade -y
-  yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel libffi-devel tmux epel-release
-  yum install -y htop
+  yum install -y make which patch vim git wget zip unzip openssl-devel bzip2-devel xz-devel libffi-devel tmux epel-release
+  yum install -y htop lm_sensors
   yum install -y dnf
-  yum install -y lm_sensors
   yum clean all
   exit_if_error "Failed to install system packages via yum!"
   # Install system-level packages via 'dnf'.
