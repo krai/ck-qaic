@@ -30,16 +30,19 @@ echo "Using Platform SDK: ${_PLATFORM_SDK}"
 unzip -o ${_PLATFORM_SDK} -d "$(dirname ${_PLATFORM_SDK})"
 cd "$(dirname ${_PLATFORM_SDK})/qaic-platform-sdk-${_SDK_VER}/${_ARCH}/${_OS}"
 
-_DEVICE_MODEL=$(cat /proc/device-tree/model | tr -d '\0')
-# Ubuntu-based devices with perf kernel: Gloria, EB6, RB6.
-if [[ ${_DEVICE_MODEL} == *Gloria ]] || [[ ${_DEVICE_MODEL} == *RB6 ]]; then
-  echo "yes" | rm deb/qaic-kmd_${_SDK_VER}_arm64.deb
-  cp deb-perf/qaic-kmd_${_SDK_VER}_arm64.deb deb/
-fi
-# CentOS-based devices with perf kernel: Haishen.
-if [[ ${_DEVICE_MODEL} == *HDK ]]; then
-  echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm
-  cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm rpm/
+# Devices with perf kernel.
+if [[ $(uname -r) == *perf ]]; then
+  _DEVICE_MODEL=$(cat /proc/device-tree/model | tr -d '\0')
+  # Ubuntu-based devices: Gloria, EB6, RB6.
+  if [[ ${_DEVICE_MODEL} == *Gloria ]] || [[ ${_DEVICE_MODEL} == *RB6 ]]; then
+    echo "yes" | rm deb/qaic-kmd_${_SDK_VER}_arm64.deb
+    cp deb-perf/qaic-kmd_${_SDK_VER}_arm64.deb deb/
+  fi
+  # CentOS-based devices: Haishen (*HDK), Heimdall (*AEDK).
+  if [[ ${_DEVICE_MODEL} == *DK ]] && ; then
+    echo "yes" | rm rpm/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm
+    cp rpm-perf/qaic-kmd-${_SDK_VER}-1.el7.${_ARCH}.rpm rpm/
+  fi
 fi
 echo "yes" | sudo ./uninstall.sh
 sudo ./install.sh
