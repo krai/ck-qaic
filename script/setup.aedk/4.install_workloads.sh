@@ -1,9 +1,12 @@
 #!/bin/bash
 
-_INSTALL_WORKLOAD_RESNET50=${INSTALL_WORKLOAD_RESNET50:-"yes"}
-_INSTALL_WORKLOAD_BERT=${INSTALL_WORKLOAD_BERT:-"yes"}
+# For locating ImageNet.
 _DEVICE_DATASETS_DIR=${DEVICE_DATASETS_DIR:-"${HOME}"}
 _DEVICE_IMAGENET_DIR=${DEVICE_IMAGENET_DIR:-dataset-imagenet-ilsvrc2012-val}
+
+_INSTALL_WORKLOAD_BERT=${INSTALL_WORKLOAD_BERT:-"yes"}
+_INSTALL_WORKLOAD_RESNET50=${INSTALL_WORKLOAD_RESNET50:-"yes"}
+_INSTALL_WORKLOAD_RETINANET=${INSTALL_WORKLOAD_RETINANET:-"yes"}
 
 . common.sh
 
@@ -55,9 +58,11 @@ if [[ "${_INSTALL_WORKLOAD_BERT}" == "yes" ]]; then
   ck install package --tags=dataset,calibration,squad,pickle,width.384 --quiet
 fi
 
-# TODO
-# if [[ "${_INSTALL_WORKLOAD_RETINANET}" == "yes" ]]; then
-# fi
+if [[ "${_INSTALL_WORKLOAD_RETINANET}" == "yes" ]]; then
+  python3 -m pip install fiftyone torch torchvision
+  ck install package --tags=dataset,openimages,original,validation
+  ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
+fi
 
 echo
 echo "Done."
