@@ -55,6 +55,7 @@ ARG COMPILE_STD
 ARG DEBUG_BUILD
 ARG CK_QAIC_PCV=9983
 ARG CK_QAIC_PERCENTILE_CALIBRATION
+ARG PRECALIBRATED_PROFILE
 
 #-----------------------------------------------------------------------------#
 # Step 1. Copy the QAIC SDKs (needed for compilation).
@@ -78,13 +79,15 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 4. Prepare the BERT workload for PCIe Pro or Standard server cards.
 #-----------------------------------------------------------------------------#
-# Uncomment if not using precalibrated profile; comment out otherwise.
-RUN ck install package --tags=profile,qaic,bert-packed --quiet
-# # Uncomment if using precalibrated profile; comment out otherwise.
-# ADD bert /home/krai/CK_REPOS/ck-qaic/profile/bert
-# RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-# --full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
-# --extra_tags=detected,profile,qaic,bert-packed,mixed
+ADD bert /home/krai/CK_REPOS/ck-qaic/profile/bert
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then \
+echo "v1.7.1.12" | ck detect soft:compiler.glow.profile \
+--full_path=/home/krai/CK_REPOS/ck-qaic/profile/bert/profile.yaml \
+--extra_tags=detected,profile,qaic,bert-packed,mixed,seq.384; \
+fi
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  ck install package --tags=profile,qaic,bert-packed,seq.384 --quiet; \
+fi
 
 # Compile the BERT-99 workload (separately for each scenario).
 # Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
