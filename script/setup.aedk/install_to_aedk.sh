@@ -141,6 +141,10 @@ print(r['lst'][0]['meta']['env']['CK_ENV_QAIC_MODEL_ROOT'])"
     if [[ "${_DRY_RUN}" != "yes" ]]; then
       src_dir=$(eval ${get_src_cmd})
       echo "      - source dir: '${src_dir}'"
+      if [[ "${src_dir}" == "" ]]; then
+        echo "ERROR: Source directory is undefined!"
+	exit 1
+      fi
     else
       src_dir="/home/krai/CK_TOOLS/model-qaic-compiled-bert-99-bert-99.pcie.16nsp.singlestream-pcv.9980-quantization.calibration-seg.384/elfs"
       echo "      - dry run => using sample source dir: '${src_dir}'"
