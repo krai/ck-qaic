@@ -139,9 +139,13 @@ $(ck locate env --tags=lib,protobuf-host)/src \
 $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
-$(ck locate env --tags=tool,cmake)/cmake*/Utilities; fi
-#$(ck locate env --tags=python-package,pytorch)/* \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities \
+$(ck locate env --tags=python-package,pytorch)/*; fi
 #$(ck locate env --tags=model,bert-packed)/*; fi
+
+# Add dummy file to allow ck dependency tracking to resolve deleted package
+RUN mkdir -p $(ck locate env --tags=python-package,pytorch)/build/torch/
+RUN touch $(ck locate env --tags=python-package,pytorch)/build/torch/__init__.py
 
 ###############################################################################
 # FINAL STAGE
