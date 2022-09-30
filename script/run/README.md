@@ -101,7 +101,7 @@ SUT=gloria SDK_VER=1.7.1.12 ./run_edge.sh
 
 ### Heimdall
 ```
-SUT=aedkh SDK_VER=1.7.1.12 ./run_edge.sh
+SUT=heimdall SDK_VER=1.7.1.12 ./run_edge.sh
 ```
 
 ### EB6

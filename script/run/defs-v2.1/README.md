@@ -18,6 +18,6 @@ Lenovo SE350: 1 Pro card.
 
 Foxconn Gloria "High": 1 Standard card.
 
-### `aedkh`
+### `heimdall`
 
 Inventec Heimdall: AEDK-like appliance.

@@ -27,11 +27,11 @@
     "hw_notes": "With 15W Accelerator TDP constraints",
     "number_of_nodes": "1",
     "operating_system": "CentOS Linux release 8.0.1905 (kernel: 4.19.81-perf #1 SMP PREEMPT Thu Feb 24 03:59:56 UTC 2022 aarch64 aarch64 aarch64 GNU/Linux)",
-    "other_software_stack": "Python v3.9.13; GCC v11.2.1",
+    "other_software_stack": "Python v3.9.14; GCC v11.2.1",
     "status": "available",
     "submitter": "Qualcomm",
     "sw_notes": "Powered by MLCommons Collective Knowledge v2.6.1",
-    "system_name": "Edge AI Development Kit (H)",
+    "system_name": "Inventec Heimdall",
     "system_type": "edge"
   }
 }

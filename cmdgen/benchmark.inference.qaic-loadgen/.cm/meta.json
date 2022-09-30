@@ -538,7 +538,7 @@
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4961"
       },
-      "aedkh": {
+      "heimdall": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
@@ -547,36 +547,6 @@
         ],
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4962"
-      },
-      "aedkh_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4962"
-      },
-      "aedkh1": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
-      },
-      "aedkh1_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
       },
       "rb6": {
         "all_device_ids": "0",
