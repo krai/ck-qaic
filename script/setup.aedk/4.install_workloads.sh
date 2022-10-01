@@ -62,6 +62,7 @@ if [[ "${_INSTALL_WORKLOAD_RETINANET}" == "yes" ]]; then
   python3 -m pip install fiftyone torch torchvision
   ck install package --tags=dataset,openimages,original,validation
   ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
+  ck install package --tags=tool,coco,master
 fi
 
 echo
