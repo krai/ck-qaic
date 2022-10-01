@@ -303,7 +303,7 @@ Env UID:         Target OS: Bits: Name:                   Version: Tags:
 # G. Benchmarking
 ## `[D]` Verify with a quick run
 ```
-QUICK_RUN=yes WORKLOADS=bert UPDATE_CK_QAIC=no SDK_VER=1.6.121 SUT=aedkr ./run_edge.sh
+QUICK_RUN=yes UPDATE_CK_QAIC=no WORKLOADS=bert SDK_VER=1.7.1.12 SUT=eb6 ./run_edge.sh
 ```
 
 

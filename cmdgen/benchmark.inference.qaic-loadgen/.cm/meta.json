@@ -578,22 +578,12 @@
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedkr": {
+      "rb6": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
-      },
-      "aedkr_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"

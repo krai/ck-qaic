@@ -103,6 +103,13 @@
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
+      "rb6": {
+        "recommended_offline_activation_count": "9",
+        "recommended_server_activation_count": "2",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
       "g292_z43_q18e": {
         "recommended_offline_activation_count": "16",
         "recommended_server_activation_count": "4",
