@@ -63,6 +63,7 @@ if [[ "${_INSTALL_WORKLOAD_RETINANET}" == "yes" ]]; then
   ck install package --tags=dataset,openimages,original,validation
   ck install package --tags=dataset,preprocessed,openimages,for.retinanet.onnx.preprocessed.quantized,validation,full
   ck install package --tags=tool,coco,master
+  ck install package --tags=lib,nms,abp,master
 fi
 
 echo
