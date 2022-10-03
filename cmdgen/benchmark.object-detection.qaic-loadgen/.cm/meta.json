@@ -5,46 +5,25 @@
   },
   "build_map": {
     "sut": {
-      "aedk_15w": {
-        "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
-      },
-      "aedk_15w_prev": {
+     "aedk_15w": {
         "recommended_offline_activation_count": "9",
         "recommended_singlestream_activation_count": "1",
-        "recommended_multistream_activation_count": "2",
-        "recommended_queue_length": "2",
-        "recommended_threads_per_queue": "2"
-      },
-      "aedk_20w": {
-        "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
         "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
-      "aedk_20w_prev": {
+     "aedk_20w": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
-      "aedk_25w": {
+     "aedk_25w": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "4",
-        "recommended_threads_per_queue": "2"
-      },
-      "aedk_25w_prev": {
-        "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
-        "recommended_queue_length": "4",
+        "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
       "gloria": {
