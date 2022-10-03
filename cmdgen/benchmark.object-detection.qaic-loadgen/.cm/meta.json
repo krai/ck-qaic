@@ -9,83 +9,62 @@
         "recommended_offline_activation_count": "9",
         "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "2",
+        "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
      "aedk_20w": {
         "recommended_offline_activation_count": "9",
         "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "2",
+        "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
      "aedk_25w": {
         "recommended_offline_activation_count": "9",
         "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "2",
+        "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
-      "gloria": {
+     "gloria": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
-      "gloria_prev": {
-        "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
-        "recommended_queue_length": "4",
-        "recommended_threads_per_queue": "2"
-      },
-      "gloria1": {
+     "gloria_highend": {
         "recommended_offline_activation_count": "14",
-        "recommended_server_activation_count": "3",
+        "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "7",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
-      "gloria1_prev": {
-        "recommended_offline_activation_count": "14",
-        "recommended_server_activation_count": "3",
-        "recommended_multistream_activation_count": "3",
-        "recommended_queue_length": "4",
-        "recommended_threads_per_queue": "2"
-      },
-      "haishen": {
+     "haishen": {
         "recommended_offline_activation_count": "8",
-        "recommended_server_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
         "recommended_multistream_activation_count": "4",
-        "recommended_queue_length": "4",
-        "recommended_threads_per_queue": "2"
-      },
-      "haishen_prev": {
-        "recommended_offline_activation_count": "8",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "heimdall": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "eb6": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "rb6": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "2",
-        "recommended_multistream_activation_count": "2",
+        "recommended_singlestream_activation_count": "1",
+        "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
