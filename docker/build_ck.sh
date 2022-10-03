@@ -45,11 +45,15 @@ echo "Building CK (QAIC-independent) image for '${MODEL}' ..."
 
 _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 
-# Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.9.14}
 _DOCKER_OS=${DOCKER_OS:-ubuntu}
 _DOCKER_MODEL_IMAGE="krai/ck.${MODEL}:${_DOCKER_OS}_latest"
 _DOCKER_COMMON_IMAGE="krai/ck.common:${_DOCKER_OS}_latest"
+
+# Use Python >= 3.7.
+_PYTHON_VER=${PYTHON_VER:-3.9.14}
+if [[ "${_DOCKER_OS}" == "ubuntu" ]]; then
+  _PYTHON_VER="3.8.10"
+fi
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"
