@@ -43,7 +43,7 @@ fi
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.9.13}
+_PYTHON_VER=${PYTHON_VER:-3.9.14}
 # Use CK >= 2.5.9.
 _CK_VER=${CK_VER:-2.6.1}
 # Which branch of repo:ck-qaic to use (main by default).
@@ -53,6 +53,10 @@ _CK_QAIC_CHECKOUT=${CK_QAIC_CHECKOUT:-main}
 #_GROUP_ID=${GROUP_ID:-${QAIC_GROUP_ID}}
 _GROUP_ID=${GROUP_ID:-1500}
 _USER_ID=${USER_ID:-2000}
+
+if [[ "${_DOCKER_OS}" == "ubuntu" ]]; then
+  _PYTHON_VER="3.8.10"
+fi
 
 if [ ! -z "${NO_CACHE}" ]; then
   _NO_CACHE="--no-cache"

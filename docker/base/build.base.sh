@@ -38,7 +38,7 @@ _DOCKER_BASE_IMAGE="krai/base:${_DOCKER_OS}_latest"
 # Use GCC >= 10.
 _GCC_MAJOR_VER=${GCC_MAJOR_VER:-11}
 # Use Python >= 3.7.
-_PYTHON_VER=${PYTHON_VER:-3.9.13}
+_PYTHON_VER=${PYTHON_VER:-3.9.14}
 # Use the Austin time zone by default.
 _TIMEZONE=${TIMEZONE:-"US/Central"}
 

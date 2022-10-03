@@ -442,7 +442,7 @@ The most important build arguments and their default values are provided below:
 - `SDK_DIR=/local/mnt/workspace/sdks`
 - `WORKSPACE_DIR=/local/mnt/workspace`
 - `DOCKER_OS=ubuntu` (only CentOS 7 and Ubuntu 20.04 are supported)
-- `PYTHON_VER=3.9.13` (Python interpreter)
+- `PYTHON_VER=3.9.14` (Python interpreter)
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_QAIC_PERCENTILE_CALIBRATION=no` (see below)
 - `CK_QAIC_PCV=9980` (PCV stands for percentile calibration value, see below)

@@ -19,7 +19,7 @@ WORKSPACE_DIR=/local/mnt/workspace SDK_VER=1.7.1.12 COMPILE_PRO=yes COMPILE_STD=
 - `SDK_DIR=/local/mnt/workspace/sdks`
 - `WORKSPACE_DIR=/local/mnt/workspace`
 - `DOCKER_OS=ubuntu` (only CentOS 7 and Ubuntu 20.04 are supported)
-- `PYTHON_VER=3.9.13` (Python interpreter)
+- `PYTHON_VER=3.9.14` (Python interpreter)
 - `GCC_MAJOR_VER=11` (C++ compiler)
 - `CK_VER=2.6.1` ([MLCommons Collective Knowledge](https://github.com/mlcommons/ck))
 - `COMPILE_PRO=yes` (compilation for PCIe Pro server cards)
