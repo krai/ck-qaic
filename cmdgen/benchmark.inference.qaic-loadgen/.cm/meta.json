@@ -334,16 +334,6 @@
         "power_server_ip": "10.222.146.196",
         "power_server_port": "4950"
       },
-      "q1_pro_edge_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.196",
-        "power_server_port": "4950"
-      },
       "q1_std_edge": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
@@ -353,32 +343,6 @@
         ],
         "power_server_ip": "",
         "power_server_port": ""
-      },
-      "q1_std_edge_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.14nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "",
-        "power_server_port": ""
-      },
-      "q4_pro_dc_prev": {
-        "all_device_ids": "0,1,2,3",
-        "ck_benchmark_prefix": "",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.209",
-        "power_server_port": "4915",
-        "ecc_default": "on"
       },
       "q4_pro_dc": {
         "all_device_ids": "0,1,2,3",
@@ -396,22 +360,6 @@
         "power_server_port": "4915",
         "ecc_default": "on"
       },
-      "q4_std_edge_prev": {
-        "all_device_ids": "0,1,2,3",
-        "ck_benchmark_prefix": "",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.14nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.209",
-        "power_server_port": "4980",
-        "ecc_default": "off"
-      },
       "q4_std_edge": {
         "all_device_ids": "0,1,2,3",
         "ck_benchmark_prefix": "",
@@ -428,22 +376,12 @@
         "power_server_port": "4980",
         "ecc_default": "off"
       },
-      "aedk_15w": {
+      "aedk": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
-      },
-      "aedk_15w_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
@@ -453,37 +391,37 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedk_20w_prev": {
+      "aedk_highend": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedk_25w": {
+      "aedk_highend_15w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
       },
-      "aedk_25w_prev": {
+      "aedk_highend_25w": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
@@ -493,7 +431,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.196",
         "power_server_port": "4956"
@@ -503,37 +441,17 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4960"
       },
-      "gloria_prev": {
+      "gloria_highend": {
         "all_device_ids": "0",
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4960"
-      },
-      "gloria1": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4961"
-      },
-      "gloria1_prev": {
-        "all_device_ids": "0",
-        "ck_benchmark_prefix": "",
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.aedk_15w.prev.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4961"
@@ -543,7 +461,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.194",
         "power_server_port": "4962"
@@ -553,7 +471,7 @@
         "ck_benchmark_prefix": "",
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.aedk_15w.<<<model_suffix>>>"
+          "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
         "power_server_ip": "192.168.0.3",
         "power_server_port": "4949"
@@ -569,25 +487,6 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "250",
-        "ecc_default": "on"
-      },
-      "g292_z43_q18_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.217",
         "power_server_port": "4953",
@@ -615,25 +514,6 @@
         "fan_raw_default": "125",
         "ecc_default": "on"
       },
-      "g292_z43_q18e_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "125",
-        "ecc_default": "on"
-      },
       "g292_z43_q16e": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
         "ck_benchmark_prefix": "numactl --localalloc",
@@ -645,25 +525,6 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "100",
-        "ecc_default": "on"
-      },
-      "g292_z43_q16e_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.217",
         "power_server_port": "4953",
@@ -683,25 +544,6 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "150",
-        "ecc_default": "on"
-      },
-      "g292_z43_q16_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.217",
         "power_server_port": "4953",
@@ -746,24 +588,6 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
       },
-      "r282_z93_q2_prev": {
-        "all_device_ids": "0,1",
-        "ck_benchmark_prefix": "numactl --interleave=all",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "100"
-      },
       "r282_z93_q2e": {
         "all_device_ids": "0,1",
         "ck_benchmark_prefix": "numactl --localalloc",
@@ -800,24 +624,6 @@
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
       },
-      "r282_z93_q5_prev": {
-        "all_device_ids": "0,1,2,3,4",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.quad.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "100"
-      },
       "r282_z93_q5e": {
         "all_device_ids": "0,1,2,3,4",
         "ck_benchmark_prefix": "numactl --localalloc",
@@ -829,24 +635,6 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "75"
-      },
-      "r282_z93_q5e_prev": {
-        "all_device_ids": "0,1,2,3,4",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.quad.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.192",
         "power_server_port": "4956",
@@ -911,25 +699,6 @@
         "fan_raw_default": "100",
         "ecc_default": "on"
       },
-      "r282_z93_q8_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "100",
-        "ecc_default": "on"
-      },
       "r282_z93_q8e": {
         "all_device_ids": "0,1,2,3,4,5,6,7",
         "ck_benchmark_prefix": "numactl --localalloc",
@@ -941,25 +710,6 @@
         "compiler_tags": "gcc",
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
-        ],
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
-        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
-        "fan_raw_default": "75",
-        "ecc_default": "on"
-      },
-      "r282_z93_q8e_prev": {
-        "all_device_ids": "0,1,2,3,4,5,6,7",
-        "ck_benchmark_prefix": "numactl --localalloc",
-        "ck_env": [
-          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
-          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
-          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
-        ],
-        "compiler_tags": "gcc",
-        "model_tags": [
-          "<<<model>>>.pcie.16nsp.prev.<<<model_suffix>>>"
         ],
         "power_server_ip": "10.222.146.206",
         "power_server_port": "4959",
@@ -978,7 +728,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
         "multistream_model_suffix": "singlestream",
         "power_server_ip": "10.222.146.206",
@@ -997,7 +747,7 @@
         ],
         "compiler_tags": "gcc",
         "model_tags": [
-          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
         "multistream_model_suffix": "singlestream",
         "power_server_ip": "10.222.146.206",

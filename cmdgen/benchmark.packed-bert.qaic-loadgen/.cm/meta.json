@@ -7,16 +7,13 @@
     "sut": {
       "q1_pro_edge": {
         "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16",
         "recommended_fp16_activation_count": "4"
       },
       "q1_std_edge": {
-        "recommended_mixed_offline_activation_count": "14",
-        "recommended_mixed_server_activation_count": "14"
+        "recommended_mixed_offline_activation_count": "14"
       },
-      "gloria1": {
-        "recommended_mixed_offline_activation_count": "14",
-        "recommended_mixed_server_activation_count": "14"
+      "gloria_highend": {
+        "recommended_mixed_offline_activation_count": "14"
       },
       "q4_pro_dc": {
         "recommended_mixed_offline_activation_count": "16",
@@ -24,36 +21,34 @@
         "recommended_fp16_activation_count": "4"
       },
       "q4_std_edge": {
-        "recommended_mixed_offline_activation_count": "14",
-        "recommended_mixed_server_activation_count": "14"
+        "recommended_mixed_offline_activation_count": "14"
       },
-      "aedk_15w": {
-        "recommended_mixed_offline_activation_count": "8",
-        "recommended_mixed_server_activation_count": "8"
+      "aedk": {
+        "recommended_mixed_offline_activation_count": "8"
       },
       "aedk_20w": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+        "recommended_mixed_offline_activation_count": "8"
       },
-      "aedk_25w": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+      "aedk_highend": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "aedk_highend_15w": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "aedk_highend_25w": {
+        "recommended_mixed_offline_activation_count": "16"
       },
       "gloria": {
-        "recommended_mixed_offline_activation_count": "9",
-        "recommended_mixed_server_activation_count": "9"
+        "recommended_mixed_offline_activation_count": "9"
       },
       "heimdall": {
-        "recommended_mixed_offline_activation_count": "9",
-        "recommended_mixed_server_activation_count": "9"
+        "recommended_mixed_offline_activation_count": "9"
       },
       "rb6": {
-        "recommended_mixed_offline_activation_count": "9",
-        "recommended_mixed_server_activation_count": "9"
+        "recommended_mixed_offline_activation_count": "9"
       },
       "eb6": {
-        "recommended_mixed_offline_activation_count": "9",
-        "recommended_mixed_server_activation_count": "9"
+        "recommended_mixed_offline_activation_count": "9"
       },
       "g292_z43_q18e": {
         "recommended_mixed_offline_activation_count": "16",
@@ -85,25 +80,20 @@
       },
       "r282_z93_q2e": {
         "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q2": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+        "recommended_mixed_offline_activation_count": "16"
       },
       "r282_z93_q1": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+        "recommended_mixed_offline_activation_count": "16"
       },
       "r282_z93_q5e": {
         "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q5": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+        "recommended_mixed_offline_activation_count": "16"
       },
       "r282_z93_q8e": {
         "recommended_mixed_offline_activation_count": "16",
@@ -131,12 +121,10 @@
       },
       "r282_z93_q8e_edge": {
         "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16",
         "recommended_mixed_vc_value": "10"
       },
       "r282_z93_q8_edge": {
-        "recommended_mixed_offline_activation_count": "16",
-        "recommended_mixed_server_activation_count": "16"
+        "recommended_mixed_offline_activation_count": "16"
       }
     },
     "scenario": {

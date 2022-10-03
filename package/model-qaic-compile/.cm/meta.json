@@ -284,17 +284,7 @@
         "calibrated-by-qaic"
       ]
     },
-    "resnet50.aedk_25w.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "16",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
-      },
-      "extra_tags": [
-        "bs.16"
-      ]
-    },
-    "resnet50.aedk_20w.offline": {
+    "resnet50.aedk_highend.offline": {
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -304,37 +294,7 @@
         "bs.8"
       ]
     },
-    "resnet50.aedk_20w.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "resnet50.aedk_20w.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "resnet50.aedk_15w.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "8",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
-      },
-      "extra_tags": [
-        "bs.8"
-      ]
-    },
-    "resnet50.aedk_15w.multistream": {
+    "resnet50.aedk_highend.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -344,7 +304,37 @@
         "bs.1"
       ]
     },
-    "resnet50.aedk_15w.singlestream": {
+    "resnet50.aedk_highend.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.aedk.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.aedk.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.aedk.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -368,7 +358,7 @@
       "extra_env": {
         "_BATCH_SIZE": "8",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SERVER",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -ols=2"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -ols=4"
       },
       "extra_tags": [
         "bs.8"
@@ -642,6 +632,67 @@
         "no-nms"
       ]
     },
+    "retinanet.aedk_highend.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_highend.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_highend.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.singlestream": {
+        "_BATCH_SIZE": "1",
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
     "retinanet.pcie.14nsp.offline": {
       "extra_env": {
         "_BATCH_SIZE": "1",
@@ -656,7 +707,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -666,7 +717,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -676,7 +727,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
       },
       "extra_tags": [
         "bs.1"
@@ -696,7 +747,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -706,7 +757,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=4"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -716,7 +767,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
       }
     },
     "retinanet.pcie.16nsp.quad.offline": {
@@ -733,7 +784,7 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1 -ols=1"
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
@@ -743,188 +794,13 @@
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=4"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.quad.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16 -mos=1 -ols=1"
-      }
-    },
-    "retinanet.aedk_20w.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.aedk_20w.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.aedk_20w.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.aedk_15w.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.aedk_15w.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.aedk_15w.singlestream": {
-        "_BATCH_SIZE": "1",
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.14nsp.prev.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.14nsp.prev.server": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.14nsp.prev.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.14nsp.prev.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.server": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.singlestream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
-      }
-    },
-    "retinanet.pcie.16nsp.prev.quad.offline": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.quad.server": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
-      },
-      "extra_tags": [
-        "bs.1"
-      ]
-    },
-    "retinanet.pcie.16nsp.prev.quad.multistream": {
-      "extra_env": {
-        "_BATCH_SIZE": "1",
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=2 -ols=1 -aic-enable-depth-first"
       },
       "extra_tags": [
         "bs.1"
       ]
     },
-    "retinanet.pcie.16nsp.prev.quad.singlestream": {
+    "retinanet.pcie.16nsp.quad.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -1095,43 +971,37 @@
         "bert.mixed"
       ]
     },
-    "bert-99.aedk_25w.offline": {
+    "bert-99.aedk_highend.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
-    "bert-99.aedk_20w.offline": {
-      "extra_env": {
-        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
-        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
-      }
-    },
-    "bert-99.aedk_20w.multistream": {
+    "bert-99.aedk_highend.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
-    "bert-99.aedk_20w.singlestream": {
+    "bert-99.aedk_highend.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
       }
     },
-    "bert-99.aedk_15w.offline": {
+    "bert-99.aedk.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3"
       }
     },
-    "bert-99.aedk_15w.multistream": {
+    "bert-99.aedk.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
-    "bert-99.aedk_15w.singlestream": {
+    "bert-99.aedk.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
