@@ -20,7 +20,7 @@ if [ -z ${DEVICE_PASSWORD} ]; then
   exit 1
 fi
 # Sensible defaults.
-_DEVICE_TYPE=${DEVICE_TYPE:-aedk_15w}
+_DEVICE_TYPE=${DEVICE_TYPE:-aedk}
 _DEVICE_USER=${DEVICE_USER:-krai}
 _DEVICE_BASE_DIR=${DEVICE_BASE_DIR:-/home}
 _DEVICE_PORT=${DEVICE_PORT:-22}

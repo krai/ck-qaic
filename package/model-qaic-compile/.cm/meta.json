@@ -489,37 +489,37 @@
         "bs.1"
       ]
     },
-    "ssd_resnet34.aedk_20w.offline": {
+    "ssd_resnet34.aedk_highend.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
       }
     },
-    "ssd_resnet34.aedk_20w.multistream": {
+    "ssd_resnet34.aedk_highend.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
-    "ssd_resnet34.aedk_20w.singlestream": {
+    "ssd_resnet34.aedk_highend.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
       }
     },
-    "ssd_resnet34.aedk_15w.offline": {
+    "ssd_resnet34.aedk.offline": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
       }
     },
-    "ssd_resnet34.aedk_15w.multistream": {
+    "ssd_resnet34.aedk.multistream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
       }
     },
-    "ssd_resnet34.aedk_15w.singlestream": {
+    "ssd_resnet34.aedk.singlestream": {
       "extra_env": {
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
         "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
@@ -830,7 +830,7 @@
         "no-nms"
       ]
     },
-    "ssd_mobilenet.aedk_20w.offline": {
+    "ssd_mobilenet.aedk_highend.offline": {
       "extra_env": {
         "_BATCH_SIZE": "4",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -840,7 +840,7 @@
         "bs.4"
       ]
     },
-    "ssd_mobilenet.aedk_20w.multistream": {
+    "ssd_mobilenet.aedk_highend.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "2",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -850,7 +850,7 @@
         "bs.2"
       ]
     },
-    "ssd_mobilenet.aedk_20w.singlestream": {
+    "ssd_mobilenet.aedk_highend.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
@@ -860,7 +860,7 @@
         "bs.1"
       ]
     },
-    "ssd_mobilenet.aedk_15w.offline": {
+    "ssd_mobilenet.aedk.offline": {
       "extra_env": {
         "_BATCH_SIZE": "4",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -870,7 +870,7 @@
         "bs.4"
       ]
     },
-    "ssd_mobilenet.aedk_15w.multistream": {
+    "ssd_mobilenet.aedk.multistream": {
       "extra_env": {
         "_BATCH_SIZE": "2",
         "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
@@ -880,7 +880,7 @@
         "bs.2"
       ]
     },
-    "ssd_mobilenet.aedk_15w.singlestream": {
+    "ssd_mobilenet.aedk.singlestream": {
       "extra_env": {
         "_BATCH_SIZE": "1",
         "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",

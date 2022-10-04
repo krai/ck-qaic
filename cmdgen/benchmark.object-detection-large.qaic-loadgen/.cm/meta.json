@@ -5,38 +5,93 @@
   },
   "build_map": {
     "sut": {
-      "aedk_15w": {
+      "aedk": {
         "recommended_offline_activation_count": "8",
-        "recommended_server_activation_count": "8",
         "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "aedk_20w": {
+        "recommended_offline_activation_count": "8",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "aedk_highend": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "16",
         "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
-      "aedk_25w": {
+      "aedk_highend_15w": {
         "recommended_offline_activation_count": "16",
-        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "aedk_highend_25w": {
+        "recommended_offline_activation_count": "16",
         "recommended_multistream_activation_count": "4",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "gloria": {
         "recommended_offline_activation_count": "9",
-        "recommended_server_activation_count": "9",
         "recommended_multistream_activation_count": "2",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
       "haishen": {
         "recommended_offline_activation_count": "8",
-        "recommended_server_activation_count": "8",
         "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "heimdall": {
+        "recommended_offline_activation_count": "9",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "rb6": {
+        "recommended_offline_activation_count": "9",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "eb6": {
+        "recommended_offline_activation_count": "9",
+        "recommended_multistream_activation_count": "2",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "gloria_highend": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "3",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "q1_pro_edge": {
+        "recommended_offline_activation_count": "16",
+        "recommended_multistream_activation_count": "4",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "q1_std_edge": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "3",
+        "recommended_queue_length": "4",
+        "recommended_threads_per_queue": "2"
+      },
+      "q4_pro_dc": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
+      "q4_std_edge": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "3",
         "recommended_queue_length": "4",
         "recommended_threads_per_queue": "2"
       },
