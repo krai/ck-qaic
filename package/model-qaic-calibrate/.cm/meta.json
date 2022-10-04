@@ -302,7 +302,7 @@
         "ML_MODEL_MODEL_NAME": "ssd-resnet34",
         "_NODE_PRECISION_FILE_PATH": "ssd-resnet34/node-precision.yaml",
         "_COMPILER_ARGS": "",
-        "_COMPILER_PARAMS": "-enable-channelwise -profiling-backend=Interpreter -profiling-threads=32 -node-precision-info=[NODE_PRECISION_FILE]",
+        "_COMPILER_PARAMS": "-enable-channelwise -profiling-threads=32 -node-precision-info=[NODE_PRECISION_FILE]",
         "_MODEL_TO_CONVERT": "calibrate_ssd_resnet34_no_nms_mlperf"
       },
       "extra_tags": [
