@@ -51,7 +51,11 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
   #-----------------------------------------------------------------------------
   if [[ ${_DOCKER} == "yes" ]]; then
     if [[ "${workload}" == "resnet50" ]]; then
-      image="krai/mlperf.${workload}.full:${_DOCKER_OS}_${SDK_VER}"
+      image="krai/mlperf.resnet50.full:${_DOCKER_OS}_${SDK_VER}"
+    elif [[ "${workload}" == "ssd_mobilenet" ]]; then
+      image="krai/mlperf.ssd-mobilenet:${_DOCKER_OS}_${SDK_VER}"
+    elif [[ "${workload}" == "ssd_resnet34" ]]; then
+      image="krai/mlperf.ssd-resnet34:${_DOCKER_OS}_${SDK_VER}"
     else
       image="krai/mlperf.${workload}:${_DOCKER_OS}_${SDK_VER}"
     fi
@@ -89,6 +93,12 @@ for workload in ${_WORKLOADS_AS_ARRAY[@]}; do
   #-----------------------------------------------------------------------------
   if [[ "${workload}" == "bert" || "${workload}" == "bert-99" ]]; then
     workload="bert-99"
+  elif [[ "${workload}" == "ssd-mobilenet" ]]; then
+    workload="ssd_mobilenet"
+  elif [[ "${workload}" == "ssd-resnet34" ]]; then
+    workload="ssd_resnet34"
+  fi
+  if [[ "${workload}" == "bert-99" ]]; then
     scenarios=(offline singlestream) # no multistream
     extra_suffix=",quantization.calibration,seg.384"
     extra_env="--env._PERCENTILE_CALIBRATION_VALUE=99.${_PCV_BERT} --extra_tags=pcv.${_PCV_BERT}"
@@ -211,4 +221,6 @@ echo ${SDK_VER} | ck detect soft:model.qaic --full_path='${tgt_dir}/programqpc.b
   echo
 done
 
+echo
 echo "DONE (installing workloads)."
+echo
