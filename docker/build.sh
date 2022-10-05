@@ -145,7 +145,7 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
       | cut -d: -f3) --rm ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} bash)
 
     if [[ "${MODEL}" == "resnet50" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,resnet50.pcie.16nsp --force' # FIXME: why clean pcie.16nsp?
+      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,resnet50.pcie.14nsp --force'
       docker exec $CONTAINER /bin/bash -c '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
         resnet50 resnet50.pcie.14nsp.offline ${_SDK_VER};'
     fi
@@ -154,6 +154,13 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
       docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,bert-99 --force'
       docker exec $CONTAINER /bin/bash -c 'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
         bert-99 bert-99.pcie.14nsp.offline,seg.384 ${_SDK_VER};'
+      if [[ ${_COMPILE_PRO} == "yes" ]]; then
+        docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+	  bert-99 bert-99.pcie.16nsp.offline,seg.384 ${_SDK_VER};'
+      else
+       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+         bert-99 bert-99.pcie.14nsp.offline,seg.384 ${_SDK_VER};'
+      fi
     fi
 
     if [[ "${MODEL}" == "retinanet" ]]; then
