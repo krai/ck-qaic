@@ -37,7 +37,7 @@
 #
 ###############################################################################
 #FROM qran-centos7:1.6.80
-# NB: Setting FROM from ARGs only works starting with Docker 1.17. 
+# NB: Setting FROM from ARGs only works starting with Docker 1.17.
 # (CentOS 7 comes with 1.13.)
 ARG BASE_IMAGE
 ARG DOCKER_OS
@@ -62,6 +62,9 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM krai/ck.ssd-resnet34:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
+ARG PRECALIBRATED_PROFILE
+ARG COMPILE_PRO
+ARG COMPILE_STD
 ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
@@ -69,7 +72,7 @@ ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/qti-aic/dev/lib/x86_64
 
 # Pull CK repositories.
 RUN cd $(ck find repo:ck-qaic) && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
-RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
+#RUN ck clean env --tags=lib,qaic --force && ck install package --tags=lib,qaic,master --quiet
 
 # Set platform scripts (ensuring that ECC is on).
 RUN ck detect platform.os --platform_init_uoa=qaic
@@ -77,16 +80,29 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the SSD-ResNet34 workload.
 #-----------------------------------------------------------------------------#
-# Use a precalibrated profile.
+# Use a profile precalibrated with SDK v1.6.80 (MLPerf Inference v2.0).
 ADD ssd-resnet34/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1
-RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then \
+echo "vdetected" | ck detect soft:compiler.glow.profile \
 --full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1/profile.yaml \
---extra_tags=detected,ssd_resnet34
+--extra_tags=detected,ssd_resnet34; \
+fi
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  ck install package --tags=profile,qaic,ssd_resnet34,bs.1; \
+fi
 
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream
-RUN ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.multistream
+# Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
+# NB: Same flags for Offline and Server.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline; \
+fi
+# Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
+# FIXME: Use pcie.14nsp.
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline      ; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream ; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.multistream  ; \
+fi
 
 #-----------------------------------------------------------------------------#
 # Step 3. Build the MLPerf LoadGen API.
@@ -105,10 +121,12 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=dataset,coco.2017,original)/annotations/*train* \
-$(ck locate env --tags=dataset,coco.2017,original)/val2017/* && \
-touch $(ck locate env --tags=dataset,coco.2017,original)/val2017/000000000139.jpg; fi
-# $(ck locate env --tags=model,onnx,no-nms)/* \
+$(ck locate env --tags=profile,bs.1)/*.raw \
+$(ck locate env --tags=preprocessed,calibration)/* \
+$(ck locate env --tags=dataset,coco.2017,original,train)/* \
+$(ck locate env --tags=dataset,coco.2017,original,val)/annotations/*train* \
+$(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
+touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; fi
 
 ###############################################################################
 # FINAL STAGE
