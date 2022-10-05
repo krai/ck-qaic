@@ -30,11 +30,11 @@ fi
 # Summarize space used by directories initially.
 echo "SPACE USED INITIALLY"
 
-echo "- ImageNet:" 
+echo "- ImageNet:"
 _IMAGENET_DIR=${_DEVICE_DATASETS_DIR}/${_DEVICE_IMAGENET_DIR}
 du -hs ${_IMAGENET_DIR}
 
-echo "- OpenImages:" 
+echo "- OpenImages:"
 _OPENIMAGES_DIR=$(ck locate env --tags=dataset,openimages,original,validation)
 du -hs ${_OPENIMAGES_DIR}
 
@@ -43,15 +43,15 @@ _PLATFORM_SDK_DIR=${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}
 du -hs ${_PLATFORM_SDK_DIR}
 
 _MLPERF_INFERENCE_DIR=$(ck locate env --tags=mlperf,inference,source)
-echo "- MLPerf Inference:" 
+echo "- MLPerf Inference:"
 du -hs ${_MLPERF_INFERENCE_DIR}
 
 _PROTOBUF_DIR=$(ck locate env --tags=lib,protobuf-host)
-echo "- Protobuf:" 
+echo "- Protobuf:"
 du -hs ${_PROTOBUF_DIR}
 
-echo "- $HOME:" 
-du -hs ${HOME}
+echo "- TOTAL:"
+df -h ${HOME}
 
 echo
 echo "CLEANING UP ..."
@@ -91,16 +91,16 @@ fi
 if [[ "${_CLEAN_MISC}" == "yes" ]]; then
   echo "- MLPerf Inference:"
   # Remove Git history for the MLPerf Inference repo (~500M).
-  if [[ -d ${_MLPERF_INFERENCE_DIR} ]]; then 
-    rm -rf ${_MLPERF_INFERENCE_DIR}/inference/.git 
-  else 
+  if [[ -d ${_MLPERF_INFERENCE_DIR} ]]; then
+    rm -rf ${_MLPERF_INFERENCE_DIR}/inference/.git
+  else
     echo "WARNING: MLPerf Inference source not found!"
   fi
   # Remove Protobuf src (~150M).
   echo "- Protobuf:"
   if [[ -d ${_PROTOBUF_DIR} ]]; then
-    rm -rf ${_PROTOBUF_DIR}/src 
-  else 
+    rm -rf ${_PROTOBUF_DIR}/src
+  else
     echo "WARNING: Protobuf not found!"
   fi
 fi
@@ -110,23 +110,23 @@ echo
 # Summarize file space remaining after cleaning up.
 echo "SPACE STILL IN USE:"
 
-echo "- ImageNet:" 
+echo "- ImageNet:"
 du -hs ${_IMAGENET_DIR}
 
-echo "- OpenImages:" 
+echo "- OpenImages:"
 du -hs ${_OPENIMAGES_DIR}
 
-echo "- Platform SDK:" 
+echo "- Platform SDK:"
 du -hs ${_PLATFORM_SDK_DIR}
 
-echo "- MLPerf Inference:" 
+echo "- MLPerf Inference:"
 du -hs ${_MLPERF_INFERENCE_DIR}
 
-echo "- Protobuf:" 
+echo "- Protobuf:"
 du -hs ${_PROTOBUF_DIR}
 
-echo "- $HOME:"
-du -hs ${HOME}
+echo "- TOTAL:"
+df -h ${HOME}
 
 echo
 echo "DONE (cleaning)."
