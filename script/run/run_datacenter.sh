@@ -1,9 +1,9 @@
 #!/bin/bash
 
 _category="datacenter"
-DOCKER=${DOCKER:-"yes"}
-DOCKER_OS=${DOCKER_OS:-"ubuntu"}
-WORKLOADS=${WORKLOADS:-"resnet50,bert"}
+DOCKER=${DOCKER:-yes}
+DOCKER_OS=${DOCKER_OS:-ubuntu}
+WORKLOADS=${WORKLOADS:-resnet50,bert,retinanet} # DEPRECATED: ssd_resnet34.
 
 . run_common.sh
 
