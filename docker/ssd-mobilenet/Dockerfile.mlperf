@@ -104,9 +104,7 @@ RUN ck compile program:object-detection-qaic-loadgen --quiet
 #-----------------------------------------------------------------------------#
 # Step 4. Remove 'heavy' items, but only the contents so not to disturb THE FORCE.
 #-----------------------------------------------------------------------------#
-RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then \
-ck clean env --tags=dataset,coco.2017,train --force \
-&& rm -rf \
+RUN if [[ "${DEBUG_BUILD}" != "yes" ]]; then rm -rf \
 $(ck find repo:ctuning-programs)/* \
 $(ck find repo:ck-crowdtuning-platforms)/* \
 $(ck locate env --tags=mlperf,inference,source)/inference/.git \
@@ -115,12 +113,13 @@ $(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
 $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
-$(ck locate env --tags=model,pytorch)/* \
 $(ck locate env --tags=profile,bs.1)/*.raw \
 $(ck locate env --tags=profile,bs.4)/*.raw \
 $(ck locate env --tags=preprocessed,calibration)/* \
-$(ck locate env --tags=python-package,onnx,for.qaic)/*; fi
-# $(ck locate env --tags=python-package,torch)/* \
+$(ck locate env --tags=dataset,coco.2017,original,train)/* \
+$(ck locate env --tags=dataset,coco.2017,original,val)/annotations/*train* \
+$(ck locate env --tags=dataset,coco.2017,original,val)/val2017/* && \
+touch $(ck locate env --tags=dataset,coco.2017,original,val)/val2017/000000000139.jpg; fi
 
 ###############################################################################
 # FINAL STAGE
