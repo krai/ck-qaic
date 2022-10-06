@@ -80,7 +80,7 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the SSD-ResNet34 workload.
 #-----------------------------------------------------------------------------#
-# Use a profile precalibrated with SDK v1.6.80 (MLPerf Inference v2.0).
+# Use a precalibrated profile or calibrate the workload.
 ADD ssd-resnet34/bs.1 /home/krai/CK_REPOS/ck-qaic/profile/ssd-resnet34/bs.1
 RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then \
 echo "vdetected" | ck detect soft:compiler.glow.profile \
@@ -95,13 +95,14 @@ fi
 # NB: Same flags for Offline and Server.
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.multistream; \
 fi
 # Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
-# FIXME: Use pcie.14nsp.
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
-  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.offline      ; \
-  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.singlestream ; \
-  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.16nsp.multistream  ; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.14nsp.offline      ; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.14nsp.singlestream ; \
+  ck install package --tags=model,qaic,ssd_resnet34,ssd_resnet34.pcie.14nsp.multistream  ; \
 fi
 
 #-----------------------------------------------------------------------------#

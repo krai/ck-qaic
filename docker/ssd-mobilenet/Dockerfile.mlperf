@@ -62,6 +62,9 @@ ENTRYPOINT ["/bin/bash", "-c"]
 FROM krai/ck.ssd-mobilenet:${DOCKER_OS}_latest AS builder
 ARG CK_QAIC_PCV
 ARG CK_QAIC_CHECKOUT
+ARG PRECALIBRATED_PROFILE
+ARG COMPILE_PRO
+ARG COMPILE_STD
 ARG DEBUG_BUILD
 
 COPY --from=preamble /opt/qti-aic/ /opt/qti-aic/
@@ -77,24 +80,34 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Step 2. Prepare the SSD-MobileNet workload.
 #-----------------------------------------------------------------------------#
-# Use a precalibrated profile.
-#ADD ssd-mobilenet/ /home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/
-#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.4/profile.yaml \
-#--extra_tags=detected,ssd_mobilenet,bs.4
-#RUN echo "vdetected" | ck detect soft:compiler.glow.profile \
-#--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
-#--extra_tags=detected,ssd_mobilenet,bs.1
+# Use a precalibrated profile or calibrate the workload.
+ADD ssd-mobilenet /home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then \
+echo "vdetected" | ck detect soft:compiler.glow.profile \
+--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.4/profile.yaml \
+--extra_tags=detected,ssd_mobilenet,bs.4; \
+echo "vdetected" | ck detect soft:compiler.glow.profile \
+--full_path=/home/krai/CK_REPOS/ck-qaic/profile/ssd-mobilenet/bs.1/profile.yaml \
+--extra_tags=detected,ssd_mobilenet,bs.1; \
+fi
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet; \
+  ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet; \
+fi
 
-# Generate calibration profiles.
-RUN ck install package --tags=profile,ssd_mobilenet,bs.1 --quiet
-RUN ck install package --tags=profile,ssd_mobilenet,bs.2 --quiet
-RUN ck install package --tags=profile,ssd_mobilenet,bs.4 --quiet
-
-# Compile the workload for the 16-NSP PCIe server cards.
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream
-RUN ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream
+# Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
+# NB: Same flags for Offline and Server.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.offline; \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.singlestream; \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.16nsp.multistream; \
+fi
+# Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.14nsp.offline      ; \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.14nsp.singlestream ; \
+  ck install package --tags=model,qaic,ssd_mobilenet,ssd_mobilenet.pcie.14nsp.multistream  ; \
+fi
 
 #-----------------------------------------------------------------------------#
 # Step 3. Build the MLPerf LoadGen API.
