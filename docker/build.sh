@@ -144,41 +144,38 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
     CONTAINER=$(docker run -dt --privileged --user=krai:kraig --group-add $(getent group qaic \
       | cut -d: -f3) --rm ${DOCKER_IMAGE_NAME}:${_DOCKER_OS}_${_SDK_VER}${tag_suffix} bash)
 
+    if [[ "${_COMPILE_STD}" == "yes" ]]; then _NSP_COUNT=14 ; fi
+    if [[ "${_COMPILE_PRO}" == "yes" ]]; then _NSP_COUNT=16 ; fi
+
     if [[ "${MODEL}" == "resnet50" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,resnet50.pcie.14nsp --force'
-      docker exec $CONTAINER /bin/bash -c '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        resnet50 resnet50.pcie.14nsp.offline ${_SDK_VER};'
+      docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,resnet50.pcie.${_NSP_COUNT}nsp --force"
+      docker exec $CONTAINER /bin/bash -c "\$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        resnet50 resnet50.pcie.${_NSP_COUNT}nsp.offline ${_SDK_VER};"
     fi
 
     if [[ "${MODEL}" == "bert" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,bert-99 --force'
-      docker exec $CONTAINER /bin/bash -c 'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        bert-99 bert-99.pcie.14nsp.offline,seg.384 ${_SDK_VER};'
-      if [[ ${_COMPILE_PRO} == "yes" ]]; then
-        docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-	  bert-99 bert-99.pcie.16nsp.offline,seg.384 ${_SDK_VER};'
-      else
-       docker exec $CONTAINER /bin/bash -c  'ck pull repo:ck-qaic && $(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-         bert-99 bert-99.pcie.14nsp.offline,seg.384 ${_SDK_VER};'
+      docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,bert-99 --force"
+      docker exec $CONTAINER /bin/bash -c  "ck pull repo:ck-qaic && \$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+	  bert-99 bert-99.pcie.${_NSP_COUNT}nsp.offline,seg.384 offline ${_SDK_VER};"
       fi
     fi
 
     if [[ "${MODEL}" == "retinanet" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,retinanet --force'
-      docker exec $CONTAINER /bin/bash -c '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        retinanet retinanet.pcie.14nsp.offline ${_SDK_VER};'
+      docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,retinanet --force"
+      docker exec $CONTAINER /bin/bash -c "\$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        retinanet retinanet.pcie.${_NSP_COUNT}nsp.offline ${_SDK_VER};"
     fi
 
     if [[ "${MODEL}" == "ssd-resnet34" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,ssd-resnet34 --force'
-      docker exec $CONTAINER /bin/bash -c '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-resnet34 ssd-resnet34.pcie.14nsp.offline ${_SDK_VER};'
+      docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,ssd-resnet34 --force"
+      docker exec $CONTAINER /bin/bash -c "\$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        ssd-resnet34 ssd-resnet34.pcie.${_NSP_COUNT}nsp.offline ${_SDK_VER};"
     fi
 
     if [[ "${MODEL}" == "ssd-mobilenet" ]]; then
-      docker exec $CONTAINER /bin/bash -c 'ck clean env --tags=compiled,ssd-mobilenet --force'
-      docker exec $CONTAINER /bin/bash -c '$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
-        ssd-mobilenet ssd-mobilenet.pcie.14nsp.offline ${_SDK_VER};'
+      docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,ssd-mobilenet --force"
+      docker exec $CONTAINER /bin/bash -c "\$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
+        ssd-mobilenet ssd-mobilenet.pcie.${_NSP_COUNT}nsp.offline ${_SDK_VER};"
     fi
 
     docker exec $CONTAINER /bin/bash -c 'ck rm experiment:* --force'
