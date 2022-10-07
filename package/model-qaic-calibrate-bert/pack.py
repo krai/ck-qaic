@@ -38,24 +38,24 @@ import numpy as np
 import pickle
 from pathlib import Path
 import sys
+from spfhp import pack_using_spfhp
 
 MASK_SL = 8
 
 input_pickle_blob = Path(sys.argv[1])
 output_dir = Path(sys.argv[2])
-strategy_set_fp = Path(sys.argv[3])
-strategy_count_fp = Path(sys.argv[4])
-packed_seq_len = int(sys.argv[5])
+packed_seq_len = int(sys.argv[3])
 
 with open(Path(input_pickle_blob), 'rb') as tokenized_features_file:
     eval_features = pickle.load(tokenized_features_file)
 
+# create a histogram of the sample lengths
+histogram = np.zeros(packed_seq_len)
+for feature in eval_features:
+    histogram[sum(feature.input_mask)-1] += 1
 
-with open(strategy_set_fp) as f:
-    strategy_set = literal_eval(f.read())
-
-with open(strategy_count_fp) as f:
-    strategy_count = [int(x) for x in f.readlines()]
+#pack strategy
+strategy_set, strategy_count = pack_using_spfhp(histogram, packed_seq_len, 3)
 
 def pack_and_write_data(data_list, dirpath, max_sl):
 
@@ -128,7 +128,7 @@ for idx, feature in enumerate(eval_features):
 # iterate over strategy
 # and do the packing
 output_idx = 0
-for group, group_freq in zip(strategy_set, strategy_count):
+for group, group_freq in zip(strategy_set, strategy_count.astype(int)):
     # group (list) contains the SL that has to be packed together
     # pack it "group_freq" times
     for _ in range(group_freq):

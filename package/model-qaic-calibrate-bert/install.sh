@@ -38,12 +38,14 @@ rm -rf *
 
 mkdir -p packed
 
+# wget the third party packing algorithm
+
+wget https://raw.githubusercontent.com/graphcore/tutorials/master/blogs_code/packedBERT/spfhp.py -P ${INSTALL_DIR}/
 
 # pack the dataset
 
-PYTHONPATH=$PYTHONPATH:${CK_ENV_MLPERF_INFERENCE}/language/bert/ \
+PYTHONPATH=$PYTHONPATH:${CK_ENV_MLPERF_INFERENCE}/language/bert/:${INSTALL_DIR}/ \
 ${CK_ENV_COMPILER_PYTHON_FILE} ${ORIGINAL_PACKAGE_DIR}/pack.py ${CK_ENV_DATASET_SQUAD_TOKENIZED} ${INSTALL_DIR}/packed \
-                               ${ORIGINAL_PACKAGE_DIR}/strategySetCalib.txt ${ORIGINAL_PACKAGE_DIR}/strategyRepeatCountCalib.txt \
                                ${_PACKED_SEQ_LEN}
 
 # create a list of the input files
