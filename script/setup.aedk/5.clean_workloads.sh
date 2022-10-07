@@ -38,6 +38,10 @@ echo "- OpenImages:"
 _OPENIMAGES_DIR=$(ck locate env --tags=dataset,openimages,original,validation)
 du -hs ${_OPENIMAGES_DIR}
 
+echo "- COCO:"
+_COCO_DIR=$(ck locate env --tags=dataset,coco.2017,original)
+du -hs ${_COCO_DIR}
+
 echo "- Platform SDK:"
 _PLATFORM_SDK_DIR=${_SDK_DIR}/qaic-platform-sdk-${_SDK_VER}
 du -hs ${_PLATFORM_SDK_DIR}
@@ -74,6 +78,17 @@ if [[ "${_CLEAN_WORKLOAD_RETINANET}" == "yes" ]]; then
     rm -rf ${_OPENIMAGES_DIR}/validation
   else
     echo "WARNING: OpenImages not found!"
+  fi
+fi
+
+# Clean up for SSD-MobileNet.
+if [[ "${_CLEAN_WORKLOAD_SSD_MOBILENET}" == "yes" ]]; then
+  echo "- COCO:"
+  if [[ -d ${_COCO_DIR} ]]; then rm -rf \
+    ${_COCO_DIR}/annotations/*train*
+    ${_COCO_DIR}/val2017/* && mkdir ${_COCO_DIR}/val2017/ && touch ${_COCO_DIR}/val2017/000000000139.jpg
+  else
+    echo "WARNING: COCO not found!"
   fi
 fi
 
@@ -115,6 +130,9 @@ du -hs ${_IMAGENET_DIR}
 
 echo "- OpenImages:"
 du -hs ${_OPENIMAGES_DIR}
+
+echo "- COCO:"
+du -hs ${_COCO_DIR}
 
 echo "- Platform SDK:"
 du -hs ${_PLATFORM_SDK_DIR}
