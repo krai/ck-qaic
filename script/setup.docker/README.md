@@ -48,10 +48,15 @@ WORKSPACE_DIR=/local/mnt/workspace bash setup_ck.sh
 **NB:** Make sure to have copied the required datasets (e.g. ImageNet) and SDKs
 to `$WORKSPACE/datasets` and `$WORKSPACE/sdks`, respectively.
 
-**NB:** Use `COMPILE_PRO=yes COMPILE_STD=no` or `COMPILE_PRO=no COMPILE_STD=yes` for PCIe Pro and PCIe Standard server cards, respectively.
+Arguments:
+- Use `WORKLOADS=resnet50,retinanet,ssd-resnet34,ssd-mobilenet` to select models. Default: `WORKLOADS=resnet50,retinanet`
+
+- Use `COMPILE_PRO=yes COMPILE_STD=no` or `COMPILE_PRO=no COMPILE_STD=yes` to compile for PCIe Pro and PCIe Standard server cards, respectively.
 Default: `COMPILE_PRO=yes COMPILE_STD=no`
+
+- Use `PRECALIBRATED_PROFILE=yes` to use a precalibrated profile and `PRECALIBRATED_PROFILE=no` to calibrate the workload from scratch. Default: `PRECALIBRATED_PROFILE=yes`
 ```
-COMPILE_PRO=no COMPILE_STD=yes DOCKER_OS=ubuntu SDK_VER=1.7.1.12 bash setup_images.sh
+WORKLOADS=ssd-resnet34,ssd-mobilenet COMPILE_PRO=no COMPILE_STD=yes PRECALIBRATED_PROFILE=no DOCKER_OS=ubuntu SDK_DIR=/data/qaic/1.8.0.137 SDK_VER=1.8.0.137 TIMEZONE=Europe/London bash setup_images.sh
 ```
 
 #### Test Docker images
