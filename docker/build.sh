@@ -157,7 +157,6 @@ if [[ ${_CK_QAIC_PERCENTILE_CALIBRATION} == 'yes' ]]; then
       docker exec $CONTAINER /bin/bash -c "ck clean env --tags=compiled,bert-99 --force"
       docker exec $CONTAINER /bin/bash -c  "ck pull repo:ck-qaic && \$(ck find repo:ck-qaic)/package/model-qaic-compile/percentile-calibration.sh \
 	  bert-99 bert-99.pcie.${_NSP_COUNT}nsp.offline,seg.384 offline ${_SDK_VER};"
-      fi
     fi
 
     if [[ "${MODEL}" == "retinanet" ]]; then
