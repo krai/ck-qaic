@@ -81,11 +81,11 @@ if [[ "${_CLEAN_WORKLOAD_RETINANET}" == "yes" ]]; then
   fi
 fi
 
-# Clean up for SSD-MobileNet.
-if [[ "${_CLEAN_WORKLOAD_SSD_MOBILENET}" == "yes" ]]; then
+# Clean up for SSD-MobileNet or SSD-ResNet34.
+if [[ "${_CLEAN_WORKLOAD_SSD_MOBILENET}" == "yes" || "${_CLEAN_WORKLOAD_SSD_RESNET34}" == "yes" ]]; then
   echo "- COCO:"
   if [[ -d ${_COCO_DIR} ]]; then rm -rf \
-    ${_COCO_DIR}/annotations/*train*
+    ${_COCO_DIR}/annotations/*train* \
     ${_COCO_DIR}/val2017/* && mkdir ${_COCO_DIR}/val2017/ && touch ${_COCO_DIR}/val2017/000000000139.jpg
   else
     echo "WARNING: COCO not found!"
