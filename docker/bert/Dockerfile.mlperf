@@ -86,6 +86,8 @@ echo "v1.7.1.12" | ck detect soft:compiler.glow.profile \
 --extra_tags=detected,profile,qaic,bert-packed,mixed,seq.384; \
 fi
 RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  ck pull repo:ck-mlperf; \
+  ck install package --tags=dataset,calibration2,squad,pickle,width.384; \
   ck install package --tags=profile,qaic,bert-packed,seq.384 --quiet; \
 fi
 
@@ -95,11 +97,11 @@ RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   if [[ "$CK_QAIC_PCV" != '' && "$CK_DETECT_PROFILE" != "yes" ]]; then \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384      --quiet \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384       --quiet \
        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
   else \
     ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384      --quiet; \
-    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384      --quiet; \
+    ck install package --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384       --quiet; \
   fi \
 fi
 
@@ -120,7 +122,7 @@ fi
 # Compile the workload for the PCIe Pro server cards. (Only Datacenter scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
   ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.384 --quiet; \
-  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.384 --quiet; \
+  ck install package --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.384  --quiet; \
 fi
 
 #-----------------------------------------------------------------------------#
@@ -141,11 +143,10 @@ $(ck locate env --tags=tool,cmake)/cmake*/Tests \
 $(ck locate env --tags=tool,cmake)/cmake*/Source \
 $(ck locate env --tags=tool,cmake)/cmake*/Utilities \
 $(ck locate env --tags=python-package,pytorch)/*; fi
-#$(ck locate env --tags=model,bert-packed)/*; fi
 
-# Add dummy file to allow ck dependency tracking to resolve deleted package
-RUN mkdir -p $(ck locate env --tags=python-package,pytorch)/build/torch/
-RUN touch $(ck locate env --tags=python-package,pytorch)/build/torch/__init__.py
+# Add dummy file to allow CK dependency tracking to resolve deleted package.
+RUN mkdir -p $(ck locate env --tags=python-package,pytorch)/build/torch/ \
+ && touch $(ck locate env --tags=python-package,pytorch)/build/torch/__init__.py
 
 ###############################################################################
 # FINAL STAGE

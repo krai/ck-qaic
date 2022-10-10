@@ -80,8 +80,7 @@ RUN source /home/krai/.bashrc \
 #-----------------------------------------------------------------------------#
 # Step 3. Download the SQuAD v1.1 dataset.
 #-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,squad,raw,width.384 \
- && ck install package --tags=dataset,calibration,squad,pickle,width.384
+RUN ck install package --tags=dataset,squad,raw,width.384
 
 #-----------------------------------------------------------------------------#
 # Step 4. Prepare the BERT workload.
