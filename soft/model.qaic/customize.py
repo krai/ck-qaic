@@ -33,6 +33,26 @@
 #
 
 import os
+import re
+
+
+##############################################################################
+def version_cmd(i):
+    apps_xml_path = '/opt/qti-aic/versions/apps.xml'
+    version = ''
+    with open(apps_xml_path) as apps_xml_file:
+        apps_xml_lines = apps_xml_file.readlines()
+        for line in apps_xml_lines:
+            base_version_match = re.search('<base_version>([\d\.]*)</base_version>', line)
+            if base_version_match:
+                base_version = base_version_match.group(1)
+                version = base_version
+            build_id_match = re.search('<build_id>(\d*)</build_id>', line)
+            if build_id_match:
+                build_id = build_id_match.group(1)
+                version += '.' + build_id
+    return {'return':0, 'cmd':'', 'version':version}
+
 
 ##############################################################################
 def setup(i):
