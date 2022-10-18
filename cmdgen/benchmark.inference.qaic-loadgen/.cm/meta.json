@@ -264,13 +264,15 @@
         "queue_length": "<<<recommended_multistream_queue_length>>>",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=MultiStream",
+	  "--env.CK_LOADGEN_TARGET_LATENCY=<<<multistream_target_latency>>>",
           "<<<?perf_multistream_ck_env>>>"
         ],
         "input_select": "<<<recommended_input_select>>>",
         "model_suffix": "<<<multistream_model_suffix>>>",
         "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>>",
         "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
-        "compliance_extension":"-target_latency.<<<multistream_target_latency>>>"
+        "compliance_extension":"-target_latency.<<<multistream_target_latency>>>",
+	"record_tags_multistream": "target_latency.<<<multistream_target_latency>>>"
       },
       "offline": {
         "recommended_activation_count": "<<<recommended_offline_activation_count>>>",
@@ -298,6 +300,7 @@
         "batch_size": "1",
         "ck_env": [
           "--env.CK_LOADGEN_SCENARIO=SingleStream",
+	  "--env.CK_LOADGEN_TARGET_LATENCY=<<<singlestream_target_latency>>>",
           "<<<?perf_singlestream_ck_env>>>"
         ],
         "input_select": "<<<recommended_input_select>>>",
@@ -307,7 +310,8 @@
         "queue_length": "1",
         "threads_per_queue": "1",
         "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
-        "compliance_extension": "-target_latency.<<<singlestream_target_latency>>>"
+        "compliance_extension": "-target_latency.<<<singlestream_target_latency>>>",
+	"record_tags_singlestream": "target_latency.<<<singlestream_target_latency>>>"
       }
     },
     "sdk": {
@@ -755,22 +759,6 @@
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75"
-      }
-    },
-    "singlestream_target_latency": {
-      "###": {
-        "ck_env_singlestream": "--env.CK_LOADGEN_TARGET_LATENCY=###",
-        "record_tags_singlestream": "target_latency.###"
-      }
-    },
-    "multistream_target_latency": {
-      "###": {
-        "ck_env_multistream": [
-          "--env.CK_LOADGEN_TARGET_LATENCY=###"
-        ],
-        "record_tags_multistream": [
-          "target_latency.###"
-        ]
       }
     },
     "target_latency_file": {
