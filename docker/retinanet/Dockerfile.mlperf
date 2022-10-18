@@ -94,16 +94,16 @@ fi
 
 # Compile the workload for the PCIe Pro server cards. (Datacenter and Edge scenarios.)
 RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
-  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.offline      ; \
-  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.server       ; \
-  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.singlestream ; \
-  ck install package --tags=retinanet,retinanet.pcie.16nsp.prev.multistream  ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.offline      ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.server       ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.singlestream ; \
+  ck install package --tags=retinanet,retinanet.pcie.16nsp.multistream  ; \
 fi
 # Compile the workload for the PCIe Standard server cards. (Only Edge scenarios.)
 RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
-  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.offline      ; \
-  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.singlestream ; \
-  ck install package --tags=retinanet,retinanet.pcie.14nsp.prev.multistream  ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.offline      ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.singlestream ; \
+  ck install package --tags=retinanet,retinanet.pcie.14nsp.multistream  ; \
 fi
 
 #-----------------------------------------------------------------------------#
