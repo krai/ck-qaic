@@ -907,6 +907,11 @@
         "ecc_default": "",
 	"ecc_value": "###"
      }
+   },
+   "soc_reset": {
+     "###": {
+        "soc_reset_cmd": "echo 1 | sudo tee $(sudo find /sys/devices -name soc_reset | grep a100);"
+     }
    }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
@@ -925,7 +930,7 @@
     "check_vc_value_end_def": "fi;",
     "check_vc_value_begin_def_2": "",
     "check_vc_value_end_def_2": "",
-    "ck_benchmark_program": "sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
+    "ck_benchmark_program": "<<<?soc_reset_cmd>>> sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
     "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
     "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
     "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>> --rm <<<docker_image>>>bash`",
