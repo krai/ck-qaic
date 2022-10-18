@@ -335,8 +335,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.196",
-        "power_server_port": "4950"
+        "power_server_ip_def": "10.222.146.196",
+        "power_server_port_def": "4950"
       },
       "q1_std_edge": {
         "all_device_ids": "0",
@@ -345,8 +345,8 @@
         "model_tags": [
           "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "",
-        "power_server_port": ""
+        "power_server_ip_def": "",
+        "power_server_port_def": ""
       },
       "q4_pro_dc": {
         "all_device_ids": "0,1,2,3",
@@ -360,8 +360,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.209",
-        "power_server_port": "4915",
+        "power_server_ip_def": "10.222.146.209",
+        "power_server_port_def": "4915",
         "ecc_default": "on"
       },
       "q4_std_edge": {
@@ -376,8 +376,8 @@
         "model_tags": [
           "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.209",
-        "power_server_port": "4980",
+        "power_server_ip_def": "10.222.146.209",
+        "power_server_port_def": "4980",
         "ecc_default": "off"
       },
       "aedk": {
@@ -387,8 +387,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "aedk_20w": {
         "all_device_ids": "0",
@@ -397,8 +397,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "aedk_highend": {
         "all_device_ids": "0",
@@ -407,8 +407,8 @@
         "model_tags": [
           "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "aedk_highend_15w": {
         "all_device_ids": "0",
@@ -417,8 +417,8 @@
         "model_tags": [
           "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "aedk_highend_25w": {
         "all_device_ids": "0",
@@ -427,8 +427,8 @@
         "model_tags": [
           "<<<model>>>.aedk_highend.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "eb6": {
         "all_device_ids": "0",
@@ -437,8 +437,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.196",
-        "power_server_port": "4956"
+        "power_server_ip_def": "10.222.146.196",
+        "power_server_port_def": "4956"
       },
       "gloria": {
         "all_device_ids": "0",
@@ -447,8 +447,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4960"
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4960"
       },
       "gloria_highend": {
         "all_device_ids": "0",
@@ -457,8 +457,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4961"
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4961"
       },
       "heimdall": {
         "all_device_ids": "0",
@@ -467,8 +467,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.194",
-        "power_server_port": "4962"
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4962"
       },
       "rb6": {
         "all_device_ids": "0",
@@ -477,8 +477,8 @@
         "model_tags": [
           "<<<model>>>.aedk.<<<model_suffix>>>"
         ],
-        "power_server_ip": "192.168.0.3",
-        "power_server_port": "4949"
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
       },
       "g292_z43_q18": {
         "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
@@ -492,8 +492,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "250",
@@ -511,8 +511,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "125",
@@ -530,8 +530,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "150",
@@ -549,8 +549,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.217",
-        "power_server_port": "4953",
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "150",
@@ -568,8 +568,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
@@ -586,8 +586,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
@@ -604,8 +604,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "60"
@@ -622,8 +622,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
@@ -640,8 +640,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
@@ -658,8 +658,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
@@ -677,8 +677,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.192",
-        "power_server_port": "4956",
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75",
@@ -696,8 +696,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
@@ -715,8 +715,8 @@
         "model_tags": [
           "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
         ],
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100",
@@ -735,8 +735,8 @@
           "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
         "multistream_model_suffix": "singlestream",
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "100"
@@ -754,8 +754,8 @@
           "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
         ],
         "multistream_model_suffix": "singlestream",
-        "power_server_ip": "10.222.146.206",
-        "power_server_port": "4959",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
         "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
         "fan_raw_default": "75"
@@ -912,6 +912,16 @@
      "###": {
         "soc_reset_cmd": "echo 1 | sudo tee $(sudo find /sys/devices -name soc_reset | grep a100);"
      }
+   },
+   "power_server_port": {
+     "###": {
+        "power_server_port_def":"###"
+     }
+   },
+   "power_server_ip": {
+     "###": {
+	"power_server_ip_def": "###"
+     }
    }
   },
   "cmd_template": "<<<shell_wrapped_cmd>>>",
@@ -971,6 +981,8 @@
     "power_record_tags_inner": "<<<record_tags,>>>",
     "power_record_uoa": "<<<record_uoa_parts->>>",
     "power_wrapped_ck_benchmark_program": "<<<wrapped_ck_benchmark_program_common>>>",
+    "power_server_ip": "<<<power_server_ip_def>>>",
+    "power_server_port": "<<<power_server_port_def>>>",
     "post_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'if [ $? -eq 0 ]; then echo Fan speed set to level: <<<post_fan_raw>>>; else echo Error: failed to set fan speed.; fi;' >> <<<logs_dir>>>post.config;",
     "pre_ipmitool_mc_info_log": "pre.ipmitool_mc_info.log",
     "pre_ipmitool_fru_print_log": "pre.ipmitool_fru_print.log",
