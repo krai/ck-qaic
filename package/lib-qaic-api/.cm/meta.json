@@ -48,6 +48,18 @@
         "version": "0.3"
       }
     },
+    "dev": {
+      "extra_env": {
+      "_VERSION": "dev"
+      },
+      "extra_tags": [
+        "v0.4",
+        "0.4"
+      ],
+      "extra_customize": {
+        "version": "0.4"
+      }
+    },
     "b1.6.71": {
       "extra_env": {
         "_VERSION": "b1.6.71"
