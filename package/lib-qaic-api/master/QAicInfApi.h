@@ -65,7 +65,7 @@ public:
   QAicInfApi();
 
   virtual ~QAicInfApi();
-  static void logCallback(QLogLevel logLevel, const char *str) {
+  static void logCallback(QLogLevel logLevel, const char *str, void*) {
     std::cout << str;
   }
 

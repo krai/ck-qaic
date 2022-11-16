@@ -383,7 +383,7 @@ QStatus QAicInfApi::init(QID qid, QAicEventCallback callback) {
   }
 
   status = qaicCreateContext(&context_, &contextProperties_, 1, &dev_,
-                                      logCallback, errorHandler, nullptr);
+                                      logCallback, nullptr, errorHandler, nullptr);
   if ((context_ == nullptr) || (status != QS_SUCCESS)) {
     std::cerr << "Failed to Create Context" << std::endl;
     return status;
