@@ -1,0 +1,1278 @@
+{
+  "accu_init": {
+    "ck_env": [
+      "--env.ML_MODEL_MODEL_NAME=<<<hyphenated_model_name>>>",
+      "--env.CK_LOADGEN_DATASET_SIZE=<<<dataset_size>>>",
+      "--env.CK_LOADGEN_BUFFER_SIZE=<<<buffer_size>>>",
+      "--env.CK_ENV_NUM_SETUP_THREADS=<<<num_setup_threads>>>",
+      "--env.CK_ENV_QAIC_INPUT_SELECT=<<<input_select>>>",
+      "--env.CK_ENV_QAIC_DEVICE_IDS=<<<device_ids>>>",
+      "--env.CK_ENV_QAIC_QUEUE_LENGTH=<<<queue_length>>>",
+      "--env.CK_ENV_QAIC_THREADS_PER_QUEUE=<<<threads_per_queue>>>",
+      "--env.CK_ENV_QAIC_ACTIVATION_COUNT=<<<activation_count>>>",
+      "--env.CK_ENV_QAIC_MODEL_BATCH_SIZE=<<<batch_size>>>",
+      "--env.QAIC_BYPASS_PPP=<<<zero_copy>>>",
+      "--env.CK_VERBOSE=<<<verbosity>>>"
+    ],
+    "deps": [
+      "--dep_add_tags.lib-qaic-api=master",
+      "--dep_add_tags.compiler=<<<compiler_tags>>>",
+      "--dep_add_tags.python=v3",
+      "--dep_add_tags.weights=<<<model_tags,>>>"
+    ],
+    "record_tags": [
+      "mlperf",
+      "round.<<<round>>>",
+      "division.<<<division>>>",
+      "platform.<<<sut>>>",
+      "inference_engine.<<<inference_engine>>>",
+      "inference_engine_version.<<<inference_engine_version>>>",
+      "inference_engine_backend.<<<inference_engine_backend>>>",
+      "scenario.<<<scenario>>>",
+      "mode.<<<mode>>>",
+      "buffer_size.<<<buffer_size>>>",
+      "workload.<<<hyphenated_model_name>>>",
+      "<<<preprocessed_tag>>>",
+      "input_select.<<<input_select>>>",
+      "queue_length.<<<queue_length>>>",
+      "task.<<<task_name>>>",
+      "threads_per_queue.<<<threads_per_queue>>>"
+    ],
+    "record_uoa_parts": [
+      "mlperf_<<<round>>>",
+      "<<<division>>>",
+      "<<<sut>>>",
+      "<<<inference_engine>>>",
+      "<<<inference_engine_version>>>",
+      "<<<inference_engine_backend>>>",
+      "<<<model>>>",
+      "<<<scenario>>>",
+      "<<<mode>>><<<mode_extension>>>"
+    ],
+    "shell_preamble": []
+  },
+  "build_map": {
+    "cache": {
+      "###": {
+        "cache_opt": "###"
+      },
+      "yes": {
+        "cache_opt": "1"
+      }
+    },
+    "cache_dir": {
+      "###": {
+        "cache_opt": "1",
+        "volume_cache": "--volume ###:<<<docker_preprocess_dir>>> "
+      },
+      "yes": {
+        "cache_opt": "1",
+        "volume_cache": "--volume <<<cache_dir_default>>>:<<<docker_preprocess_dir>>> "
+      }
+    },
+    "calibration_value": {
+      "###": {
+        "model_tags": [
+          "pcv.\"$(echo ###)\""
+        ],
+        "record_tags": "pcv.###",
+        "record_uoa_parts": "pcv.###"
+      }
+    },
+    "compile": {
+      "yes": {
+        "shell_wrapped_cmd": "<<<ck_compile_program>>>"
+      }
+    },
+    "compliance": {
+      "###": {
+        "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=### --env.CK_LOADGEN_MODE=PerformanceOnly",
+        "mode": "performance",
+        "mode_extension": "<<<?compliance_extension>>>-compliance.###<<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "output_file": "mlperf_log_summary.txt",
+        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
+        "recommended_repetitions": "1",
+        "recommended_verbosity": "0",
+        "record_tags": "compliance.###",
+        "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "perf_singlestream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<singlestream_target_latency>>>",
+        "perf_multistream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<multistream_target_latency>>> <<<?ck_env_multistream>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>> <<<?ck_env_server>>>",
+        "vc_cmd_def_2": "<<<vc_cmd_def>>>",
+        "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
+        "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>"
+      },
+      "TEST04": {
+        "ck_env": "--env.CK_MLPERF_COMPLIANCE_TEST=TEST04 --env.CK_LOADGEN_MODE=PerformanceOnly",
+        "mode": "performance",
+        "mode_extension": "<<<?compliance_extension>>>-compliance.TEST04<<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "output_file": "mlperf_log_summary.txt",
+        "buffer_size": "<<<recommended_compliance_buffer_size>>>",
+        "recommended_repetitions": "1",
+        "recommended_verbosity": "0",
+        "record_tags": "compliance.TEST04",
+        "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "perf_singlestream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<singlestream_target_latency>>>",
+        "perf_multistream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<multistream_target_latency>>> <<<?ck_env_multistream>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>> <<<?ck_env_server>>>",
+        "vc_cmd_def_2": "<<<vc_cmd_def>>>",
+        "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
+        "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>"
+      }
+    },
+    "container": {
+      "###": {
+        "check_param_container_begin": "<<<check_param_container_begin_def>>>",
+        "check_param_container_end": "<<<check_param_container_end_def>>>",
+        "docker_run": "time <<<docker_exec_command>>>  ### <<<docker_bash_command>>>",
+        "double_quote": "\"",
+        "escape_char": "\\"
+      }
+    },
+    "docker": {
+      "yes": {
+        "docker_run": "time <<<docker_exec_command>>> <<<container>>> <<<docker_bash_command>>>",
+        "double_quote": "\"",
+        "escape_char": "\\"
+      },
+      "container_only": {
+        "wrapped_ck_benchmark_program": "CONTAINER_ID=<<<container>>> && <<<docker_exec_command>>> $CONTAINER_ID <<<docker_bash_command>>> \"echo -e 'sdk=<<<sdk>>>\nmodel_name=<<<model_name>>>' > <<<docker_config>>>\" && echo ${CONTAINER_ID};"
+      }
+    },
+    "experiment_dir": {
+      "###": {
+        "volume_experiment": "--volume ###:<<<docker_experiment_dir_default>>>"
+      },
+      "yes": {
+        "volume_experiment": "--volume <<<experiment_dir_default>>>:<<<docker_experiment_dir_default>>>"
+      }
+    },
+    "fan_mode": {
+      "###": {
+        "ck_env": "--env.CK_FAN_MODE=###",
+        "record_tags": "fan_mode.###",
+        "record_uoa_parts": "fan_mode.###"
+      }
+    },
+    "max_query_count": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=###",
+        "record_tags": "max_query_count.###"
+      }
+    },
+    "mode": {
+      "accuracy": {
+        "ck_env": "--env.CK_LOADGEN_MODE=AccuracyOnly --env.CK_ENV_SKIP_ACCURACY_CALC=<<<skip_accuracy_calc>>>",
+        "mode_extension": "-dataset_size.<<<dataset_size>>>-<<<preprocessed_tag>>>",
+        "output_file": "accuracy.txt",
+        "recommended_buffer_size": "<<<recommended_accuracy_buffer_size>>>",
+        "recommended_verbosity": "1",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>>",
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>>"
+      },
+      "performance": {
+        "ck_env": "--env.CK_LOADGEN_MODE=PerformanceOnly",
+        "mode_extension": "<<<performance_mode_extension>>><<<?timestamp_value>>>",
+        "output_file": "mlperf_log_summary.txt",
+        "recommended_buffer_size": "<<<recommended_performance_buffer_size>>>",
+        "recommended_verbosity": "0",
+        "perf_offline_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<offline_target_qps>>>",
+        "perf_offline_ext": "-target_qps.<<<offline_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "perf_server_ck_env": "--env.CK_LOADGEN_TARGET_QPS=<<<server_target_qps>>> <<<?ck_env_server>>>",
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "perf_multistream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<multistream_target_latency>>> <<<?ck_env_multistream>>>",
+        "perf_singlestream_ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=<<<singlestream_target_latency>>>",
+        "record_tags_singlestream": "target_latency.<<<singlestream_target_latency>>>",
+        "record_tags_multistream": "target_latency.<<<multistream_target_latency>>>",
+        "perf_server_ext": "-target_qps.<<<server_target_qps>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "record_tags_inner": "<<<power_record_tags_inner>>>",
+        "record_uoa": "<<<power_record_uoa>>>",
+        "wrapped_ck_benchmark_program": "<<<power_wrapped_ck_benchmark_program>>>",
+        "vc_cmd_def_2": "<<<vc_cmd_def>>>",
+        "check_vc_value_begin_def_2": "<<<check_vc_value_begin_def>>>",
+        "check_vc_value_end_def_2": "<<<check_vc_value_end_def>>>",
+        "notes_file": "<<<notes_file_def>>>"
+      }
+    },
+    "model_extra_tags": {
+      "###": {
+        "model_tags": [
+          "###"
+        ]
+      }
+    },
+    "no_record": {
+      "yes": {
+        "shell_wrapped_cmd": "<<<wrapped_ck_run_program>>>"
+      }
+    },
+    "power": {
+      "###": {},
+      "yes": {
+        "_power_log_helper": "mkdir -p \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\" && cp \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\"/../mlperf_log_* \"$CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS\"/",
+        "power_command_args": [
+          "ck",
+          "benchmark",
+          "--env.CK_MLPERF_POWER_CLIENT_ADDRESS=<<<power_server_ip>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_PORT=<<<power_server_port>>>",
+          "--env.CK_MLPERF_POWER_CLIENT_LOADGEN_LOGS=\"$(ck find program:<<<program_name>>>)\"/tmp/loadgen_logs",
+          "--env.CK_MLPERF_POWER_CLIENT_WORKLOAD=\\\"\\\"\"$_cmd\"",
+          "--record",
+          "--record_repo=local",
+          "--repetitions=1",
+          "--record_uoa=<<<record_uoa_parts->>>-power.client",
+          "--tags=<<<record_tags,>>>,power.client",
+          "program:mlperf-power-client"
+        ],
+        "power_record_tags_inner": "<<<record_tags,>>>,power.workload",
+        "power_record_uoa": "<<<record_uoa_parts->>>-power.workload",
+        "check_ipmitool_set_fan_raw_sut_begin_def": " if [ \"( echo \\\"aedk_15w aedk_20w aedk_25w gloria haishen\\\" | grep -io \\\"<<<sut>>>\\\" )\" = \"<<<sut>>>\"  ] ; then echo 'Error: SUT \"<<<sut>>>\" does not support  pre_fan and/or post_fan.'; else",
+        "power_wrapped_ck_benchmark_program": "<<<?check_ipmitool_set_fan_raw_begin>>>  <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> <<<?timestamp_value_cmd>>> if [ -n \"`ck list local:experiment:<<<record_uoa_parts->>>-power.client`\" ]; then echo 'Experiment <<<record_uoa_parts->>>-power.client exists, skipping' ; else  <<<ecc_cmd>>> rm -f /opt/qti-aic/logs/*;  <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>>   ck rm --force local:experiment:<<<record_uoa>>>; _cmd=\"$(cat<<'EOF'\n<<<ck_benchmark_program>>> \"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}\" <<<?print_output_file>>> && <<<_power_log_helper>>>\nEOF\n)\";_cmd=\"$(printf \"%s\\n\" \"$_cmd\" | sed \"s/'/'\\\\\\\\''/g; 1 s/^/'/; $ s/$/'/\" )\"; <<<power_command_args >>> ; fi; <<<?notes_file>>> cp -r <<<logs_dir>>>*.{log,txt} <<<docker_experiment_dir_default>>>/<<<record_uoa>>> 2>/dev/null; <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>>"
+      }
+    },
+    "power_mode": {
+      "###": {
+        "ck_env": "--env.CK_POWER_MODE=###",
+        "record_tags": "power_mode.###",
+        "record_uoa_parts": "power_mode.###"
+      }
+    },
+    "query_count": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###",
+        "record_tags": "query_count.###",
+        "record_uoa_parts": "query_count.###"
+      }
+    },
+    "multistream_query_count": {
+      "###": {
+        "ck_env_multistream": [
+          " --env.CK_LOADGEN_MAX_QUERY_COUNT=###",
+          " --env.CK_LOADGEN_MIN_QUERY_COUNT=###"
+        ]
+      }
+    },
+    "server_query_count": {
+      "###": {
+        "ck_env_server": "--env.CK_LOADGEN_MAX_QUERY_COUNT=### --env.CK_LOADGEN_MIN_QUERY_COUNT=###"
+      }
+    },
+    "scenario": {
+      "multistream": {
+        "recommended_activation_count": "<<<recommended_multistream_activation_count>>>",
+        "batch_size": "<<<recommended_multistream_batch_size>>>",
+        "num_setup_threads": "<<<recommended_multistream_num_setup_threads>>>",
+        "queue_length": "<<<recommended_multistream_queue_length>>>",
+        "ck_env": [
+          "--env.CK_LOADGEN_SCENARIO=MultiStream",
+          "<<<?perf_multistream_ck_env>>>"
+        ],
+        "input_select": "<<<recommended_input_select>>>",
+        "model_suffix": "<<<multistream_model_suffix>>>",
+        "performance_mode_extension": "-target_latency.<<<multistream_target_latency>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
+        "compliance_extension":"-target_latency.<<<multistream_target_latency>>>",
+	"record_tags_multistream": "target_latency.<<<multistream_target_latency>>>",
+	"device_ids_default": "<<<ms_device_ids_default>>>"
+      },
+      "offline": {
+        "recommended_activation_count": "<<<recommended_offline_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "ck_env": "--env.CK_LOADGEN_SCENARIO=Offline <<<?perf_offline_ck_env>>>",
+        "input_select": "<<<recommended_input_select>>>",
+        "performance_mode_extension": "<<<?perf_offline_ext>>>",
+        "compliance_extension": "-target_qps.<<<offline_target_qps>>>"
+      },
+      "server": {
+        "recommended_activation_count": "<<<recommended_server_activation_count>>>",
+        "batch_size": "<<<recommended_batch_size>>>",
+        "ck_env": [
+          "--env.CK_LOADGEN_SCENARIO=Server --env.CK_ENV_QAIC_MAX_WAIT_ABS=<<<max_wait>>> --env.CK_EXTRA_COMPILER_DEPS4=-DSERVER_MODE",
+          "<<<?perf_server_ck_env>>>"
+        ],
+        "input_select": "0",
+        "model_suffix": "server",
+        "performance_mode_extension": "<<<?perf_server_ext>>>",
+        "compliance_extension": "-target_qps.<<<server_target_qps>>>"
+      },
+      "singlestream": {
+        "recommended_activation_count": "1",
+        "batch_size": "1",
+	"device_ids_default":"<<<ss_device_ids_default>>>",
+        "ck_env": [
+          "--env.CK_LOADGEN_SCENARIO=SingleStream",
+          "<<<?perf_singlestream_ck_env>>>"
+        ],
+        "input_select": "<<<recommended_input_select>>>",
+        "model_suffix": "singlestream",
+        "num_setup_threads": "1",
+        "performance_mode_extension": "-target_latency.<<<singlestream_target_latency>>><<<?fan_raw_tag>>><<<?vc_tag>>>",
+        "queue_length": "1",
+        "threads_per_queue": "1",
+        "recommended_compliance_buffer_size": "<<<recommended_stream_buffer_size>>>",
+        "compliance_extension": "-target_latency.<<<singlestream_target_latency>>>",
+	"record_tags_singlestream": "target_latency.<<<singlestream_target_latency>>>"
+      }
+    },
+    "sdk": {
+      "###": {
+        "ck_env": "",
+        "deps": "",
+        "inference_engine": "qaic",
+        "inference_engine_backend": "aic100",
+        "inference_engine_version": "v###",
+        "library": "qaic-v###-aic100"
+      }
+    },
+    "sut": {
+      "###": {
+        "compiler_tags": "gcc"
+      },
+      "q1_pro_edge": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_DISPATCH_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_SCHEDULER_YIELD_TIME_OFFLINE=1000000",
+          "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_OFFLINE=100"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.196",
+        "power_server_port_def": "4350"
+      },
+      "q1_std_edge": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "",
+        "power_server_port_def": ""
+      },
+      "q4_pro_dc": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.KILT_DISPATCH_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_SCHEDULER_YIELD_TIME_OFFLINE=1000000",
+          "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_DISPATCH_YIELD_TIME_SERVER=10",
+          "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_SERVER=10",
+          "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_SERVER=10"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.195",
+        "power_server_port_def": "4915",
+        "ecc_default": "on"
+      },
+      "q3_std_edge": {
+        "all_device_ids": "0,1,2",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.KILT_DEVICE_QAIC_RINGFENCE_DRIVER=NO",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0:0,8:0,16:0,24",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
+        ],
+        "ecc_default": "off"
+      },
+      "q4_std_edge": {
+        "all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.KILT_DEVICE_QAIC_RINGFENCE_DRIVER=NO",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0:0,8:0,16:0,24",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG_OFFLINE=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15",
+          "--env.KILT_DISPATCH_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_SCHEDULER_YIELD_TIME_OFFLINE=1000000",
+          "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_OFFLINE=100",
+          "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_OFFLINE=100"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.209",
+        "power_server_port_def": "4980",
+        "ecc_default": "off"
+      },
+      "q2_lite_edge": {
+	"all_device_ids": "0,1",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+	"model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "100.71.242.112",
+        "power_server_port_def": "4520",
+        "ecc_default": "off"
+      },
+      "q4_lite_edge": {
+	"all_device_ids": "0,1,2,3",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+	"model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.196",
+        "power_server_port_def": "4450",
+        "ecc_default": "off"
+      },
+      "q8_std_dc": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,64,65,66,67:1,68,69,70,71:1,72,73,74,75:1,76,77,78,79",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
+        ],
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "ecc_default": "on"
+      },
+      "q8_std_network": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,64,65,66,67:1,68,69,70,71:1,72,73,74,75:1,76,77,78,79",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.14nsp.<<<model_suffix>>>"
+        ],
+        "network_server_ip_def_2": "10.52.184.21",
+        "network_server_port_def_2": "7276",
+        "network_server_port_for_docker_def_2": " -p <<<network_server_port_def_2>>>:<<<network_server_port_def_2>>> ",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "ecc_default": "on"
+      },
+      "aedk": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "aedk_20w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "aedk_highend": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "aedk_highend_15w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "aedk_highend_25w": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk_highend.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "eb6": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.196",
+        "power_server_port_def": "4956"
+      },
+      "gloria": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4960"
+      },
+      "gloria_highend": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4961"
+      },
+      "heimdall": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.194",
+        "power_server_port_def": "4962"
+      },
+      "rb6": {
+        "all_device_ids": "0",
+        "ck_benchmark_prefix": "",
+        "compiler_tags": "gcc",
+        "ck_env": [
+          "--env.KILT_SCHEDULER_YIELD_TIME=1000000",
+          "--env.KILT_DISPATCH_YIELD_TIME=10",
+          "--env.KILT_DEVICE_QAIC_SAMPLES_QUEUE_DEPTH=128"
+        ],
+        "model_tags": [
+          "<<<model>>>.aedk.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "192.168.0.3",
+        "power_server_port_def": "4949"
+      },
+      "g292_z43_q18": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,4,5,6,7:1,68,69,70,71:1,64,65,66,67:1,72,73,74,75:1,80,81,82,83:1,88,89,90,91:1,96,97,98,99:1,104,105,106,107:1,112,113,114,115:1,120,121,122,123:0,0,1,2,3:0,8,9,10,11:0,16,17,18,19:0,24,25,26,27:0,32,33,34,35:0,40,41,42,43:0,48,49,50,51:0,56,57,58,59",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "network_server_ip_def_2": "192.168.1.103",
+        "network_server_port_def_2": "7276",
+        "network_server_port_for_docker_def_2": " -p <<<network_server_port_def_2>>>:<<<network_server_port_def_2>>> ",
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "250",
+        "ecc_default": "on"
+      },
+      "g292_z43_q18e": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DG292_CONFB",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,4,5,6,7:1,68,69,70,71:1,64,65,66,67:1,72,73,74,75:1,80,81,82,83:1,88,89,90,91:1,96,97,98,99:1,104,105,106,107:1,112,113,114,115:1,120,121,122,123:0,0,1,2,3:0,8,9,10,11:0,16,17,18,19:0,24,25,26,27:0,32,33,34,35:0,40,41,42,43:0,48,49,50,51:0,56,57,58,59",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "125",
+        "ecc_default": "on"
+      },
+      "g292_z43_q16e": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=1,64,65,66,67:1,72,73,74,75:1,80,81,82,83:1,88,89,90,91:1,96,97,98,99:1,104,105,106,107:1,112,113,114,115:1,120,121,122,123:0,0,1,2,3:0,8,9,10,11:0,16,17,18,19:0,24,25,26,27:0,32,33,34,35:0,40,41,42,43:0,48,49,50,51:0,56,57,58,59",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "150",
+        "ecc_default": "on"
+      },
+      "g292_z43_q16": {
+        "all_device_ids": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=<<<g292_config>>>",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=1,64,65,66,67:1,72,73,74,75:1,80,81,82,83:1,88,89,90,91:1,96,97,98,99:1,104,105,106,107:1,112,113,114,115:1,120,121,122,123:0,0,1,2,3:0,8,9,10,11:0,16,17,18,19:0,24,25,26,27:0,32,33,34,35:0,40,41,42,43:0,48,49,50,51:0,56,57,58,59",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:64"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.217",
+        "power_server_port_def": "4953",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "150",
+        "ecc_default": "on"
+      },
+      "r282_z93_q1": {
+        "all_device_ids": "4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
+      },
+      "r282_z93_q2": {
+        "all_device_ids": "0,4",
+        "ck_benchmark_prefix": "numactl --interleave=all",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
+      },
+      "r282_z93_q2e": {
+        "all_device_ids": "0,1",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "60"
+      },
+      "r282_z93_q5": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
+      },
+      "r282_z93_q5e": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
+      },
+      "r282_z93_q5_dc": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100",
+        "ecc_default": "on"
+      },
+      "r282_z93_q5e_dc": {
+        "all_device_ids": "0,1,2,3,4",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.192",
+        "power_server_port_def": "4956",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "75",
+        "ecc_default": "on"
+      },
+      "r282_z93_q8": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,16,17,18,19:1,20,21,22,23:1,24,25,26,27:1,28,29,30,31",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:16"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100",
+        "ecc_default": "on"
+      },
+      "r282_z93_q8e": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,16,17,18,19:1,20,21,22,23:1,24,25,26,27:1,28,29,30,31",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:16",
+          "--env.KILT_DISPATCH_YIELD_TIME_OFFLINE=100",
+         "--env.KILT_SCHEDULER_YIELD_TIME_OFFLINE=1000000",
+         "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_OFFLINE=100",
+         "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_OFFLINE=100",
+         "--env.KILT_DISPATCH_YIELD_TIME_SERVER=10",
+         "--env.KILT_DEVICE_SCHEDULER_YIELD_TIME_SERVER=10",
+         "--env.KILT_DEVICE_ENQUEUE_YIELD_TIME_SERVER=10"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.<<<model_suffix>>>"
+        ],
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100",
+        "ecc_default": "on"
+      },
+      "r282_z93_q8_edge": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,16,17,18,19:1,20,21,22,23:1,24,25,26,27:1,28,29,30,31",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:16"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
+        ],
+        "multistream_model_suffix": "singlestream",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "100"
+      },
+      "r282_z93_q8e_edge": {
+        "all_device_ids": "0,1,2,3,4,5,6,7",
+        "ck_benchmark_prefix": "numactl --localalloc",
+        "ck_env": [
+          "--env.CK_EXTRA_COMPILER_DEPS1=-march=znver2",
+          "--env.CK_EXTRA_COMPILER_DEPS2=-DENABLE_ZEN2",
+          "--env.CK_EXTRA_COMPILER_DEPS3=-DR282",
+          "--env.CK_ENV_QAIC_DEVICE_CONFIG=0,0,1,2,3:0,4,5,6,7:0,8,9,10,11:0,12,13,14,15:1,16,17,18,19:1,20,21,22,23:1,24,25,26,27:1,28,29,30,31",
+          "--env.CK_ENV_QAIC_DATASOURCE_CONFIG=0:16"
+        ],
+        "compiler_tags": "gcc",
+        "model_tags": [
+          "<<<model>>>.pcie.16nsp.quad.<<<model_suffix>>>"
+        ],
+        "multistream_model_suffix": "singlestream",
+        "power_server_ip_def": "10.222.146.206",
+        "power_server_port_def": "4959",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<pre_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd_def2": "<<<post_ipmitool_set_fan_raw_sdr_elist_cmd_def>>>",
+        "fan_raw_default": "75"
+      }
+    },
+    "target_latency_file": {
+      "###": {
+        "ck_env": "--env.CK_LOADGEN_TARGET_LATENCY=$CK_LOADGEN_TARGET_LATENCY",
+        "record_tags": "target_latency.$CK_LOADGEN_TARGET_LATENCY",
+        "shell_preamble": "export CK_LOADGEN_TARGET_LATENCY=$(awk -vX=<<<?escape_char>>>\"<<<sut>>>,<<<library>>>,<<<model_readable>>><<<?escape_char>>>\" 'X==$1{print $2;exit}' < ###); [ <<<?escape_char>>>\"$CK_LOADGEN_TARGET_LATENCY<<<?escape_char>>>\" ] || { echo 'Error: entry <<<sut>>>,<<<library>>>,<<<model_readable>>> not found in ###, exiting'; exit 1; }; ",
+        "target_latency": "$CK_LOADGEN_TARGET_LATENCY"
+      }
+    },
+    "verbose": {
+      "all": {
+        "ck_env": "--env.CK_VERBOSE=1 --env.CK_SILENT_MODE=YES",
+        "print_output_file": "<<<print_output_file_cmd>>>",
+        "screen_output": ""
+      },
+      "yes": {
+        "print_output_file": "<<<print_output_file_cmd>>>"
+      }
+    },
+    "volume": {
+      "###": {
+        "volume_opt": "--volume ### "
+      },
+      "yes": {
+        "volume_opt": ""
+      }
+    },
+    "pre_ipmitool_mc_info": {
+      "yes": {
+        "pre_ipmitool_mc_info_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>>"
+      }
+    },
+    "pre_ipmitool_fru_print": {
+      "yes": {
+        "pre_ipmitool_fru_print_cmd": "<<<pre_ipmitool_fru_print_cmd_def>>>"
+      }
+    },
+    "pre_ipmitool_sdr_elist_full": {
+      "yes": {
+        "pre_ipmitool_sdr_elist_full_cmd": "<<<pre_ipmitool_sdr_elist_full_cmd_def>>>"
+      }
+    },
+    "watch_sensors": {
+      "yes": {
+        "watch_sensors_cmd": "<<<watch_sensors_cmd_def>>>"
+      },
+      "###": {
+        "watch_sensors_sleep": "###",
+        "watch_sensors_cmd": "<<<watch_sensors_cmd_def>>>"
+      }
+    },
+    "watch_ipmitool_get_sys_power": {
+      "yes": {
+        "watch_ipmitool_get_sys_power_cmd": "<<<watch_ipmitool_get_sys_power_cmd_def>>>"
+      },
+      "###": {
+        "watch_ipmitool_get_sys_power_sleep": "###",
+        "watch_ipmitool_get_sys_power_cmd": "<<<watch_ipmitool_get_sys_power_cmd_def>>>"
+      }
+    },
+    "post_ipmitool_mc_info": {
+      "yes": {
+        "post_ipmitool_mc_info_cmd": "<<<post_ipmitool_mc_info_cmd_def>>>"
+      }
+    },
+    "post_ipmitool_sdr_elist_full": {
+      "yes": {
+        "post_ipmitool_sdr_elist_full_cmd": "<<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+      }
+    },
+    "ipmitool_all": {
+      "yes": {
+        "ipmitool_all_cmd": "<<<pre_ipmitool_mc_info_cmd_def>>> <<<pre_ipmitool_fru_print_cmd_def>>> <<<pre_ipmitool_sdr_elist_full_cmd_def>>> <<<post_ipmitool_mc_info_cmd_def>>> <<<post_ipmitool_sdr_elist_full_cmd_def>>>"
+      }
+    },
+    "pre_fan": {
+      "yes": {
+        "pre_fan_raw": "<<<?fan_raw_default>>>",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
+        "check_ipmitool_set_pre_fan_raw_value_begin": "<<<check_ipmitool_set_pre_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "check_ipmitool_set_pre_fan_raw_value_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "pre_fan_sleep_cmd": "<<<pre_fan_sleep_def>>>",
+        "fan_raw_tag" : "-fan_raw.<<<?fan_raw_default>>>"
+      },
+      "###":{
+        "pre_fan_raw": "###",
+        "pre_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
+        "check_ipmitool_set_pre_fan_raw_value_begin": "<<<check_ipmitool_set_pre_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "check_ipmitool_set_pre_fan_raw_value_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "pre_fan_sleep_cmd": "<<<pre_fan_sleep_def>>>",
+        "fan_raw_tag" : "-fan_raw.###"
+      }
+    },
+    "post_fan": {
+      "yes": {
+        "post_fan_raw": "<<<?fan_raw_default>>>",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
+        "check_ipmitool_set_post_fan_raw_value_begin": "<<<check_ipmitool_set_post_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "check_ipmitool_set_post_fan_raw_value_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "post_fan_sleep_cmd": "<<<post_fan_sleep_def>>>"
+      },
+      "###":{
+        "post_fan_raw": "###",
+        "post_ipmitool_set_fan_raw_sdr_elist_cmd": "<<<?post_ipmitool_set_fan_raw_sdr_elist_cmd_def2>>>",
+        "check_ipmitool_set_fan_raw_begin": "<<<check_ipmitool_set_fan_raw_sut_begin_def>>>",
+        "check_ipmitool_set_post_fan_raw_value_begin": "<<<check_ipmitool_set_post_fan_raw_value_begin_def>>>",
+        "check_ipmitool_set_fan_raw_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "check_ipmitool_set_post_fan_raw_value_end": "<<<check_ipmitool_set_fan_raw_end_def>>>",
+        "post_fan_sleep_cmd": "<<<post_fan_sleep_def>>>"
+      }
+    },
+    "vc": {
+      "yes": {
+        "vc_value_input":"<<<vc_value_default>>>",
+        "vc_value":"<<<?escape_char>>>$(printf \"0x%.2x\" <<<vc_value_input>>>)",
+        "vc_cmd": "<<<vc_cmd_def_2>>>",
+        "check_vc_value_begin": "<<<check_vc_value_begin_def_2>>>",
+        "check_vc_value_end": "<<<check_vc_value_end_def_2>>>",
+        "record_tags": "vc.<<<vc_value_default>>>",
+        "vc_tag": "-vc.<<<vc_value_default>>>"
+      },
+      "###": {
+        "vc_value_input": "###",
+        "vc_value": "<<<?escape_char>>>$(printf \"0x%.2x\" ###)",
+        "vc_cmd": "<<<vc_cmd_def_2>>>",
+        "check_vc_value_begin": "<<<check_vc_value_begin_def_2>>>",
+        "check_vc_value_end": "<<<check_vc_value_end_def_2>>>",
+        "record_tags": "vc.###",
+        "vc_tag": "-vc.###"
+      }
+    },
+    "timestamp": {
+      "yes": {
+        "timestamp_value":"<<<?escape_char>>>${timestamp_val}",
+        "timestamp_value_cmd": "<<<timestamp_value_def>>>"
+      }
+    },
+    "ecc": {
+      "###": {
+        "ecc_default": "",
+        "ecc_value": "###"
+      }
+    },
+    "soc_reset": {
+      "###": {
+        "soc_reset_cmd": "echo 1 | sudo tee $(sudo find /sys/devices -name soc_reset | grep a100);"
+      }
+    },
+    "power_server_port": {
+      "###": {
+        "power_server_port_def":"###"
+      }
+    },
+    "power_server_ip": {
+      "###": {
+	"power_server_ip_def": "###"
+      }
+    },
+    "network_server_ip": {
+      "###": {
+        "network_server_ip_def": "###"
+      }
+    },
+    "network_server_port": {
+      "###": {
+        "network_server_port_def": "###",
+        "network_server_port_for_docker_def_2": " -p ###:### "
+      }
+    },
+    "docker_port": {
+      "yes": {
+        "network_server_port_for_docker":"<<<?network_server_port_for_docker_def_2>>>"
+      }
+    }
+  },
+  "cmd_template": "<<<shell_wrapped_cmd>>>",
+  "defaults": {
+    "activation_count": "<<<recommended_activation_count>>>",
+    "buffer_size": "<<<recommended_buffer_size>>>",
+    "cache_opt": "0",
+    "check_experiment_dir": "",
+    "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model>>> ]]; then echo -e 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model>>>.'; else",
+    "check_param_container_end_def": "fi;",
+    "check_ipmitool_set_pre_fan_raw_value_begin_def": " if [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" != <<<?escape_char>>>\"yes<<<?escape_char>>>\" ] && ( [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<?pre_fan>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"250<<<?escape_char>>>\" ] ) ; then echo 'Error: Value used for pre_fan is not supported. Supported values from 1 to 250.'; else",
+    "check_ipmitool_set_post_fan_raw_value_begin_def": " if [ <<<?escape_char>>>\"<<<post_fan>>><<<?escape_char>>>\" != <<<?escape_char>>>\"yes<<<?escape_char>>>\" ] && ( [ <<<?escape_char>>>\"<<<?post_fan>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<?post_fan>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"250<<<?escape_char>>>\" ] ) ; then echo 'Error: Value used for post_fan is not supported. Supported values from 1 to 250.'; else",
+    "check_ipmitool_set_fan_raw_sut_begin_def": " if [[  <<<?escape_char>>>\"aedk_15w aedk_20w aedk_25w gloria haishen<<<?escape_char>>>\" =~ (^|)<<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\"(^|) ]] ; then echo 'Error: SUT <<<?escape_char>>>\"<<<sut>>><<<?escape_char>>>\" does not support  pre_fan and/or post_fan.'; else",
+    "check_ipmitool_set_fan_raw_end_def": "fi;",
+    "check_vc_value_begin_def": " if [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -lt <<<?escape_char>>>\"1<<<?escape_char>>>\" ] || [ <<<?escape_char>>>\"<<<vc_value_input>>><<<?escape_char>>>\" -gt <<<?escape_char>>>\"17<<<?escape_char>>>\" ] ; then echo 'Error: incorrect vc value. VC must be between 1 and 17.'; else",
+    "check_vc_value_end_def": "fi;",
+    "check_vc_value_begin_def_2": "",
+    "check_vc_value_end_def_2": "",
+    "ck_benchmark_program": "<<<?soc_reset_cmd>>> sleep <<<sleep_before_ck_benchmark_sec>>>; <<<ck_benchmark_prefix>>> ck benchmark <<<run_or_benchmark_common>>> --speed --skip_stat_analysis --process_multi_keys --repetitions=<<<repetitions>>> --record --record_repo=local --record_uoa=<<<record_uoa>>> --tags=<<<record_tags_inner>>>",
+    "ck_compile_program": "ck compile program:<<<program_name>>> <<<?deps >>>",
+    "ck_run_program": "ck run <<<run_or_benchmark_common>>>",
+    "container": "`docker run -dt <<<docker_mode>>><<<docker_user>>><<<docker_group_add>>><<<?volume_opt>>><<<?volume_experiment>>><<<?volume_cache>>><<<?network_server_port_for_docker>>> --rm <<<docker_image>>>bash`",
+    "division": "open",
+    "device_ids": "<<<device_ids_default>>>",
+    "device_ids_default":"<<<all_device_ids>>>",
+    "ss_device_ids_default":"0",
+    "ms_device_ids_default":"<<<all_device_ids>>>",
+    "docker_bash_command": "/bin/bash -c",
+    "docker_config": "/home/krai/container.config",
+    "docker_exec_command": "docker exec",
+    "docker_experiment_dir_default": "/home/krai/CK_REPOS/local/experiment",
+    "docker_group_add": "--group-add <<<shared_group_id>>> ",
+    "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_os":"ubuntu",
+    "docker_mode": "--privileged ",
+    "docker_user": "--user=krai:kraig ",
+    "ecc_default": "off",
+    "ecc_value": "",
+    "ecc_cmd":"export ECC_VAL=<<<ecc_default>>><<<ecc_value>>>;",
+    "experiment_dir_default": "${CK_EXPERIMENT_DIR}",
+    "g292_config": "-DG292_CONFA",
+    "hyphenated_model_name": "<<<model_name>>>",
+    "ipmitool_mc_info_cmd_part": "sudo ipmitool mc info > <<<logs_dir>>>",
+    "ipmitool_fru_print_cmd_part": "sudo ipmitool fru print > <<<logs_dir>>>",
+    "ipmitool_sdr_elist_full_cmd_part": "sudo ipmitool sdr elist full > <<<logs_dir>>>",
+    "ipmitool_set_fan_raw_part": "sudo ipmitool raw 0x2e 0x10 0x0a 0x3c 0 64 1",
+    "logs_dir": "/opt/qti-aic/logs/",
+    "max_wait": "50000",
+    "model_readable": "<<<model_tags->>>",
+    "model_suffix": "offline",
+    "multistream_model_suffix": "multistream",
+    "multistream_target_latency": "<<<target_latency>>>",
+    "network_server_ip_def": "<<<?network_server_ip_def_2>>>",
+    "network_server_port_def": "<<<?network_server_port_def_2>>>",
+    "notes_file_def": "echo 'device_ids=<<<device_ids>>>' >> <<<logs_dir>>>NOTES.txt;",
+    "offline_target_qps": "<<<target_qps>>>",
+    "post_ipmitool_mc_info_log": "post.ipmitool_mc_info.log",
+    "post_ipmitool_sdr_elist_full_log": "post.ipmitool_sdr_elist_full.log",
+    "post_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<post_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>post.config; ",
+    "post_ipmitool_sdr_elist_full_cmd_def": "<<<?post_fan_sleep_cmd>>> echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<post_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>post.config; ",
+    "post_fan_sleep_def": "echo 'sleep 10' >> <<<logs_dir>>>post.config; ",
+    "power_record_tags_inner": "<<<record_tags,>>>",
+    "power_record_uoa": "<<<record_uoa_parts->>>",
+    "power_wrapped_ck_benchmark_program": "<<<wrapped_ck_benchmark_program_common>>>",
+    "power_server_ip": "<<<power_server_ip_def>>>",
+    "power_server_port": "<<<power_server_port_def>>>",
+    "post_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<post_fan_raw>>> 0xFF > <<<logs_dir>>><<<post_ipmitool_raw_log>>>' >> <<<logs_dir>>>post.config; echo 'if [ $? -eq 0 ]; then echo Fan speed set to level: <<<post_fan_raw>>>; else echo Error: failed to set fan speed.; fi;' >> <<<logs_dir>>>post.config;",
+    "pre_ipmitool_mc_info_log": "pre.ipmitool_mc_info.log",
+    "pre_ipmitool_fru_print_log": "pre.ipmitool_fru_print.log",
+    "pre_ipmitool_sdr_elist_full_log": "pre.ipmitool_sdr_elist_full.log",
+    "pre_ipmitool_raw_log":"pre.ipmitool_raw.log",
+    "post_ipmitool_raw_log":"post.ipmitool_raw.log",
+    "pre_ipmitool_mc_info_cmd_def": "echo '<<<ipmitool_mc_info_cmd_part>>><<<pre_ipmitool_mc_info_log>>>' >> <<<logs_dir>>>pre.config; ",
+    "pre_ipmitool_fru_print_cmd_def": "echo '<<<ipmitool_fru_print_cmd_part>>><<<pre_ipmitool_fru_print_log>>>' >> <<<logs_dir>>>pre.config; ",
+    "pre_ipmitool_sdr_elist_full_cmd_def": "<<<?pre_fan_sleep_cmd>>> echo '<<<ipmitool_sdr_elist_full_cmd_part>>><<<pre_ipmitool_sdr_elist_full_log>>>' >> <<<logs_dir>>>pre.config; ",
+    "pre_ipmitool_set_fan_raw_sdr_elist_cmd_def": "echo '<<<ipmitool_set_fan_raw_part>>> <<<pre_fan_raw>>> 0xFF  > <<<logs_dir>>><<<pre_ipmitool_raw_log>>>' >> <<<logs_dir>>>pre.config; echo 'if [ $? -eq 0 ]; then echo Fan speed set to level: <<<pre_fan_raw>>>; else echo Error: failed to set fan speed.; fi;' >> <<<logs_dir>>>pre.config;",
+    "pre_fan_sleep_def": "echo 'sleep 10' >> <<<logs_dir>>>pre.config; ",
+    "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
+    "preprocessed_using": "opencv",
+    "print_container_only": "&& CONTAINER=<<<container>>>",
+    "print_output_file_cmd": "&& cat <<<?escape_char>>>`ck find program:<<<program_name>>><<<?escape_char>>>`/tmp/<<<output_file>>>",
+    "queue_length": "<<<recommended_queue_length>>>",
+    "recommended_multistream_queue_length": "<<<recommended_queue_length>>>",
+    "recommended_compliance_buffer_size": "<<<recommended_performance_buffer_size>>>",
+    "record_tags_inner": "<<<record_tags,>>>",
+    "record_uoa": "<<<record_uoa_parts->>>",
+    "repetitions": "1",
+    "replace_existing": "",
+    "round": "v3.0",
+    "run_or_benchmark_common": "program:<<<program_name>>> <<<screen_output>>> <<<?deps >>> <<<?ck_env >>>",
+    "screen_output": "--env.CK_SILENT_MODE=YES --skip_print_timers",
+    "separator": ";",
+    "server_target_qps": "<<<target_qps>>>",
+    "num_setup_threads": "<<<recommended_num_setup_threads>>>",
+    "shared_group_id": "$(getent group <<<shared_group_name>>> | cut -d: -f3)",
+    "shared_group_name": "qaic",
+    "shell_wrapped_cmd": "<<<shell_preamble >>> <<<wrapped_ck_benchmark_program>>>",
+    "singlestream_target_latency": "<<<target_latency>>>",
+    "sleep_before_ck_benchmark_sec": "0",
+    "threads_per_queue": "<<<recommended_threads_per_queue>>>",
+    "timestamp_value_def": "export timestamp_val=-<<<?escape_char>>>$(date +'%Y%m%dT%H%M%S' -u); ",
+    "verbosity": "<<<recommended_verbosity>>>",
+    "vc_cmd_def": "export VC_VAL=<<<vc_value>>>;",
+    "vc_cmd_def_2": "",
+    "watch_sensors_sleep": "1",
+    "watch_ipmitool_get_sys_power_sleep": "10",
+    "watch_cmd_begin":"echo <<<?escape_char>>>\"nohup sh -c 'echo <<<?escape_char>>>\\$<<<?escape_char>>>\\$ >> <<<logs_dir>>>watch.procs; while [ true ]; do ",
+    "watch_sensor_cmd_part": "sudo sensors | grep qaic-pci -A6 >> <<<logs_dir>>>",
+    "watch_sensor_log": "watch.sensors.log",
+    "watch_cmd_separator": "&& echo <<<?escape_char>>><<<?escape_char>>>\"^^^<<<?escape_char>>><<<?escape_char>>>\" >> <<<logs_dir>>>",
+    "watch_sleep": " sleep ",
+    "watch_cmd_end": " done' & <<<?escape_char>>>\" >> <<<logs_dir>>>watch.config; ",
+    "watch_ipmitool_get_sys_power_cmd_part": "sudo ipmitool sensor get SYS_POWER 2>&1 >> <<<logs_dir>>>",
+    "watch_ipmitool_get_sys_power_log": "watch.ipmitool_get_sys_power.log",
+    "watch_sensors_cmd_def": "<<<watch_cmd_begin>>> <<<watch_sensor_cmd_part>>><<<watch_sensor_log>>> <<<watch_cmd_separator>>><<<watch_sensor_log>>><<<separator>>><<<watch_sleep>>><<<watch_sensors_sleep>>><<<separator>>><<<watch_cmd_end>>>",
+    "watch_ipmitool_get_sys_power_cmd_def": "<<<watch_cmd_begin>>><<<watch_ipmitool_get_sys_power_cmd_part>>><<<watch_ipmitool_get_sys_power_log>>> <<<watch_cmd_separator>>><<<watch_ipmitool_get_sys_power_log>>><<<separator>>><<<watch_sleep>>><<<watch_ipmitool_get_sys_power_sleep>>><<<separator>>><<<watch_cmd_end>>>",
+    "wrapped_ck_benchmark_program_common": "<<<?docker_run>>> <<<?double_quote>>><<<?check_param_container_begin>>> <<<?check_ipmitool_set_fan_raw_begin>>> <<<?check_ipmitool_set_pre_fan_raw_value_begin>>> <<<?check_ipmitool_set_post_fan_raw_value_begin>>> <<<?check_vc_value_begin>>> <<<?timestamp_value_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ] && [ -z <<<?escape_char>>>\"<<<replace_existing>>><<<?escape_char>>>\" ]; then echo 'Experiment <<<record_uoa>>> exists, skipping'; else <<<ecc_cmd>>> rm -f /opt/qti-aic/logs/*; <<<?pre_ipmitool_mc_info_cmd>>><<<?pre_ipmitool_fru_print_cmd>>><<<?pre_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?pre_ipmitool_sdr_elist_full_cmd>>><<<?watch_sensors_cmd>>><<<?watch_ipmitool_get_sys_power_cmd>>><<<?post_ipmitool_mc_info_cmd>>><<<?post_ipmitool_set_fan_raw_sdr_elist_cmd>>><<<?post_ipmitool_sdr_elist_full_cmd>>><<<?ipmitool_all_cmd>>> <<<?vc_cmd>>> if [ -n <<<?escape_char>>>\"<<<?escape_char>>>`ck list local:experiment:<<<record_uoa>>><<<?escape_char>>>`<<<?escape_char>>>\" ]; then ck rm --force local:experiment:<<<record_uoa>>>; fi; <<<ck_benchmark_program>>> <<<?escape_char>>>\"@@@{'meta': {'ck_benchmark_program': '<<<ck_benchmark_program>>>'}}<<<?escape_char>>>\" <<<?print_output_file>>> ; <<<?notes_file>>> cp -r <<<logs_dir>>>*.{log,txt} <<<docker_experiment_dir_default>>>/<<<record_uoa>>> 2>/dev/null; <<<?check_vc_value_end>>> <<<?check_ipmitool_set_post_fan_raw_value_end>>> <<<?check_ipmitool_set_pre_fan_raw_value_end>>> <<<?check_ipmitool_set_fan_raw_end>>> <<<?check_param_container_end>>> fi<<<?double_quote>>>",
+    "wrapped_ck_benchmark_program": "<<<wrapped_ck_benchmark_program_common>>>",
+    "wrapped_ck_run_program": "<<<ck_run_program>>> <<<?print_output_file>>>",
+    "skip_accuracy_calc": "no"
+  },
+  "groups": {
+    "closed": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      },
+      {
+        "compliance": "TEST01"
+      },
+      {
+        "compliance": "TEST04"
+      },
+      {
+        "compliance": "TEST05"
+      }
+    ],
+    "datacenter": [
+      {
+        "scenario": "offline"
+      },
+      {
+        "scenario": "server"
+      }
+    ],
+    "edge": [
+      {
+        "scenario": "offline"
+      },
+      {
+        "scenario": "singlestream"
+      },
+      {
+        "scenario": "multistream"
+      }
+    ],
+    "open": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      }
+    ]
+  }
+}

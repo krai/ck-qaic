@@ -1,0 +1,201 @@
+#
+# Copyright (c) 2021-2022 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+###############################################################################
+# IMPORT STAGE
+#
+# In this stage, "import" the 'krai/qaic' image.
+#
+###############################################################################
+ARG BASE_IMAGE
+ARG BASE_IMAGE
+ARG DOCKER_OS
+ARG SDK_VER
+FROM ${BASE_IMAGE}:${DOCKER_OS}_${SDK_VER} AS qaic
+
+###############################################################################
+# FINAL STAGE
+#
+# In this stage, copy in QAIC SDK, and then calibrate and compile the workload.
+#
+###############################################################################
+FROM krai/ck.bert:${DOCKER_OS}_latest AS final
+ARG SDK_VER
+ARG COMPILE_PRO
+ARG COMPILE_STD
+ARG COMPILE_DC
+ARG COMPILE_EDGE
+ARG DEBUG_BUILD
+ARG CK_QAIC_PAT
+ARG CK_QAIC_REPO
+ARG CK_QAIC_CHECKOUT
+ARG CK_QAIC_PCV
+ARG CK_QAIC_PERCENTILE_CALIBRATION
+ARG PRECALIBRATED_PROFILE
+
+#-----------------------------------------------------------------------------#
+# Step 0. Update CK repositories.
+#-----------------------------------------------------------------------------#
+RUN if [[ ! -z ${CK_QAIC_PAT} ]]; then echo ${CK_QAIC_PAT} | gh auth login --with-token; gh auth setup-git; fi
+RUN cd ${CK_REPOS}/${CK_QAIC_REPO} && git pull && git checkout ${CK_QAIC_CHECKOUT} && ck pull all
+
+#-----------------------------------------------------------------------------#
+# Step 1. Copy in the QAIC SDKs.
+#-----------------------------------------------------------------------------#
+COPY --from=qaic /opt/qti-aic/ /opt/qti-aic/
+ENV LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}
+
+# Set platform scripts (ensuring that ECC is on).
+RUN ck detect platform.os --platform_init_uoa=qaic
+
+#-----------------------------------------------------------------------------#
+# Step 2. Calibrate the workload.
+#-----------------------------------------------------------------------------#
+# Calibrate from scratch.
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then \
+  echo ${SDK_VER} | ck install package --tags=profile,qaic,bert-packed,seq.384; \
+fi
+# Use a precalibrated profile.
+ADD bert ${CK_REPOS}/${CK_QAIC_REPO}/profile/bert
+RUN if [[ "${PRECALIBRATED_PROFILE}" == "yes" ]]; then                      \
+  echo "precalibrated" | ck detect soft:compiler.glow.profile               \
+  --full_path=/home/krai/CK_REPOS/${CK_QAIC_REPO}/profile/bert/profile.yaml \
+  --extra_tags=detected,profile,qaic,bert-packed,mixed,seq.384;             \
+fi
+
+#-----------------------------------------------------------------------------#
+# Step 3. Compile the BERT-99 and BERT-99.9 workloads for appropriate scenarios.
+#-----------------------------------------------------------------------------#
+## Datacenter and Edge: BERT-99 Offline.
+RUN if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+  if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384 \
+      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  else \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99,bert-99.pcie.16nsp.offline,quantization.calibration,seg.384; \
+  fi \
+fi
+RUN if [[ "${COMPILE_STD}" == "yes" ]]; then \
+  if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384 \
+      --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+  else \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99,bert-99.pcie.14nsp.offline,quantization.calibration,seg.384; \
+  fi \
+fi
+
+## Datacenter only: BERT-99.9 Offline.
+RUN if [[ "${COMPILE_DC}" == "yes" ]]; then \
+  if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.offline,seg.448; \
+  fi; \
+  if [[ "${COMPILE_STD}" == "yes" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.offline,seg.448; \
+  fi \
+fi
+
+## Datacenter only: BERT-99.9 Server, BERT-99 Server.
+RUN if [[ "${COMPILE_DC}" == "yes" ]]; then \
+  if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99.9,bert-99.9.pcie.16nsp.server,seg.448; \
+    if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384 \
+        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    else \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.16nsp.server,quantization.calibration,seg.384; \
+    fi \
+  fi; \
+  if [[ "${COMPILE_STD}" == "yes" ]]; then \
+    ck install package --quiet \
+      --tags=model,compiled,bert-99.9,bert-99.9.pcie.14nsp.server,seg.448; \
+    if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.384 \
+        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    else \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.14nsp.server,quantization.calibration,seg.384; \
+    fi \
+  fi \
+fi
+
+## Edge only: BERT-99 SingleStream, BERT-99 MultiStream.
+RUN if [[ "${COMPILE_EDGE}" == "yes" ]]; then \
+  if [[ "${COMPILE_PRO}" == "yes" ]]; then \
+    if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384 \
+        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    else \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.16nsp.singlestream,quantization.calibration,seg.384; \
+    fi \
+  fi; \
+  if [[ "${COMPILE_STD}" == "yes" ]]; then \
+    if [[ ! -z "${CK_QAIC_PCV}" ]]; then \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384 \
+        --env._PERCENTILE_CALIBRATION_VALUE=99.$CK_QAIC_PCV --extra_tags=pcv.$CK_QAIC_PCV; \
+    else \
+      ck install package --quiet \
+        --tags=model,compiled,bert-99,bert-99.pcie.14nsp.singlestream,quantization.calibration,seg.384; \
+    fi \
+  fi \
+fi
+
+#-----------------------------------------------------------------------------#
+# Step 4. Build the MLPerf LoadGen API to prefetch dependencies.
+#-----------------------------------------------------------------------------#
+RUN ck compile program:packed-bert-qaic-loadgen --quiet \
+ && if [[ "${DEBUG_BUILD}" == "no" ]]; then rm -rf \
+$(ck find repo:ctuning-programs)/* \
+$(ck find repo:ck-crowdtuning-platforms)/* \
+$(ck locate env --tags=mlperf,inference,source)/inference/.git \
+$(ck locate env --tags=lib,protobuf-host)/src \
+$(ck locate env --tags=tool,cmake)/cmake*/Bootstrap.cmk \
+$(ck locate env --tags=tool,cmake)/cmake*/Tests \
+$(ck locate env --tags=tool,cmake)/cmake*/Source \
+$(ck locate env --tags=tool,cmake)/cmake*/Utilities; fi
+
+#-----------------------------------------------------------------------------#
+# Show the status of QAIC devices.
+#-----------------------------------------------------------------------------#
+CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

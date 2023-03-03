@@ -1,0 +1,269 @@
+{
+  "_base_entry": "cmdgen:05ee58d2d664fb59",
+  "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
+  "accu_init": {
+  },
+  "build_map": {
+    "sut": {
+      "q1_pro_edge": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_fp16_activation_count": "4"
+      },
+      "q1_std_edge": {
+        "recommended_mixed_offline_activation_count": "14"
+      },
+      "gloria_highend": {
+        "recommended_mixed_offline_activation_count": "14"
+      },
+      "q2_lite_edge": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "q4_lite_edge": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "q4_pro_dc": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4"
+      },
+      "q3_std_edge": {
+        "recommended_mixed_offline_activation_count": "14"
+      },
+      "q4_std_edge": {
+        "recommended_mixed_offline_activation_count": "14"
+      },
+      "q8_std_dc": {
+        "recommended_mixed_offline_activation_count": "14",
+        "recommended_mixed_server_activation_count": "14",
+        "recommended_fp16_activation_count": "3"
+      },
+      "q8_std_network": {
+        "recommended_mixed_offline_activation_count": "14",
+        "recommended_mixed_server_activation_count": "14",
+        "recommended_fp16_activation_count": "3"
+      },
+      "aedk": {
+        "recommended_mixed_offline_activation_count": "8"
+      },
+      "aedk_20w": {
+        "recommended_mixed_offline_activation_count": "8"
+      },
+      "aedk_highend": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "aedk_highend_15w": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "aedk_highend_25w": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "gloria": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "heimdall": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "rb6": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "eb6": {
+        "recommended_mixed_offline_activation_count": "9"
+      },
+      "g292_z43_q18e": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6",
+        "recommended_threads_per_queue": "3"
+      },
+      "g292_z43_q18": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_threads_per_queue": "3"
+      },
+      "g292_z43_q16e": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6",
+        "recommended_threads_per_queue": "3"
+      },
+      "g292_z43_q16": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q2e": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_vc_value": "10"
+      },
+      "r282_z93_q2": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "r282_z93_q1": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "r282_z93_q5e": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_vc_value": "10"
+      },
+      "r282_z93_q5": {
+        "recommended_mixed_offline_activation_count": "16"
+      },
+      "r282_z93_q8e": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "9",
+        "recommended_fp16_vc_value": "6"
+      },
+      "r282_z93_q8": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4"
+      },
+      "r282_z93_q5e_dc": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4",
+        "recommended_mixed_vc_value": "10",
+        "recommended_fp16_vc_value": "6"
+      },
+      "r282_z93_q5_dc": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_server_activation_count": "16",
+        "recommended_fp16_activation_count": "4"
+      },
+      "r282_z93_q8e_edge": {
+        "recommended_mixed_offline_activation_count": "16",
+        "recommended_mixed_vc_value": "10"
+      },
+      "r282_z93_q8_edge": {
+        "recommended_mixed_offline_activation_count": "16"
+      }
+    },
+    "scenario": {
+      "offline": {
+        "batch_size": "<<<offline_override_batch_size>>>"
+      },
+      "server": {
+        "batch_size": "<<<server_override_batch_size>>>"
+      }
+    },
+    "model": {
+      "bert-99.9": {
+        "deps": [
+          "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
+        ],
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=bert"
+        ],
+        "model_tags": [
+          "###",
+          "seg.<<<override_seg_length>>>"
+        ],
+        "override_seg_length": "448",
+        "recommended_offline_activation_count": "<<<recommended_fp16_activation_count>>>",
+        "recommended_server_activation_count": "<<<recommended_fp16_activation_count>>>",
+        "division": "closed",
+        "vc_value_default": "<<<recommended_fp16_vc_value>>>",
+        "zero_copy": "disable"
+      },
+      "bert-99": {
+        "deps": [
+          "--dep_add_tags.dataset-tokenized=dataset,squad,tokenized,raw"
+        ],
+        "ck_env": [
+          "--env.ML_MODEL_MODEL_NAME=bert",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert"
+        ],
+        "model_tags": [
+          "###",
+          "quantization.calibration",
+          "seg.<<<override_seg_length>>>"
+        ],
+        "recommended_server_activation_count": "<<<recommended_mixed_server_activation_count>>>",
+        "recommended_offline_activation_count": "<<<recommended_mixed_offline_activation_count>>>",
+        "recommended_queue_length": "4",
+        "division": "closed",
+        "vc_value_default": "<<<recommended_mixed_vc_value>>>",
+        "zero_copy": "enable"
+      }
+    },
+    "network_server": {
+      "yes": {
+        "program_name": "packed-bert-qaic-loadgen-network-server",
+        "ck_env": [
+          "--env.NETWORK_SERVER_IP_ADDRESS=<<<network_server_ip_def>>>",
+	  "--env.NETWORK_SERVER_PORT=<<<network_server_port_def>>>",
+          "--env.CK_ENV_UNIQUE_SERVER_ID=KILT_Network_SUT"
+        ]
+      }
+    },
+    "network_client": {
+      "yes": {
+        "program_name": "packed-bert-qaic-loadgen-network-client",
+        "ck_env": [
+          "--env.NETWORK_SERVER_IP_ADDRESS=<<<network_server_ip_def>>>",
+          "--env.NETWORK_SERVER_PORT=<<<network_server_port_def>>>"
+        ]
+      }
+    }
+  },
+  "defaults": {
+    "buffer_size": "<<<recommended_buffer_size>>>",
+    "cache_dir_default": "/data/packed-bert.qaic-loadgen.cache",
+    "cache_opt": "0",
+    "check_param_container_begin_def": "sdk_container=\\$(grep sdk <<<docker_config>>> | awk -F '=' '{print \\$2}'); model_name_container=\\$(grep model_name <<<docker_config>>> | awk -F '=' '{print \\$2}' | sed -e 's/-/_/g');  if [[ \\$sdk_container != <<<sdk>>> || \\$model_name_container != <<<model_name>>> ]]; then echo 'Error: The SDK or/and model is not correct for this container.\nContainer: sdk='\\$sdk_container', model='\\$model_name_container.'\nGiven: sdk=<<<sdk>>>, model=<<<model_name>>>.'; else",
+    "dataset_size": "10833",
+    "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/packed-bert-qaic-loadgen/tmp/preprocessed",
+    "hyphenated_model_name": "<<<model>>>",
+    "max_wait": "50000",
+    "model_name": "bert",
+    "offline_override_batch_size": "<<<override_batch_size>>>",
+    "override_batch_size": "1000",
+    "preprocessed_using": "tensorflow",
+    "program_name": "packed-bert-qaic-loadgen",
+    "recommended_input_select": "0",
+    "recommended_accuracy_buffer_size": "10833",
+    "recommended_mixed_vc_value": "17",
+    "recommended_fp16_vc_value": "12",
+    "recommended_batch_size": "<<<override_batch_size>>>",
+    "recommended_performance_buffer_size": "10833",
+    "recommended_num_setup_threads": "2",
+    "recommended_queue_length": "4",
+    "recommended_threads_per_queue": "4",
+    "server_override_batch_size": "<<<override_batch_size>>>",
+    "override_seg_length": "384",
+    "task_name": "bert-question-answering"
+  },
+  "groups": {
+    "closed": [
+      {
+        "mode": "accuracy"
+      },
+      {
+        "mode": "performance"
+      },
+      {
+        "compliance": "TEST01"
+      },
+      {
+        "compliance": "TEST05"
+      }
+    ],
+    "edge": [
+      {
+        "scenario": "singlestream"
+      },
+      {
+        "scenario": "offline"
+      }
+    ]
+  }
+}

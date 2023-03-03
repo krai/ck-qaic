@@ -1,0 +1,175 @@
+{
+  "backup_data_uid": "e719226ce4300adc",
+  "compile_deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    },
+    "lib-protobuf-host": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ProtoBuf host compiler",
+      "skip_installed": {
+        "android": "yes",
+        "win": "yes"
+      },
+      "sort": 115,
+      "tags": "lib,protobuf-host,for.qaic"
+    },
+    "lib-kilt": {
+      "local": "yes",
+      "name": "Krai Inference Library",
+      "sort": 0,
+      "tags": "lib,kilt"
+    },
+    "lib-xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
+    }
+  },
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_STDCPP_INCLUDE",
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA"
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ -O3 -ffast-math $<<CK_EXTRA_COMPILER_DEPS1>>$ $<<CK_EXTRA_COMPILER_DEPS2>>$ $<<CK_EXTRA_COMPILER_DEPS3>>$ -Wall -Wno-sign-compare -std=c++17 -I/opt/qti-aic/dev/inc/ -I/opt/qti-aic/dev/inc/qaic-api-common -I$<<CK_ENV_LIB_PROTOBUF_HOST>>$/include/ -I$<<CK_ENV_LIB_KILT>>$/include/devices/qaic/ -I$<<CK_ENV_LIB_KILT>>$/include/devices/qaic/api/master/ -I$<<CK_ENV_LIB_KILT>>$/include/config/env/ -I$<<CK_ENV_LIB_KILT>>$/include/config/ -I$<<CK_ENV_LIB_KILT>>$/include/devices/qaic/config/ -I$<<CK_ENV_LIB_KILT>>$/include/benchmarks/network/bert/server/config/",
+  "data_name": "packed-bert-qaic-loadgen",
+  "extra_ld_vars": "-L$<<CK_ENV_LIB_KILT>>$/lib/ -ldl -lpthread -lprotobuf -lQAic",
+  "linker_add_lib_as_env": [
+    "CK_CXX_EXTRA",
+    "CK_ENV_LIB_STDCPP_DYNAMIC"
+  ],
+  "main_language": "cpp",
+  "need_cpu_info": "yes",
+  "only_for_target_os_tags": [
+    "linux",
+    "android"
+  ],
+  "pass_env_to_resolve": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no",
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json",
+        "post_process_via_ck": {
+          "data_uoa": "bert-question-answering",
+          "module_uoa": "script",
+          "script_name": "loadgen_postprocess"
+        },
+        "pre_process_via_ck": {
+          "data_uoa": "bert-question-answering",
+          "module_uoa": "script",
+          "script_name": "loadgen_preprocess"
+        },
+        "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<CK_ENV_LIB_STDCPP_DYNAMIC>>$"
+        ],
+        "run_output_files": [
+          "mlperf_log_accuracy.json",
+          "mlperf_log_detail.txt",
+          "mlperf_log_summary.txt",
+          "mlperf_log_trace.json"
+        ]
+      }
+    }
+  },
+  "run_deps": {
+    "dataset-original": {
+      "local": "yes",
+      "name": "Original SQuAD dataset",
+      "sort": 20,
+      "tags": "dataset,squad,original"
+    },
+    "dataset-tokenized": {
+      "local": "yes",
+      "name": "SQuAD dataset tokenized for BERT",
+      "sort": 1,
+      "tags": "dataset,squad,tokenized,raw"
+    },
+    "lib-python-matplotlib": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "Python Matplotlib library",
+      "sort": 60,
+      "tags": "lib,python-package,matplotlib"
+    },
+    "lib-python-numpy": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 40,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-tensorflow": {
+      "local": "yes",
+      "name": "Python TensorFlow library",
+      "sort": 30,
+      "tags": "lib,python-package,tensorflow"
+    },
+    "mlperf-inference-src": {
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "MLPerf Inference source",
+      "no_tags": "for.aimet",
+      "sort": 45,
+      "tags": "mlperf,inference,source"
+    },
+    "python": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 30,
+      "tags": "compiler,lang-python"
+    },
+    "weights": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "BERT Packed model",
+      "sort": 20,
+      "tags": "model,qaic,compiled"
+    }
+  },
+  "run_vars": {
+    "CK_BATCH_SIZE": 1,
+    "CK_ENV_QAIC_INPUT_COUNT": 4,
+    "CK_ENV_QAIC_OUTPUT_COUNT": 2,
+    "CK_IDLE_TIMEOUT_MS": 40,
+    "CK_LOADGEN_BUFFER_SIZE": 10833,
+    "CK_LOADGEN_DATASET_SIZE": 10833,
+    "CK_LOADGEN_MODE": "AccuracyOnly",
+    "CK_LOADGEN_MULTISTREAMNESS": "",
+    "CK_LOADGEN_SCENARIO": "Offline",
+    "CK_LOADGEN_TRIGGER_COLD_RUN": "NO",
+    "CK_LOADGEN_USER_CONF": "user.conf",
+    "CK_MLPERF_PRE_USER_CONF_AND_AUDIT_CONFIG": "YES",
+    "CK_QUEUE_TIMEOUT_MS": 20,
+    "CK_RESULTS_DIR": "predictions",
+    "CK_VERBOSE": 1,
+    "CK_WARMUP_TIMEOUT_MS": 70,
+    "LOGURU_LEVEL": "ERROR",
+    "ML_MODEL_MODEL_NAME": "bert"
+  },
+  "skip_bin_ext": "yes",
+  "source_files": [
+    "$<<CK_ENV_LIB_KILT>>$/include/benchmarks/network/bert/server/server.cpp",
+    "$<<CK_ENV_LIB_KILT>>$/include/benchmarks/network/bert/server/pack.cpp",
+    "$<<CK_ENV_LIB_KILT>>$/include/devices/qaic/api/master/QAicInfApi.cpp"
+  ],
+  "tags": [
+    "loadgen",
+    "bert",
+    "qaic",
+    "lang-cpp"
+  ],
+  "target_file": "bert-server",
+  "template": "yes",
+  "template_type": "BERT via QAIC (C++)"
+}

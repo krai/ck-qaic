@@ -1,0 +1,71 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "CUDA_VISIBLE_DEVICES": "-1",
+      "MODEL_NAME": "profile",
+      "QAIC_PROFILE": "yes",
+      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "package_name": "Profile for QAIC model (BERT)",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "mlperf-source": {
+      "local": "yes",
+      "name": "MLPerf Inference source",
+      "sort": 36,
+      "tags": "mlperf,inference,source"
+    },
+    "model-source": {
+      "local": "yes",
+      "name": "BERT Packed model",
+      "sort": 5,
+      "tags": "model,mlperf,bert-packed"
+    },
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python 3",
+      "sort": 40,
+      "tags": "compiler,python,v3"
+    },
+    "squad-cal": {
+      "local": "yes",
+      "name": "SQuAD calibration dataset",
+      "sort": 1,
+      "tags": "dataset,calibration,squad,pickle,width.384"
+    }
+  },
+  "end_full_path_universal": "profile.yaml",
+  "process_script": "install",
+  "soft_uoa": "compiler.glow.profile",
+  "suggested_path": "model-profile-qaic-bert-packed",
+  "tags": [
+    "profile",
+    "model-profile",
+    "qaic",
+    "qaic-profile",
+    "bert-packed"
+  ],
+  "variations": {
+    "seq.384": {
+      "extra_env": {
+        "_PACKED_SEQ_LEN": "384"
+      },
+      "on_by_default": "yes"
+    },
+    "seq.448": {
+      "extra_env": {
+        "_PACKED_SEQ_LEN": "448"
+      }
+    },
+    "seq.512": {
+      "extra_env": {
+        "_PACKED_SEQ_LEN": "512"
+      }
+    }
+  }
+}

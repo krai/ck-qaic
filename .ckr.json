@@ -1,0 +1,20 @@
+{
+  "data_uoa": "ck-qaic",
+  "data_uid": "044999a5af4f0992",
+  "data_alias": "ck-qaic",
+  "data_name": "ck-qaic",
+  "dict": {
+    "shared": "git",
+    "url": "https://github.com/krai/ck-qaic",
+    "repo_deps": [
+      {
+        "repo_uoa": "ck-env",
+        "repo_url": "https://github.com/krai/ck-env"
+      },
+      {
+        "repo_uoa": "ck-mlperf",
+        "repo_url": "https://github.com/krai/ck-mlperf"
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "4fabef7e0ad24fe4",
+  "backup_module_uid": "88eef0cd8c43b68a",
+  "backup_module_uoa": "docker",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2021-09-01T11:56:41.379773",
+    "version": [
+      "1",
+      "55",
+      "5"
+    ]
+  },
+  "data_name": "ssd-mobilenet"
+}

@@ -1,0 +1,18 @@
+#! /bin/bash
+
+# DUMMY
+
+cmdfile=/opt/qti-aic/logs/post.config
+cmdfile_watch=/opt/qti-aic/logs/watch.procs
+if [ -e $cmdfile ]; then
+  while read cmd; do
+    eval $cmd
+  done < $cmdfile
+fi
+if [ -e $cmdfile_watch ]; then
+  cat $cmdfile_watch | xargs kill
+fi
+
+if [ -n "$VC_VAL_RESET" ]; then
+  echo 1 | sudo tee /sys/bus/mhi/devices/*/soc_reset
+fi

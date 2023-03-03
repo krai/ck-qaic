@@ -1,0 +1,1179 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "_COMPILER_ARGS_NAME_PREFIX": "",
+      "MODEL_NAME": "converted_model",
+      "QAIC_TOOLCHAIN_PATH": "/opt/qti-aic",
+      "_BATCH_SIZE": "1",
+      "_SEG": "384"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "package_name": "QAIC model",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "model-source": {
+      "local": "yes",
+      "name": "Original model",
+      "sort": 5,
+      "tags": "model",
+      "update_tags_if_env": {
+        "resnet50,tf,mlperf,fix_input_shape": [
+          {
+            "_MODEL_TO_CONVERT": "compile_resnet50_tf"
+          }
+        ],
+        "ssd-resnet34,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "compile_ssd_resnet34_no_nms_mlperf"
+          }
+        ],
+        "retinanet,onnx,mlperf,non-quantized,no-nms": [
+          {
+            "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf"
+          }
+        ],
+        "ssd-mobilenet,pytorch,mlperf,for.qaic": [
+          {
+            "_MODEL_TO_CONVERT": "compile_ssd_mobilenet_no_nms_mlperf"
+          }
+        ],
+        "mlperf,bert-packed": [
+          {
+            "_MODEL_TO_CONVERT": ["compile_bert_99", "compile_bert_99.9"] 
+          }
+        ]
+      }
+    },
+    "profile-resnet34": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_ssd_resnet34_no_nms_mlperf"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "SSD-ResNet34 profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,ssd_resnet34",
+      "update_tags_if_env": {
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_retinanet_no_nms_mlperf"
+          ],
+          "_QUANTIZED": [
+            "yes"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "Retinanet profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,retinanet",
+      "update_tags_if_env": {
+        "bs.1": [
+          {
+            "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
+        "bs.8": [
+          {
+            "_BATCH_SIZE": "8"
+          }
+        ],
+        "bs.explicit": [
+          {
+            "_BATCH_SIZE_EXPLICIT": "yes"
+          }
+        ],
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile-ssd_mobilenet": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_ssd_mobilenet_no_nms_mlperf"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "SSD-MobileNet profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,ssd_mobilenet",
+      "update_tags_if_env": {
+        "bs.1": [
+          {
+            "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
+        "bs.8": [
+          {
+            "_BATCH_SIZE": "8"
+          }
+        ],
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile-resnet50": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_resnet50_tf"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "ResNet50 profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,resnet50",
+      "update_tags_if_env": {
+        "bs.1": [
+          {
+            "_BATCH_SIZE": "1"
+          }
+        ],
+        "bs.2": [
+          {
+            "_BATCH_SIZE": "2"
+          }
+        ],
+        "bs.4": [
+          {
+            "_BATCH_SIZE": "4"
+          }
+        ],
+        "bs.8": [
+          {
+            "_BATCH_SIZE": "8"
+          }
+        ],
+        "bs.16": [
+          {
+            "_BATCH_SIZE": "16"
+          }
+        ],
+        "first.5": [
+          {
+            "_CAL": "calibrate_first.5"
+          }
+        ]
+      }
+    },
+    "profile-bert": {
+      "enable_if_env": [
+        {
+          "_MODEL_TO_CONVERT": [
+            "compile_bert_99"
+          ]
+        }
+      ],
+      "local": "yes",
+      "name": "BERT profile for QAIC model",
+      "sort": 100,
+      "tags": "profile,qaic,bert-packed",
+      "update_tags_if_env": {
+        "seq.384": [
+          {
+            "_SEG": "384"
+          }
+        ],
+        "seq.448": [
+          {
+            "_SEG": "448"
+          }
+        ],
+        "seq.512": [
+          {
+            "_SEG": "512"
+          }
+        ]
+      }
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 15,
+      "tags": "compiler,python",
+      "version_from": [
+        3,
+        4,
+        0
+      ]
+    }
+  },
+  "end_full_path_universal": "elfs/constants.bin",
+  "process_script": "install",
+  "soft_uoa": "model.qaic",
+  "suggested_path": "model-qaic-compiled",
+  "tags": [
+    "model",
+    "qaic",
+    "converted",
+    "compiled",
+    "compiled-by-qaic"
+  ],
+  "variations": {
+    "first.5": {
+      "extra_env": {
+        "_CAL": "calibrate_first.5"
+      }
+    },
+    "resnet50": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf ResNet50 TF)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_IMAGENET": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "resnet50",
+        "_MODEL_TO_CONVERT": "compile_resnet50_tf",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema-constants=symmetric_with_uint8 -quantization-schema-activations=symmetric_with_uint8 -quantization-precision=Int8 -enable-channelwise -output-node-name=ArgMax -vvv -compile-only -use-producer-dma=1",
+        "_COMPILER_ARGS_OFFLINE": "-sdp-cluster-sizes=2,2",
+        "_COMPILER_ARGS_SINGLESTREAM": "-aic-num-of-instances=1",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ ",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ ",
+        "_COMPILER_PARAMS_SERVER_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema-constants=symmetric_with_uint8 -quantization-schema-activations=symmetric_with_uint8 -quantization-precision=Int8 -enable-channelwise -output-node-name=ArgMax -vvv -compile-only -use-producer-dma=0 -aic-num-of-instances=1",
+        "_COMPILER_ARGS_SERVER": "-sdp-cluster-sizes=4,4 -mos=1,4"
+      },
+      "extra_tags": [
+        "image-classification",
+        "compiled-by-qaic",
+        "calibrated-by-qaic"
+      ]
+    },
+    "resnet50.aedk_highend.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.aedk_highend.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.aedk_highend.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.aedk.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.aedk.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.aedk.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.14nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.16nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.16nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+        "resnet50.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "8",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=1,2 -ols=4"
+      },
+      "extra_tags": [
+        "bs.8"
+      ]
+    },
+    "resnet50.pcie.16nsp.quad.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "resnet50.pcie.16nsp.quad.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "ssd_resnet34": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf SSD-ResNet34 No NMS)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_COCO": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "ssd-resnet34",
+        "_BATCH_SIZE": "1",
+        "_MODEL_TO_CONVERT": "compile_ssd_resnet34_no_nms_mlperf",
+        "_ENABLE_CHANNEL_WISE": "yes",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema-constants=symmetric_with_uint8 -quantization-schema-activations=symmetric_with_uint8 -quantization-precision=Int8 -vvv -node-precision-info=[NODE_PRECISION_FILE] -compile-only",
+        "_COMPILER_ARGS_OFFLINE": "-aic-enable-depth-first",
+        "_COMPILER_ARGS_SINGLESTREAM": "",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms",
+        "bs.1"
+      ]
+    },
+    "ssd_resnet34.aedk_highend.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.aedk_highend.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "ssd_resnet34.aedk_highend.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      }
+    },
+    "ssd_resnet34.aedk.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.aedk.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "ssd_resnet34.aedk.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      }
+    },
+    "ssd_resnet34.pcie.14nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.14nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "ssd_resnet34.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "ssd_resnet34.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      }
+    },
+    "retinanet.fp16": {
+      "extra_customize": {
+        "package_name": "SSD Retinanet FP16"
+      },
+      "extra_env": {
+        "_BATCH_SIZE_EXPLICIT": "yes",
+        "_NO_QUANTIZATION" : "yes",
+        "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16 -onnx-define-symbol=batch_size,[BATCH_SIZE]",
+        "_COMPILER_ARGS_OFFLINE": "-aic-perf-metrics -time-passes -version",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=1",
+        "_FP_16": "yes"
+      }
+    },
+    "retinanet.fp16.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.fp16.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf Retinanet No NMS)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_OPENIMAGES": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "retinanet",
+        "_MODEL_TO_CONVERT": "compile_retinanet_no_nms_mlperf",
+        "_ENABLE_CHANNEL_WISE": "yes",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -vvv -compile-only -onnx-define-symbol=batch_size,[BATCH_SIZE] -node-precision-info=[NODE_PRECISION_FILE] -enable-channelwise -quantization-schema-activations=asymmetric -quantization-calibration=None -execute-nodes-in-fp16=Sigmoid",
+        "_COMPILER_ARGS_OFFLINE": "",
+        "_COMPILER_ARGS_SINGLESTREAM": "",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_QUANTIZED": "yes",
+        "_BATCH_SIZE_EXPLICIT": "yes"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ]
+    },
+    "retinanet.aedk_highend.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_highend.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk_highend.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=2 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.aedk.singlestream": {
+        "_BATCH_SIZE": "1",
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      }
+    },
+    "retinanet.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=2 -ols=1 -aic-enable-depth-first"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "retinanet.pcie.16nsp.quad.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=1 -ols=1"
+      }
+    },
+    "ssd_mobilenet": {
+      "extra_customize": {
+        "package_name": "QAIC model (MLPerf SSD-MobileNet No NMS)"
+      },
+      "extra_env": {
+        "CK_CALIBRATE_COCO": "yes",
+        "CK_ENV_DATASET_PREPROCESSED_DIR": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR>>$",
+        "CK_ENV_DATASET_PREPROCESSED_FOF": "$<<CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF>>$",
+        "ML_MODEL_MODEL_NAME": "ssd-mobilenet",
+        "_MODEL_TO_CONVERT": "compile_ssd_mobilenet_no_nms_mlperf",
+        "_ENABLE_CHANNEL_WISE": "yes",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -quantization-schema-constants=symmetric_with_uint8 -quantization-schema-activations=symmetric_with_uint8 -quantization-precision=Int8 -vvv -compile-only",
+        "_COMPILER_ARGS_OFFLINE": "-allocator-dealloc-delay=2 -size-split-granularity=1048 -vtcm-working-set-limit-ratio=0.75",
+        "_COMPILER_ARGS_SINGLESTREAM": "",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=1 -ols=2",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
+      },
+      "extra_tags": [
+        "object-detection",
+        "calibrated-by-qaic",
+        "no-nms"
+      ]
+    },
+    "ssd_mobilenet.aedk_highend.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "4",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      },
+      "extra_tags": [
+        "bs.4"
+      ]
+    },
+    "ssd_mobilenet.aedk_highend.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
+    "ssd_mobilenet.aedk_highend.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "ssd_mobilenet.aedk.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "4",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.4"
+      ]
+    },
+    "ssd_mobilenet.aedk.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
+    "ssd_mobilenet.aedk.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "ssd_mobilenet.pcie.14nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "4",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      },
+      "extra_tags": [
+        "bs.4"
+      ]
+    },
+    "ssd_mobilenet.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=7"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
+    "ssd_mobilenet.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=14"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "ssd_mobilenet.pcie.16nsp.offline": {
+      "extra_env": {
+        "_BATCH_SIZE": "4",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1"
+      },
+      "extra_tags": [
+        "bs.4"
+      ]
+    },
+    "ssd_mobilenet.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_BATCH_SIZE": "2",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8"
+      },
+      "extra_tags": [
+        "bs.2"
+      ]
+    },
+    "ssd_mobilenet.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_BATCH_SIZE": "1",
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=16"
+      },
+      "extra_tags": [
+        "bs.1"
+      ]
+    },
+    "bert-99": {
+      "extra_customize": {
+        "package_name": "BERT model quantized"
+      },
+      "extra_env": {
+        "_BATCH_SIZE": "0",
+        "_MODEL_TO_CONVERT": "compile_bert_99",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Add,Div,Erf,Softmax -quantization-schema-constants=symmetric_with_uint8 -quantization-schema-activations=symmetric_with_uint8 -quantization-precision=Int8 -quantization-precision-bias=Int32 -vvv -compile-only -onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -multicast-weights",
+        "_COMPILER_ARGS_OFFLINE": "-size-split-granularity=1536 -vtcm-working-set-limit-ratio=1",
+        "_COMPILER_ARGS_SINGLESTREAM": "-aic-num-of-instances=1 -num-iter=1000 -profiling-threads=1 -use-producer-dma=1 -stats-batchsize=1",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SINGLESTREAM_BASE": "$<<_COMPILER_PARAMS_BASE>>$",
+        "_COMPILER_PARAMS_SERVER_BASE": "-aic-hw -aic-hw-version=2.0 -execute-nodes-in-fp16=Add,Div,Erf,Softmax -compile-only",
+        "_COMPILER_ARGS_SERVER": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG] -multicast-weights"
+      },
+      "extra_tags": [
+        "bert",
+        "calibrated-by-qaic",
+        "bert-99"
+      ]
+    },
+    "bert-99.aedk_highend.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3 -allocator-dealloc-delay=2"
+      }
+    },
+    "bert-99.aedk_highend.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -allocator-dealloc-delay=2"
+      }
+    },
+    "bert-99.aedk_highend.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
+    "bert-99.aedk.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=3 -allocator-dealloc-delay=2"
+      }
+    },
+    "bert-99.aedk.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -allocator-dealloc-delay=2"
+      }
+    },
+    "bert-99.aedk.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
+    "bert-99.pcie.14nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.14nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.14nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.14nsp.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
+    "bert-99.pcie.16nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=1 -mos=1 -ols=2 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.multistream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4 -allocator-dealloc-delay=3"
+      }
+    },
+    "bert-99.pcie.16nsp.quad.singlestream": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "SINGLESTREAM",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=8 -mos=8 -ols=1"
+      }
+    },
+    "bert-99.9": {
+      "extra_customize": {
+        "package_name": "BERT model FP16"
+      },
+      "extra_env": {
+        "_BATCH_SIZE": "0",
+        "_NO_QUANTIZATION" : "yes",
+        "_MODEL_TO_CONVERT": "compile_bert_99.9",
+        "_COMPILER_PARAMS_BASE": "-aic-hw -aic-hw-version=2.0 -compile-only -convert-to-fp16",
+        "_COMPILER_ARGS_OFFLINE": "-onnx-define-symbol=batch_size,1 -onnx-define-symbol=seg_length,[SEG]",
+        "_COMPILER_PARAMS_OFFLINE_BASE": "$<<_COMPILER_PARAMS_BASE>>$ -mos=4 -ols=1"
+      },
+      "extra_tags": [
+        "bert",
+        "bert.fp16"
+      ]
+    },
+    "bert-99.9.pcie.14nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.quad.offline": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.16nsp.quad.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bert-99.9.pcie.14nsp.server": {
+      "extra_env": {
+        "_COMPILER_PARAMS_SCENARIO_NAME": "OFFLINE",
+        "_COMPILER_PARAMS_SUT": "-aic-num-cores=4"
+      }
+    },
+    "bs.1": {
+      "extra_env": {
+        "_BATCH_SIZE": "1"
+      }
+    },
+    "bs.4": {
+      "extra_env": {
+        "_BATCH_SIZE": "4"
+      }
+    },
+    "bs.8": {
+      "extra_env": {
+        "_BATCH_SIZE": "8"
+      }
+    },
+    "bs.16": {
+      "extra_env": {
+        "_BATCH_SIZE": "16"
+      }
+    },
+    "quantization.calibration": {
+      "extra_env": {
+        "_PERCENTILE_CALIBRATION_VALUE": "99.9980",
+        "_QUANTIZATION_PARAMS": "-quantization-calibration=Percentile  -percentile-calibration-value=[PERCENTILE_CALIBRATION_VALUE]"
+      }
+    },
+    "seg.384": {
+      "extra_env": {
+        "_SEG": "384",
+        "ML_MODEL_SEQ_LENGTH": "384"
+      }
+    },
+    "seg.448": {
+      "extra_env": {
+        "_SEG": "448",
+        "ML_MODEL_SEQ_LENGTH": "448"
+      }
+    },
+    "seg.512": {
+      "extra_env": {
+        "_SEG": "512",
+        "ML_MODEL_SEQ_LENGTH": "512"
+      }
+    }
+  }
+}

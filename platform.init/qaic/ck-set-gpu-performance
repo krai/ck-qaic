@@ -1,0 +1,57 @@
+#! /bin/bash
+
+#
+# Copyright (c) 2021 Krai Ltd.
+#
+for cmd in pre watch; do
+  cmdfile=/opt/qti-aic/logs/${cmd}.config
+  if [ -e $cmdfile ]; then
+    while read cmd; do
+      eval $cmd
+    done < $cmdfile
+    fi
+done
+
+device_ids=$(/opt/qti-aic/tools/qaic-util -q | grep QID | sed 's/QID //')
+
+if [ -n "$VC_VAL" ]; then
+  echo "Setting custom maximum frequency for QAIC devices."
+  echo ""
+  for device_id in $device_ids
+  do
+    sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-diag -d $device_id -m 0x4B 0x66 0x05 0x1 $VC_VAL
+  done
+else
+  echo "Not setting custom maximum frequency for QAIC devices."
+fi
+
+echo "ECC = $ECC_VAL"
+
+if [ "$ECC_VAL" == "on" ]; then
+  echo "Setting ECC for QAIC devices."
+  echo ""
+
+  request="{ \
+   \"request\": [ \
+    { \
+     \"qid\": DEVICE_ID, \
+     \"dev_config\": { \
+      \"update_ras_ecc_config_request\": { \
+      \"ras_ecc\": [ \
+          \"RAS_DDR_ECC\" \
+          ] \
+          } \
+     } \
+    } \
+   ] \
+  }"
+
+  for device_id in $device_ids
+  do
+      echo "${request/DEVICE_ID/$device_id}" > request.json
+      sudo LD_LIBRARY_PATH=/opt/qti-aic/dev/lib/x86_64 /opt/qti-aic/tools/qaic-monitor-json -i request.json
+      rm request.json
+  done
+else
+  echo "Not setting ECC for QAIC devices."
+fi

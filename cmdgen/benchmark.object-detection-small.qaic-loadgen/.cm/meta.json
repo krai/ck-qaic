@@ -1,0 +1,292 @@
+{
+  "_base_entry": "cmdgen:05ee58d2d664fb59",
+  "_base_entry#": "cmdgen.benchmark.inference.qaic-loadgen",
+  "accu_init": {
+  },
+  "build_map": {
+    "sut": {
+      "aedk": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_20w": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_highend": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "10",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_highend_15w": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "10",
+        "recommended_threads_per_queue": "8"
+      },
+      "aedk_highend_25w": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "10",
+        "recommended_threads_per_queue": "8"
+      },
+      "gloria": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "haishen": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "heimdall": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "rb6": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "eb6": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "gloria_highend": {
+        "recommended_offline_activation_count": "1",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q1_pro_edge": {
+        "recommended_offline_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q1_std_edge": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q2_lite_edge": {
+        "recommended_offline_activation_count": "9",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q4_lite_edge": {
+        "recommended_offline_activation_count": "9",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q4_pro_dc": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "q3_std_edge": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q4_std_edge": {
+        "recommended_offline_activation_count": "14",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "8",
+        "recommended_threads_per_queue": "8"
+      },
+      "q8_std_dc": {
+        "recommended_offline_activation_count": "14",
+        "recommended_server_activation_count": "14",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "g292_z43_q18e": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "12"
+      },
+      "g292_z43_q18": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3"
+      },
+      "g292_z43_q16e": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "12"
+      },
+      "g292_z43_q16": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q2e": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "14"
+      },
+      "r282_z93_q2": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q1": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q5e": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "14"
+      },
+      "r282_z93_q5": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_multistream_activation_count": "2",
+        "recommended_multistream_batch_size": "2",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8e": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q8": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_threads_per_queue": "3"
+      },
+      "r282_z93_q5e_dc": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q5_dc": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "6",
+        "recommended_threads_per_queue": "2"
+      },
+      "r282_z93_q8e_edge": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "1",
+        "recommended_threads_per_queue": "3",
+        "vc_value_default": "12"
+      },
+      "r282_z93_q8_edge": {
+        "recommended_offline_activation_count": "16",
+        "recommended_server_activation_count": "16",
+        "recommended_queue_length": "3",
+        "recommended_multistream_activation_count": "1",
+        "recommended_multistream_batch_size": "1",
+        "recommended_threads_per_queue": "3"
+      }
+    },
+    "model": {
+      "ssd_mobilenet": {
+        "ck_env": [
+          "--env.ML_MODEL_HAS_BACKGROUND_CLASS=YES",
+          "--env.ML_MODEL_OUT_BUFFER_IDX=1",
+          "--env.CK_ENV_QAIC_MODEL_MAX_DETECTIONS=100",
+          "--env.CK_ENV_QAIC_OUTPUT_COUNT=2",
+          "--env.CK_ENV_QAIC_SKIP_STAGE=convert",
+          "--env.CK_ENV_QAIC_NMS_PRIORS_BIN_PATH=../NMS_ABP/CLASS_SPECIFIC_NMS/data/priors_mv1.bin"
+        ],
+        "deps": [
+          "--dep_add_tags.dataset=for.ssd_mobilenet.onnx.preprocessed.quantized,full --cmd_key=coco"
+        ],
+        "division": "closed",
+        "hyphenated_model_name": "ssd-mobilenet",
+        "model_name": "ssd-mobilenet",
+        "model_tags": [
+          "###",
+          "bs.<<<batch_size>>>"
+        ],
+        "recommended_accuracy_buffer_size": "500",
+        "recommended_performance_buffer_size": "256"
+      }
+    }
+  },
+  "defaults": {
+    "cache_dir_default": "/data/object-detection.qaic-loadgen.cache",
+    "dataset_size": "5000",
+    "docker_image": "krai/mlperf.<<<model_name>>>:<<<docker_os>>>_<<<sdk>>> ",
+    "docker_preprocess_dir": "/home/krai/CK_REPOS/ck-qaic/program/object-detection-qaic-loadgen/tmp/preprocessed",
+    "preprocessed_tag": "preprocessed_using.<<<preprocessed_using>>>",
+    "preprocessed_using": "opencv",
+    "program_name": "object-detection-qaic-loadgen",
+    "recommended_num_setup_threads": "2",
+    "recommended_multistream_num_setup_threads": "2",
+    "recommended_batch_size": "4",
+    "recommended_input_select": "0",
+    "task_name": "object-detection",
+    "vc_value_default": "17",
+    "zero_copy": "enable"
+  }
+}

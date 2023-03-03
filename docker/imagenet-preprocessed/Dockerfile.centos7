@@ -1,0 +1,116 @@
+#
+# Copyright (c) 2021 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+FROM imagenet:latest as builder
+
+LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
+
+# Use the Bash shell.
+SHELL ["/bin/bash", "-c"]
+
+# Allow stepping into the Bash shell interactively.
+ENTRYPOINT ["/bin/bash", "-c"]
+
+###############################################################################
+# BUILDER STAGE
+#
+# In this stage, only perform steps that write into CK, CK_TOOLS, CK_REPOS,
+# which can be simply copied into the final image.
+#
+###############################################################################
+
+# Install system dependencies.
+RUN yum update -y && yum install -y python3 python3-pip python3-devel git wget
+
+# Create a non-root user with a fixed group id and a fixed user id.
+ARG GROUP_ID
+ARG USER_ID
+RUN groupadd -g ${GROUP_ID} kraig
+RUN useradd -u ${USER_ID} -g kraig --create-home --shell /bin/bash krai
+USER krai:kraig
+WORKDIR /home/krai
+
+# Install Collective Knowledge (CK).
+ENV CK_VER=1.55.5 \
+    CK_ROOT=/home/krai/CK \
+    CK_REPOS=/home/krai/CK_REPOS \
+    CK_TOOLS=/home/krai/CK_TOOLS \
+    CK_PYTHON=python3 \
+    PATH=${CK_ROOT}/bin:/home/krai/.local/bin:${PATH} \
+    GIT_USER="krai" \
+    GIT_EMAIL="info@krai.ai" \
+    LANG=C.UTF-8
+RUN mkdir -p ${CK_ROOT} ${CK_REPOS} ${CK_TOOLS} \
+ && git config --global user.name ${GIT_USER} && git config --global user.email ${GIT_EMAIL} \
+ && git clone --branch V${CK_VER} https://github.com/ctuning/ck.git ${CK_ROOT} \
+ && cd ${CK_ROOT} \
+ && source /home/krai/.bashrc \
+ && ${CK_PYTHON} setup.py install --user \
+ && ${CK_PYTHON} -c "import ck.kernel as ck; print ('Collective Knowledge v%s' % ck.__version__)" \
+ && chmod -R g+rx /home/krai/.local
+
+# Pull CK repositories.
+RUN ck pull repo --url=https://github.com/krai/ck-env
+
+# Set platform script.
+RUN ck detect platform.os --platform_init_uoa=generic-linux-dummy
+
+# Detect Python interpreter, install the latest package installer (pip) and implicit dependencies.
+RUN source /home/krai/.bashrc \
+ && ck detect soft:compiler.python --full_path=/usr/bin/${CK_PYTHON} \
+ && ${CK_PYTHON} -m pip install --user --ignore-installed pip setuptools \
+ && ${CK_PYTHON} -m pip install --user wheel pyyaml testresources
+
+#-----------------------------------------------------------------------------#
+# Step 1. Install explicit Python dependencies.
+#-----------------------------------------------------------------------------#
+RUN ck install package --tags=python-package,numpy \
+ && ck install package --tags=python-package,opencv-python-headless
+
+#-----------------------------------------------------------------------------#
+# Step 2. Prepare the dataset.
+#-----------------------------------------------------------------------------#
+RUN echo "vfull" | ck detect soft:dataset.imagenet.val \
+  --full_path="/imagenet/ILSVRC2012_val_00000001.JPEG" \
+  --extra_tags=ilsvrc2012,full
+RUN ck install package \
+  --tags=dataset,imagenet,val,preprocessed,using-opencv,for.resnet50.quantized,layout.nhwc,side.224,full,validation
+
+###############################################################################
+# FINAL STAGE
+#
+# In this stage, simply copy CK, CK_TOOLS, CK_REPOS to the final image.
+#
+###############################################################################
+FROM centos:7 AS final
+COPY --from=builder /home/krai/CK_TOOLS/dataset-imagenet-preprocessed-using-opencv* /imagenet-preprocessed
+COPY --from=builder /imagenet/ILSVRC2012_val_00000001.JPEG /imagenet/ILSVRC2012_val_00000001.JPEG

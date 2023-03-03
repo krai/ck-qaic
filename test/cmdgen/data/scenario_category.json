@@ -1,0 +1,50 @@
+[
+    {
+        "scenario_name": "offline",
+        "category_name": "datacenter"
+    },
+    {
+        "scenario_name": "all-in-one",
+        "category_name": "datacenter"
+    },
+    {
+        "scenario_name": "server",
+        "category_name": "datacenter"
+    },
+    {
+        "scenario_name": "offline",
+        "category_name": "edge-server"
+    },
+    {
+        "scenario_name": "multistream",
+        "category_name": "edge-server"
+    },
+    {
+        "scenario_name": "all-in-one",
+        "category_name": "edge-server"
+    },
+    {
+        "scenario_name": "singlestream",
+        "category_name": "edge-server"
+    },
+    {
+        "scenario_name": "server",
+        "category_name": "edge-server"
+    },
+    {
+        "scenario_name": "offline",
+        "category_name": "edge-appliance"
+    },
+    {
+        "scenario_name": "multistream",
+        "category_name": "edge-appliance"
+    },
+    {
+        "scenario_name": "all-in-one",
+        "category_name": "edge-appliance"
+    },
+    {
+        "scenario_name": "singlestream",
+        "category_name": "edge-appliance"
+    }
+]

@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "5ae816c6a4fde929",
+  "backup_module_uid": "194e44c4cacd5101",
+  "backup_module_uoa": "sut",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2023-02-24T14:47:22.242062",
+    "version": [
+      "2",
+      "6",
+      "1"
+    ]
+  },
+  "data_name": "q4_lite_edge"
+}

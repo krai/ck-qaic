@@ -1,0 +1,73 @@
+#
+# Copyright (c) 2021-2022 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+###############################################################################
+# PREABMLE STAGE
+###############################################################################
+ARG DOCKER_OS
+FROM krai/base:${DOCKER_OS}_latest AS preamble
+
+LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
+
+###############################################################################
+### BUILDER STAGE
+###############################################################################
+FROM preamble AS builder
+ARG DOCKER_OS
+ARG ARCH
+
+RUN mkdir -p /tmp
+
+COPY tmp/qaic-*.zip /tmp/
+WORKDIR /tmp
+
+RUN unzip qaic-apps-* && rm -f qaic-apps-*.zip && cd qaic-apps-* && ./install.sh && cd ../ && rm -rf qaic-apps-* \
+&& unzip qaic-platform-*.zip && rm -f qaic-platform-*.zip && cd qaic-platform-* && cd ${ARCH}/${DOCKER_OS} && sudo ./install.sh --container && cd ../../.. && rm -rf qaic-platform-*
+
+###############################################################################
+### FINAL STAGE
+###############################################################################
+FROM preamble AS final
+ARG GROUP_ID
+
+COPY --from=builder /opt/qti-aic/ /opt/qti-aic/
+
+ENV LD_LIBRARY_PATH="/opt/qti-aic/dev/lib/x86_64:${LD_LIBRARY_PATH}"
+
+# Create group-writable directory for workflow logs.
+ENV LOGS_DIR="/opt/qti-aic/logs"
+RUN mkdir -p ${LOGS_DIR} \
+ && chgrp ${GROUP_ID} ${LOGS_DIR} \
+ && chmod g+ws ${LOGS_DIR} \
+ && setfacl -R -d -m group:${GROUP_ID}:rw ${LOGS_DIR}
+
+CMD ["/opt/qti-aic/tools/qaic-util -q | grep Status"]

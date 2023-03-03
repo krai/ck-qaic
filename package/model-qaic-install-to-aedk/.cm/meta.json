@@ -1,0 +1,43 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PACKAGE_VERSION": "1",
+      "_CK_AEDK_IDS": "",
+      "_CK_AEDK_IPS": "",
+      "_CK_AEDK_PORTS": "",
+      "_CK_AEDK_USER": ""
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "package_name": "QAIC-from-ONNX model installer",
+    "skip_file_check": "yes"
+  },
+  "deps": {
+    "model-qaic": {
+      "local": "yes",
+      "tags": "model,compiled,qaic"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 15,
+      "tags": "compiler,python",
+      "version_from": [
+        3,
+        4,
+        0
+      ]
+    }
+  },
+  "process_script": "install",
+  "soft_uoa": "model.qaic",
+  "suggested_path": "model-qaic-aedk-installer",
+  "tags": [
+    "model",
+    "qaic",
+    "converted",
+    "converted-from-onnx",
+    "install-to-aedk"
+  ]
+}

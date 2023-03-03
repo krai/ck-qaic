@@ -1,0 +1,121 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+
+      "ML_MODEL_MODEL_NAME": "retinanet",
+      "ML_MODEL_DATA_LAYOUT": "NCHW",
+      "ML_MODEL_DATA_TYPE": "float32",
+      "ML_MODEL_INPUT_DATA_TYPE": "float32",
+      "ML_MODEL_IMAGE_WIDTH": "800",
+      "ML_MODEL_IMAGE_HEIGHT": "800",
+
+      "MODEL_INPUT_LAYER_NAME": "input",
+      "MODEL_OUTPUT_LAYER_NAME": "boxes,scores",
+      "MODEL_DATASET_TYPE": "openimages",
+      "MODEL_OUTPUT_LAYER_BBOXES": "boxes",
+      "MODEL_OUTPUT_LAYER_SCORES": "scores",
+      "MODEL_CLASSES_LABELS": "flatlabels.txt",
+      "PACKAGE_COPY": "YES",
+      "PACKAGE_NAME": "retinanet.onnx",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_WGET": "NO"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes",
+    "version": "reference"
+  },
+  "deps": {
+    "lib-python-onnx": {
+      "local": "yes",
+      "name": "Python ONNX library",
+      "sort": 10,
+      "tags": "lib,python-package,onnx",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ],
+      "version_from": [
+        1,
+        8,
+        0
+      ],
+      "version_to": [
+        1,
+        8,
+        99
+      ]
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "compiler,python",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ]
+    },
+    "pytorch-model": {
+      "local": "yes",
+      "name": "Pytorch Retinanet",
+      "sort": 5,
+      "tags": "model,pytorch,retinanet",
+      "enable_if_env": [
+        {
+            "_CONVERT": "yes"
+        }
+      ]
+    }
+  },
+  "end_full_path": {
+    "linux": "retinanet.onnx"
+  },
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " (MLPerf Retinanet no NMS)",
+  "process_script": "install",
+  "soft_uoa": "bcaac306e9041879",
+  "suggested_path": "model-onnx-mlperf-retinanet-no-nms",
+  "tags": [
+    "mlperf",
+    "object-detection",
+    "model",
+    "onnx",
+    "retinanet",
+    "non-quantized",
+    "nchw",
+    "channel-stable",
+    "side.800",
+    "no-nms"
+  ],
+  "variations": {
+    "downloaded": {
+      "extra_customize": {
+        "package_extra_name": " (downloaded)"
+      },
+      "extra_env": {
+        "_DOWNLOAD": "yes"
+      },
+      "on_by_default": "yes"
+    },
+    "converted-from-pytorch": {
+      "extra_customize": {
+        "package_extra_name": " (converted from pytorch)"
+      },
+      "extra_env": {
+        "_CONVERT": "yes"
+      },
+      "on_by_default": "no"
+    }
+  }
+}

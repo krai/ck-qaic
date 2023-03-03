@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "4da8fcece8dfd223",
+  "backup_module_uid": "194e44c4cacd5101",
+  "backup_module_uoa": "sut",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2021-08-19T17:17:43.075834",
+    "version": [
+      "1",
+      "17",
+      "0"
+    ]
+  },
+  "data_name": "g292_z43_q16"
+}

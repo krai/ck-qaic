@@ -1,0 +1,90 @@
+#
+# Copyright (c) 2021-2022 Krai Ltd.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+FROM centos:7.9.2009
+
+LABEL maintainer="Anton Lokhmotov <anton@krai.ai>"
+
+ARG GCC_MAJOR_VER
+
+ARG PYTHON_VER
+ARG PYTHON_MAJOR_VER
+ARG PYTHON_MINOR_VER
+ARG PYTHON_PATCH_VER
+
+# Use the Bash shell.
+SHELL ["/bin/bash", "-c"]
+
+# Allow stepping into the Bash shell interactively.
+ENTRYPOINT ["/bin/bash", "-c"]
+
+# Set the timezone.
+ARG TIMEZONE
+RUN rm -rf /etc/localtime \
+ && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+ && ls -la /etc/localtime
+
+RUN echo "min=1" >> /etc/yum.conf \
+ && echo "timeout=1200" >> /etc/yum.conf
+
+RUN yum update -y \
+ && update-ca-trust force-enable \
+ && yum install -y \
+    sudo acl which make patch git vim \
+    wget rsync ca-certificates sshpass openssl-devel libffi-devel \
+    zip unzip bzip2-devel \
+    pciutils pciutils-lib numactl OpenIPMI OpenIPMI-tools lm_sensors \
+ && yum clean all
+
+# Start IPMI tool.
+RUN sudo systemctl enable ipmi.service
+
+# NB: Must be two separate calls to yum install.
+RUN yum install -y centos-release-scl \
+ && yum install -y devtoolset-${GCC_MAJOR_VER}-gcc devtoolset-${GCC_MAJOR_VER}-gcc-c++
+
+# Install Python >= 3.7.
+RUN mkdir -p /tmp && cd /tmp \
+ && wget https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
+ && tar xzf Python-${PYTHON_VER}.tgz \
+ && rm Python-${PYTHON_VER}.tgz \
+ && cd Python-${PYTHON_VER} \
+ && scl enable devtoolset-${GCC_MAJOR_VER} "./configure --enable-optimizations && make -j 10 altinstall" \
+ && cd /tmp \
+ && rm -rf Python-${PYTHON_VER}*
+
+# Make the installed Python default for both python and python3.
+ENV CK_PYTHON=python${PYTHON_MAJOR_VER}.${PYTHON_MINOR_VER}
+RUN rm -f /usr/bin/python3 && ln -s /usr/local/bin/${CK_PYTHON} /usr/bin/python3 \
+ && rm -f /usr/bin/python  && ln -s /usr/local/bin/${CK_PYTHON} /usr/bin/python
+
+CMD ["rpm -q centos-release"]
