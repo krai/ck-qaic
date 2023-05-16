@@ -37,18 +37,26 @@ _DATASETS_DIR=${DATASETS_DIR:-/local/mnt/workspace/datasets}
 _IMAGENET_NAME=${IMAGENET_NAME:-imagenet}
 _IMAGENET_DIR=${_DATASETS_DIR}/${_IMAGENET_NAME}
 
+if [[ "${DATASETS_DIR}" == "no" ]]; then
+  time docker build -t imagenet:latest . -f-<<EOF
+FROM ubuntu:20.04
+RUN mkdir /imagenet && touch /imagenet/ILSVRC2012_val_00000001.JPEG
+EOF
+  exit 0
+fi
+
 if [[ ! -f "${_IMAGENET_DIR}/ILSVRC2012_val_00000001.JPEG" ]]; then
   echo "ERROR: File '${_IMAGENET_DIR}/ILSVRC2012_val_00000001.JPEG' does not exist!"
   exit 1
 fi
 
 # The image tag ('imagenet') and the path in that image ('/imagenet') are hardcoded on purpose.
-if [[ "${_DOCKER_OS}" == "ubuntu" ]]; then
+if [[ "${_DOCKER_OS}" == "ubuntu" || "${_DOCKER_OS}" == "deb" ]]; then
   time docker build -t imagenet:latest ${_IMAGENET_DIR} -f-<<EOF
 FROM ubuntu:20.04
 ADD / /imagenet
 EOF
-else
+elif [[ "${_DOCKER_OS}" == "centos" ]]; then
   time docker build -t imagenet:latest ${_IMAGENET_DIR} -f-<<EOF
 FROM centos:7
 ADD / /imagenet

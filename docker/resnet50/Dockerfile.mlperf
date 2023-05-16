@@ -80,6 +80,8 @@ RUN ck detect platform.os --platform_init_uoa=qaic
 #-----------------------------------------------------------------------------#
 # Calibrate from scratch.
 RUN if [[ "${PRECALIBRATED_PROFILE}" == "no" ]]; then         \
+  ck install package --tags=dataset,calibration,mlperf.option1 --quiet; \
+  ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet; \
   ck install package --tags=profile,resnet50,bs.1 --quiet;    \
   ck install package --tags=profile,resnet50,bs.8 --quiet;    \
   rm -rf $(ck locate env --tags=profile,resnet50,bs.1)/*.raw; \

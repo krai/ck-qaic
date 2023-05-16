@@ -57,7 +57,7 @@ ARG CK_QAIC_PAT
 ARG CK_QAIC_REPO
 ARG CK_QAIC_CHECKOUT
 # For the ImageNet validation set, use the full one (50,000 images) or reduced one (500 images).
-ARG IMAGENET=full
+ARG IMAGENET
 
 #-----------------------------------------------------------------------------#
 # Step 0. Update CK repositories.
@@ -84,13 +84,7 @@ RUN if [[ "${IMAGENET}" == "full" ]]; \
   fi
 
 #-----------------------------------------------------------------------------#
-# Step 2. Preprocess the calibration dataset.
-#-----------------------------------------------------------------------------#
-RUN ck install package --tags=dataset,calibration,mlperf.option1 --quiet \
- && ck install package --tags=dataset,imagenet,calibration,preprocessed,for.resnet50 --quiet
-
-#-----------------------------------------------------------------------------#
-# Step 3. Prepare the ResNet50 workload.
+# Step 2. Prepare the ResNet50 workload.
 #-----------------------------------------------------------------------------#
 # Update ("fix") the input shape from ?x224x224x3 to 1x224x224x3
 # to work around a current limitation in the toolchain.
