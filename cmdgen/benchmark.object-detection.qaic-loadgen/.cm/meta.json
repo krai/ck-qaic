@@ -150,6 +150,12 @@
         "recommended_queue_length": "2",
         "recommended_threads_per_queue": "2"
       },
+      "r282_z93_q3_std": {
+        "recommended_offline_activation_count": "14",
+        "recommended_server_activation_count": "14",
+        "recommended_queue_length": "2",
+        "recommended_threads_per_queue": "2"
+      },
       "r282_z93_q5_std": {
         "recommended_offline_activation_count": "14",
         "recommended_server_activation_count": "14",
