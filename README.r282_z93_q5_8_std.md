@@ -11,13 +11,6 @@ Go to `ck-qaic` directory and switch to the branch `r282_z93_q5_8_std`:
 cd ck-qaic
 git checkout r282_z93_q5_8_std
 ```
-Add GitHub PAT to `~/.bashrc` and init it:
-```
-echo "export CK_QAIC_PAT=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" >> ~/.bashrc
-
-source ~/.bashrc
-```
-
 ## Docker setup
 
 Go to the following directory in `ck-qaic` as base:
@@ -25,10 +18,11 @@ Go to the following directory in `ck-qaic` as base:
 cd script/setup.docker
 ```
 
-Define the workspace directory, e.g. `/home`
+Define the workspace directory:
 ```
-export WORKSPACE_DIR=/home
+export WORKSPACE_DIR=/local/mnt/workspace
 ```
+**NB:** Workspace directory should contain a subdirectory for SDKs: `$WORKSPACE_DIR/sdks` where need to be copied archives of Apps and Platform SDKs (e.g. `qaic-apps-1.8.3.7.zip` and `qaic-platform-sdk-x86_64-ubuntu-1.8.3.7.zip`). A system folder `docker` (`$WORKSPACE_DIR/docker`) and the experimental results folder will be also placed there during the installation.
 
 ### Host OS dependent
 
@@ -38,13 +32,6 @@ export WORKSPACE_DIR=/home
 ```
 WORKSPACE_DIR=$WORKSPACE_DIR bash setup_ubuntu.sh
 ```
-
-#### CentOS host (supported: CentOS 7)
-```
-WORKSPACE_DIR=$WORKSPACE_DIR bash setup_centos.sh
-```
-
-**NB:** Log out and log back in for the necessary group permissions to take effect.
 
 ### Host OS independent
 
@@ -99,9 +86,13 @@ WORKLOADS=resnet50,retinanet SDK_VER=1.8.3.7 DOCKER=yes SUT=r282_z93_q8_std DEFS
 
 ### List experiments
 ```
-ck list mlperf_v3.0.$(hostname).$USER:experiment:*retinanet* | sort
+ck list mlperf_v3.0.$(hostname).$USER:experiment:*r282_z93_q5_std* | sort
 ```
 <details><pre>
+mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-offline-accuracy-dataset_size.50000-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-offline-performance-target_qps.100000-fan_raw.250-vc.17
+mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-server-accuracy-dataset_size.50000-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.99000-fan_raw.250-vc.17
 mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-offline-accuracy-dataset_size.24781-preprocessed_using.opencv
 mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-offline-performance-target_qps.1400-fan_raw.250-vc.17
 mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-server-accuracy-dataset_size.24781-preprocessed_using.opencv
