@@ -46,7 +46,7 @@ WORKSPACE_DIR=$WORKSPACE_DIR bash setup_ck.sh
 
 ```
 cd $(ck find repo:ck-qaic)/docker/imagenet
-WORKSPACE_DIR=$WORKSPACE_DIR DATASETS_DIR=no CK_QAIC_CHECKOUT=r282_z93_q5_8_std ./build.sh
+DATASETS_DIR=no ./build.sh
 ```
 
 ### Target OS dependent, SDK dependent
@@ -86,28 +86,76 @@ WORKLOADS=resnet50,retinanet SDK_VER=1.8.3.7 DOCKER=yes SUT=r282_z93_q8_std DEFS
 
 ### List experiments
 ```
-ck list mlperf_v3.0.$(hostname).$USER:experiment:*r282_z93_q5_std* | sort
+ck list $CK_EXPERIMENT_REPO:experiment:*r282_z93_q3_std* | sort
 ```
 <details><pre>
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-offline-accuracy-dataset_size.50000-preprocessed_using.opencv
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-offline-performance-target_qps.100000-fan_raw.250-vc.17
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-server-accuracy-dataset_size.50000-preprocessed_using.opencv
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.99000-fan_raw.250-vc.17
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-offline-accuracy-dataset_size.24781-preprocessed_using.opencv
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-offline-performance-target_qps.1400-fan_raw.250-vc.17
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-server-accuracy-dataset_size.24781-preprocessed_using.opencv
-mlperf_v3.0-closed-r282_z93_q5_std-qaic-v1.8.3.7-aic100-retinanet-server-performance-target_qps.1330-fan_raw.250-vc.17
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ ck list mlperf_v3.0.aus655-pci-bowie.eselezne:experiment:*r282_z93_q3_std* | sort
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-accuracy-dataset_size.50000-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-performance-target_qps.60000-fan_raw.250-vc.17
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-accuracy-dataset_size.50000-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.58000-fan_raw.250-vc.17
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.59000-fan_raw.250-vc.17
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-accuracy-dataset_size.24781-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-performance-target_qps.840-fan_raw.250-vc.17
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-accuracy-dataset_size.24781-preprocessed_using.opencv
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-performance-target_qps.780-fan_raw.250-vc.17
 </pre></details>
 
 ### Grep results in the experiment directory
 ```
-cd $CK_REPOS/mlperf_v3.0.$(hostname).$USER/experiment
-grep INVALID */*.0001.json
-grep Samples per second */*.0001.json
-grep Scheduled samples per second */*.0001.json
-grep mAP *retinanet*/*.0001.json
-grep '"accuracy"' *resnet50*/*.0001.json
+cd $CK_EXPERIMENT_DIR
+grep '"INVALID"' *r282_z93_q3_std*/*.0001.json
 ```
+<details><pre>
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ grep '"INVALID"' *r282_z93_q3_std*/*.0001.json
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.59000-fan_raw.250-vc.17/ckp-378d944b268d1eb8.0001.json:          "Result is": "INVALID",
+</pre></details>
+
+```
+grep '"Samples per second"' *r282_z93_q3_std*/*.0001.json
+```
+<details><pre>
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ grep '"Samples per second"' *r282_z93_q3_std*/*.0001.json
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-performance-target_qps.60000-fan_raw.250-vc.17/ckp-965f136a44004048.0001.json:          "Samples per second": "61169.7",
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-performance-target_qps.840-fan_raw.250-vc.17/ckp-01acb24a054d468d.0001.json:          "Samples per second": "830.597",
+</pre></details>
+
+```
+grep '"Scheduled samples per second"' *r282_z93_q3_std*/*.0001.json
+```
+<details><pre>
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ grep '"Scheduled samples per second"' *r282_z93_q3_std*/*.0001.json
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.58000-fan_raw.250-vc.17/ckp-c7536bc4cad921b7.0001.json:          "Scheduled samples per second": "57999.05",
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.59000-fan_raw.250-vc.17/ckp-378d944b268d1eb8.0001.json:          "Scheduled samples per second": "58998.49",
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-performance-target_qps.780-fan_raw.250-vc.17/ckp-049968dcf6bcb2a8.0001.json:          "Scheduled samples per second": "779.07",
+</pre></details>
+
+```
+grep '"mAP"' *r282_z93_q3_std*/*.0001.json
+```
+<details><pre>
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ grep '"mAP"' *r282_z93_q3_std*/*.0001.json
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-accuracy-dataset_size.24781-preprocessed_using.opencv/ckp-44b3818a4e497d41.0001.json:        "mAP": 37.239,
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-accuracy-dataset_size.24781-preprocessed_using.opencv/ckp-6bb5830c547cde64.0001.json:        "mAP": 37.239,
+</pre></details>
+
+```
+grep '"accuracy"' *r282_z93_q3_std*/*.0001.json
+```
+<details><pre>
+eselezne@aus655-pci-bowie:/local/mnt/workspace/eselezne/CK-REPOS/mlperf_v3.0.aus655-pci-bowie.eselezne/experiment$ grep '"accuracy"' *r282_z93_q3_std*/*.0001.json
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-accuracy-dataset_size.50000-preprocessed_using.opencv/ckp-54b6af4feb96cee3.0001.json:        "accuracy": 75.0,
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-accuracy-dataset_size.50000-preprocessed_using.opencv/ckp-54b6af4feb96cee3.0001.json:          "accuracy": [
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-offline-performance-target_qps.60000-fan_raw.250-vc.17/ckp-965f136a44004048.0001.json:          "accuracy": [],
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-accuracy-dataset_size.50000-preprocessed_using.opencv/ckp-6487ac8f429475c8.0001.json:        "accuracy": 75.0,
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-accuracy-dataset_size.50000-preprocessed_using.opencv/ckp-6487ac8f429475c8.0001.json:          "accuracy": [
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.58000-fan_raw.250-vc.17/ckp-c7536bc4cad921b7.0001.json:          "accuracy": [],
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-resnet50-server-performance-target_qps.59000-fan_raw.250-vc.17/ckp-378d944b268d1eb8.0001.json:          "accuracy": [],
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-accuracy-dataset_size.24781-preprocessed_using.opencv/ckp-44b3818a4e497d41.0001.json:          "accuracy": [
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-offline-performance-target_qps.840-fan_raw.250-vc.17/ckp-01acb24a054d468d.0001.json:          "accuracy": [],
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-accuracy-dataset_size.24781-preprocessed_using.opencv/ckp-6bb5830c547cde64.0001.json:          "accuracy": [
+mlperf_v3.0-closed-r282_z93_q3_std-qaic-v1.8.3.7-aic100-retinanet-server-performance-target_qps.780-fan_raw.250-vc.17/ckp-049968dcf6bcb2a8.0001.json:          "accuracy": [],
+</pre></details>
 
 
 
