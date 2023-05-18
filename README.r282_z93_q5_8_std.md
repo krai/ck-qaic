@@ -54,7 +54,7 @@ DATASETS_DIR=no ./build.sh
 **NB:** In principle, you can use any combination of the host OS and target OS e.g. Ubuntu host and CentOS target.  For simplicity, however, we recommend to use the same OS to satisfy MLPerf requirements.
 
 **NB:** Make sure to have copied the required SDKs
-to `$WORKSPACE_DIR/sdks`, respectively.
+to `$WORKSPACE_DIR/sdks`.
 
 ```
 cd $(ck find repo:ck-qaic)/script/setup.docker
@@ -69,6 +69,12 @@ QUICK_RUN=yes WORKLOADS=resnet50,retinanet SDK_VER=1.8.3.7 DOCKER=yes SUT=r282_z
 ```
 
 ## Benchmarking
+
+### `r282_z93_q3_std`
+```
+cd $(ck find ck-qaic:script:run)
+WORKLOADS=resnet50,retinanet SDK_VER=1.8.3.7 DOCKER=yes SUT=r282_z93_q3_std DEFS_DIR=$CK_REPOS/ck-qaic/script/defs ./run_datacenter.sh
+```
 
 ### `r282_z93_q5_std`
 ```
