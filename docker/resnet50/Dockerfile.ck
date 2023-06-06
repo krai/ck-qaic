@@ -69,7 +69,7 @@ RUN cd ${CK_REPOS}/${CK_QAIC_REPO} && git checkout ${CK_QAIC_CHECKOUT} && ck pul
 # Step 1. Copy and preprocess the validation dataset.
 #-----------------------------------------------------------------------------#
 # Download the ImageNet labels.
-RUN ck install package --tags=dataset,imagenet,aux,from.dividiti --quiet
+RUN ck install package --tags=dataset,imagenet,aux,from.berkeley --quiet
 # Add original ImageNet from an auxiliary image to preprocess it.
 COPY --from=imagenet /imagenet /imagenet
 
